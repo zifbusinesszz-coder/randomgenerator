@@ -123,12 +123,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Counter animation for stats
     const stats = document.querySelectorAll('.stat-number');
     const countUp = (element) => {
-        const target = parseInt(element.textContent);
-        if (isNaN(target)) return;
+        const originalText = element.textContent;
+        const numberMatch = originalText.match(/(\d+)/);
+        
+        if (!numberMatch) return;
 
-        const isPercentage = element.textContent.includes('%');
+        const target = parseInt(numberMatch[1]);
         let current = 0;
         const increment = Math.ceil(target / 30);
+        const suffix = originalText.replace(numberMatch[0], '');
         
         const counter = setInterval(() => {
             current += increment;
@@ -136,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 current = target;
                 clearInterval(counter);
             }
-            element.textContent = current + (isPercentage ? '%' : '+');
+            element.textContent = current + suffix;
         }, 30);
     };
 
