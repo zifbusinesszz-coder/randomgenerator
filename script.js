@@ -123,15 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Counter animation for stats
     const stats = document.querySelectorAll('.stat-number');
     const countUp = (element) => {
-        const originalText = element.textContent;
-        const numberMatch = originalText.match(/(\d+)/);
+        const originalText = element.textContent.trim();
         
-        if (!numberMatch) return;
+        // Only animate if it's a pure number (with optional + or %)
+        const pureNumberMatch = originalText.match(/^(\d+)([\+%]?)$/);
+        
+        if (!pureNumberMatch) return; // Skip if not a pure number
 
-        const target = parseInt(numberMatch[1]);
+        const target = parseInt(pureNumberMatch[1]);
+        const suffix = pureNumberMatch[2] || '';
         let current = 0;
         const increment = Math.ceil(target / 30);
-        const suffix = originalText.replace(numberMatch[0], '');
         
         const counter = setInterval(() => {
             current += increment;
@@ -153,10 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.5 });
 
     stats.forEach(stat => {
-        // Check if stat contains a number
-        if (stat.textContent.match(/\d/)) {
-            statObserver.observe(stat);
-        }
+        statObserver.observe(stat);
     });
 
     // Parallax effect for hero background
