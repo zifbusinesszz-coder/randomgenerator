@@ -97,12 +97,10 @@ body {
     max-width: 50px;
     object-fit: contain;
     transition: transform 0.3s var(--transition);
-    filter: grayscale(100%);
 }
 
 .logo-image:hover {
     transform: scale(1.05);
-    filter: grayscale(0%);
 }
 
 .nav-links {
@@ -369,17 +367,32 @@ body {
 .stat { text-align: left; }
 
 .stat-number {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 36px;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 42px;
     font-weight: 700;
     margin-bottom: 8px;
     color: var(--primary);
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.stat-number .suffix {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--primary);
+    opacity: 0.5;
 }
 
 .stat-label {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
 .hero-cta {
@@ -418,7 +431,6 @@ body {
 .card-icon {
     font-size: 28px;
     margin-bottom: 10px;
-    filter: grayscale(100%);
 }
 
 .floating-card p {
@@ -616,11 +628,7 @@ body {
     font-size: 40px;
     margin-bottom: 16px;
     display: inline-block;
-    filter: grayscale(100%);
-    transition: filter 0.3s var(--transition);
 }
-
-.service-card:hover .service-icon { filter: grayscale(0%); }
 
 .service-card h3 {
     font-family: var(--font-display);
@@ -683,7 +691,6 @@ body {
     font-size: 36px;
     margin-bottom: 12px;
     display: inline-block;
-    filter: grayscale(100%);
 }
 
 .value-item h4 {
