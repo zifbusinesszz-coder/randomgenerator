@@ -1,15 +1,17 @@
 /* ==========================================
-   WOOD'S WASTE - PREMIUM CSS
+   WOOD'S WASTE - PREMIUM CSS (B&W THEME)
    ========================================== */
 
 :root {
-    --primary: #1a1a1a;
-    --secondary: #0ea854;
-    --accent: #ffffff;
-    --text-light: #666666;
-    --border: #e5e5e5;
-    --success: #10b981;
+    --primary: #0d0d0d;
+    --primary-light: #1a1a1a;
+    --secondary: #ffffff;
+    --accent: #666666;
+    --text-light: #888888;
+    --border: #2a2a2a;
+    --success: #ffffff;
     --warning: #f59e0b;
+    --green: #0ea854;
     
     --font-display: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
@@ -36,8 +38,8 @@ html {
 
 body {
     font-family: var(--font-body);
-    color: var(--primary);
-    background: #ffffff;
+    color: var(--secondary);
+    background: var(--primary);
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -52,9 +54,9 @@ body {
     left: 0;
     right: 0;
     height: 80px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(13, 13, 13, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--border);
     z-index: 1000;
     animation: slideDown 0.6s var(--transition);
 }
@@ -87,7 +89,7 @@ body {
     font-weight: 700;
     font-size: 18px;
     text-decoration: none;
-    color: var(--primary);
+    color: var(--secondary);
     font-family: var(--font-display);
     letter-spacing: -1px;
 }
@@ -98,6 +100,7 @@ body {
     max-width: 50px;
     object-fit: contain;
     transition: transform 0.3s var(--transition);
+    filter: brightness(0) invert(1);
 }
 
 .logo-image:hover {
@@ -116,7 +119,7 @@ body {
 
 .nav-link {
     text-decoration: none;
-    color: var(--primary);
+    color: var(--text-light);
     font-weight: 500;
     font-size: 15px;
     position: relative;
@@ -144,7 +147,7 @@ body {
 
 .nav-cta {
     background: var(--secondary);
-    color: white;
+    color: var(--primary);
     padding: 12px 28px;
     border-radius: 6px;
     text-decoration: none;
@@ -156,7 +159,7 @@ body {
 
 .nav-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(14, 168, 84, 0.25);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
 }
 
 .desktop-cta {
@@ -177,7 +180,7 @@ body {
 .hamburger span {
     width: 25px;
     height: 3px;
-    background: var(--primary);
+    background: var(--secondary);
     border-radius: 2px;
     transition: all 0.3s var(--transition);
 }
@@ -201,33 +204,35 @@ body {
 
 .btn-primary {
     background: var(--secondary);
-    color: white;
+    color: var(--primary);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(14, 168, 84, 0.3);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary {
-    background: var(--primary);
-    color: white;
+    background: var(--primary-light);
+    color: var(--secondary);
+    border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.1);
+    border-color: var(--secondary);
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
 }
 
 .btn-outline:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--primary);
     transform: translateY(-3px);
 }
 
@@ -246,7 +251,7 @@ body {
     display: flex;
     align-items: center;
     padding: 80px 40px 40px;
-    background: #ffffff;
+    background: var(--primary);
     overflow: hidden;
 }
 
@@ -260,14 +265,14 @@ body {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.6;
+    opacity: 0.05;
     animation: float 20s ease-in-out infinite;
 }
 
 .orb-1 {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(14, 168, 84, 0.4), transparent);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
     top: -100px;
     right: -100px;
     animation-delay: 0s;
@@ -276,7 +281,7 @@ body {
 .orb-2 {
     width: 500px;
     height: 500px;
-    background: radial-gradient(circle, rgba(26, 26, 26, 0.2), transparent);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
     bottom: -100px;
     left: -100px;
     animation-delay: 2s;
@@ -297,7 +302,7 @@ body {
 .gradient-lines {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(14, 168, 84, 0.05) 50%, transparent 100%);
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
 }
 
 .hero-content {
@@ -338,10 +343,7 @@ body {
 }
 
 .hero-title .highlight {
-    background: linear-gradient(135deg, var(--secondary), #0d9e4f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--secondary);
 }
 
 @keyframes slideUp {
@@ -378,7 +380,7 @@ body {
     gap: 30px;
     margin-bottom: 40px;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--border);
 }
 
 .stat {
@@ -391,10 +393,7 @@ body {
     font-size: 36px;
     font-weight: 700;
     margin-bottom: 8px;
-    background: linear-gradient(135deg, var(--secondary), #0d9e4f);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--secondary);
 }
 
 .stat-label {
@@ -416,11 +415,11 @@ body {
 
 .floating-card {
     position: absolute;
-    background: white;
+    background: var(--primary-light);
     padding: 20px;
     border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     animation: float 8s ease-in-out infinite;
     max-width: 180px;
@@ -452,15 +451,15 @@ body {
 .floating-card p {
     font-weight: 600;
     font-size: 14px;
+    color: var(--text-light);
 }
 
 .hero-shape {
     position: absolute;
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, var(--secondary), #0d9e4f);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent);
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    opacity: 0.1;
     animation: morph 15s ease-in-out infinite;
     top: 50px;
     right: -100px;
@@ -482,13 +481,13 @@ body {
 }
 
 /* ==========================================
-   PROMO BANNER
+   PROMO BANNER (KEEPS GREEN)
    ========================================== */
 
 .promo-banner {
     position: relative;
     padding: 60px 40px;
-    background: linear-gradient(135deg, var(--primary), #2a2a2a);
+    background: linear-gradient(135deg, var(--green), #0d9e4f);
     color: white;
     overflow: hidden;
     text-align: center;
@@ -498,7 +497,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(14, 168, 84, 0.2), transparent);
+    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1), transparent);
     animation: pulse 4s ease-in-out infinite;
 }
 
@@ -520,7 +519,7 @@ body {
 
 .promo-badge {
     display: inline-block;
-    background: var(--secondary);
+    background: rgba(255, 255, 255, 0.2);
     color: white;
     padding: 8px 16px;
     border-radius: 20px;
@@ -558,24 +557,24 @@ body {
     font-family: var(--font-display);
     font-weight: 900;
     font-size: 28px;
-    color: var(--secondary);
+    color: #ffffff;
 }
 
 .promo-link {
     display: inline-block;
-    color: var(--secondary);
+    color: white;
     text-decoration: none;
     font-weight: 700;
     padding: 12px 24px;
-    border: 2px solid var(--secondary);
+    border: 2px solid white;
     border-radius: 6px;
     transition: all 0.3s var(--transition);
     animation: fadeInUp 0.8s var(--transition) 0.4s both;
 }
 
 .promo-link:hover {
-    background: var(--secondary);
-    color: white;
+    background: white;
+    color: var(--green);
     transform: translateY(-3px);
 }
 
@@ -585,7 +584,7 @@ body {
 
 .services {
     padding: 100px 40px;
-    background: #f8f9fa;
+    background: var(--primary-light);
 }
 
 .section-header {
@@ -617,10 +616,10 @@ body {
 }
 
 .service-card {
-    background: white;
+    background: var(--primary);
     padding: 40px;
     border-radius: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border);
     position: relative;
     overflow: hidden;
     transition: all 0.3s var(--transition);
@@ -636,8 +635,9 @@ body {
 
 .service-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 50px rgba(14, 168, 84, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     border-color: var(--secondary);
+    background: var(--primary-light);
 }
 
 .service-hover-effect {
@@ -652,7 +652,7 @@ body {
 }
 
 .service-card:hover .service-hover-effect {
-    opacity: 0.15;
+    opacity: 0.08;
 }
 
 .service-icon {
@@ -679,7 +679,7 @@ body {
 
 .about {
     padding: 100px 40px;
-    background: white;
+    background: var(--primary);
 }
 
 .about-container {
@@ -733,6 +733,7 @@ body {
 .value-item p {
     font-size: 14px;
     margin: 0;
+    color: var(--text-light);
 }
 
 .about-visual {
@@ -744,14 +745,14 @@ body {
     overflow: hidden;
     border-radius: 20px;
     height: 500px;
+    border: 1px solid var(--border);
 }
 
 .about-image-wrapper::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--secondary), transparent);
-    opacity: 0.1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
     z-index: 2;
 }
 
@@ -764,7 +765,7 @@ body {
 .image-placeholder {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #e5e5e5, #f5f5f5);
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -776,7 +777,7 @@ body {
 
 .process {
     padding: 100px 40px;
-    background: linear-gradient(180deg, #f8f9fa, white);
+    background: linear-gradient(180deg, var(--primary-light), var(--primary));
 }
 
 .process-timeline {
@@ -802,7 +803,7 @@ body {
     font-family: var(--font-mono);
     font-size: 48px;
     font-weight: 700;
-    color: var(--secondary);
+    color: var(--text-light);
     line-height: 1;
 }
 
@@ -822,10 +823,10 @@ body {
     position: absolute;
     left: 47px;
     top: 80px;
-    width: 6px;
+    width: 2px;
     height: 80px;
-    background: linear-gradient(180deg, var(--secondary), transparent);
-    border-radius: 3px;
+    background: linear-gradient(180deg, var(--border), transparent);
+    border-radius: 1px;
     display: none;
 }
 
@@ -839,7 +840,7 @@ body {
 
 .quote-section {
     padding: 100px 40px;
-    background: white;
+    background: var(--primary);
 }
 
 .quote-header {
@@ -890,20 +891,25 @@ body {
 .form-group input,
 .form-group textarea {
     padding: 14px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-family: var(--font-body);
     font-size: 15px;
     transition: all 0.3s var(--transition);
-    background: #f8f9fa;
+    background: var(--primary-light);
+    color: var(--secondary);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-light);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
     border-color: var(--secondary);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(14, 168, 84, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 .form-group textarea {
@@ -923,7 +929,7 @@ body {
 .cta-section {
     position: relative;
     padding: 100px 40px;
-    background: white;
+    background: var(--primary);
     overflow: hidden;
 }
 
@@ -937,7 +943,7 @@ body {
     position: absolute;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(14, 168, 84, 0.3), transparent);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent);
     border-radius: 50%;
     bottom: -200px;
     right: -100px;
@@ -978,9 +984,10 @@ body {
    ========================================== */
 
 .footer {
-    background: var(--primary);
-    color: white;
+    background: #050505;
+    color: var(--secondary);
     padding: 80px 40px 30px;
+    border-top: 1px solid var(--border);
 }
 
 .footer-content {
@@ -1000,13 +1007,13 @@ body {
 }
 
 .footer-section p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
     font-size: 14px;
     margin-bottom: 12px;
 }
 
 .footer-section a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-light);
     text-decoration: none;
     transition: color 0.3s var(--transition);
 }
@@ -1024,10 +1031,10 @@ body {
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border);
     padding-top: 30px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-light);
     font-size: 14px;
 }
 
@@ -1078,7 +1085,7 @@ body {
         left: 0;
         top: 80px;
         flex-direction: column;
-        background: white;
+        background: var(--primary-light);
         width: 100%;
         text-align: left;
         padding: 20px 0;
@@ -1088,7 +1095,7 @@ body {
         z-index: 999;
         transform: translateX(-100%);
         transition: transform 0.3s var(--transition);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .nav-links.mobile-open {
@@ -1096,7 +1103,7 @@ body {
     }
 
     .nav-links li {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        border-bottom: 1px solid var(--border);
     }
 
     .nav-links li a {
@@ -1106,7 +1113,7 @@ body {
     }
 
     .nav-links li a:hover {
-        background: rgba(14, 168, 84, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         padding-left: 30px;
     }
 
