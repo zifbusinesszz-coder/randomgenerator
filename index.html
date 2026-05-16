@@ -3,324 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wood's Waste | Premium Junk Removal Services</title>
+    <title>Wood's Waste — Premium Junk Removal</title>
     <link rel="icon" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo-section">
-                <div class="logo-icon">W</div>
-                <span class="logo-text">WOOD'S WASTE</span>
+
+<!-- ======= NAV ======= -->
+<nav class="nav">
+    <div class="nav__inner">
+        <a href="#hero" class="nav__logo">
+            <span class="nav__logo-mark">WW</span>
+            <span class="nav__logo-name">Wood's Waste</span>
+        </a>
+
+        <button class="nav__burger" id="burger" aria-label="Toggle menu">
+            <span></span><span></span>
+        </button>
+
+        <ul class="nav__links" id="navLinks">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#quote">Quote</a></li>
+        </ul>
+
+        <a href="tel:5072981179" class="nav__cta">
+            <span class="nav__cta-label">Call Now</span>
+            <span class="nav__cta-num">(507) 298-1179</span>
+        </a>
+    </div>
+</nav>
+
+<!-- ======= HERO ======= -->
+<section id="hero" class="hero">
+    <div class="hero__noise"></div>
+
+    <div class="hero__inner">
+        <div class="hero__eyebrow">
+            <span class="hero__dot"></span>
+            Minneapolis, MN — Available Today
+        </div>
+
+        <h1 class="hero__title">
+            <span class="hero__title-line">Reclaim</span>
+            <span class="hero__title-line hero__title-line--indent">Your</span>
+            <span class="hero__title-line hero__title-line--space">Space.</span>
+        </h1>
+
+        <div class="hero__bottom">
+            <p class="hero__sub">
+                Wood's Waste removes what others won't.
+                Fast. Responsible. No surprises.
+            </p>
+            <div class="hero__actions">
+                <a href="#quote" class="btn btn--fill">Get Free Quote</a>
+                <a href="tel:5072981179" class="btn btn--ghost">(507) 298-1179</a>
             </div>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+        </div>
+    </div>
+
+    <div class="hero__stats">
+        <div class="hero__stat">
+            <strong>500+</strong>
+            <span>Jobs completed</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+            <strong>24 hr</strong>
+            <span>Same-day available</span>
+        </div>
+        <div class="hero__stat-divider"></div>
+        <div class="hero__stat">
+            <strong>100%</strong>
+            <span>Eco-friendly disposal</span>
+        </div>
+    </div>
+
+    <div class="hero__marquee-wrap">
+        <div class="hero__marquee">
+            <span>Furniture Removal&nbsp;&nbsp;—&nbsp;&nbsp;Appliances&nbsp;&nbsp;—&nbsp;&nbsp;Garage Cleanouts&nbsp;&nbsp;—&nbsp;&nbsp;Yard Waste&nbsp;&nbsp;—&nbsp;&nbsp;Construction Debris&nbsp;&nbsp;—&nbsp;&nbsp;General Junk&nbsp;&nbsp;—&nbsp;&nbsp;</span>
+            <span aria-hidden="true">Furniture Removal&nbsp;&nbsp;—&nbsp;&nbsp;Appliances&nbsp;&nbsp;—&nbsp;&nbsp;Garage Cleanouts&nbsp;&nbsp;—&nbsp;&nbsp;Yard Waste&nbsp;&nbsp;—&nbsp;&nbsp;Construction Debris&nbsp;&nbsp;—&nbsp;&nbsp;General Junk&nbsp;&nbsp;—&nbsp;&nbsp;</span>
+        </div>
+    </div>
+</section>
+
+<!-- ======= SPRING OFFER ======= -->
+<section class="offer">
+    <div class="offer__inner">
+        <div class="offer__left">
+            <div class="offer__badge">Limited Time</div>
+            <h2 class="offer__title">Spring Refresh<br>Special</h2>
+        </div>
+        <div class="offer__right">
+            <div class="offer__discount">20<span>%</span><br>OFF</div>
+            <p class="offer__copy">All services this season. Call now to lock in your rate before it's gone.</p>
+            <a href="tel:5072981179" class="offer__cta">Claim Your Discount →</a>
+        </div>
+    </div>
+</section>
+
+<!-- ======= SERVICES ======= -->
+<section id="services" class="services">
+    <div class="services__header">
+        <div class="services__label">What We Handle</div>
+        <h2 class="services__title">Every job.<br>Every item.</h2>
+    </div>
+
+    <div class="services__grid">
+        <div class="service">
+            <div class="service__num">01</div>
+            <div class="service__icon">🛋️</div>
+            <h3 class="service__name">Furniture</h3>
+            <p class="service__desc">Sofas, beds, dressers—hauled and disposed responsibly.</p>
+        </div>
+        <div class="service">
+            <div class="service__num">02</div>
+            <div class="service__icon">🔧</div>
+            <h3 class="service__name">Appliances</h3>
+            <p class="service__desc">Fridges, washers, dryers. Safe, legal removal every time.</p>
+        </div>
+        <div class="service">
+            <div class="service__num">03</div>
+            <div class="service__icon">🏗️</div>
+            <h3 class="service__name">Garage Cleanouts</h3>
+            <p class="service__desc">Years of accumulation, gone in a matter of hours.</p>
+        </div>
+        <div class="service">
+            <div class="service__num">04</div>
+            <div class="service__icon">🌳</div>
+            <h3 class="service__name">Yard Waste</h3>
+            <p class="service__desc">Branches, leaves, landscaping debris. We clear it all.</p>
+        </div>
+        <div class="service">
+            <div class="service__num">05</div>
+            <div class="service__icon">🧱</div>
+            <h3 class="service__name">Construction Debris</h3>
+            <p class="service__desc">Drywall, concrete, lumber—no job is too heavy.</p>
+        </div>
+        <div class="service">
+            <div class="service__num">06</div>
+            <div class="service__icon">✨</div>
+            <h3 class="service__name">General Junk</h3>
+            <p class="service__desc">Everything else. One call is all it takes.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ======= ABOUT ======= -->
+<section id="about" class="about">
+    <div class="about__inner">
+        <div class="about__photo-col">
+            <div class="about__photo-wrap">
+                <img src="team.JPG" alt="Griffin & Gavin — Wood's Waste" class="about__photo">
+                <div class="about__photo-caption">Griffin &amp; Gavin — Founders</div>
             </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#hero" class="nav-link">Home</a></li>
-                <li><a href="#services" class="nav-link">Services</a></li>
-                <li><a href="#about" class="nav-link">Why Us</a></li>
-                <li><a href="#process" class="nav-link">Process</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+        </div>
+        <div class="about__content">
+            <div class="about__label">About Us</div>
+            <h2 class="about__title">Local guys.<br>Serious work.</h2>
+            <p class="about__body">We're Griffin and Gavin — two Minnesota natives who built Wood's Waste on the belief that junk removal should be simple, honest, and environmentally responsible. No call centers. No corporate nonsense. Just two people who show up and get the job done.</p>
+            <div class="about__pillars">
+                <div class="about__pillar">
+                    <span class="about__pillar-icon">⚡</span>
+                    <div>
+                        <strong>Fast</strong>
+                        <p>Same-day service, on time, every time.</p>
+                    </div>
+                </div>
+                <div class="about__pillar">
+                    <span class="about__pillar-icon">♻️</span>
+                    <div>
+                        <strong>Eco-Conscious</strong>
+                        <p>We donate, recycle, and dispose responsibly.</p>
+                    </div>
+                </div>
+                <div class="about__pillar">
+                    <span class="about__pillar-icon">🤝</span>
+                    <div>
+                        <strong>No Surprises</strong>
+                        <p>Transparent pricing. Zero hidden fees.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ======= PROCESS ======= -->
+<section id="process" class="process">
+    <div class="process__header">
+        <div class="process__label">How It Works</div>
+        <h2 class="process__title">Three steps<br>to a clean space.</h2>
+    </div>
+    <div class="process__steps">
+        <div class="process__step">
+            <div class="process__step-num">01</div>
+            <div class="process__step-line"></div>
+            <h3>Get in Touch</h3>
+            <p>Call, text, or fill out our form. Tell us what needs to go.</p>
+        </div>
+        <div class="process__step">
+            <div class="process__step-num">02</div>
+            <div class="process__step-line"></div>
+            <h3>We Show Up</h3>
+            <p>Our crew arrives on time, fully equipped, and ready to work.</p>
+        </div>
+        <div class="process__step">
+            <div class="process__step-num">03</div>
+            <div class="process__step-line"></div>
+            <h3>Space Reclaimed</h3>
+            <p>We haul everything away. You're left with a clean space and peace of mind.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ======= QUOTE FORM ======= -->
+<section id="quote" class="quote">
+    <div class="quote__inner">
+        <div class="quote__left">
+            <div class="quote__label">Free Quote</div>
+            <h2 class="quote__title">Ready to clear<br>it out?</h2>
+            <p class="quote__sub">We respond within 2 hours. No commitment required.</p>
+            <div class="quote__contact">
+                <a href="tel:5072981179" class="quote__contact-link">
+                    <span class="quote__contact-type">Phone</span>
+                    <span class="quote__contact-val">(507) 298-1179</span>
+                </a>
+                <a href="sms:5072981179" class="quote__contact-link">
+                    <span class="quote__contact-type">Text</span>
+                    <span class="quote__contact-val">Send a Message</span>
+                </a>
+            </div>
+        </div>
+        <div class="quote__right">
+            <form class="quote__form" action="https://formspree.io/f/xpqkvqva" method="POST">
+                <div class="field">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your name" required>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(000) 000-0000" required>
+                </div>
+                <div class="field">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Job site address" required>
+                </div>
+                <div class="field">
+                    <label for="items">What needs to go?</label>
+                    <textarea id="items" name="items" placeholder="Describe your items or cleanout…" required></textarea>
+                </div>
+                <button type="submit" class="btn btn--fill btn--large">Send Request</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- ======= FOOTER ======= -->
+<footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__brand">
+            <div class="footer__logo">WW</div>
+            <p>Premium junk removal.<br>Minneapolis &amp; surrounding areas.</p>
+        </div>
+        <div class="footer__links">
+            <h4>Navigation</h4>
+            <ul>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#process">Process</a></li>
+                <li><a href="#quote">Get a Quote</a></li>
             </ul>
-            <a href="tel:5072981179" class="nav-cta">Call Now</a>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="hero-pattern"></div>
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">✨ Junk Removal Experts</div>
-                <h1 class="hero-title">Reclaim Your <span class="accent">Space</span></h1>
-                <p class="hero-subtitle">Professional junk removal done right. Fast, eco-friendly, and transparent pricing.</p>
-                
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">500+</span>
-                        <span class="stat-label">Happy Clients</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">24h</span>
-                        <span class="stat-label">Fast Response</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">100%</span>
-                        <span class="stat-label">Eco-Friendly</span>
-                    </div>
-                </div>
-
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Get Free Quote</button>
-                    <a href="tel:5072981179" class="btn btn-outline">Call (507) 298-1179</a>
-                </div>
-            </div>
-
-            <div class="hero-visual">
-                <div class="visual-card">
-                    <div class="card-content">
-                        <div class="card-icon">📦</div>
-                        <p>Same-Day Removal</p>
-                    </div>
-                </div>
-                <div class="visual-card card-2">
-                    <div class="card-content">
-                        <div class="card-icon">♻️</div>
-                        <p>Responsible Disposal</p>
-                    </div>
-                </div>
-                <div class="visual-card card-3">
-                    <div class="card-content">
-                        <div class="card-icon">💰</div>
-                        <p>Fair Pricing</p>
-                    </div>
-                </div>
-            </div>
+        <div class="footer__contact">
+            <h4>Contact</h4>
+            <a href="tel:5072981179">(507) 298-1179</a>
+            <a href="sms:5072981179">Text Us</a>
         </div>
-    </section>
+    </div>
+    <div class="footer__bar">
+        <span>&copy; 2025 Wood's Waste LLC — Minnesota</span>
+        <span>Eco-friendly disposal. Every job.</span>
+    </div>
+</footer>
 
-    <!-- Offer Banner -->
-    <section class="offer-banner">
-        <div class="offer-content">
-            <h3>🌱 Spring Refresh Special</h3>
-            <p><strong>20% OFF</strong> all services this season</p>
-            <a href="tel:5072981179" class="offer-link">Claim Your Discount</a>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="section-header">
-            <h2>Our Services</h2>
-            <p>From single items to complete cleanouts</p>
-        </div>
-
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">🛋️</span>
-                    <h3>Furniture Removal</h3>
-                </div>
-                <p>Sofas, beds, dressers, and all furniture. Safely removed and responsibly disposed.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">🔧</span>
-                    <h3>Appliances</h3>
-                </div>
-                <p>Refrigerators, washers, dryers. Handled with care and disposed legally.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">🏗️</span>
-                    <h3>Garage Cleanouts</h3>
-                </div>
-                <p>Years of clutter gone in hours. We handle the heavy lifting.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">🌳</span>
-                    <h3>Yard Waste</h3>
-                </div>
-                <p>Branches, leaves, landscaping debris. Quick and eco-friendly removal.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">🧱</span>
-                    <h3>Construction Debris</h3>
-                </div>
-                <p>Drywall, concrete, wood, and more. We handle any construction waste.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-header">
-                    <span class="service-icon">✨</span>
-                    <h3>General Junk</h3>
-                </div>
-                <p>Everything else you need gone. One call, total peace of mind.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Us Section -->
-    <section id="about" class="why-us">
-        <div class="why-us-container">
-            <div class="why-us-content">
-                <h2>Why Choose Wood's Waste?</h2>
-                <p>We're Griffin and Gavin, two Minnesota natives who believe junk removal should be simple, fair, and environmentally responsible.</p>
-
-                <div class="benefits-grid">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">⚡</div>
-                        <div>
-                            <h4>Lightning Fast</h4>
-                            <p>Same-day service available. We show up on time, ready to go.</p>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💚</div>
-                        <div>
-                            <h4>100% Eco-Friendly</h4>
-                            <p>We donate, recycle, and responsibly dispose of everything.</p>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💵</div>
-                        <div>
-                            <h4>Transparent Pricing</h4>
-                            <p>No hidden fees. You know exactly what you're paying.</p>
-                        </div>
-                    </div>
-
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🤝</div>
-                        <div>
-                            <h4>Local & Trusted</h4>
-                            <p>Serving Minneapolis area with 500+ happy customers.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="why-us-visual">
-                <div class="visual-placeholder">
-                    <div class="placeholder-content">
-                        <span class="placeholder-icon">👥</span>
-                        <p>Griffin & Gavin</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section id="process" class="process">
-        <div class="section-header">
-            <h2>How It Works</h2>
-            <p>Simple 3-step process</p>
-        </div>
-
-        <div class="process-steps">
-            <div class="step">
-                <div class="step-number">01</div>
-                <h3>Contact Us</h3>
-                <p>Call, text, or fill our form. Describe what you need removed and where.</p>
-            </div>
-
-            <div class="step-divider"></div>
-
-            <div class="step">
-                <div class="step-number">02</div>
-                <h3>We Quote & Schedule</h3>
-                <p>Get a fast quote. We'll schedule a time that works for you.</p>
-            </div>
-
-            <div class="step-divider"></div>
-
-            <div class="step">
-                <div class="step-number">03</div>
-                <h3>Space Reclaimed</h3>
-                <p>Our team handles everything. You're left with a clean space.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Form Section -->
-    <section id="contact" class="contact-section">
-        <div class="contact-container">
-            <div class="contact-header">
-                <h2>Get Your Free Quote</h2>
-                <p>Tell us about your project and we'll respond within 2 hours</p>
-            </div>
-
-            <div class="contact-content">
-                <form class="contact-form" action="https://formspree.io/f/xpqkvqva" method="POST">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Your Name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" id="address" name="address" placeholder="Your Address" required>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <textarea id="items" name="items" placeholder="What items need removed?" rows="4" required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-large">Get Free Quote</button>
-                </form>
-
-                <div class="contact-info">
-                    <div class="info-item">
-                        <span class="info-icon">📞</span>
-                        <div>
-                            <h4>Call Us</h4>
-                            <a href="tel:5072981179">(507) 298-1179</a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">💬</span>
-                        <div>
-                            <h4>Text Us</h4>
-                            <a href="sms:5072981179">Send a Text</a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">⏱️</span>
-                        <div>
-                            <h4>Response Time</h4>
-                            <p>Within 2 hours</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Wood's Waste</h4>
-                <p>Premium junk removal serving Minneapolis & surrounding areas since 2023.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#hero">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">Why Us</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Get Started</h4>
-                <p><a href="tel:5072981179">(507) 298-1179</a></p>
-                <p>Available for same-day service</p>
-            </div>
-        </div>
-        <div class="footer-divider"></div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Wood's Waste. Eco-friendly junk removal, Minnesota.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
