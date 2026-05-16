@@ -1,13 +1,12 @@
 /* ==========================================
-   WOOD'S WASTE - INTERACTIVE JS
+   WOOD'S WASTE - FINAL PRODUCTION JS
    ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
     initMobileNav();
     initNavbarScroll();
     initSmoothScrolling();
-    initScrollAnimations();
-    initHeroParallax();
+    initScrollReveal();
     initFormEnhancements();
     initCounterAnimations();
 });
@@ -27,7 +26,7 @@ function initMobileNav() {
         hamburger.classList.toggle("active");
     });
 
-    // Close menu when clicking a link
+    // Close on link click
     document.querySelectorAll(".nav-link").forEach(link => {
         link.addEventListener("click", () => {
             navLinks.classList.remove("mobile-open");
@@ -45,48 +44,36 @@ function initMobileNav() {
 }
 
 /* ==========================================
-   NAVBAR SCROLL EFFECT
+   NAVBAR (clean + stable)
    ========================================== */
 
 function initNavbarScroll() {
     const navbar = document.querySelector(".navbar");
-
     if (!navbar) return;
 
-    let lastScroll = 0;
-
     window.addEventListener("scroll", () => {
-        const currentScroll = window.pageYOffset;
-
-        // Add shadow when scrolling
-        if (currentScroll > 50) {
-            navbar.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)";
-            navbar.style.background = "rgba(255,255,255,0.98)";
+        if (window.scrollY > 30) {
+            navbar.classList.add("scrolled");
         } else {
-            navbar.style.boxShadow = "none";
-            navbar.style.background = "rgba(255,255,255,0.95)";
+            navbar.classList.remove("scrolled");
         }
-
-        lastScroll = currentScroll;
     });
 }
 
 /* ==========================================
-   SMOOTH SCROLLING (enhanced)
+   SMOOTH SCROLL (anchor links)
    ========================================== */
 
 function initSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function (e) {
-            const targetId = this.getAttribute("href");
-            const target = document.querySelector(targetId);
-
+        anchor.addEventListener("click", (e) => {
+            const target = document.querySelector(anchor.getAttribute("href"));
             if (!target) return;
 
             e.preventDefault();
 
             window.scrollTo({
-                top: target.offsetTop - 70,
+                top: target.offsetTop - 80,
                 behavior: "smooth"
             });
         });
@@ -94,153 +81,84 @@ function initSmoothScrolling() {
 }
 
 /* ==========================================
-   SCROLL ANIMATIONS (Intersection Observer)
+   SCROLL REVEAL (SAFE + NON-BREAKING)
    ========================================== */
 
-function initScrollAnimations() {
+function initScrollReveal() {
     const elements = document.querySelectorAll(
         ".service-card, .section-header, .process-step, .value-item, .about-content, .about-visual"
     );
 
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                }
-            });
-        },
-        {
-            threshold: 0.15
-        }
-    );
-
-    elements.forEach(el => {
-        el.style.opacity = "0";
-        el.style.transform = "translateY(30px)";
-        el.style.transition = "all 0.6s ease-out";
-        observer.observe(el);
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+            }
+        });
+    }, {
+        threshold: 0.12
     });
+
+    elements.forEach(el => observer.observe(el));
 }
 
 /* ==========================================
-   HERO PARALLAX EFFECT
-   ========================================== */
-
-function initHeroParallax() {
-    const orbs = document.querySelectorAll(".gradient-orb");
-    const floatingCards = document.querySelectorAll(".floating-card");
-
-    window.addEventListener("scroll", () => {
-        const scrollY = window.scrollY;
-
-        // Move background orbs
-        orbs.forEach((orb, index) => {
-            const speed = index === 0 ? 0.2 : 0.15;
-            orb.style.transform = `translateY(${scrollY * speed}px)`;
-        });
-
-        // Slight floating card movement
-        floatingCards.forEach((card, index) => {
-            const speed = 0.05 + index * 0.02;
-            card.style.transform = `translateY(${scrollY * speed}px)`;
-        });
-    });
-}
-
-/* ==========================================
-   FORM ENHANCEMENTS
+   FORM UX (conversion focused, no bugs)
    ========================================== */
 
 function initFormEnhancements() {
     const form = document.querySelector(".quote-form");
-
     if (!form) return;
 
-    form.addEventListener("submit", (e) => {
-        const button = form.querySelector("button[type='submit']");
-        if (!button) return;
+    form.addEventListener("submit", () => {
+        const btn = form.querySelector("button[type='submit']");
+        if (!btn) return;
 
-        button.innerText = "Sending...";
-        button.disabled = true;
-
-        // Let Formspree handle submission
-        setTimeout(() => {
-            button.innerText = "Sent!";
-            button.style.background = "#10b981";
-        }, 1200);
-    });
-
-    // Input focus effects
-    document.querySelectorAll("input, textarea").forEach(input => {
-        input.addEventListener("focus", () => {
-            input.parentElement.classList.add("focused");
-        });
-
-        input.addEventListener("blur", () => {
-            input.parentElement.classList.remove("focused");
-        });
+        btn.innerText = "Sending...";
+        btn.disabled = true;
     });
 }
 
 /* ==========================================
-   COUNTER ANIMATIONS (hero stats)
+   COUNTER ANIMATION (safe + smooth)
    ========================================== */
 
 function initCounterAnimations() {
     const counters = document.querySelectorAll(".stat-number");
 
-    const animateCounter = (el) => {
-        const target = el.innerText.replace(/\D/g, "");
-        const suffix = el.innerText.replace(/[0-9]/g, "");
+    const animate = (el) => {
+        const raw = el.innerText.replace(/\D/g, "");
+        const target = parseInt(raw);
+
+        if (!target) return;
+
         let count = 0;
-        const speed = 30;
+        const step = Math.max(1, Math.floor(target / 60));
 
         const update = () => {
-            if (count < target) {
-                count++;
-                el.innerText = count + suffix;
-                setTimeout(update, speed);
+            count += step;
+
+            if (count >= target) {
+                el.innerText = el.innerText.includes("+")
+                    ? target + "+"
+                    : target;
             } else {
-                el.innerText = target + suffix;
+                el.innerText = count;
+                requestAnimationFrame(update);
             }
         };
 
         update();
     };
 
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounter(entry.target);
-                    observer.unobserve(entry.target);
-                }
-            });
-        },
-        { threshold: 0.6 }
-    );
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animate(entry.target);
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.6 });
 
-    counters.forEach(counter => observer.observe(counter));
+    counters.forEach(c => observer.observe(c));
 }
-
-/* ==========================================
-   EXTRA POLISH: BUTTON RIPPLE EFFECT
-   ========================================== */
-
-document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn");
-    if (!btn) return;
-
-    const ripple = document.createElement("span");
-    ripple.classList.add("ripple");
-
-    const rect = btn.getBoundingClientRect();
-    ripple.style.left = `${e.clientX - rect.left}px`;
-    ripple.style.top = `${e.clientY - rect.top}px`;
-
-    btn.appendChild(ripple);
-
-    setTimeout(() => ripple.remove(), 600);
-});
