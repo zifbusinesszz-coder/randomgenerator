@@ -1,105 +1,246 @@
-// Mobile Navigation Toggle
-const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('navLinks');
+/* ==========================================
+   WOOD'S WASTE - INTERACTIVE JS
+   ========================================== */
 
-if (hamburger) {
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('mobile-open');
+document.addEventListener("DOMContentLoaded", () => {
+    initMobileNav();
+    initNavbarScroll();
+    initSmoothScrolling();
+    initScrollAnimations();
+    initHeroParallax();
+    initFormEnhancements();
+    initCounterAnimations();
+});
+
+/* ==========================================
+   MOBILE NAVIGATION
+   ========================================== */
+
+function initMobileNav() {
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("navLinks");
+
+    if (!hamburger || !navLinks) return;
+
+    hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("mobile-open");
+        hamburger.classList.toggle("active");
     });
 
-    // Close mobile menu when a link is clicked
-    const navItems = navLinks.querySelectorAll('a');
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('mobile-open');
+    // Close menu when clicking a link
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("mobile-open");
+            hamburger.classList.remove("active");
+        });
+    });
+
+    // Close on outside click
+    document.addEventListener("click", (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+            navLinks.classList.remove("mobile-open");
+            hamburger.classList.remove("active");
+        }
+    });
+}
+
+/* ==========================================
+   NAVBAR SCROLL EFFECT
+   ========================================== */
+
+function initNavbarScroll() {
+    const navbar = document.querySelector(".navbar");
+
+    if (!navbar) return;
+
+    let lastScroll = 0;
+
+    window.addEventListener("scroll", () => {
+        const currentScroll = window.pageYOffset;
+
+        // Add shadow when scrolling
+        if (currentScroll > 50) {
+            navbar.style.boxShadow = "0 10px 30px rgba(0,0,0,0.08)";
+            navbar.style.background = "rgba(255,255,255,0.98)";
+        } else {
+            navbar.style.boxShadow = "none";
+            navbar.style.background = "rgba(255,255,255,0.95)";
+        }
+
+        lastScroll = currentScroll;
+    });
+}
+
+/* ==========================================
+   SMOOTH SCROLLING (enhanced)
+   ========================================== */
+
+function initSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            const targetId = this.getAttribute("href");
+            const target = document.querySelector(targetId);
+
+            if (!target) return;
+
+            e.preventDefault();
+
+            window.scrollTo({
+                top: target.offsetTop - 70,
+                behavior: "smooth"
+            });
         });
     });
 }
 
-// Smooth scroll and active nav link highlighting
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && document.querySelector(href)) {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+/* ==========================================
+   SCROLL ANIMATIONS (Intersection Observer)
+   ========================================== */
+
+function initScrollAnimations() {
+    const elements = document.querySelectorAll(
+        ".service-card, .section-header, .process-step, .value-item, .about-content, .about-visual"
+    );
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
             });
+        },
+        {
+            threshold: 0.15
         }
-    });
-});
+    );
 
-// Update active nav link on scroll
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
-    });
-});
-
-// Form validation and submission feedback
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        const button = this.querySelector('button[type="submit"]');
-        const originalText = button.textContent;
-        
-        button.textContent = 'Sending...';
-        button.disabled = true;
-        
-        // Formspree will handle the actual submission
-        // This just provides visual feedback
-        setTimeout(() => {
-            button.textContent = originalText;
-            button.disabled = false;
-        }, 3000);
+    elements.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(30px)";
+        el.style.transition = "all 0.6s ease-out";
+        observer.observe(el);
     });
 }
 
-// Add scroll animation for elements
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
+/* ==========================================
+   HERO PARALLAX EFFECT
+   ========================================== */
 
-const observer = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
-            observer.unobserve(entry.target);
-        }
+function initHeroParallax() {
+    const orbs = document.querySelectorAll(".gradient-orb");
+    const floatingCards = document.querySelectorAll(".floating-card");
+
+    window.addEventListener("scroll", () => {
+        const scrollY = window.scrollY;
+
+        // Move background orbs
+        orbs.forEach((orb, index) => {
+            const speed = index === 0 ? 0.2 : 0.15;
+            orb.style.transform = `translateY(${scrollY * speed}px)`;
+        });
+
+        // Slight floating card movement
+        floatingCards.forEach((card, index) => {
+            const speed = 0.05 + index * 0.02;
+            card.style.transform = `translateY(${scrollY * speed}px)`;
+        });
     });
-}, observerOptions);
+}
 
-// Observe service cards and benefit items
-document.querySelectorAll('.service-card, .benefit-item, .step').forEach(el => {
-    observer.observe(el);
-});
+/* ==========================================
+   FORM ENHANCEMENTS
+   ========================================== */
 
-// Prevent multiple form submissions
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function() {
-        const submitBtn = this.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-        }
+function initFormEnhancements() {
+    const form = document.querySelector(".quote-form");
+
+    if (!form) return;
+
+    form.addEventListener("submit", (e) => {
+        const button = form.querySelector("button[type='submit']");
+        if (!button) return;
+
+        button.innerText = "Sending...";
+        button.disabled = true;
+
+        // Let Formspree handle submission
+        setTimeout(() => {
+            button.innerText = "Sent!";
+            button.style.background = "#10b981";
+        }, 1200);
     });
+
+    // Input focus effects
+    document.querySelectorAll("input, textarea").forEach(input => {
+        input.addEventListener("focus", () => {
+            input.parentElement.classList.add("focused");
+        });
+
+        input.addEventListener("blur", () => {
+            input.parentElement.classList.remove("focused");
+        });
+    });
+}
+
+/* ==========================================
+   COUNTER ANIMATIONS (hero stats)
+   ========================================== */
+
+function initCounterAnimations() {
+    const counters = document.querySelectorAll(".stat-number");
+
+    const animateCounter = (el) => {
+        const target = el.innerText.replace(/\D/g, "");
+        const suffix = el.innerText.replace(/[0-9]/g, "");
+        let count = 0;
+        const speed = 30;
+
+        const update = () => {
+            if (count < target) {
+                count++;
+                el.innerText = count + suffix;
+                setTimeout(update, speed);
+            } else {
+                el.innerText = target + suffix;
+            }
+        };
+
+        update();
+    };
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.6 }
+    );
+
+    counters.forEach(counter => observer.observe(counter));
+}
+
+/* ==========================================
+   EXTRA POLISH: BUTTON RIPPLE EFFECT
+   ========================================== */
+
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn");
+    if (!btn) return;
+
+    const ripple = document.createElement("span");
+    ripple.classList.add("ripple");
+
+    const rect = btn.getBoundingClientRect();
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top = `${e.clientY - rect.top}px`;
+
+    btn.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 600);
 });
