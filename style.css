@@ -1143,4 +1143,35 @@ body {
 
     .cta-section h2 { font-size: 34px; }
 }
+.service-area {
+  padding: 80px 20px;
+  background: #f9f9f9;
+}
+
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 40px auto 0;
+}
+
+.area-card {
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.area-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.area-card p {
+  font-size: 0.875rem;
+  color: #666;
+}
 
