@@ -1144,49 +1144,53 @@ body {
     .cta-section h2 { font-size: 34px; }
 }
 .service-area {
-  padding: 80px 20px;
-  background: #f9f9f9;
-}
-
-.area-group-label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #999;
-  max-width: 1100px;
-  margin: 32px auto 12px;
-  padding: 0 20px;
+    padding: 80px 20px;
+    background: #f9f9f9;
 }
 
 .area-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  max-width: 1100px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    max-width: 1100px;
+    margin: 40px auto 0;
 }
 
 .area-card {
-  background: white;
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 18px 14px;
-  text-align: center;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
 }
 
 .area-card h3 {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0 0 4px;
-  color: #111;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0;
+    color: #111;
 }
 
-.area-card p {
-  font-size: 0.8rem;
-  color: #666;
-  line-height: 1.4;
-  margin: 0;
+.area-card.hidden {
+    display: none;
+}
+
+.area-toggle-btn {
+    background: none;
+    border: 1.5px solid #111;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #111;
+}
+
+.area-toggle-btn:hover {
+    background: #111;
+    color: white;
 }
 
