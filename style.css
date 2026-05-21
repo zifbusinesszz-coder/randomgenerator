@@ -1148,30 +1148,45 @@ body {
   background: #f9f9f9;
 }
 
+.area-group-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #999;
+  max-width: 1100px;
+  margin: 32px auto 12px;
+  padding: 0 20px;
+}
+
 .area-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
   max-width: 1100px;
-  margin: 40px auto 0;
+  margin: 0 auto;
 }
 
 .area-card {
   background: white;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
-  padding: 24px;
+  padding: 18px 14px;
   text-align: center;
 }
 
 .area-card h3 {
-  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0 0 4px;
+  color: #111;
 }
 
 .area-card p {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #666;
+  line-height: 1.4;
+  margin: 0;
 }
 
