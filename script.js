@@ -161,3 +161,11 @@ function initCounterAnimations() {
 
     document.querySelectorAll(".stat-number").forEach(c => observer.observe(c));
 }
+function toggleAreas() {
+    const extras = document.querySelectorAll('.area-card.extra');
+    const btn = document.getElementById('areaToggle');
+    const isHidden = extras[0].classList.contains('hidden');
+
+    extras.forEach(card => card.classList.toggle('hidden'));
+    btn.textContent = isHidden ? 'Show less ↑' : 'View all areas ↓';
+}
