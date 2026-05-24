@@ -5,3 +5,18 @@
     <priority>1.0</priority>
   </url>
 </urlset>
+<url>
+    <loc>https://woodswastemn.com/farmington</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://woodswastemn.com/lakeville</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+</url>
+<url>
+    <loc>https://woodswastemn.com/apple-valley</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+</url>
