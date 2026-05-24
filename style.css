@@ -92,10 +92,11 @@ body {
 }
 
 .logo-image {
-    height: 50px;
+    height: 52px;
     width: auto;
-    max-width: 50px;
+    max-width: 220px;
     object-fit: contain;
+    object-position: left center;
     transition: transform 0.3s var(--transition);
 }
 
