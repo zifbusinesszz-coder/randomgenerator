@@ -1194,4 +1194,12 @@ body {
     background: #111;
     color: white;
 }
+.area-card a {
+    color: #111;
+    text-decoration: none;
+}
+
+.area-card a:hover {
+    opacity: 0.6;
+}
 
