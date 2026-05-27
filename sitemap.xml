@@ -169,6 +169,21 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+            <url>
+    <loc>https://woodswastemn.com/chaska</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+            <url>
+    <loc>https://woodswastemn.com/chanhassen</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+            <url>
+    <loc>https://woodswastemn.com/victoria</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
           <url>
     <loc>https://woodswastemn.com/waconia</loc>
     <changefreq>monthly</changefreq>
