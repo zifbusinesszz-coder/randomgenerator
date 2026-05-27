@@ -68,6 +68,35 @@
         .why-check { width: 22px; height: 22px; background: #0a0a0a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
         @media (max-width: 768px) { .city-hero { padding: 120px 20px 60px; } .city-hero h1 { font-size: 40px; } .city-hero-cta { flex-direction: column; } .city-hero-cta .btn { width: 100%; } .city-intro { padding: 60px 20px; } .city-services { padding: 60px 20px; } .city-why { padding: 60px 20px; } }
         @media (max-width: 480px) { .city-hero h1 { font-size: 32px; } .city-services h2, .city-why h2 { font-size: 30px; } }
+
+        /* FAQ */
+        .city-faq { padding: 80px 40px; background: white; }
+        .city-faq-inner { max-width: 800px; margin: 0 auto; }
+        .city-faq h2 { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: #0a0a0a; margin-bottom: 40px; }
+        .faq-list { border-top: 1px solid #e0e0e0; }
+        .faq-item { border-bottom: 1px solid #e0e0e0; }
+        .faq-question { width: 100%; background: none; border: none; padding: 22px 0; display: flex; justify-content: space-between; align-items: center; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: #0a0a0a; cursor: pointer; text-align: left; gap: 16px; }
+        .faq-question:hover { color: #444; }
+        .faq-icon { font-size: 22px; font-weight: 300; flex-shrink: 0; transition: transform 0.3s ease; }
+        .faq-question[aria-expanded="true"] .faq-icon { transform: rotate(45deg); }
+        .faq-answer { display: none; padding: 0 0 22px; }
+        .faq-answer.open { display: block; }
+        .faq-answer p { font-size: 15px; color: #555; line-height: 1.8; margin: 0; }
+        .faq-answer a { color: #0a0a0a; font-weight: 600; }
+
+        /* Nearby Cities */
+        .city-nearby { padding: 80px 40px; background: #f5f5f5; }
+        .city-nearby-inner { max-width: 900px; margin: 0 auto; }
+        .city-nearby h2 { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 900; color: #0a0a0a; margin-bottom: 12px; }
+        .city-nearby-inner > p { font-size: 16px; color: #777; margin-bottom: 36px; }
+        .nearby-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .nearby-card { display: flex; align-items: center; gap: 10px; background: white; border: 1px solid #e0e0e0; border-radius: 10px; padding: 18px 20px; text-decoration: none; color: #0a0a0a; font-size: 14px; font-weight: 600; transition: all 0.25s ease; }
+        .nearby-card:hover { border-color: #0a0a0a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+        .nearby-icon { font-size: 18px; }
+        .nearby-all { font-size: 14px; }
+        .nearby-all a { color: #0a0a0a; font-weight: 600; text-decoration: underline; }
+
+        @media (max-width: 768px) { .city-faq { padding: 60px 20px; } .city-faq h2 { font-size: 30px; } .city-nearby { padding: 60px 20px; } .city-nearby h2 { font-size: 30px; } }
     </style>
 </head>
 <body>
@@ -215,6 +244,107 @@
         </form>
     </section>
 
+    <!-- FAQ -->
+    <section class="city-faq">
+        <div class="city-faq-inner">
+            <h2>Junk Removal in Northfield — Common Questions</h2>
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        How much does junk removal cost in Northfield?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Pricing is based on how much truck space your load takes up. A single item like a couch or appliance typically runs $75–$150. A full garage or estate cleanout is priced by volume and quoted before we start. There are no hidden fees — what we quote is what you pay. Call or text <a href="tel:5072981179">(507) 298-1179</a> for a fast estimate.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Do you offer same-day junk removal in Northfield?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes — same-day service is frequently available in Northfield. We keep our schedule flexible for exactly this reason. Call or text us in the morning and we can often have a crew out the same day. Response time is typically within 2 hours.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        What items do you take?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We take almost everything: furniture, appliances, mattresses, electronics, construction debris, yard waste, garage contents, and general clutter. The few things we can't take are hazardous materials like paint, chemicals, and propane tanks — those require special disposal. If you're unsure about an item, just ask when you call.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Do I need to carry anything to the curb?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No. We do all the lifting and carrying — from any room, any floor, any part of your property. You just point at what needs to go and we handle the rest. No prep work required on your end.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        What happens to my items after pickup?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We sort everything after pickup. Usable furniture and household items are donated to local charities and organizations before anything goes to a landfill. Recyclable materials are handled properly. We take responsible disposal seriously on every job.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Are you locally owned?
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. Wood's Waste is a small, owner-operated business run by Griffin and Gavin out of Farmington, MN — just up Highway 3 from Northfield. When you call, you're talking to the people who will actually show up and do the work — not a call center or a franchise dispatcher.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Nearby Cities -->
+    <section class="city-nearby">
+        <div class="city-nearby-inner">
+            <h2>Also Serving Nearby Communities</h2>
+            <p>Wood's Waste provides junk removal throughout the south metro and beyond. If you're in a neighboring city, we're likely already in your area.</p>
+            <div class="nearby-grid">
+                <a href="/farmington" class="nearby-card">
+                    <span class="nearby-icon">📍</span>
+                    <span>Farmington, MN</span>
+                </a>
+                <a href="/lakeville" class="nearby-card">
+                    <span class="nearby-icon">📍</span>
+                    <span>Lakeville, MN</span>
+                </a>
+                <a href="/hastings" class="nearby-card">
+                    <span class="nearby-icon">📍</span>
+                    <span>Hastings, MN</span>
+                </a>
+                <a href="/prior-lake" class="nearby-card">
+                    <span class="nearby-icon">📍</span>
+                    <span>Prior Lake, MN</span>
+                </a>
+                <a href="/savage" class="nearby-card">
+                    <span class="nearby-icon">📍</span>
+                    <span>Savage, MN</span>
+                </a>
+            </div>
+            <p class="nearby-all"><a href="index.html#service-area">View all service areas →</a></p>
+        </div>
+    </section>
+
     <section class="cta-section">
         <div class="cta-content">
             <h2>Ready to Get the Job Done?</h2>
@@ -259,5 +389,21 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                const isOpen = btn.getAttribute('aria-expanded') === 'true';
+                document.querySelectorAll('.faq-question').forEach(b => {
+                    b.setAttribute('aria-expanded', 'false');
+                    b.nextElementSibling.classList.remove('open');
+                });
+                if (!isOpen) {
+                    btn.setAttribute('aria-expanded', 'true');
+                    answer.classList.add('open');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
