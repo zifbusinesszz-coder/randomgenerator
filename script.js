@@ -183,3 +183,104 @@ document.querySelectorAll('.faq-question').forEach(btn => {
         }
     });
 });
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzTav7WDX-QBwfc0fqDvp6flDi66dkyED0Gx-5o10ERs5o3VbgxpRyFcn3tSsYV0Pk0A/exec';
+
+var HOURS = ['9:00 AM','10:00 AM','11:00 AM','12:00 PM',
+             '1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'];
+var HOUR_VALUES = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+
+// Populate date dropdown (next 30 days)
+(function() {
+  var select = document.getElementById('bDate');
+  var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  for (var i = 1; i <= 30; i++) {
+    var d = new Date();
+    d.setDate(d.getDate() + i);
+    var label = days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+    var value = d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2,'0') + '-' +
+      String(d.getDate()).padStart(2,'0');
+    var opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = label;
+    select.appendChild(opt);
+  }
+})();
+
+// Build time dropdown slots
+function buildTimeSlots(bookedTimes) {
+  var select = document.getElementById('bTime');
+  select.innerHTML = '<option value="">-- Select a time --</option>';
+  HOUR_VALUES.forEach(function(val, i) {
+    var opt = document.createElement('option');
+    opt.value = val;
+    if (bookedTimes.indexOf(val) !== -1) {
+      opt.textContent = HOURS[i] + ' — Unavailable';
+      opt.disabled = true;
+      opt.style.color = '#aaa';
+    } else {
+      opt.textContent = HOURS[i];
+    }
+    select.appendChild(opt);
+  });
+  select.disabled = false;
+}
+
+// Fetch booked times when date changes
+document.getElementById('bDate').addEventListener('change', function() {
+  var date = this.value;
+  if (!date) return;
+
+  var timeSelect = document.getElementById('bTime');
+  timeSelect.innerHTML = '<option>Loading...</option>';
+  timeSelect.disabled = true;
+
+  fetch(SCRIPT_URL + '?date=' + date)
+    .then(function(res) { return res.json(); })
+    .then(function(data) { buildTimeSlots(data.booked || []); })
+    .catch(function() { buildTimeSlots([]); }); // fail open if fetch errors
+});
+
+// Form submit
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var btn    = document.getElementById('submitBtn');
+  var status = document.getElementById('formStatus');
+  var dateSelect = document.getElementById('bDate');
+  var timeSelect = document.getElementById('bTime');
+  var dateLabel  = dateSelect.options[dateSelect.selectedIndex].text;
+  var timeLabel  = timeSelect.options[timeSelect.selectedIndex].text;
+
+  btn.textContent = 'Booking...';
+  btn.disabled = true;
+  btn.style.background = '#666';
+
+  var payload = {
+    name:    document.getElementById('bName').value,
+    phone:   document.getElementById('bPhone').value,
+    address: document.getElementById('bAddress').value,
+    items:   document.getElementById('bItems').value,
+    date:    dateSelect.value,
+    time:    timeSelect.value
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(payload)
+  })
+  .then(function() {
+    status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;';
+    status.innerHTML = '&#10003; You\'re booked for <strong>' + dateLabel + ' at ' + timeLabel + '</strong>. We\'ll call to confirm shortly.';
+    document.getElementById('bookingForm').reset();
+    btn.style.display = 'none';
+  })
+  .catch(function() {
+    status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;';
+    status.innerHTML = 'Something went wrong. Please call us at <a href="tel:5072981179" style="color:#b91c1c;font-weight:600;">(507) 298-1179</a>';
+    btn.textContent = 'Book My Free Quote →';
+    btn.disabled = false;
+    btn.style.background = '#111';
+  });
+});
