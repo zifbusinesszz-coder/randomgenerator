@@ -283,10 +283,7 @@
 </section>
 
 <script>
-// -------------------------------------------------------
-// PASTE YOUR GOOGLE APPS SCRIPT DEPLOY URL HERE
 var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzTav7WDX-QBwfc0fqDvp6flDi66dkyED0Gx-5o10ERs5o3VbgxpRyFcn3tSsYV0Pk0A/exec';
-// -------------------------------------------------------
 
 (function() {
   var select = document.getElementById('bDate');
@@ -312,11 +309,9 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
   var status = document.getElementById('formStatus');
   var dateSelect = document.getElementById('bDate');
   var dateLabel = dateSelect.options[dateSelect.selectedIndex].text;
-
   btn.textContent = 'Booking...';
   btn.disabled = true;
   btn.style.background = '#666';
-
   var payload = {
     name:    document.getElementById('bName').value,
     phone:   document.getElementById('bPhone').value,
@@ -325,24 +320,24 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     date:    dateSelect.value,
     time:    document.getElementById('bTime').value
   };
-
-fetch(SCRIPT_URL, {
-  method: 'POST',
-  mode: 'no-cors',
-  body: JSON.stringify(payload)
-})
-.then(function() {
-  status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;';
-  status.innerHTML = '&#10003; You\'re booked for <strong>' + dateLabel + ' at ' + payload.time + '</strong>. We\'ll call to confirm shortly.';
-  document.getElementById('bookingForm').reset();
-  btn.style.display = 'none';
-})
-.catch(function() {
-  status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;';
-  status.innerHTML = 'Something went wrong. Please call us at <a href="tel:5072981179" style="color:#b91c1c;font-weight:600;">(507) 298-1179</a>';
-  btn.textContent = 'Book My Free Quote →';
-  btn.disabled = false;
-  btn.style.background = '#111';
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(payload)
+  })
+  .then(function() {
+    status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;';
+    status.innerHTML = '&#10003; You\'re booked for <strong>' + dateLabel + ' at ' + payload.time + '</strong>. We\'ll call to confirm shortly.';
+    document.getElementById('bookingForm').reset();
+    btn.style.display = 'none';
+  })
+  .catch(function() {
+    status.style.cssText = 'display:block;text-align:center;padding:16px;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;';
+    status.innerHTML = 'Something went wrong. Please call us at <a href="tel:5072981179" style="color:#b91c1c;font-weight:600;">(507) 298-1179</a>';
+    btn.textContent = 'Book My Free Quote →';
+    btn.disabled = false;
+    btn.style.background = '#111';
+  });
 });
 </script>
 
