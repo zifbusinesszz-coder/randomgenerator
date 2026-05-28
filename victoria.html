@@ -300,20 +300,20 @@
       <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-family:'Inter',sans-serif;font-size:13px;">🤝 No obligation</div>
     </div>
 
-    <div style="background:#fff;border-radius:16px;padding:40px;box-shadow:0 24px 80px rgba(0,0,0,0.4);">
+    <div style="background:#fff;border-radius:16px;padding:clamp(24px,5vw,40px);box-shadow:0 24px 80px rgba(0,0,0,0.4);">
       <form id="bookingForm" style="display:flex;flex-direction:column;gap:20px;">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="form-row-split">
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Full Name</label>
             <input type="text" id="bName" required placeholder="Jane Smith"
-              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
               onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Phone Number</label>
             <input type="tel" id="bPhone" required placeholder="(507) 555-0100"
-              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
               onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
           </div>
         </div>
@@ -321,22 +321,22 @@
         <div style="display:flex;flex-direction:column;gap:6px;">
           <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Address</label>
           <input type="text" id="bAddress" required placeholder="123 Main St, Farmington, MN"
-            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;"
+            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
             onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
         </div>
 
         <div style="display:flex;flex-direction:column;gap:6px;">
           <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">What needs to be removed?</label>
           <textarea id="bItems" required placeholder="e.g. couch, mattress, garage cleanout..." rows="3"
-            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;resize:vertical;"
+            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;resize:vertical;width:100%;box-sizing:border-box;"
             onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'"></textarea>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="form-row-split">
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Preferred Date</label>
             <select id="bDate" required
-              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#fff;cursor:pointer;"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#fff;cursor:pointer;width:100%;box-sizing:border-box;"
               onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
               <option value="">Select a date...</option>
             </select>
@@ -344,7 +344,7 @@
           <div style="display:flex;flex-direction:column;gap:6px;">
             <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Preferred Time</label>
             <select id="bTime" required disabled
-              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#f5f5f5;cursor:not-allowed;"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#f5f5f5;cursor:not-allowed;width:100%;box-sizing:border-box;"
               onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
               <option value="">Select a date first...</option>
             </select>
@@ -352,12 +352,12 @@
         </div>
 
         <button type="submit" id="submitBtn"
-          style="background:#111;color:#fff;border:none;border-radius:8px;padding:14px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;"
+          style="background:#111;color:#fff;border:none;border-radius:8px;padding:14px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;width:100%;"
           onmouseover="this.style.background='#333'" onmouseout="this.style.background='#111'">
           Book My Free Quote →
         </button>
 
-        <div id="formStatus" style="display:none;text-align:center;padding:12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;"></div>
+        <div id="formStatus" style="display:none;text-align:center;padding:16px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;"></div>
 
       </form>
     </div>
@@ -368,6 +368,14 @@
 
   </div>
 </section>
+
+<style>
+@media (max-width: 560px) {
+  .form-row-split {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
 
     <section class="city-faq">
     <div class="city-faq-inner">
