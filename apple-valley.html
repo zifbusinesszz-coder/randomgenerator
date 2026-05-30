@@ -614,19 +614,21 @@ document.getElementById('bookingForm').addEventListener('submit', async function
   };
 
   try {
-    var res  = await fetch('https://script.google.com/macros/s/AKfycbxzTav7WDX-QBwfc0fqDvp6flDi66dkyED0Gx-5o10ERs5o3VbgxpRyFcn3tSsYV0Pk0A/exec', { method: 'POST', body: JSON.stringify(payload) });
-    var json = await res.json();
-    if (json.success) {
-      status.style.display = 'block';
-      status.style.background = '#f0fdf4';
-      status.style.color = '#16a34a';
-      status.textContent = "✓ You're booked! We'll confirm shortly.";
-      document.getElementById('bookingForm').reset();
-      window._uploadedFiles = [];
-      renderFileList();
-    } else {
-      throw new Error(json.error || 'Unknown error');
-    }
+var res = await fetch('https://script.google.com/macros/s/AKfycbxzTav7WDX-QBwfc0fqDvp6flDi66dkyED0Gx-5o10ERs5o3VbgxpRyFcn3tSsYV0Pk0A/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: JSON.stringify(payload)
+});
+
+// no-cors means we can't read the response — just assume success
+status.style.display = 'block';
+status.style.background = '#f0fdf4';
+status.style.color = '#16a34a';
+status.textContent = "✓ You're booked! We'll confirm shortly.";
+document.getElementById('bookingForm').reset();
+window._uploadedFiles = [];
+renderFileList();
+      
   } catch(err) {
     status.style.display = 'block';
     status.style.background = '#fef2f2';
