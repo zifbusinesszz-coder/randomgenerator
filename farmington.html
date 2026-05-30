@@ -405,6 +405,246 @@
     </section>
 
     <!-- Quote Form -->
+
+    <section id="form" class="quote-section" style="padding:80px 20px;background:#111;position:relative;overflow:hidden;">
+
+  <div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.03) 0%,transparent 70%);pointer-events:none;"></div>
+
+  <div style="max-width:680px;margin:0 auto;position:relative;z-index:1;">
+
+    <div style="text-align:center;margin-bottom:40px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3rem);font-weight:700;color:#fff;margin:0 0 16px;">Book Your Free Quote</h2>
+      <p style="font-family:'Inter',sans-serif;font-size:1rem;color:rgba(255,255,255,0.6);max-width:480px;margin:0 auto;line-height:1.7;">We'll come out, take a look, and give you a price on the spot. No obligation.</p>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:40px;">
+      <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-family:'Inter',sans-serif;font-size:13px;"><span style="color:#F5A623;">★★★★★</span> 5.0 Google Rating</div>
+      <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-family:'Inter',sans-serif;font-size:13px;">⚡ Same-day available</div>
+      <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-family:'Inter',sans-serif;font-size:13px;">🤝 No obligation</div>
+    </div>
+
+    <div style="background:#fff;border-radius:16px;padding:clamp(24px,5vw,40px);box-shadow:0 24px 80px rgba(0,0,0,0.4);">
+      <form id="bookingForm" style="display:flex;flex-direction:column;gap:20px;">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="form-row-split">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Full Name</label>
+            <input type="text" id="bName" required placeholder="Jane Smith"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
+              onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Phone Number</label>
+            <input type="tel" id="bPhone" required placeholder="(507) 555-0100"
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
+              onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Address</label>
+          <input type="text" id="bAddress" required placeholder="123 Main St, Farmington, MN"
+            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;width:100%;box-sizing:border-box;"
+            onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">What needs to be removed?</label>
+          <textarea id="bItems" required placeholder="e.g. couch, mattress, garage cleanout..." rows="3"
+            style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;resize:vertical;width:100%;box-sizing:border-box;"
+            onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'"></textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="form-row-split">
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Preferred Date</label>
+            <select id="bDate" required
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#fff;cursor:pointer;width:100%;box-sizing:border-box;"
+              onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
+              <option value="">Select a date...</option>
+            </select>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Preferred Time</label>
+            <select id="bTime" required disabled
+              style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;outline:none;background:#f5f5f5;cursor:not-allowed;width:100%;box-sizing:border-box;"
+              onfocus="this.style.borderColor='#111'" onblur="this.style.borderColor='#ddd'">
+              <option value="">Select a date first...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Photos / Files (Optional) -->
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <label style="font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#111;">Photos / Files</label>
+            <span style="font-family:'Inter',sans-serif;font-size:12px;color:#888;background:#f4f4f4;padding:2px 8px;border-radius:20px;">Optional</span>
+          </div>
+          <div id="dropZone"
+            style="border:1.5px dashed #ccc;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:#fafafa;"
+            onmouseover="this.style.borderColor='#111';this.style.background='#f5f5f5'"
+            onmouseout="if(!window._dzActive){this.style.borderColor='#ccc';this.style.background='#fafafa'}"
+            onclick="document.getElementById('fileInput').click()"
+            ondragover="event.preventDefault();this.style.borderColor='#111';this.style.background='#f0f0f0';window._dzActive=true;"
+            ondragleave="this.style.borderColor='#ccc';this.style.background='#fafafa';window._dzActive=false;"
+            ondrop="event.preventDefault();this.style.borderColor='#ccc';this.style.background='#fafafa';window._dzActive=false;handleFiles(event.dataTransfer.files)">
+            <div style="font-size:28px;color:#aaa;margin-bottom:10px;">📎</div>
+            <p style="margin:0 0 4px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#333;">Drop files here or <span style="text-decoration:underline;color:#111;">browse</span></p>
+            <p style="margin:0;font-family:'Inter',sans-serif;font-size:12px;color:#999;">JPG, PNG, HEIC, PDF — up to 10 files, 20MB each</p>
+          </div>
+          <input type="file" id="fileInput" multiple accept="image/*,.pdf,.heic,.heif" style="display:none;" onchange="handleFiles(this.files)">
+          <div id="fileList" style="display:flex;flex-direction:column;gap:8px;margin-top:4px;"></div>
+        </div>
+
+        <button type="submit" id="submitBtn"
+          style="background:#111;color:#fff;border:none;border-radius:8px;padding:14px 24px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;width:100%;"
+          onmouseover="this.style.background='#333'" onmouseout="this.style.background='#111'">
+          Book My Free Quote →
+        </button>
+
+        <div id="formStatus" style="display:none;text-align:center;padding:16px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;"></div>
+
+      </form>
+    </div>
+
+    <p style="text-align:center;font-family:'Inter',sans-serif;font-size:13px;color:rgba(255,255,255,0.4);margin-top:24px;">
+      Prefer to call? <a href="tel:5072981179" style="color:rgba(255,255,255,0.7);text-decoration:none;font-weight:600;">(507) 298-1179</a>
+    </p>
+
+  </div>
+</section>
+
+<style>
+@media (max-width: 560px) {
+  .form-row-split { grid-template-columns: 1fr !important; }
+}
+</style>
+
+<script>
+// ── File upload ──────────────────────────────────────────────
+window._uploadedFiles = [];
+
+function handleFiles(incoming) {
+  Array.from(incoming).slice(0, 10 - window._uploadedFiles.length).forEach(function(f) {
+    if (!window._uploadedFiles.find(function(x){ return x.name === f.name && x.size === f.size; }))
+      window._uploadedFiles.push(f);
+  });
+  renderFileList();
+}
+
+function removeFile(name, size) {
+  window._uploadedFiles = window._uploadedFiles.filter(function(f){ return !(f.name === name && f.size === size); });
+  renderFileList();
+}
+
+function renderFileList() {
+  var list = document.getElementById('fileList');
+  list.innerHTML = '';
+  window._uploadedFiles.forEach(function(f) {
+    var size = f.size < 1024*1024 ? Math.round(f.size/1024)+'KB' : (f.size/1024/1024).toFixed(1)+'MB';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;background:#f5f5f5;border-radius:8px;padding:8px 12px;';
+    var thumb = document.createElement('div');
+    thumb.style.cssText = 'width:36px;height:36px;border-radius:6px;background:#e0e0e0;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:18px;';
+    if (f.type.startsWith('image/')) {
+      var img = document.createElement('img');
+      img.style.cssText = 'width:36px;height:36px;object-fit:cover;border-radius:6px;';
+      var reader = new FileReader(); reader.onload = function(e){ img.src = e.target.result; }; reader.readAsDataURL(f);
+      thumb.appendChild(img);
+    } else { thumb.textContent = '📄'; }
+    var info = document.createElement('div');
+    info.style.cssText = 'flex:1;min-width:0;';
+    info.innerHTML = '<p style="margin:0;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+f.name+'</p><p style="margin:0;font-family:Inter,sans-serif;font-size:11px;color:#888;">'+size+'</p>';
+    var del = document.createElement('button');
+    del.textContent = '✕';
+    del.style.cssText = 'background:none;border:none;padding:4px;cursor:pointer;color:#aaa;font-size:14px;flex-shrink:0;';
+    del.onmouseover = function(){ del.style.color='#111'; }; del.onmouseout = function(){ del.style.color='#aaa'; };
+    del.onclick = function(ev){ ev.stopPropagation(); removeFile(f.name, f.size); };
+    row.append(thumb, info, del);
+    list.appendChild(row);
+  });
+}
+
+// Read a file as base64 string
+function readFileAsBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // e.target.result is "data:type/ext;base64,XXXX" — strip the prefix
+      resolve(e.target.result.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── Form submit ──────────────────────────────────────────────
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  var btn    = document.getElementById('submitBtn');
+  var status = document.getElementById('formStatus');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  btn.style.background = '#555';
+
+  // Encode all uploaded files to base64
+  var encodedFiles = [];
+  try {
+    encodedFiles = await Promise.all(window._uploadedFiles.map(async function(f) {
+      return { name: f.name, type: f.type, data: await readFileAsBase64(f) };
+    }));
+  } catch(err) {
+    status.style.display = 'block';
+    status.style.background = '#fef2f2';
+    status.style.color = '#dc2626';
+    status.textContent = 'Error reading files. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Book My Free Quote →';
+    btn.style.background = '#111';
+    return;
+  }
+
+  var payload = {
+    name:    document.getElementById('bName').value,
+    phone:   document.getElementById('bPhone').value,
+    address: document.getElementById('bAddress').value,
+    items:   document.getElementById('bItems').value,
+    date:    document.getElementById('bDate').value,
+    time:    document.getElementById('bTime').value,
+    files:   encodedFiles
+  };
+
+  try {
+var res = await fetch('https://script.google.com/macros/s/AKfycbzGbctgjm5ekt7CFSVRzCHDxff_6X88b6mjY3yyb5gHXzTcGD5ZTtSWOYrP8-I4-IkQVw/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: JSON.stringify(payload)
+});
+
+// no-cors means we can't read the response — just assume success
+status.style.display = 'block';
+status.style.background = '#f0fdf4';
+status.style.color = '#16a34a';
+status.textContent = "✓ You're booked! We'll confirm shortly.";
+document.getElementById('bookingForm').reset();
+window._uploadedFiles = [];
+renderFileList();
+      
+  } catch(err) {
+    status.style.display = 'block';
+    status.style.background = '#fef2f2';
+    status.style.color = '#dc2626';
+    status.textContent = 'Something went wrong. Please call (507) 298-1179.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Book My Free Quote →';
+  btn.style.background = '#111';
+});
+</script>
+    
 </script>
 
     <section class="city-faq">
