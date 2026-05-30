@@ -420,6 +420,130 @@ renderFileList();
 });
 </script>
 
+<script>
+// ── File upload ──────────────────────────────────────────────
+window._uploadedFiles = [];
+
+function handleFiles(incoming) {
+  Array.from(incoming).slice(0, 10 - window._uploadedFiles.length).forEach(function(f) {
+    if (!window._uploadedFiles.find(function(x){ return x.name === f.name && x.size === f.size; }))
+      window._uploadedFiles.push(f);
+  });
+  renderFileList();
+}
+
+function removeFile(name, size) {
+  window._uploadedFiles = window._uploadedFiles.filter(function(f){ return !(f.name === name && f.size === size); });
+  renderFileList();
+}
+
+function renderFileList() {
+  var list = document.getElementById('fileList');
+  list.innerHTML = '';
+  window._uploadedFiles.forEach(function(f) {
+    var size = f.size < 1024*1024 ? Math.round(f.size/1024)+'KB' : (f.size/1024/1024).toFixed(1)+'MB';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;background:#f5f5f5;border-radius:8px;padding:8px 12px;';
+    var thumb = document.createElement('div');
+    thumb.style.cssText = 'width:36px;height:36px;border-radius:6px;background:#e0e0e0;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:18px;';
+    if (f.type.startsWith('image/')) {
+      var img = document.createElement('img');
+      img.style.cssText = 'width:36px;height:36px;object-fit:cover;border-radius:6px;';
+      var reader = new FileReader(); reader.onload = function(e){ img.src = e.target.result; }; reader.readAsDataURL(f);
+      thumb.appendChild(img);
+    } else { thumb.textContent = '📄'; }
+    var info = document.createElement('div');
+    info.style.cssText = 'flex:1;min-width:0;';
+    info.innerHTML = '<p style="margin:0;font-family:Inter,sans-serif;font-size:13px;font-weight:500;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+f.name+'</p><p style="margin:0;font-family:Inter,sans-serif;font-size:11px;color:#888;">'+size+'</p>';
+    var del = document.createElement('button');
+    del.textContent = '✕';
+    del.style.cssText = 'background:none;border:none;padding:4px;cursor:pointer;color:#aaa;font-size:14px;flex-shrink:0;';
+    del.onmouseover = function(){ del.style.color='#111'; }; del.onmouseout = function(){ del.style.color='#aaa'; };
+    del.onclick = function(ev){ ev.stopPropagation(); removeFile(f.name, f.size); };
+    row.append(thumb, info, del);
+    list.appendChild(row);
+  });
+}
+
+// Read a file as base64 string
+function readFileAsBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      // e.target.result is "data:type/ext;base64,XXXX" — strip the prefix
+      resolve(e.target.result.split(',')[1]);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── Form submit ──────────────────────────────────────────────
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  var btn    = document.getElementById('submitBtn');
+  var status = document.getElementById('formStatus');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  btn.style.background = '#555';
+
+  // Encode all uploaded files to base64
+  var encodedFiles = [];
+  try {
+    encodedFiles = await Promise.all(window._uploadedFiles.map(async function(f) {
+      return { name: f.name, type: f.type, data: await readFileAsBase64(f) };
+    }));
+  } catch(err) {
+    status.style.display = 'block';
+    status.style.background = '#fef2f2';
+    status.style.color = '#dc2626';
+    status.textContent = 'Error reading files. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Book My Free Quote →';
+    btn.style.background = '#111';
+    return;
+  }
+
+  var payload = {
+    name:    document.getElementById('bName').value,
+    phone:   document.getElementById('bPhone').value,
+    address: document.getElementById('bAddress').value,
+    items:   document.getElementById('bItems').value,
+    date:    document.getElementById('bDate').value,
+    time:    document.getElementById('bTime').value,
+    files:   encodedFiles
+  };
+
+  try {
+var res = await fetch('https://script.google.com/macros/s/AKfycbzGbctgjm5ekt7CFSVRzCHDxff_6X88b6mjY3yyb5gHXzTcGD5ZTtSWOYrP8-I4-IkQVw/exec', {
+  method: 'POST',
+  mode: 'no-cors',
+  body: JSON.stringify(payload)
+});
+
+// no-cors means we can't read the response — just assume success
+status.style.display = 'block';
+status.style.background = '#f0fdf4';
+status.style.color = '#16a34a';
+status.textContent = "✓ You're booked! We'll confirm shortly.";
+document.getElementById('bookingForm').reset();
+window._uploadedFiles = [];
+renderFileList();
+      
+  } catch(err) {
+    status.style.display = 'block';
+    status.style.background = '#fef2f2';
+    status.style.color = '#dc2626';
+    status.textContent = 'Something went wrong. Please call (507) 298-1179.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Book My Free Quote →';
+  btn.style.background = '#111';
+});
+</script>
+
     <section class="city-faq">
     <div class="city-faq-inner">
         <h2>Junk Removal in Bloomington — Common Questions</h2>
