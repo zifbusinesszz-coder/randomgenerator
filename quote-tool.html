@@ -1535,29 +1535,51 @@ Markup: ${markup}%`;
     try{
       const b64=await readFileBase64(aiFiles[i]);
       const mediaType=aiFiles[i].type||'image/jpeg';
-      const prompt=`You are a junk removal pricing assistant for Wood's Waste, a junk removal company in Farmington, MN.
+const prompt=`You are a highly experienced junk removal estimator for Wood's Waste in Farmington, MN. You have 10+ years identifying items in junk piles and you never miss a billable item.
 
 ${pricingContext}
 
-Look at this photo of junk/items to be removed. Analyze it and respond ONLY with valid JSON in this exact format (no markdown, no explanation):
+STEP 1 — SCAN THE ENTIRE IMAGE METHODICALLY:
+Look at every corner, every background item, every partially visible object. Do not skip anything. Items are often stacked, partially hidden, or in the background.
+
+STEP 2 — CHECK FOR EVERY SPECIAL ITEM ONE BY ONE:
+Go through this list and ask yourself "do I see this?" for each one:
+□ Mattress (any size — twin, full, queen, king)
+□ Box Spring (often under a mattress or leaning against a wall)
+□ Refrigerator (full size, mini fridge, or standalone freezer)
+□ Washer or Dryer (front load, top load, standalone)
+□ TV (flatscreen, tube, any size mounted or standing)
+□ Tire (car, truck, with or without rim)
+□ Piano (upright, baby grand, keyboard unit)
+□ Hot Tub (even partially disassembled)
+□ A/C Unit (window unit, portable unit, or central unit)
+□ Paint Cans (any number of cans, full or empty)
+
+If you see ANY of the above, include them in specialsFound using the EXACT label from this list: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}
+
+STEP 3 — ESTIMATE LOAD SIZE:
+Use these definitions carefully:
+- Min Load: very small — fits in a pickup truck bed, 1-3 small items, a few bags
+- Quarter Load: small — a few large items or 5-10 boxes, maybe one piece of furniture
+- Half Load: medium — a room's worth of furniture and junk, several large items
+- Full Truck: large — multiple rooms, full estate or garage cleanout, completely fills the truck
+
+IMPORTANT: When in doubt between two sizes, always choose the LARGER one. It is better to slightly overestimate than to underprice the job.
+
+Respond ONLY with valid JSON. No markdown. No explanation outside the JSON:
 {
   "loadKey": "minimum|quarter|half|full",
   "loadLabel": "Min Load|Quarter Load|Half Load|Full Truck",
-  "specialsFound": ["Mattress","Refrigerator"],
-  "reasoning": "Brief 1-sentence explanation of what you see"
-}
+  "specialsFound": ["Exact Label"],
+  "reasoning": "2-3 sentences describing exactly what you see, what special items you identified and why, and why you chose this load size"
+}`;
 
-Rules:
-- Choose the load size that best fits what you see in the photo
-- Only include special items you can actually see
-- specialsFound must use exact labels from: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}`;
-
-    const response=await api({
-    action:'aiAnalyzePhoto',
-    image:b64,
-    mediaType:aiFiles[i].type||'image/jpeg',
-    prompt:prompt
-            });
+const response=await api({
+  action:'aiAnalyzePhoto',
+  image:b64,
+  mediaType:aiFiles[i].type||'image/jpeg',
+  prompt:prompt
+});
     if(!response.success) throw new Error(response.error||'AI error');
       const text=response.text;
       let parsed; try{ parsed=JSON.parse(text.replace(/```json|```/g,'').trim()); }catch(e){ throw new Error('Could not parse AI response'); }
