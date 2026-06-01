@@ -1554,7 +1554,7 @@ function onActualInput(){
   const charged=parseFloat(document.getElementById('actualCharged').value)||0;
   const job=jobHistory.find(j=>j.id===actualJobId);
   if(!job||!charged){document.getElementById('actualDiff').style.display='none';return;}
-  const quotedMid=parseFloat(job.price.replace(/[^0-9.]/g,''))||0,diff=charged-quotedMid;
+  const parts=job.price.replace(/[^0-9–]/g,'').split('–').map(Number);const quotedMid=parts.length===2?(parts[0]+parts[1])/2:parts[0];const diff=charged-quotedMid;
   const diffEl=document.getElementById('actualDiff');diffEl.style.display='block';diffEl.className='actual-diff '+(diff>=0?'over':'under');
   document.getElementById('actualDiffLabel').textContent=diff>=0?'Charged more than quoted':'Charged less than quoted';
   document.getElementById('actualDiffVal').textContent=(diff>=0?'+':'')+'$'+Math.abs(Math.round(diff));
