@@ -3,391 +3,456 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quote Tool — Wood's Waste | For Junk Removal Companies</title>
-<meta name="description" content="Know exactly what to charge before you call the customer back. Built by junk removal operators, for junk removal operators.">
+<title>Quote Tool — Wood's Waste</title>
+<meta name="description" content="Know exactly what to charge before you call the customer back.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+/* ── TOKENS ─────────────────────────────────────────────── */
 :root {
-  --black: #0a0a0a;
-  --white: #ffffff;
-  --off: #f5f5f5;
-  --gray: #777;
-  --border: #e0e0e0;
-  --dark2: #1a1a1a;
-  --green: #1D9E75;
-  --green-light: #e1f5ee;
-  --green-dark: #0F6E56;
+  --black:       #0a0a0a;
+  --white:       #ffffff;
+  --off:         #f4f4f2;
+  --gray:        #777;
+  --border:      #e2e2e0;
+  --dark2:       #1a1a1a;
+  --green:       #1D9E75;
+  --green-l:     #e1f5ee;
+  --green-dk:    #0F6E56;
+  /* Dark surface palette — used inside calc */
+  --d-bg:        #0a0a0a;
+  --d-surface:   #141414;
+  --d-card:      #1c1c1c;
+  --d-border:    rgba(255,255,255,0.1);
+  --d-border2:   rgba(255,255,255,0.18);
+  --d-text:      #ffffff;
+  --d-muted:     rgba(255,255,255,0.45);
+  --d-faint:     rgba(255,255,255,0.2);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
 
-/* NAV */
+/* ── NAV ─────────────────────────────────────────────────── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 60px; padding: 0 40px;
+  height: 62px; padding: 0 40px;
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-mark { width: 30px; height: 30px; background: var(--black); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; color: white; }
+.nav-logo-mark { width: 32px; height: 32px; background: var(--black); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; color: white; }
 .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--black); line-height: 1.1; }
-.nav-logo-sub { font-size: 10px; color: var(--gray); font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: 0.04em; }
+.nav-logo-sub { font-size: 10px; color: var(--gray); font-weight: 400; letter-spacing: 0.04em; }
 .nav-links { display: flex; align-items: center; gap: 28px; }
-.nav-links a { font-size: 13px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--gray); text-decoration: none; transition: color .2s; }
 .nav-links a:hover { color: var(--black); }
-.nav-cta { background: var(--black); color: white !important; padding: 8px 18px; border-radius: 6px; font-size: 13px !important; font-weight: 600 !important; }
-.nav-cta:hover { background: #333 !important; }
+.nav-cta { background: var(--black) !important; color: white !important; padding: 8px 18px; border-radius: 6px; font-size: 13px !important; font-weight: 600 !important; }
+.nav-cta:hover { background: #333 !important; color: white !important; }
 
-/* HERO */
-.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; max-width: 1100px; margin: 0 auto; padding: 100px 40px 80px; position: relative; }
-.hero::before { content: ''; position: fixed; inset: 0; z-index: -1; background-image: repeating-linear-gradient(135deg, transparent, transparent 60px, rgba(0,0,0,0.018) 60px, rgba(0,0,0,0.018) 61px); pointer-events: none; }
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--black); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 4px; margin-bottom: 20px; }
-.hero-eyebrow span { opacity: 0.5; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -2px; color: var(--black); margin-bottom: 20px; }
-.hero h1 u { text-decoration: none; border-bottom: 4px solid var(--black); }
-.hero-sub { font-size: 16px; color: var(--gray); line-height: 1.8; max-width: 440px; margin-bottom: 32px; }
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.btn-primary { background: var(--black); color: white; padding: 13px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
-.btn-primary:hover { background: #333; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-.btn-ghost { background: transparent; color: var(--black); padding: 13px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; border: 1.5px solid var(--border); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
-.btn-ghost:hover { border-color: var(--black); }
-.hero-proof { display: flex; align-items: center; gap: 14px; margin-top: 24px; font-size: 12px; color: var(--gray); }
-.hero-proof-ava { display: flex; }
-.ava { width: 28px; height: 28px; border-radius: 50%; border: 2px solid white; background: var(--black); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: -8px; }
-.ava:first-child { margin-left: 0; }
-.hero-proof-text { line-height: 1.5; }
-.hero-proof-text strong { color: var(--black); }
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; max-width: 1100px; margin: 0 auto; padding: 120px 40px 80px; }
+.hero::before { content:''; position:fixed; inset:0; z-index:-1; background-image: repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(0,0,0,.016) 60px,rgba(0,0,0,.016) 61px); pointer-events:none; }
+.hero-eyebrow { display:inline-flex; align-items:center; gap:8px; background:var(--black); color:white; font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:5px 12px; border-radius:4px; margin-bottom:20px; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,5vw,4.2rem); font-weight:900; line-height:1.05; letter-spacing:-2px; color:var(--black); margin-bottom:20px; }
+.hero h1 u { text-decoration:none; border-bottom:4px solid var(--black); }
+.hero-sub { font-size:16px; color:var(--gray); line-height:1.8; max-width:440px; margin-bottom:32px; }
+.hero-actions { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+.btn-primary { background:var(--black); color:white; padding:13px 28px; border-radius:8px; font-size:14px; font-weight:600; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all .2s; }
+.btn-primary:hover { background:#333; transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.15); }
+.btn-ghost { background:transparent; color:var(--black); padding:13px 24px; border-radius:8px; font-size:14px; font-weight:500; border:1.5px solid var(--border); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all .2s; }
+.btn-ghost:hover { border-color:var(--black); }
+.hero-proof { display:flex; align-items:center; gap:14px; margin-top:24px; font-size:12px; color:var(--gray); }
+.hero-proof-ava { display:flex; }
+.ava { width:28px; height:28px; border-radius:50%; border:2px solid white; background:var(--black); color:white; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-left:-8px; }
+.ava:first-child { margin-left:0; }
 
-/* PHONE MOCKUP */
-.hero-phone { display: flex; justify-content: center; align-items: center; }
-.phone-frame { width: 280px; background: var(--black); border-radius: 36px; padding: 12px; box-shadow: 0 32px 80px rgba(0,0,0,0.25); }
-.phone-notch { width: 80px; height: 6px; background: #222; border-radius: 3px; margin: 0 auto 14px; }
-.phone-screen { background: #111; border-radius: 26px; padding: 18px 16px 20px; }
-.phone-app-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.phone-app-name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 900; color: white; }
-.phone-app-badge { font-size: 9px; font-weight: 700; background: var(--green); color: white; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.05em; }
-.phone-job-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
-.phone-load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
-.phone-load-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; }
-.phone-load-card.sel { border-color: white; background: rgba(255,255,255,0.06); }
-.phone-load-icon { font-size: 14px; }
-.phone-load-name { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.7); margin-top: 3px; }
-.phone-specials { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-.phone-special-tag { font-size: 9px; font-weight: 600; padding: 3px 7px; border-radius: 10px; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
-.phone-special-tag.on { background: rgba(29,158,117,0.2); color: #5DCAA5; border-color: rgba(29,158,117,0.3); }
-.phone-markup-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.phone-markup-label { font-size: 9px; color: rgba(255,255,255,0.4); white-space: nowrap; }
-.phone-markup-track { flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; }
-.phone-markup-fill { position: absolute; left: 0; top: 0; height: 100%; width: 45%; background: var(--green); border-radius: 2px; }
-.phone-markup-thumb { position: absolute; top: 50%; left: 45%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: white; border-radius: 50%; }
-.phone-markup-val { font-size: 10px; font-weight: 700; color: white; }
-.phone-result { background: rgba(29,158,117,0.12); border: 1px solid rgba(29,158,117,0.25); border-radius: 10px; padding: 10px 12px; }
-.phone-result-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-bottom: 2px; }
-.phone-result-price { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: white; }
-.phone-result-breakdown { font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 3px; }
-.phone-result-btn { display: block; width: 100%; margin-top: 8px; background: var(--green); color: white; border: none; border-radius: 6px; padding: 8px; font-size: 10px; font-weight: 700; text-align: center; font-family: 'Inter', sans-serif; }
+/* ── PHONE MOCKUP ─────────────────────────────────────────── */
+.hero-phone { display:flex; justify-content:center; align-items:center; }
+.phone-frame { width:280px; background:var(--black); border-radius:36px; padding:12px; box-shadow:0 32px 80px rgba(0,0,0,.25); }
+.phone-notch { width:80px; height:6px; background:#222; border-radius:3px; margin:0 auto 14px; }
+.phone-screen { background:#111; border-radius:26px; padding:18px 16px 20px; }
+.phone-app-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.phone-app-name { font-family:'Playfair Display',serif; font-size:13px; font-weight:900; color:white; }
+.phone-app-badge { font-size:9px; font-weight:700; background:var(--green); color:white; padding:2px 7px; border-radius:10px; letter-spacing:.05em; }
+.phone-job-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.35); margin-bottom:6px; }
+.phone-load-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+.phone-load-card { border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:8px 6px; text-align:center; }
+.phone-load-card.sel { border-color:white; background:rgba(255,255,255,.06); }
+.phone-load-icon { font-size:14px; }
+.phone-load-name { font-size:9px; font-weight:600; color:rgba(255,255,255,.7); margin-top:3px; }
+.phone-specials { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px; }
+.phone-special-tag { font-size:9px; font-weight:600; padding:3px 7px; border-radius:10px; background:rgba(255,255,255,.07); color:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.1); }
+.phone-special-tag.on { background:rgba(29,158,117,.2); color:#5DCAA5; border-color:rgba(29,158,117,.3); }
+.phone-markup-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.phone-markup-label { font-size:9px; color:rgba(255,255,255,.4); white-space:nowrap; }
+.phone-markup-track { flex:1; height:3px; background:rgba(255,255,255,.1); border-radius:2px; position:relative; }
+.phone-markup-fill { position:absolute; left:0; top:0; height:100%; width:45%; background:var(--green); border-radius:2px; }
+.phone-markup-thumb { position:absolute; top:50%; left:45%; transform:translate(-50%,-50%); width:10px; height:10px; background:white; border-radius:50%; }
+.phone-markup-val { font-size:10px; font-weight:700; color:white; }
+.phone-result { background:rgba(29,158,117,.12); border:1px solid rgba(29,158,117,.25); border-radius:10px; padding:10px 12px; }
+.phone-result-label { font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:rgba(255,255,255,.35); margin-bottom:2px; }
+.phone-result-price { font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:white; }
+.phone-result-breakdown { font-size:9px; color:rgba(255,255,255,.4); margin-top:3px; }
+.phone-result-btn { display:block; width:100%; margin-top:8px; background:var(--green); color:white; border:none; border-radius:6px; padding:8px; font-size:10px; font-weight:700; text-align:center; font-family:'Inter',sans-serif; cursor:pointer; }
 
-/* STRIP */
-.strip { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
-.strip-item { font-size: 13px; color: var(--gray); display: flex; align-items: center; gap: 8px; }
-.strip-item strong { color: var(--black); }
+/* ── STRIP ────────────────────────────────────────────────── */
+.strip { background:var(--off); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:20px 40px; display:flex; align-items:center; justify-content:center; gap:48px; flex-wrap:wrap; }
+.strip-item { font-size:13px; color:var(--gray); display:flex; align-items:center; gap:8px; }
+.strip-item strong { color:var(--black); }
 
-/* SECTIONS */
-section { padding: 90px 40px; }
-.section-inner { max-width: 1000px; margin: 0 auto; }
-.section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 10px; }
-.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -1.5px; color: var(--black); margin-bottom: 40px; max-width: 560px; line-height: 1.1; }
+/* ── SECTIONS ─────────────────────────────────────────────── */
+section { padding:90px 40px; }
+.section-inner { max-width:1000px; margin:0 auto; }
+.section-eyebrow { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); margin-bottom:10px; }
+.section-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; letter-spacing:-1.5px; color:var(--black); margin-bottom:40px; max-width:560px; line-height:1.1; }
 
-/* ORIGIN */
-.origin { background: white; }
-.origin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-.origin-body p { font-size: 15px; color: var(--gray); line-height: 1.85; margin-bottom: 16px; }
-.origin-stat-stack { display: flex; flex-direction: column; gap: 16px; }
-.origin-stat { border: 1px solid var(--border); border-radius: 12px; padding: 24px; position: relative; overflow: hidden; transition: all 0.2s; }
-.origin-stat:hover { border-color: var(--black); transform: translateY(-2px); }
-.origin-stat::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--black); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-.origin-stat:hover::before { transform: scaleX(1); }
-.origin-stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--black); letter-spacing: -1px; }
-.origin-stat-label { font-size: 13px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
+/* ── ORIGIN ───────────────────────────────────────────────── */
+.origin { background:white; }
+.origin-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+.origin-body p { font-size:15px; color:var(--gray); line-height:1.85; margin-bottom:16px; }
+.origin-stat-stack { display:flex; flex-direction:column; gap:16px; }
+.origin-stat { border:1px solid var(--border); border-radius:12px; padding:24px; position:relative; overflow:hidden; transition:all .2s; }
+.origin-stat:hover { border-color:var(--black); transform:translateY(-2px); }
+.origin-stat::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--black); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+.origin-stat:hover::before { transform:scaleX(1); }
+.origin-stat-num { font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:900; color:var(--black); letter-spacing:-1px; }
+.origin-stat-label { font-size:13px; color:var(--gray); margin-top:4px; line-height:1.5; }
 
-/* HOW IT WORKS */
-.how { background: var(--off); }
-.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-.step-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
-.step-num { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 0.1em; margin-bottom: 14px; }
-.step-icon { font-size: 26px; margin-bottom: 12px; display: block; }
-.step-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 8px; }
-.step-desc { font-size: 13px; color: var(--gray); line-height: 1.75; }
+/* ── HOW IT WORKS ─────────────────────────────────────────── */
+.how { background:var(--off); }
+.steps-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+.step-card { background:white; border:1px solid var(--border); border-radius:14px; padding:28px; }
+.step-num { font-family:'Space Mono',monospace; font-size:11px; font-weight:700; color:var(--gray); letter-spacing:.1em; margin-bottom:14px; }
+.step-icon { font-size:26px; margin-bottom:12px; display:block; }
+.step-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--black); margin-bottom:8px; }
+.step-desc { font-size:13px; color:var(--gray); line-height:1.75; }
 
-/* FEATURES */
-.features { background: white; }
-.features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-.feat-card { border: 1px solid var(--border); border-radius: 12px; padding: 26px; transition: all 0.2s; position: relative; overflow: hidden; }
-.feat-card:hover { border-color: var(--black); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.06); }
-.feat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--black); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-.feat-card:hover::after { transform: scaleX(1); }
-.feat-icon { font-size: 24px; margin-bottom: 12px; display: block; }
-.feat-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
-.feat-desc { font-size: 13px; color: var(--gray); line-height: 1.75; }
+/* ── FEATURES ─────────────────────────────────────────────── */
+.features { background:white; }
+.features-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+.feat-card { border:1px solid var(--border); border-radius:12px; padding:26px; transition:all .2s; position:relative; overflow:hidden; }
+.feat-card:hover { border-color:var(--black); transform:translateY(-2px); box-shadow:0 10px 28px rgba(0,0,0,.06); }
+.feat-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--black); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
+.feat-card:hover::after { transform:scaleX(1); }
+.feat-icon { font-size:24px; margin-bottom:12px; display:block; }
+.feat-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:700; color:var(--black); margin-bottom:6px; }
+.feat-desc { font-size:13px; color:var(--gray); line-height:1.75; }
 
-/* PRICING */
-.pricing { background: var(--off); }
-.pricing-inner { max-width: 720px; margin: 0 auto; }
-.pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.pricing-card { background: white; border: 1.5px solid var(--border); border-radius: 16px; padding: 30px 26px; position: relative; transition: all 0.2s; }
-.pricing-card:hover { border-color: #888; }
-.pricing-card.featured { background: var(--black); border-color: var(--black); }
-.pricing-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--black); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
-.pricing-card.featured .pricing-badge { background: white; color: var(--black); }
-.pricing-plan { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
-.pricing-card.featured .pricing-plan { color: rgba(255,255,255,0.5); }
-.pricing-price { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; }
-.pricing-card.featured .pricing-price { color: white; }
-.pricing-price span { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 400; opacity: 0.5; letter-spacing: 0; }
-.pricing-desc { font-size: 13px; color: var(--gray); margin-bottom: 18px; line-height: 1.6; }
-.pricing-card.featured .pricing-desc { color: rgba(255,255,255,0.5); }
-.pricing-features { list-style: none; margin-bottom: 22px; }
-.pf { font-size: 13px; padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; color: var(--black); }
-.pricing-card.featured .pf { border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
-.pf:last-child { border-bottom: none; }
-.chk { font-size: 12px; font-weight: 700; color: var(--black); }
-.pricing-card.featured .chk { color: white; }
-.btn-plan-dark { display: block; width: 100%; padding: 11px; background: var(--black); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.2s; }
-.btn-plan-dark:hover { background: #333; }
-.btn-plan-light { display: block; width: 100%; padding: 11px; background: white; color: var(--black); border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.2s; }
-.btn-plan-light:hover { background: #f0f0f0; }
-.pricing-note { text-align: center; font-size: 12px; color: var(--gray); margin-top: 18px; }
+/* ── PRICING ──────────────────────────────────────────────── */
+.pricing { background:var(--off); }
+.pricing-inner { max-width:720px; margin:0 auto; }
+.pricing-cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.pricing-card { background:white; border:1.5px solid var(--border); border-radius:16px; padding:30px 26px; position:relative; transition:all .2s; }
+.pricing-card:hover { border-color:#888; }
+.pricing-card.featured { background:var(--black); border-color:var(--black); }
+.pricing-badge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:var(--black); color:white; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:4px 12px; border-radius:20px; white-space:nowrap; }
+.pricing-card.featured .pricing-badge { background:white; color:var(--black); }
+.pricing-plan { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gray); margin-bottom:8px; }
+.pricing-card.featured .pricing-plan { color:rgba(255,255,255,.5); }
+.pricing-price { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; letter-spacing:-2px; margin-bottom:4px; }
+.pricing-card.featured .pricing-price { color:white; }
+.pricing-price span { font-family:'Inter',sans-serif; font-size:14px; font-weight:400; opacity:.5; letter-spacing:0; }
+.pricing-desc { font-size:13px; color:var(--gray); margin-bottom:18px; line-height:1.6; }
+.pricing-card.featured .pricing-desc { color:rgba(255,255,255,.5); }
+.pricing-features { list-style:none; margin-bottom:22px; }
+.pf { font-size:13px; padding:7px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; color:var(--black); }
+.pricing-card.featured .pf { border-color:rgba(255,255,255,.1); color:rgba(255,255,255,.8); }
+.pf:last-child { border-bottom:none; }
+.chk { font-size:12px; font-weight:700; }
+.btn-plan-dark { display:block; width:100%; padding:11px; background:var(--black); color:white; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:background .2s; }
+.btn-plan-dark:hover { background:#333; }
+.btn-plan-light { display:block; width:100%; padding:11px; background:white; color:var(--black); border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; text-align:center; text-decoration:none; transition:background .2s; }
+.btn-plan-light:hover { background:#f0f0f0; }
+.pricing-note { text-align:center; font-size:12px; color:var(--gray); margin-top:18px; }
 
-/* TESTIMONIAL */
-.testimonial { background: white; }
-.testimonial-inner { max-width: 680px; margin: 0 auto; text-align: center; }
-.stars { font-size: 18px; letter-spacing: 2px; margin-bottom: 18px; }
-.testimonial-quote { font-family: 'Playfair Display', serif; font-size: clamp(1.4rem, 3vw, 2rem); color: var(--black); line-height: 1.55; margin-bottom: 20px; font-weight: 700; }
-.testimonial-author { font-size: 13px; color: var(--gray); font-weight: 500; }
-.testimonial-author strong { color: var(--black); }
+/* ── TESTIMONIAL ──────────────────────────────────────────── */
+.testimonial { background:white; }
+.testimonial-inner { max-width:680px; margin:0 auto; text-align:center; }
+.stars { font-size:18px; letter-spacing:2px; margin-bottom:18px; }
+.testimonial-quote { font-family:'Playfair Display',serif; font-size:clamp(1.4rem,3vw,2rem); color:var(--black); line-height:1.55; margin-bottom:20px; font-weight:700; }
+.testimonial-author { font-size:13px; color:var(--gray); font-weight:500; }
 
-/* CTA BOTTOM */
-.cta-bottom { background: var(--black); text-align: center; position: relative; overflow: hidden; }
-.cta-bottom::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px); }
-.cta-bottom h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900; color: white; letter-spacing: -2px; margin-bottom: 12px; position: relative; }
-.cta-bottom p { font-size: 16px; color: rgba(255,255,255,0.45); margin-bottom: 28px; position: relative; }
-.cta-bottom .btn-primary { background: white; color: var(--black); position: relative; }
-.cta-bottom .btn-primary:hover { background: #eee; }
+/* ── CTA BOTTOM ───────────────────────────────────────────── */
+.cta-bottom { background:var(--black); text-align:center; position:relative; overflow:hidden; padding:90px 40px; }
+.cta-bottom::before { content:''; position:absolute; inset:0; background-image:repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px); }
+.cta-bottom h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.8rem); font-weight:900; color:white; letter-spacing:-2px; margin-bottom:12px; position:relative; }
+.cta-bottom p { font-size:16px; color:rgba(255,255,255,.45); margin-bottom:28px; position:relative; }
+.cta-bottom .btn-primary { background:white; color:var(--black); position:relative; }
+.cta-bottom .btn-primary:hover { background:#eee; }
 
-/* FOOTER */
-footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08); padding: 32px 40px; }
-.footer-inner { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-.footer-logo { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: white; }
-.footer-links { display: flex; gap: 24px; }
-.footer-links a { font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: rgba(255,255,255,0.7); }
-.footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer { background:var(--black); border-top:1px solid rgba(255,255,255,.08); padding:32px 40px; }
+.footer-inner { max-width:1000px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+.footer-logo { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:white; }
+.footer-links { display:flex; gap:24px; }
+.footer-links a { font-size:12px; color:rgba(255,255,255,.35); text-decoration:none; transition:color .2s; }
+.footer-links a:hover { color:rgba(255,255,255,.7); }
+.footer-copy { font-size:12px; color:rgba(255,255,255,.25); }
 
-/* ====================== MODAL ====================== */
-.modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
-.modal-overlay.open { display: flex; }
-.modal { background: white; border-radius: 20px; width: 100%; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.3); animation: modalIn 0.25s ease both; margin: auto; }
-@keyframes modalIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
-.modal-header { background: var(--black); padding: 24px 28px 20px; border-radius: 20px 20px 0 0; position: relative; }
-.modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.modal-close:hover { background: rgba(255,255,255,0.2); }
-.modal-plan-badge { display: inline-block; background: rgba(255,255,255,0.12); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; }
-.modal-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: white; margin-bottom: 4px; }
-.modal-header p { font-size: 12px; color: rgba(255,255,255,0.5); }
-.modal-steps { display: flex; gap: 6px; margin-top: 14px; }
-.modal-step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: all 0.3s; }
-.modal-step-dot.active { background: white; width: 20px; border-radius: 3px; }
-.modal-step-dot.done { background: rgba(255,255,255,0.6); }
-.modal-body { padding: 24px 28px 28px; }
+/* ════════════════════════════════════════
+   MODAL
+════════════════════════════════════════ */
+.modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,.65); backdrop-filter:blur(5px); align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; }
+.modal-overlay.open { display:flex; }
+.modal { background:white; border-radius:20px; width:100%; max-width:600px; box-shadow:0 40px 100px rgba(0,0,0,.3); animation:modalIn .25s ease both; margin:auto; }
+@keyframes modalIn { from{opacity:0;transform:translateY(16px) scale(.98)} to{opacity:1;transform:none} }
+.modal-header { background:var(--black); padding:24px 28px 20px; border-radius:20px 20px 0 0; position:relative; }
+.modal-close { position:absolute; top:16px; right:16px; background:rgba(255,255,255,.1); border:none; color:white; width:28px; height:28px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.modal-close:hover { background:rgba(255,255,255,.2); }
+.modal-plan-badge { display:inline-block; background:rgba(255,255,255,.12); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.6); padding:4px 10px; border-radius:4px; margin-bottom:10px; }
+.modal-header h3 { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:white; margin-bottom:4px; }
+.modal-header p { font-size:12px; color:rgba(255,255,255,.5); }
+.modal-tabs { display:flex; gap:2px; background:rgba(255,255,255,.08); border-radius:8px; padding:3px; margin-top:14px; width:fit-content; }
+.modal-tab { padding:6px 16px; border-radius:6px; font-size:12px; font-weight:600; color:rgba(255,255,255,.5); cursor:pointer; transition:all .15s; border:none; background:none; font-family:'Inter',sans-serif; }
+.modal-tab.active { background:white; color:var(--black); }
+.modal-steps { display:flex; gap:6px; margin-top:14px; }
+.modal-step-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.25); transition:all .3s; }
+.modal-step-dot.active { background:white; width:20px; border-radius:3px; }
+.modal-step-dot.done { background:rgba(255,255,255,.6); }
+.modal-body { padding:24px 28px 28px; }
 
-/* FORM */
-.modal-trial-box { background: #f5f5f5; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--gray); line-height: 1.6; margin-bottom: 20px; display: flex; gap: 8px; align-items: flex-start; }
-.modal-trial-box strong { color: var(--black); }
-.form-grid { display: flex; flex-direction: column; gap: 14px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field label { font-size: 12px; font-weight: 600; color: var(--black); }
-.field input, .field select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; background: white; color: var(--black); }
-.field input:focus, .field select:focus { border-color: var(--black); }
-.field input::placeholder { color: #bbb; }
-.divider { height: 1px; background: var(--border); margin: 4px 0; }
-.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 2px; }
-.card-note { font-size: 11px; color: #aaa; margin-top: 2px; }
-.submit-btn { width: 100%; padding: 13px; background: var(--black); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 6px; transition: background 0.2s; }
-.submit-btn:hover { background: #333; }
-.submit-btn:disabled { background: #aaa; cursor: default; }
-.submit-btn.green { background: var(--green); }
-.submit-btn.green:hover { background: var(--green-dark); }
-.btn-back { background: none; border: 1.5px solid var(--border); color: var(--gray); border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
-.btn-back:hover { border-color: var(--black); color: var(--black); }
-.btn-row { display: flex; gap: 10px; margin-top: 6px; }
-.fine-print { font-size: 11px; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.5; }
+/* Form elements */
+.modal-trial-box { background:#f5f5f5; border-radius:8px; padding:12px 14px; font-size:12px; color:var(--gray); line-height:1.6; margin-bottom:20px; display:flex; gap:8px; align-items:flex-start; }
+.modal-trial-box strong { color:var(--black); }
+.form-grid { display:flex; flex-direction:column; gap:14px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label { font-size:12px; font-weight:600; color:var(--black); }
+.field input, .field select { padding:9px 12px; border:1px solid var(--border); border-radius:7px; font-size:13px; font-family:'Inter',sans-serif; outline:none; transition:border-color .2s; background:white; color:var(--black); }
+.field input:focus, .field select:focus { border-color:var(--black); }
+.field input::placeholder { color:#bbb; }
+.field .error-hint { font-size:11px; color:#c0392b; display:none; }
+.field.has-error input { border-color:#c0392b; }
+.field.has-error .error-hint { display:block; }
+.divider { height:1px; background:var(--border); margin:4px 0; }
+.section-label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); margin-bottom:2px; }
+.card-note { font-size:11px; color:#aaa; margin-top:2px; }
+.submit-btn { width:100%; padding:13px; background:var(--black); color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; margin-top:6px; transition:background .2s; }
+.submit-btn:hover { background:#333; }
+.submit-btn:disabled { background:#aaa; cursor:default; }
+.submit-btn.green { background:var(--green); }
+.submit-btn.green:hover { background:var(--green-dk); }
+.btn-back { background:none; border:1.5px solid var(--border); color:var(--gray); border-radius:8px; padding:13px 20px; font-size:14px; font-weight:500; cursor:pointer; font-family:'Inter',sans-serif; }
+.btn-back:hover { border-color:var(--black); color:var(--black); }
+.btn-row { display:flex; gap:10px; margin-top:6px; }
+.fine-print { font-size:11px; color:#aaa; text-align:center; margin-top:10px; line-height:1.5; }
+.err-banner { background:#fff0f0; border:1px solid #fcc; border-radius:8px; padding:10px 14px; font-size:13px; color:#c0392b; margin-bottom:14px; display:none; }
+.err-banner.show { display:block; }
 
-/* STEP 2 PRICING */
-.pricing-section { margin-bottom: 22px; }
-.pricing-section-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
-.load-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px; }
-.load-row-label { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 6px; }
-.price-input-wrap { position: relative; }
-.price-input-wrap::before { content: '$'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--gray); pointer-events: none; }
-.price-input-wrap input { padding-left: 22px !important; }
-.special-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.special-item-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; gap: 10px; transition: all 0.15s; }
-.special-item-row:hover { border-color: #aaa; }
-.special-item-row.active { border-color: var(--black); background: #fafafa; }
-.sitem-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--black); font-weight: 500; }
-.sitem-icon { font-size: 15px; }
-.sitem-fee .price-input-wrap input { width: 70px; font-size: 12px; padding: 5px 6px 5px 18px !important; border-radius: 5px; }
-.sitem-toggle { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; transition: all 0.15s; }
-.sitem-toggle.on { background: var(--black); border-color: var(--black); color: white; }
-.extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.extras-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-.extras-card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 10px; }
-.range-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.range-row input[type=range] { flex: 1; accent-color: var(--black); }
-.range-val { font-size: 13px; font-weight: 700; color: var(--black); min-width: 44px; }
-.extras-rate-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray); flex-wrap: wrap; }
-.extras-rate-row .price-input-wrap input { width: 70px; }
+/* Step 2 pricing config */
+.pricing-section { margin-bottom:22px; }
+.pricing-section-title { font-size:13px; font-weight:700; color:var(--black); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:6px; }
+.load-row { display:grid; grid-template-columns:130px 1fr 1fr; gap:10px; align-items:center; margin-bottom:8px; }
+.load-row-label { font-size:12px; color:var(--gray); display:flex; align-items:center; gap:6px; }
+.price-input-wrap { position:relative; }
+.price-input-wrap::before { content:'$'; position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--gray); pointer-events:none; }
+.price-input-wrap input { padding-left:22px !important; }
+.special-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.special-item-row { display:flex; align-items:center; justify-content:space-between; border:1px solid var(--border); border-radius:8px; padding:8px 12px; gap:10px; transition:all .15s; }
+.special-item-row:hover { border-color:#aaa; }
+.special-item-row.active { border-color:var(--black); background:#fafafa; }
+.sitem-left { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--black); font-weight:500; }
+.sitem-icon { font-size:15px; }
+.sitem-fee .price-input-wrap input { width:70px; font-size:12px; padding:5px 6px 5px 18px !important; border-radius:5px; }
+.sitem-toggle { width:18px; height:18px; border-radius:50%; border:1.5px solid var(--border); background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; transition:all .15s; }
+.sitem-toggle.on { background:var(--black); border-color:var(--black); color:white; }
+.extras-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.extras-card { border:1px solid var(--border); border-radius:10px; padding:14px; }
+.extras-card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--gray); margin-bottom:10px; }
+.extras-rate-row { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--gray); flex-wrap:wrap; }
+.extras-rate-row .price-input-wrap input { width:70px; }
+.markup-signup-card { border:1.5px solid var(--black); border-radius:10px; padding:16px; background:#fafafa; }
+.markup-signup-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.markup-signup-title { font-size:12px; font-weight:700; color:var(--black); }
+.markup-signup-val { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; color:var(--black); }
+.markup-signup-sub { font-size:11px; color:var(--gray); margin-top:6px; }
 
-/* MARKUP SLIDER in signup */
-.markup-signup-card { border: 1.5px solid var(--black); border-radius: 10px; padding: 16px; background: #fafafa; margin-bottom: 0; }
-.markup-signup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.markup-signup-title { font-size: 12px; font-weight: 700; color: var(--black); }
-.markup-signup-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--black); }
-.markup-signup-sub { font-size: 11px; color: var(--gray); margin-top: 6px; }
+/* Success / saving */
+.success-state { display:none; text-align:center; padding:20px 10px 10px; }
+.success-mark { width:56px; height:56px; background:var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:22px; }
+.success-state h3 { font-family:'Playfair Display',serif; font-size:22px; font-weight:900; margin-bottom:8px; }
+.success-state p { font-size:13px; color:var(--gray); line-height:1.7; margin-bottom:20px; }
+.success-next { background:var(--off); border-radius:10px; padding:16px; text-align:left; margin-bottom:16px; }
+.success-next-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--gray); margin-bottom:8px; }
+.success-next-item { font-size:13px; color:var(--black); padding:5px 0; display:flex; gap:8px; }
+.sheet-saved-badge { display:inline-flex; align-items:center; gap:6px; background:var(--green-l); color:var(--green-dk); font-size:11px; font-weight:600; padding:5px 12px; border-radius:20px; margin-bottom:16px; }
+.saving-overlay { display:none; text-align:center; padding:40px 20px; }
+.saving-spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--black); border-radius:50%; animation:spin .7s linear infinite; margin:0 auto 16px; }
+@keyframes spin { to{ transform:rotate(360deg); } }
+.saving-overlay p { font-size:14px; color:var(--gray); }
 
-/* SUCCESS STATE */
-.success-state { display: none; text-align: center; padding: 20px 10px 10px; }
-.success-mark { width: 56px; height: 56px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; }
-.success-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.success-state p { font-size: 13px; color: var(--gray); line-height: 1.7; margin-bottom: 20px; }
-.success-next { background: var(--off); border-radius: 10px; padding: 16px; text-align: left; margin-bottom: 16px; }
-.success-next-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 8px; }
-.success-next-item { font-size: 13px; color: var(--black); padding: 5px 0; display: flex; gap: 8px; }
-.sheet-saved-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green-dark); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
-.saving-overlay { display: none; text-align: center; padding: 40px 20px; }
-.saving-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--black); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.saving-overlay p { font-size: 14px; color: var(--gray); }
+/* ════════════════════════════════════════
+   CALCULATOR PAGE  (all dark)
+════════════════════════════════════════ */
+#calcPage { display:none; min-height:100vh; background:var(--d-bg); color:var(--d-text); }
 
-/* ====================== CALCULATOR PAGE ====================== */
-#calcPage { display: none; min-height: 100vh; background: #0a0a0a; }
-.calc-nav { height: 54px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.calc-nav-logo { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; color: white; }
-.calc-nav-co { font-size: 12px; color: rgba(255,255,255,0.4); }
-.calc-nav-right { display: flex; align-items: center; gap: 12px; }
-.calc-history-btn { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-.calc-history-btn:hover { color: white; background: rgba(255,255,255,0.1); }
-.calc-body { max-width: 480px; margin: 0 auto; padding: 24px 20px 60px; }
+/* calc nav */
+.calc-nav { height:58px; padding:0 20px; display:flex; align-items:center; justify-content:space-between; background:var(--d-surface); border-bottom:1px solid var(--d-border); position:sticky; top:0; z-index:50; }
+.calc-nav-left { display:flex; align-items:center; gap:12px; }
+.calc-nav-mark { width:32px; height:32px; background:var(--green); border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:14px; font-weight:900; color:white; flex-shrink:0; }
+.calc-nav-logo { font-family:'Playfair Display',serif; font-size:15px; font-weight:900; color:var(--d-text); }
+.calc-nav-co { font-size:11px; color:var(--d-muted); }
+.calc-nav-right { display:flex; align-items:center; gap:8px; }
+.calc-icon-btn { font-size:12px; font-weight:600; color:var(--d-muted); background:rgba(255,255,255,.06); border:1px solid var(--d-border); padding:6px 12px; border-radius:6px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s; white-space:nowrap; }
+.calc-icon-btn:hover { color:var(--d-text); background:rgba(255,255,255,.1); border-color:var(--d-border2); }
+.calc-icon-btn.logout { color:rgba(255,100,100,.7); }
+.calc-icon-btn.logout:hover { color:#ff6b6b; background:rgba(255,100,100,.08); border-color:rgba(255,100,100,.2); }
 
-/* Calc sections */
-.calc-section { margin-bottom: 24px; }
-.calc-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
-.calc-load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.calc-load-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.15s; }
-.calc-load-card:hover { border-color: rgba(255,255,255,0.3); }
-.calc-load-card.sel { border-color: white; background: rgba(255,255,255,0.06); }
-.calc-load-icon { font-size: 22px; margin-bottom: 6px; }
-.calc-load-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
-.calc-load-cost { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+/* settings tab in calc */
+.calc-settings-btn { font-size:12px; font-weight:600; color:var(--d-muted); background:rgba(255,255,255,.04); border:1px solid var(--d-border); padding:6px 12px; border-radius:6px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s; }
+.calc-settings-btn:hover { color:var(--d-text); background:rgba(255,255,255,.08); }
 
-.calc-specials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-.calc-special-tag { border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; }
-.calc-special-tag:hover { border-color: rgba(255,255,255,0.25); }
-.calc-special-tag.sel { border-color: var(--green); background: rgba(29,158,117,0.1); }
-.calc-special-left { display: flex; align-items: center; gap: 7px; }
-.calc-special-icon { font-size: 14px; }
-.calc-special-name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); }
-.calc-special-tag.sel .calc-special-name { color: #5DCAA5; }
-.calc-special-fee { font-size: 10px; color: rgba(255,255,255,0.3); }
-.calc-special-tag.sel .calc-special-fee { color: rgba(93,202,165,0.6); }
+.calc-body { max-width:480px; margin:0 auto; padding:24px 20px 80px; }
 
-/* Drive + time inputs */
-.calc-inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.calc-input-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; }
-.calc-input-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
-.calc-input-field { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 10px; font-size: 14px; font-weight: 600; color: white; width: 100%; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.15s; }
-.calc-input-field:focus { border-color: rgba(255,255,255,0.3); }
-.calc-input-field::placeholder { color: rgba(255,255,255,0.2); font-weight: 400; }
-.calc-input-unit { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+/* Section titles */
+.calc-section { margin-bottom:24px; }
+.calc-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.12em; color:var(--d-faint); margin-bottom:10px; }
+
+/* Load cards */
+.calc-load-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.calc-load-card { border:1px solid var(--d-border); background:var(--d-card); border-radius:10px; padding:14px 10px; text-align:center; cursor:pointer; transition:all .15s; }
+.calc-load-card:hover { border-color:var(--d-border2); background:#222; }
+.calc-load-card.sel { border-color:white; background:rgba(255,255,255,.07); }
+.calc-load-icon { font-size:22px; margin-bottom:6px; }
+.calc-load-name { font-size:12px; font-weight:600; color:rgba(255,255,255,.85); }
+.calc-load-cost { font-size:11px; color:var(--d-faint); margin-top:2px; }
+
+/* Special item tags */
+.calc-specials-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.calc-special-tag { border:1px solid var(--d-border); background:var(--d-card); border-radius:8px; padding:8px 10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:all .15s; }
+.calc-special-tag:hover { border-color:var(--d-border2); }
+.calc-special-tag.sel { border-color:var(--green); background:rgba(29,158,117,.12); }
+.calc-special-left { display:flex; align-items:center; gap:7px; }
+.calc-special-icon { font-size:14px; }
+.calc-special-name { font-size:11px; font-weight:600; color:rgba(255,255,255,.7); }
+.calc-special-tag.sel .calc-special-name { color:#5DCAA5; }
+.calc-special-fee { font-size:10px; color:var(--d-faint); }
+.calc-special-tag.sel .calc-special-fee { color:rgba(93,202,165,.6); }
+
+/* Drive + time */
+.calc-inputs-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.calc-input-card { border:1px solid var(--d-border); background:var(--d-card); border-radius:10px; padding:12px 14px; }
+.calc-input-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--d-faint); margin-bottom:8px; }
+.calc-input-field { background:rgba(255,255,255,.06); border:1px solid var(--d-border); border-radius:6px; padding:8px 10px; font-size:14px; font-weight:600; color:white; width:100%; font-family:'Inter',sans-serif; outline:none; transition:border-color .15s; }
+.calc-input-field:focus { border-color:rgba(255,255,255,.3); }
+.calc-input-field::placeholder { color:rgba(255,255,255,.2); font-weight:400; }
+.calc-input-unit { font-size:10px; color:var(--d-faint); margin-top:4px; }
 
 /* Markup slider */
-.calc-markup-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; }
-.calc-markup-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-.calc-markup-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
-.calc-markup-pct { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: white; }
-.calc-markup-note { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
-input[type=range].calc-slider { width: 100%; accent-color: var(--green); height: 4px; }
+.calc-markup-card { border:1px solid var(--d-border); background:var(--d-card); border-radius:10px; padding:14px 16px; }
+.calc-markup-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+.calc-markup-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--d-faint); }
+.calc-markup-pct { font-family:'Playfair Display',serif; font-size:28px; font-weight:900; color:white; }
+.calc-markup-note { font-size:10px; color:var(--d-faint); margin-top:4px; }
+input[type=range].calc-slider { width:100%; accent-color:var(--green); height:4px; cursor:pointer; }
 
-/* Result */
-.calc-result { border: 1px solid rgba(29,158,117,0.3); background: rgba(29,158,117,0.08); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
-.calc-result-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
-.calc-result-price { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: white; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
-.calc-result-price.has-range { font-size: 36px; }
-.calc-result-breakdown { margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; flex-direction: column; gap: 5px; }
-.calc-breakdown-row { display: flex; justify-content: space-between; font-size: 12px; }
-.calc-breakdown-label { color: rgba(255,255,255,0.4); }
-.calc-breakdown-val { color: rgba(255,255,255,0.7); font-weight: 600; }
-.calc-breakdown-row.total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 2px; }
-.calc-breakdown-row.total .calc-breakdown-label { color: rgba(255,255,255,0.7); font-weight: 600; }
-.calc-breakdown-row.total .calc-breakdown-val { color: white; font-weight: 700; }
-.calc-markup-line { font-size: 11px; color: rgba(93,202,165,0.7); margin-top: 2px; }
+/* Result box */
+.calc-result { border:1px solid rgba(29,158,117,.3); background:rgba(29,158,117,.07); border-radius:14px; padding:20px; margin-bottom:20px; }
+.calc-result-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--d-faint); margin-bottom:6px; }
+.calc-result-price { font-family:'Playfair Display',serif; font-size:48px; font-weight:900; color:white; letter-spacing:-2px; line-height:1; margin-bottom:4px; }
+.calc-result-price.has-range { font-size:36px; }
+.calc-result-breakdown { margin-top:14px; border-top:1px solid rgba(255,255,255,.08); padding-top:12px; display:flex; flex-direction:column; gap:5px; }
+.calc-breakdown-row { display:flex; justify-content:space-between; font-size:12px; }
+.calc-breakdown-label { color:rgba(255,255,255,.4); }
+.calc-breakdown-val { color:rgba(255,255,255,.7); font-weight:600; }
+.calc-breakdown-row.total { border-top:1px solid rgba(255,255,255,.1); padding-top:6px; margin-top:2px; }
+.calc-breakdown-row.total .calc-breakdown-label { color:rgba(255,255,255,.7); font-weight:600; }
+.calc-breakdown-row.total .calc-breakdown-val { color:white; font-weight:700; }
 
-.calc-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.calc-btn-save { background: var(--green); color: white; border: none; border-radius: 8px; padding: 13px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
-.calc-btn-save:hover { background: var(--green-dark); }
-.calc-btn-reset { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 13px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-.calc-btn-reset:hover { color: white; border-color: rgba(255,255,255,0.25); }
+/* Action buttons */
+.calc-action-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.calc-btn-save { background:var(--green); color:white; border:none; border-radius:8px; padding:13px; font-size:13px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
+.calc-btn-save:hover { background:var(--green-dk); }
+.calc-btn-reset { background:rgba(255,255,255,.06); color:rgba(255,255,255,.6); border:1px solid var(--d-border); border-radius:8px; padding:13px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s; }
+.calc-btn-reset:hover { color:white; border-color:var(--d-border2); }
 
-/* HISTORY PANEL */
-.history-panel { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
-.history-panel.open { display: block; }
-.history-drawer { position: absolute; right: 0; top: 0; bottom: 0; width: 340px; background: #111; border-left: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; animation: drawerIn 0.22s ease both; }
-@keyframes drawerIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-.history-header { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
-.history-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 900; color: white; }
-.history-close { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.history-list { flex: 1; overflow-y: auto; padding: 12px; }
-.history-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: rgba(255,255,255,0.25); }
-.history-item { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
-.history-item:hover { border-color: rgba(255,255,255,0.2); }
-.history-item-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-.history-item-price { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: white; }
-.history-item-time { font-size: 10px; color: rgba(255,255,255,0.3); }
-.history-item-detail { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
-.history-item-markup { display: inline-block; font-size: 10px; font-weight: 600; color: #5DCAA5; background: rgba(29,158,117,0.15); padding: 2px 7px; border-radius: 8px; margin-top: 4px; }
-.history-clear { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
-.history-clear-btn { width: 100%; background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.35); border-radius: 6px; padding: 8px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
-.history-clear-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.6); }
+/* ── SETTINGS PANEL ───────────────────────────────────────── */
+.settings-panel { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.75); backdrop-filter:blur(4px); }
+.settings-panel.open { display:block; }
+.settings-drawer { position:absolute; right:0; top:0; bottom:0; width:380px; background:var(--d-surface); border-left:1px solid var(--d-border); display:flex; flex-direction:column; animation:drawerIn .22s ease both; overflow-y:auto; }
+@keyframes drawerIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+.settings-header { padding:18px 20px; border-bottom:1px solid var(--d-border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--d-surface); z-index:10; }
+.settings-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:900; color:white; }
+.settings-close { background:rgba(255,255,255,.08); border:none; color:rgba(255,255,255,.6); width:28px; height:28px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.settings-body { padding:20px; flex:1; }
+.settings-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--d-faint); margin:0 0 12px; padding-bottom:8px; border-bottom:1px solid var(--d-border); display:flex; align-items:center; gap:6px; }
+.settings-load-row { display:grid; grid-template-columns:120px 1fr 1fr; gap:8px; align-items:center; margin-bottom:8px; }
+.settings-load-label { font-size:11px; color:rgba(255,255,255,.5); display:flex; align-items:center; gap:5px; }
+.s-input-wrap { position:relative; }
+.s-input-wrap::before { content:'$'; position:absolute; left:8px; top:50%; transform:translateY(-50%); font-size:12px; color:rgba(255,255,255,.3); pointer-events:none; }
+.s-input-wrap input { padding:7px 8px 7px 20px; background:rgba(255,255,255,.06); border:1px solid var(--d-border); border-radius:6px; font-size:12px; font-weight:600; color:white; width:100%; font-family:'Inter',sans-serif; outline:none; transition:border-color .15s; }
+.s-input-wrap input:focus { border-color:rgba(255,255,255,.3); }
+.s-specials-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:4px; }
+.s-special-row { display:flex; align-items:center; justify-content:space-between; border:1px solid var(--d-border); background:rgba(255,255,255,.03); border-radius:7px; padding:7px 10px; gap:8px; }
+.s-special-row.active { border-color:rgba(255,255,255,.2); background:rgba(255,255,255,.06); }
+.s-sitem-left { display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(255,255,255,.65); font-weight:500; }
+.s-sitem-fee .s-input-wrap input { width:60px; font-size:11px; padding:5px 5px 5px 17px; }
+.s-sitem-toggle { width:16px; height:16px; border-radius:50%; border:1.5px solid var(--d-border2); background:rgba(255,255,255,.05); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:9px; flex-shrink:0; transition:all .15s; }
+.s-sitem-toggle.on { background:var(--green); border-color:var(--green); color:white; }
+.s-extras-pair { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.s-extras-card { border:1px solid var(--d-border); background:rgba(255,255,255,.03); border-radius:8px; padding:12px; }
+.s-extras-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--d-faint); margin-bottom:8px; }
+.s-rate-row { display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(255,255,255,.4); }
+.s-rate-row .s-input-wrap input { width:66px; }
+.markup-settings-card { border:1px solid rgba(29,158,117,.3); background:rgba(29,158,117,.06); border-radius:8px; padding:14px; }
+.markup-settings-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.markup-settings-title { font-size:11px; font-weight:700; color:rgba(255,255,255,.6); }
+.markup-settings-val { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:white; }
+.settings-save-btn { width:100%; margin-top:20px; padding:12px; background:var(--green); color:white; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:background .15s; }
+.settings-save-btn:hover { background:var(--green-dk); }
+.settings-save-btn:disabled { background:#555; cursor:default; }
 
-/* SAVED TOAST */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green); color: white; font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 20px; z-index: 400; transition: transform 0.3s ease; pointer-events: none; white-space: nowrap; }
-.toast.show { transform: translateX(-50%) translateY(0); }
+/* ── HISTORY PANEL ────────────────────────────────────────── */
+.history-panel { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.7); backdrop-filter:blur(4px); }
+.history-panel.open { display:block; }
+.history-drawer { position:absolute; right:0; top:0; bottom:0; width:340px; background:var(--d-surface); border-left:1px solid var(--d-border); display:flex; flex-direction:column; animation:drawerIn .22s ease both; }
+.history-header { padding:18px 20px; border-bottom:1px solid var(--d-border); display:flex; align-items:center; justify-content:space-between; }
+.history-title { font-family:'Playfair Display',serif; font-size:17px; font-weight:900; color:white; }
+.history-close { background:rgba(255,255,255,.08); border:none; color:rgba(255,255,255,.6); width:28px; height:28px; border-radius:50%; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.history-list { flex:1; overflow-y:auto; padding:12px; }
+.history-empty { text-align:center; padding:40px 20px; font-size:13px; color:rgba(255,255,255,.25); }
+.history-item { border:1px solid var(--d-border); background:rgba(255,255,255,.03); border-radius:10px; padding:12px 14px; margin-bottom:8px; cursor:pointer; transition:border-color .15s; }
+.history-item:hover { border-color:var(--d-border2); }
+.history-item-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
+.history-item-price { font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white; }
+.history-item-time { font-size:10px; color:rgba(255,255,255,.3); }
+.history-item-detail { font-size:11px; color:rgba(255,255,255,.4); line-height:1.5; }
+.history-item-markup { display:inline-block; font-size:10px; font-weight:600; color:#5DCAA5; background:rgba(29,158,117,.15); padding:2px 7px; border-radius:8px; margin-top:4px; }
+.history-clear { padding:12px 20px; border-top:1px solid var(--d-border); }
+.history-clear-btn { width:100%; background:none; border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.35); border-radius:6px; padding:8px; font-size:12px; cursor:pointer; font-family:'Inter',sans-serif; transition:all .15s; }
+.history-clear-btn:hover { border-color:rgba(255,255,255,.25); color:rgba(255,255,255,.6); }
 
-@media (max-width: 768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero { grid-template-columns: 1fr; padding: 90px 20px 60px; gap: 40px; }
-  .hero-phone { display: none; }
-  section { padding: 60px 20px; }
-  .origin-grid, .steps-grid, .features-grid, .pricing-cards { grid-template-columns: 1fr; }
-  .strip { padding: 20px; gap: 20px; justify-content: flex-start; }
-  .footer-inner { flex-direction: column; align-items: flex-start; }
-  .load-row { grid-template-columns: 110px 1fr 1fr; }
-  .special-grid { grid-template-columns: 1fr; }
-  .extras-grid, .calc-inputs-grid, .calc-action-row { grid-template-columns: 1fr; }
-  .history-drawer { width: 100%; }
-  .calc-load-grid, .calc-specials-grid { grid-template-columns: 1fr 1fr; }
+/* ── TOAST ────────────────────────────────────────────────── */
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--green); color:white; font-size:13px; font-weight:600; padding:10px 20px; border-radius:20px; z-index:400; transition:transform .3s ease; pointer-events:none; white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width:768px) {
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .hero { grid-template-columns:1fr; padding:90px 20px 60px; gap:40px; }
+  .hero-phone { display:none; }
+  section { padding:60px 20px; }
+  .origin-grid, .steps-grid, .features-grid, .pricing-cards { grid-template-columns:1fr; }
+  .strip { padding:20px; gap:20px; justify-content:flex-start; }
+  .footer-inner { flex-direction:column; align-items:flex-start; }
+  .load-row { grid-template-columns:100px 1fr 1fr; }
+  .special-grid { grid-template-columns:1fr; }
+  .extras-grid, .calc-inputs-grid, .calc-action-row { grid-template-columns:1fr; }
+  .history-drawer, .settings-drawer { width:100%; }
+  .calc-load-grid, .calc-specials-grid, .s-specials-grid { grid-template-columns:1fr 1fr; }
+  .form-row-3 { grid-template-columns:1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<!-- MARKETING SITE -->
+<!-- ════════════════════════════════════════════
+     MARKETING PAGE
+════════════════════════════════════════════ -->
 <div id="marketingPage">
 
 <nav>
@@ -403,19 +468,20 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
     <a href="#features">Features</a>
     <a href="#pricing">Pricing</a>
     <a href="tel:5072981179">(507) 298-1179</a>
-    <a href="#pricing" class="nav-cta" onclick="openModal('pro')">Start Free Trial</a>
+    <a href="#" onclick="openModal('login'); return false;">Log in</a>
+    <a href="#pricing" class="nav-cta" onclick="openModal('pro'); return false;">Start Free Trial</a>
   </div>
 </nav>
 
-<section style="padding-top:0; padding-bottom:0;">
+<section style="padding-top:0;padding-bottom:0;">
 <div class="hero">
   <div class="hero-left">
-    <div class="hero-eyebrow">Built by Wood's Waste <span>·</span> Farmington, MN</div>
+    <div class="hero-eyebrow">Built by Wood's Waste <span style="opacity:.5">·</span> Farmington, MN</div>
     <h1>Know what to<br>charge <u>before</u><br>you call back.</h1>
     <p class="hero-sub">You're on a job, the phone rings, customer wants a price. You used to guess. Now you punch in the load size, the drive, the special items — and we tell you exactly what to quote.</p>
     <div class="hero-actions">
-      <a href="#pricing" class="btn-primary" onclick="openModal('starter')">Start free trial →</a>
-      <a href="#how" class="btn-ghost">See how it works</a>
+      <a href="#pricing" class="btn-primary" onclick="openModal('starter'); return false;">Start free trial →</a>
+      <a href="#" class="btn-ghost" onclick="openModal('login'); return false;">Log in</a>
     </div>
     <div class="hero-proof">
       <div class="hero-proof-ava">
@@ -423,13 +489,11 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
         <div class="ava" style="background:#333;">JH</div>
         <div class="ava" style="background:#555;">MR</div>
       </div>
-      <div class="hero-proof-text">
-        <strong>Junk removal operators</strong> pricing jobs confidently<br>across the midwest
+      <div style="line-height:1.5;font-size:12px;color:var(--gray);">
+        <strong style="color:var(--black);">Junk removal operators</strong> pricing jobs confidently<br>across the midwest
       </div>
     </div>
   </div>
-
-  <!-- Phone mockup -->
   <div class="hero-phone">
     <div class="phone-frame">
       <div class="phone-notch"></div>
@@ -444,7 +508,7 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
           <div class="phone-load-card sel"><div class="phone-load-icon">🛋️</div><div class="phone-load-name">Half Load</div></div>
         </div>
         <div class="phone-job-label">Special items</div>
-        <div class="phone-specials" style="margin-bottom:10px;">
+        <div class="phone-specials">
           <div class="phone-special-tag on">🛏️ Mattress +$40</div>
           <div class="phone-special-tag on">📺 TV +$25</div>
           <div class="phone-special-tag">🧊 Fridge</div>
@@ -499,24 +563,9 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
     <p class="section-eyebrow">How it works</p>
     <h2 class="section-title">Sign up once. Price every job.</h2>
     <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">01 / 03</div>
-        <span class="step-icon">⚙️</span>
-        <div class="step-title">Enter your costs</div>
-        <div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market — we just do the math.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">02 / 03</div>
-        <span class="step-icon">📱</span>
-        <div class="step-title">Pull it up on your phone</div>
-        <div class="step-desc">No app to install. Open your dashboard on any phone, browser, or tablet. Punch in the job details while you're standing in the driveway.</div>
-      </div>
-      <div class="step-card">
-        <div class="step-num">03 / 03</div>
-        <span class="step-icon">💰</span>
-        <div class="step-title">Quote with confidence</div>
-        <div class="step-desc">The tool shows your cost, your markup, and your final quote number. Call the customer back in 30 seconds with a real number, not a guess.</div>
-      </div>
+      <div class="step-card"><div class="step-num">01 / 03</div><span class="step-icon">⚙️</span><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market — we just do the math.</div></div>
+      <div class="step-card"><div class="step-num">02 / 03</div><span class="step-icon">📱</span><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone, browser, or tablet. Punch in the job details while you're standing in the driveway.</div></div>
+      <div class="step-card"><div class="step-num">03 / 03</div><span class="step-icon">💰</span><div class="step-title">Quote with confidence</div><div class="step-desc">The tool shows your cost, your markup, and your final quote number. Call the customer back in 30 seconds with a real number, not a guess.</div></div>
     </div>
   </div>
 </section>
@@ -526,36 +575,12 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
     <p class="section-eyebrow">Features</p>
     <h2 class="section-title">Built for how the job actually works.</h2>
     <div class="features-grid">
-      <div class="feat-card">
-        <span class="feat-icon">🎚️</span>
-        <div class="feat-title">Markup slider up to 500%</div>
-        <div class="feat-desc">Slide it up when you really want the job or the customer is easy. Slide it down for a difficult site or a tight market. Your margin, your call — every single time.</div>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">⚙️</span>
-        <div class="feat-title">Your costs, locked in</div>
-        <div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once at signup. Every quote after that is calculated off your real numbers — not industry averages.</div>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">📦</span>
-        <div class="feat-title">Special item surcharges</div>
-        <div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies to the job and the fee gets added automatically. No forgetting to charge for the fridge.</div>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">🗺️</span>
-        <div class="feat-title">Drive distance factored in</div>
-        <div class="feat-desc">Type in the miles and your per-mile rate kicks in automatically. Jobs 40 miles out should cost more than jobs down the street. Now they will.</div>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">📋</span>
-        <div class="feat-title">Job history log</div>
-        <div class="feat-desc">Every quote you save gets logged with the price, load size, markup, and timestamp. Look back at past jobs, spot patterns, and know what you actually charged.</div>
-      </div>
-      <div class="feat-card">
-        <span class="feat-icon">📱</span>
-        <div class="feat-title">Works on any device</div>
-        <div class="feat-desc">No app to install. Open it on your phone, tablet, or laptop. Works on iOS, Android, whatever. If it has a browser, it works.</div>
-      </div>
+      <div class="feat-card"><span class="feat-icon">🎚️</span><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you really want the job or the customer is easy. Slide it down for a difficult site or a tight market. Your margin, your call — every single time.</div></div>
+      <div class="feat-card"><span class="feat-icon">⚙️</span><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote after that is calculated off your real numbers — not industry averages.</div></div>
+      <div class="feat-card"><span class="feat-icon">📦</span><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies to the job and the fee gets added automatically.</div></div>
+      <div class="feat-card"><span class="feat-icon">🗺️</span><div class="feat-title">Drive distance factored in</div><div class="feat-desc">Type in the miles and your per-mile rate kicks in automatically. Jobs 40 miles out should cost more than jobs down the street. Now they will.</div></div>
+      <div class="feat-card"><span class="feat-icon">📋</span><div class="feat-title">Job history log</div><div class="feat-desc">Every quote you save gets logged with the price, load size, markup, and timestamp. Look back at past jobs and spot patterns.</div></div>
+      <div class="feat-card"><span class="feat-icon">📱</span><div class="feat-title">Works on any device</div><div class="feat-desc">No app to install. Open it on your phone, tablet, or laptop. Works on iOS, Android, whatever. If it has a browser, it works.</div></div>
     </div>
   </div>
 </section>
@@ -563,7 +588,7 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
 <section class="pricing" id="pricing">
   <div class="pricing-inner">
     <p class="section-eyebrow" style="text-align:center;">Pricing</p>
-    <h2 class="section-title" style="text-align:center; max-width:100%; margin-bottom:32px;">Simple, honest pricing.</h2>
+    <h2 class="section-title" style="text-align:center;max-width:100%;margin-bottom:32px;">Simple, honest pricing.</h2>
     <div class="pricing-cards">
       <div class="pricing-card">
         <div class="pricing-plan">Starter</div>
@@ -608,7 +633,7 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
 </section>
 
 <section class="cta-bottom">
-  <div style="position:relative; z-index:1;">
+  <div style="position:relative;z-index:1;">
     <h2>Stop guessing on price.</h2>
     <p>14-day free trial. No charge until it's working for you.</p>
     <a href="#" class="btn-primary" onclick="openModal('pro'); return false;">Start free →</a>
@@ -629,7 +654,9 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
 
 </div><!-- /marketingPage -->
 
-<!-- ===================== MODAL ===================== -->
+<!-- ════════════════════════════════════════════
+     MODAL (Signup + Login tabs)
+════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal" id="modal">
     <div class="modal-header" id="modalHeader">
@@ -637,6 +664,11 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
       <div class="modal-plan-badge" id="modalPlanBadge">Starter Plan — $29/mo</div>
       <h3 id="modalTitle">Start your free trial</h3>
       <p id="modalSubtitle">14 days free. Card required — charged only after trial ends.</p>
+      <!-- Tabs for signup vs login -->
+      <div class="modal-tabs" id="modalTabs">
+        <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Create account</button>
+        <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log in</button>
+      </div>
       <div class="modal-steps" id="modalStepDots">
         <div class="modal-step-dot active" id="dot1"></div>
         <div class="modal-step-dot" id="dot2"></div>
@@ -644,26 +676,28 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
     </div>
     <div class="modal-body">
 
-      <!-- STEP 1: Account + Payment -->
+      <!-- ── SIGNUP STEP 1 ── -->
       <div id="step1">
+        <div class="err-banner" id="step1Err"></div>
         <div class="modal-trial-box">
           <span>🔒</span>
           <div><strong>No charge for 14 days.</strong> Your card is saved to activate your plan after the trial. Cancel anytime before day 15 and you'll never be billed.</div>
         </div>
         <div class="form-grid">
           <div class="form-row">
-            <div class="field"><label>First name</label><input type="text" id="m-first" placeholder="Griffin" /></div>
-            <div class="field"><label>Last name</label><input type="text" id="m-last" placeholder="Wood" /></div>
+            <div class="field" id="f-first"><label>First name</label><input type="text" id="m-first" placeholder="Griffin" /><span class="error-hint">Required</span></div>
+            <div class="field" id="f-last"><label>Last name</label><input type="text" id="m-last" placeholder="Wood" /><span class="error-hint">Required</span></div>
           </div>
-          <div class="field"><label>Business name</label><input type="text" id="m-biz" placeholder="Your Junk Removal Co." /></div>
-          <div class="field"><label>Email</label><input type="email" id="m-email" placeholder="you@yourbusiness.com" /></div>
+          <div class="field" id="f-biz"><label>Business name</label><input type="text" id="m-biz" placeholder="Your Junk Removal Co." /><span class="error-hint">Required</span></div>
+          <div class="field" id="f-email"><label>Email</label><input type="email" id="m-email" placeholder="you@yourbusiness.com" /><span class="error-hint">Valid email required</span></div>
           <div class="field"><label>Phone</label><input type="tel" id="m-phone" placeholder="(507) 555-0100" /></div>
+          <div class="field" id="f-pw"><label>Password</label><input type="password" id="m-pw" placeholder="Min 8 characters" /><span class="error-hint">Min 8 characters</span></div>
           <div class="divider"></div>
           <div class="section-label">Payment info — trial starts today, billed on day 15</div>
-          <div class="field"><label>Card number</label><input type="text" id="m-card" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmt(this,'card')" /></div>
+          <div class="field" id="f-card"><label>Card number</label><input type="text" id="m-card" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)" /><span class="error-hint">Enter a valid card number</span></div>
           <div class="form-row-3">
-            <div class="field" style="grid-column:1/3"><label>Expiry</label><input type="text" id="m-exp" placeholder="MM / YY" maxlength="7" oninput="fmt(this,'exp')" /></div>
-            <div class="field"><label>CVV</label><input type="text" id="m-cvv" placeholder="•••" maxlength="4" /></div>
+            <div class="field" id="f-exp" style="grid-column:1/3"><label>Expiry</label><input type="text" id="m-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)" /><span class="error-hint">Required</span></div>
+            <div class="field" id="f-cvv"><label>CVV</label><input type="text" id="m-cvv" placeholder="•••" maxlength="4" /><span class="error-hint">Required</span></div>
           </div>
           <div class="card-note">🔒 Your card info is encrypted and stored securely. No charge today.</div>
           <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — set up your pricing →</button>
@@ -671,50 +705,51 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
         </div>
       </div>
 
-      <!-- STEP 2: Pricing Config -->
-      <div id="step2" style="display:none;">
-        <div style="font-size:13px; color:var(--gray); margin-bottom:18px; line-height:1.6;">Set your costs once — every job you price will use these numbers. You can update them anytime.</div>
+      <!-- ── LOGIN FORM ── -->
+      <div id="loginForm" style="display:none;">
+        <div class="err-banner" id="loginErr"></div>
+        <div class="form-grid">
+          <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com" /></div>
+          <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password" /></div>
+          <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
+          <p class="fine-print">Don't have an account? <a href="#" onclick="switchTab('signup');return false;" style="color:var(--black);font-weight:600;">Start a free trial →</a></p>
+        </div>
+      </div>
 
+      <!-- ── SIGNUP STEP 2 ── -->
+      <div id="step2" style="display:none;">
+        <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. You can update them anytime in Settings.</div>
         <div class="pricing-section">
-          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px; font-weight:400; color:var(--gray); margin-left:4px;">(what it costs YOU — before markup)</span></div>
+          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(what it costs YOU — before markup)</span></div>
           <div class="load-row" style="margin-bottom:4px;">
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);">Load</div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);text-align:center;">Low</div>
-            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);text-align:center;">High</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);">Load</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);text-align:center;">Low</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);text-align:center;">High</div>
           </div>
           <div class="load-row"><div class="load-row-label"><span>📦</span> Min Load</div><div class="price-input-wrap"><input type="number" id="p-min-low" value="100" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-min-high" value="130" min="0" /></div></div>
           <div class="load-row"><div class="load-row-label"><span>🛋️</span> Quarter Load</div><div class="price-input-wrap"><input type="number" id="p-qtr-low" value="160" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-qtr-high" value="200" min="0" /></div></div>
           <div class="load-row"><div class="load-row-label"><span>🏠</span> Half Load</div><div class="price-input-wrap"><input type="number" id="p-half-low" value="230" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-half-high" value="280" min="0" /></div></div>
           <div class="load-row"><div class="load-row-label"><span>🚛</span> Full Truck</div><div class="price-input-wrap"><input type="number" id="p-full-low" value="350" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-full-high" value="420" min="0" /></div></div>
         </div>
-
         <div class="pricing-section">
-          <div class="pricing-section-title">📦 Special item fees <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(added on top of load cost)</span></div>
+          <div class="pricing-section-title">📦 Special item fees</div>
           <div class="special-grid" id="specialGrid"></div>
         </div>
-
         <div class="pricing-section">
           <div class="pricing-section-title">🗺️ Drive & labor costs</div>
           <div class="extras-grid">
             <div class="extras-card">
               <div class="extras-card-title">Drive rate</div>
-              <div class="extras-rate-row" style="margin-bottom:8px;">
-                <div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;" /></div>
-                <span>per mile</span>
-              </div>
-              <div style="font-size:11px; color:var(--gray);">Applied to full round-trip distance</div>
+              <div class="extras-rate-row" style="margin-bottom:8px;"><div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;" /></div><span>per mile</span></div>
+              <div style="font-size:11px;color:var(--gray);">Applied to full round-trip distance</div>
             </div>
             <div class="extras-card">
               <div class="extras-card-title">Labor rate</div>
-              <div class="extras-rate-row" style="margin-bottom:8px;">
-                <div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;" /></div>
-                <span>/hr per person</span>
-              </div>
-              <div style="font-size:11px; color:var(--gray);">Used to calculate job time cost</div>
+              <div class="extras-rate-row" style="margin-bottom:8px;"><div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;" /></div><span>/hr per person</span></div>
+              <div style="font-size:11px;color:var(--gray);">Used to calculate job time cost</div>
             </div>
           </div>
         </div>
-
         <div class="pricing-section" style="margin-bottom:0;">
           <div class="pricing-section-title">🎚️ Default markup</div>
           <div class="markup-signup-card">
@@ -722,81 +757,70 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
               <div class="markup-signup-title">Your default markup percentage</div>
               <div class="markup-signup-val" id="signupMarkupVal">35%</div>
             </div>
-            <input type="range" id="signupMarkup" min="0" max="500" value="35" step="5" style="width:100%; accent-color:var(--black);" oninput="document.getElementById('signupMarkupVal').textContent=this.value+'%'" />
+            <input type="range" id="signupMarkup" min="0" max="500" value="35" step="5" style="width:100%;accent-color:var(--black);" oninput="document.getElementById('signupMarkupVal').textContent=this.value+'%'" />
             <div class="markup-signup-sub">You can slide this up or down on every individual job. This is just your starting point.</div>
           </div>
         </div>
-
         <div class="btn-row" style="margin-top:20px;">
           <button class="btn-back" onclick="goStep(1)">← Back</button>
           <button class="submit-btn" id="step2Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
         </div>
       </div>
 
-      <!-- SAVING -->
+      <!-- ── SAVING ── -->
       <div class="saving-overlay" id="savingOverlay">
         <div class="saving-spinner"></div>
-        <p>Setting up your account...</p>
+        <p id="savingMsg">Setting up your account...</p>
       </div>
 
-      <!-- SUCCESS -->
+      <!-- ── SUCCESS ── -->
       <div class="success-state" id="successState">
         <div class="success-mark">✓</div>
         <div class="sheet-saved-badge">✓ Pricing saved to your account</div>
         <h3>You're all set.</h3>
-        <p>Your costs are saved. Pull up the quote tool on your phone anytime you need a number — takes about 30 seconds per job.</p>
+        <p>Your costs are saved. Pull up the quote tool on your phone anytime — takes about 30 seconds per job.</p>
         <div class="success-next">
           <div class="success-next-label">Good to know</div>
-          <div class="success-next-item">📧 Dashboard login sent to your email</div>
           <div class="success-next-item">🎚️ Markup slider starts at your default — change it per job</div>
           <div class="success-next-item">📋 Every saved quote goes into your job history</div>
+          <div class="success-next-item">⚙️ Edit your prices anytime in Settings</div>
           <div class="success-next-item">📞 Griffin will text to make sure everything looks right</div>
         </div>
-        <button class="submit-btn green" onclick="openCalc()" style="margin-top:0;">Open my quote tool →</button>
-        <p style="font-size:13px; color:var(--gray); margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black); font-weight:600;">(507) 298-1179</a></p>
+        <button class="submit-btn green" onclick="openCalc()">Open my quote tool →</button>
+        <p style="font-size:13px;color:var(--gray);margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- ===================== CALCULATOR PAGE ===================== -->
+<!-- ════════════════════════════════════════════
+     CALCULATOR PAGE
+════════════════════════════════════════════ -->
 <div id="calcPage">
   <nav class="calc-nav">
-    <div>
-      <div class="calc-nav-logo">Quote Tool</div>
-      <div class="calc-nav-co" id="calcNavCo">Wood's Waste</div>
+    <div class="calc-nav-left">
+      <div class="calc-nav-mark">W</div>
+      <div>
+        <div class="calc-nav-logo">Quote Tool</div>
+        <div class="calc-nav-co" id="calcNavCo">Wood's Waste</div>
+      </div>
     </div>
     <div class="calc-nav-right">
-      <button class="calc-history-btn" onclick="openHistory()">History</button>
+      <button class="calc-icon-btn" onclick="openSettings()">⚙ Settings</button>
+      <button class="calc-icon-btn" onclick="openHistory()">History</button>
+      <button class="calc-icon-btn logout" onclick="doLogout()">Log out</button>
     </div>
   </nav>
 
   <div class="calc-body">
-
     <div class="calc-section">
       <div class="calc-section-title">Load size</div>
       <div class="calc-load-grid">
-        <div class="calc-load-card" id="cl-minimum" onclick="selectLoad('minimum')">
-          <div class="calc-load-icon">📦</div>
-          <div class="calc-load-name">Min Load</div>
-          <div class="calc-load-cost" id="cl-cost-minimum">$100–$130</div>
-        </div>
-        <div class="calc-load-card" id="cl-quarter" onclick="selectLoad('quarter')">
-          <div class="calc-load-icon">🛋️</div>
-          <div class="calc-load-name">Quarter Load</div>
-          <div class="calc-load-cost" id="cl-cost-quarter">$160–$200</div>
-        </div>
-        <div class="calc-load-card" id="cl-half" onclick="selectLoad('half')">
-          <div class="calc-load-icon">🏠</div>
-          <div class="calc-load-name">Half Load</div>
-          <div class="calc-load-cost" id="cl-cost-half">$230–$280</div>
-        </div>
-        <div class="calc-load-card" id="cl-full" onclick="selectLoad('full')">
-          <div class="calc-load-icon">🚛</div>
-          <div class="calc-load-name">Full Truck</div>
-          <div class="calc-load-cost" id="cl-cost-full">$350–$420</div>
-        </div>
+        <div class="calc-load-card" id="cl-minimum" onclick="selectLoad('minimum')"><div class="calc-load-icon">📦</div><div class="calc-load-name">Min Load</div><div class="calc-load-cost" id="cl-cost-minimum">$100–$130</div></div>
+        <div class="calc-load-card" id="cl-quarter" onclick="selectLoad('quarter')"><div class="calc-load-icon">🛋️</div><div class="calc-load-name">Quarter Load</div><div class="calc-load-cost" id="cl-cost-quarter">$160–$200</div></div>
+        <div class="calc-load-card" id="cl-half" onclick="selectLoad('half')"><div class="calc-load-icon">🏠</div><div class="calc-load-name">Half Load</div><div class="calc-load-cost" id="cl-cost-half">$230–$280</div></div>
+        <div class="calc-load-card" id="cl-full" onclick="selectLoad('full')"><div class="calc-load-icon">🚛</div><div class="calc-load-name">Full Truck</div><div class="calc-load-cost" id="cl-cost-full">$350–$420</div></div>
       </div>
     </div>
 
@@ -816,7 +840,7 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
         <div class="calc-input-card">
           <div class="calc-input-label">Job time</div>
           <input type="number" class="calc-input-field" id="calcHours" placeholder="0" min="0" step="0.5" oninput="recalc()" />
-          <div class="calc-input-unit">hours · <span id="calcCrewNote">1 person</span></div>
+          <div class="calc-input-unit">hours</div>
         </div>
       </div>
     </div>
@@ -849,7 +873,58 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
       <button class="calc-btn-save" onclick="saveJob()">Save to history</button>
       <button class="calc-btn-reset" onclick="resetCalc()">Clear</button>
     </div>
+  </div>
+</div>
 
+<!-- ════════════════════════════════════════════
+     SETTINGS PANEL
+════════════════════════════════════════════ -->
+<div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
+  <div class="settings-drawer">
+    <div class="settings-header">
+      <div class="settings-title">Settings</div>
+      <button class="settings-close" onclick="closeSettings()">✕</button>
+    </div>
+    <div class="settings-body">
+      <div style="margin-bottom:20px;">
+        <div class="settings-section-title" style="margin-bottom:16px;">🚛 Load costs (your cost before markup)</div>
+        <div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;align-items:center;margin-bottom:6px;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);">Load</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);text-align:center;">Low</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);text-align:center;">High</div>
+        </div>
+        <div class="settings-load-row"><div class="settings-load-label"><span>📦</span> Min</div><div class="s-input-wrap"><input type="number" id="s-min-low" value="100" min="0" /></div><div class="s-input-wrap"><input type="number" id="s-min-high" value="130" min="0" /></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><span>🛋️</span> Quarter</div><div class="s-input-wrap"><input type="number" id="s-qtr-low" value="160" min="0" /></div><div class="s-input-wrap"><input type="number" id="s-qtr-high" value="200" min="0" /></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><span>🏠</span> Half</div><div class="s-input-wrap"><input type="number" id="s-half-low" value="230" min="0" /></div><div class="s-input-wrap"><input type="number" id="s-half-high" value="280" min="0" /></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><span>🚛</span> Full</div><div class="s-input-wrap"><input type="number" id="s-full-low" value="350" min="0" /></div><div class="s-input-wrap"><input type="number" id="s-full-high" value="420" min="0" /></div></div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div class="settings-section-title">📦 Special item fees</div>
+        <div class="s-specials-grid" id="sSpecialsGrid"></div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div class="settings-section-title">🗺️ Drive & labor</div>
+        <div class="s-extras-pair">
+          <div class="s-extras-card"><div class="s-extras-label">Drive rate</div><div class="s-rate-row"><div class="s-input-wrap"><input type="number" id="s-drive" value="1.50" min="0" step="0.25" /></div><span>per mile</span></div></div>
+          <div class="s-extras-card"><div class="s-extras-label">Labor rate</div><div class="s-rate-row"><div class="s-input-wrap"><input type="number" id="s-labor" value="35" min="0" /></div><span>/hr</span></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="settings-section-title">🎚️ Default markup</div>
+        <div class="markup-settings-card">
+          <div class="markup-settings-header">
+            <div class="markup-settings-title">Default markup %</div>
+            <div class="markup-settings-val" id="sMarkupVal">35%</div>
+          </div>
+          <input type="range" class="calc-slider" id="sMarkup" min="0" max="500" value="35" step="5" oninput="document.getElementById('sMarkupVal').textContent=this.value+'%'" />
+        </div>
+      </div>
+
+      <button class="settings-save-btn" id="settingsSaveBtn" onclick="saveSettings()">Save pricing changes</button>
+    </div>
   </div>
 </div>
 
@@ -869,56 +944,173 @@ input[type=range].calc-slider { width: 100%; accent-color: var(--green); height:
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">✓ Job saved to history</div>
+<div class="toast" id="toast"></div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+// ════════════════════════════════════════
+//  CONFIGURATION
+// ════════════════════════════════════════
+// Replace with your deployed Google Apps Script URL:
+const API_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 const SPECIAL_ITEMS_CONFIG = [
-  { key: 'mattress',  icon: '🛏️', label: 'Mattress',     fee: 40  },
-  { key: 'boxspring', icon: '🛏️', label: 'Box Spring',   fee: 30  },
-  { key: 'fridge',    icon: '🧊', label: 'Refrigerator', fee: 50  },
-  { key: 'washer',    icon: '🫧', label: 'Washer/Dryer', fee: 45  },
-  { key: 'tv',        icon: '📺', label: 'TV',           fee: 25  },
-  { key: 'tire',      icon: '🔘', label: 'Tire',         fee: 15  },
-  { key: 'piano',     icon: '🎹', label: 'Piano',        fee: 150 },
-  { key: 'hottub',    icon: '🛁', label: 'Hot Tub',      fee: 250 },
-  { key: 'ac',        icon: '❄️', label: 'A/C Unit',     fee: 35  },
-  { key: 'paint',     icon: '🪣', label: 'Paint Cans',   fee: 20  },
+  { key:'mattress',  icon:'🛏️', label:'Mattress',     fee:40  },
+  { key:'boxspring', icon:'🛏️', label:'Box Spring',   fee:30  },
+  { key:'fridge',    icon:'🧊', label:'Refrigerator', fee:50  },
+  { key:'washer',    icon:'🫧', label:'Washer/Dryer', fee:45  },
+  { key:'tv',        icon:'📺', label:'TV',           fee:25  },
+  { key:'tire',      icon:'🔘', label:'Tire',         fee:15  },
+  { key:'piano',     icon:'🎹', label:'Piano',        fee:150 },
+  { key:'hottub',    icon:'🛁', label:'Hot Tub',      fee:250 },
+  { key:'ac',        icon:'❄️', label:'A/C Unit',     fee:35  },
+  { key:'paint',     icon:'🪣', label:'Paint Cans',   fee:20  },
 ];
 
-// ── STATE ────────────────────────────────────────────────
-let currentPlan   = 'starter';
-let companyId     = '';
-let companyName   = 'Your Company';
-let specialItemStates = {};
-let selectedLoad  = null;
-let selectedSpecials = {};
-let jobHistory    = [];
+// ════════════════════════════════════════
+//  APP STATE
+// ════════════════════════════════════════
+let currentPlan  = 'starter';
+let session = {
+  token: localStorage.getItem('ww_token') || null,
+  companyId: localStorage.getItem('ww_cid') || null,
+  businessName: localStorage.getItem('ww_biz') || 'Wood\'s Waste',
+};
 
-// Pricing loaded from signup (defaults shown)
+let specialItemStates = {};   // signup form
+let selectedLoad     = null;
+let selectedSpecials = {};
+let jobHistory       = [];
+let activeTab        = 'signup'; // 'signup' | 'login'
+
 let userPricing = {
   loads: {
-    minimum: { low: 100, high: 130 },
-    quarter: { low: 160, high: 200 },
-    half:    { low: 230, high: 280 },
-    full:    { low: 350, high: 420 },
+    minimum: { low:100,  high:130  },
+    quarter: { low:160,  high:200  },
+    half:    { low:230,  high:280  },
+    full:    { low:350,  high:420  },
   },
-  specials: {},
-  driveRate: 1.50,
-  laborRate: 35,
+  specials:      {},
+  driveRate:     1.50,
+  laborRate:     35,
   defaultMarkup: 35,
 };
 
-// ── SIGNUP SPECIAL ITEMS ─────────────────────────────────
+// ════════════════════════════════════════
+//  INIT — auto-login if session token saved
+// ════════════════════════════════════════
+(function init() {
+  buildSpecialGrid();
+  buildSettingsSpecialsGrid();
+  if (session.token) {
+    showSaving('Logging you back in...');
+    api({ action:'getUser', token: session.token })
+      .then(res => {
+        hideSaving();
+        if (res.success) {
+          session.businessName = res.businessName;
+          session.companyId    = res.companyId;
+          applyPricing(res.pricing);
+          openCalcDirect();
+        } else {
+          clearSession();
+        }
+      })
+      .catch(() => { hideSaving(); clearSession(); });
+  }
+})();
+
+// ════════════════════════════════════════
+//  API HELPER
+// ════════════════════════════════════════
+async function api(payload) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return res.json();
+}
+
+// ════════════════════════════════════════
+//  MODAL
+// ════════════════════════════════════════
+function openModal(planOrMode) {
+  if (planOrMode === 'login') {
+    switchTab('login');
+  } else {
+    currentPlan = planOrMode;
+    document.getElementById('modalPlanBadge').textContent = planOrMode === 'pro' ? 'Pro Plan — $59/mo' : 'Starter Plan — $29/mo';
+    switchTab('signup');
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  // Reset saving/success in case they closed mid-flow
+  document.getElementById('savingOverlay').style.display = 'none';
+  document.getElementById('successState').style.display  = 'none';
+}
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+function switchTab(tab) {
+  activeTab = tab;
+  const isSignup = tab === 'signup';
+  document.getElementById('tabSignup').classList.toggle('active', isSignup);
+  document.getElementById('tabLogin').classList.toggle('active', !isSignup);
+  document.getElementById('step1').style.display       = isSignup ? 'block' : 'none';
+  document.getElementById('step2').style.display       = 'none';
+  document.getElementById('loginForm').style.display   = isSignup ? 'none' : 'block';
+  document.getElementById('savingOverlay').style.display = 'none';
+  document.getElementById('successState').style.display  = 'none';
+  document.getElementById('modalStepDots').style.display = isSignup ? 'flex' : 'none';
+  document.getElementById('modalPlanBadge').style.display = isSignup ? 'inline-block' : 'none';
+
+  if (isSignup) {
+    document.getElementById('modalTitle').textContent    = 'Start your free trial';
+    document.getElementById('modalSubtitle').textContent = '14 days free. Card required — charged only after trial ends.';
+    updateStepDots(1);
+  } else {
+    document.getElementById('modalTitle').textContent    = 'Welcome back';
+    document.getElementById('modalSubtitle').textContent = 'Log in to your quote tool';
+  }
+}
+
+function goStep(n) {
+  document.getElementById('step1').style.display = n===1 ? 'block' : 'none';
+  document.getElementById('step2').style.display = n===2 ? 'block' : 'none';
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('savingOverlay').style.display = 'none';
+  document.getElementById('successState').style.display  = 'none';
+  updateStepDots(n);
+  const titles = ['Start your free trial','Set your costs & markup'];
+  const subs   = ['14 days free. Card required — charged only after trial ends.','Takes 2 minutes. Change any of this anytime.'];
+  document.getElementById('modalTitle').textContent    = titles[n-1]||'';
+  document.getElementById('modalSubtitle').textContent = subs[n-1]||'';
+  document.getElementById('modal').scrollTop = 0;
+}
+
+function updateStepDots(n) {
+  [1,2].forEach(i => {
+    const d = document.getElementById('dot'+i);
+    d.className = 'modal-step-dot'+(i<n?' done':i===n?' active':'');
+  });
+}
+
+// ════════════════════════════════════════
+//  SIGNUP FLOW
+// ════════════════════════════════════════
 function buildSpecialGrid() {
   const grid = document.getElementById('specialGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
   SPECIAL_ITEMS_CONFIG.forEach(item => {
-    specialItemStates[item.key] = { enabled: true, fee: item.fee };
+    specialItemStates[item.key] = { enabled:true, fee:item.fee };
     const row = document.createElement('div');
     row.className = 'special-item-row active';
-    row.id = 'srow-' + item.key;
+    row.id = 'srow-'+item.key;
     row.innerHTML = `
       <div class="sitem-left"><span class="sitem-icon">${item.icon}</span>${item.label}</div>
       <div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)" /></div></div>
@@ -927,138 +1119,213 @@ function buildSpecialGrid() {
     grid.appendChild(row);
   });
 }
-buildSpecialGrid();
 
 function toggleSpecial(key) {
   specialItemStates[key].enabled = !specialItemStates[key].enabled;
-  document.getElementById('srow-' + key).classList.toggle('active', specialItemStates[key].enabled);
-  const t = document.getElementById('stoggle-' + key);
+  document.getElementById('srow-'+key).classList.toggle('active', specialItemStates[key].enabled);
+  const t = document.getElementById('stoggle-'+key);
   t.classList.toggle('on', specialItemStates[key].enabled);
   t.textContent = specialItemStates[key].enabled ? '✓' : '+';
 }
-function updateSpecialFee(key, val) { specialItemStates[key].fee = Number(val) || 0; }
-
-// ── MODAL ────────────────────────────────────────────────
-function openModal(plan) {
-  currentPlan = plan;
-  document.getElementById('modalPlanBadge').textContent = plan === 'pro' ? 'Pro Plan — $59/mo' : 'Starter Plan — $29/mo';
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  goStep(1);
-}
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-
-function goStep(n) {
-  [1,2].forEach(i => { const el = document.getElementById('step'+i); if(el) el.style.display = i===n?'block':'none'; });
-  document.getElementById('savingOverlay').style.display = 'none';
-  document.getElementById('successState').style.display = 'none';
-  updateStepDots(n);
-  const titles = ['Start your free trial','Set your costs & markup'];
-  const subs   = ['14 days free. Card required — charged only after trial ends.','Takes 2 minutes. Change any of this anytime.'];
-  document.getElementById('modalTitle').textContent    = titles[n-1] || '';
-  document.getElementById('modalSubtitle').textContent = subs[n-1]   || '';
-  document.getElementById('modal').scrollTop = 0;
-}
-function updateStepDots(n) {
-  [1,2].forEach(i => {
-    const d = document.getElementById('dot'+i);
-    d.className = 'modal-step-dot' + (i<n?' done':i===n?' active':'');
-  });
-}
+function updateSpecialFee(key, val) { specialItemStates[key].fee = Number(val)||0; }
 
 function goStep2() {
-  const first = document.getElementById('m-first').value.trim();
-  const last  = document.getElementById('m-last').value.trim();
-  const biz   = document.getElementById('m-biz').value.trim();
-  const email = document.getElementById('m-email').value.trim();
-  const card  = document.getElementById('m-card').value.replace(/\s/g,'');
-  const exp   = document.getElementById('m-exp').value.trim();
-  const cvv   = document.getElementById('m-cvv').value.trim();
-  if (!first||!last||!biz||!email||card.length<16||exp.length<4||cvv.length<3) {
-    alert('Please fill in all fields to continue.');
-    return;
-  }
-  companyName = biz;
-  companyId = biz.toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,30)+'_'+Date.now().toString(36);
+  clearFormErrors();
+  const first = v('m-first'), last = v('m-last'), biz = v('m-biz');
+  const email = v('m-email'), pw = v('m-pw');
+  const card  = v('m-card').replace(/\s/g,'');
+  const exp   = v('m-exp'), cvv = v('m-cvv');
+
+  let valid = true;
+  if (!first)         { setErr('f-first', true); valid=false; }
+  if (!last)          { setErr('f-last',  true); valid=false; }
+  if (!biz)           { setErr('f-biz',   true); valid=false; }
+  if (!email || !email.includes('@')) { setErr('f-email', true); valid=false; }
+  if (!pw || pw.length < 8)           { setErr('f-pw',    true); valid=false; }
+  if (card.length < 16)  { setErr('f-card', true); valid=false; }
+  if (exp.length < 4)    { setErr('f-exp',  true); valid=false; }
+  if (cvv.length < 3)    { setErr('f-cvv',  true); valid=false; }
+
+  if (!valid) { showBanner('step1Err', 'Please fill in all fields above.'); return; }
+  hideBanner('step1Err');
   goStep(2);
 }
 
-function completeSignup() {
+async function completeSignup() {
   const btn = document.getElementById('step2Btn');
   btn.disabled = true; btn.textContent = 'Saving...';
 
-  // Pull pricing from form into userPricing
-  userPricing.loads = {
-    minimum: { low: numVal('p-min-low'),  high: numVal('p-min-high')  },
-    quarter: { low: numVal('p-qtr-low'),  high: numVal('p-qtr-high')  },
-    half:    { low: numVal('p-half-low'), high: numVal('p-half-high') },
-    full:    { low: numVal('p-full-low'), high: numVal('p-full-high') },
-  };
-  userPricing.specials = {};
+  const specials = {};
   SPECIAL_ITEMS_CONFIG.forEach(item => {
     if (specialItemStates[item.key].enabled)
-      userPricing.specials[item.key] = { fee: specialItemStates[item.key].fee, label: item.label };
+      specials[item.key] = { fee:specialItemStates[item.key].fee, label:item.label, icon:item.icon };
   });
-  userPricing.driveRate     = numVal('driveRate');
-  userPricing.laborRate     = numVal('laborRate');
-  userPricing.defaultMarkup = parseInt(document.getElementById('signupMarkup').value);
 
-  const payload = {
-    action: 'signup', companyId, businessName: companyName,
-    ownerName: document.getElementById('m-first').value.trim()+' '+document.getElementById('m-last').value.trim(),
-    email: document.getElementById('m-email').value.trim(),
-    phone: document.getElementById('m-phone').value.trim(),
-    plan: currentPlan, trialStart: new Date().toISOString(),
-    ...userPricing
+  const pricing = {
+    loads: {
+      minimum: { low:nv('p-min-low'),  high:nv('p-min-high')  },
+      quarter: { low:nv('p-qtr-low'),  high:nv('p-qtr-high')  },
+      half:    { low:nv('p-half-low'), high:nv('p-half-high') },
+      full:    { low:nv('p-full-low'), high:nv('p-full-high') },
+    },
+    specials,
+    driveRate:     nv('driveRate'),
+    laborRate:     nv('laborRate'),
+    defaultMarkup: parseInt(document.getElementById('signupMarkup').value),
   };
 
-  saveToSheet(payload).finally(() => {
-    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
-    [1,2].forEach(i => { const el=document.getElementById('step'+i); if(el) el.style.display='none'; });
-    document.getElementById('savingOverlay').style.display = 'none';
-    document.getElementById('successState').style.display  = 'block';
-    document.getElementById('modalStepDots').style.display = 'none';
-    document.getElementById('modalTitle').textContent      = "You're all set.";
-    document.getElementById('modalSubtitle').textContent   = '';
-  });
-}
+  const payload = {
+    action: 'signup',
+    businessName: v('m-biz'),
+    ownerName:    v('m-first')+' '+v('m-last'),
+    email:        v('m-email'),
+    phone:        v('m-phone'),
+    password:     v('m-pw'),
+    plan:         currentPlan,
+    trialStart:   new Date().toISOString(),
+    ...pricing,
+  };
 
-async function saveToSheet(payload) {
   try {
-    await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
-  } catch(e) { console.error('Sheet save:', e); }
+    const res = await api(payload);
+    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
+
+    if (!res.success) {
+      showBanner('step1Err', res.error || 'Something went wrong. Please try again.');
+      goStep(1);
+      return;
+    }
+
+    saveSession(res.token, res.companyId, res.businessName || v('m-biz'));
+    applyPricing(pricing);
+    showSuccess();
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
+    showBanner('step1Err', 'Could not connect to server. Check your internet and try again.');
+    goStep(1);
+  }
 }
 
+function showSuccess() {
+  ['step1','step2','savingOverlay','loginForm'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.style.display='none';
+  });
+  document.getElementById('successState').style.display  = 'block';
+  document.getElementById('modalStepDots').style.display = 'none';
+  document.getElementById('modalTitle').textContent      = "You're all set.";
+  document.getElementById('modalSubtitle').textContent   = '';
+}
+
+// ════════════════════════════════════════
+//  LOGIN
+// ════════════════════════════════════════
+async function doLogin() {
+  const email = v('l-email'), pw = v('l-pw');
+  if (!email || !pw) { showBanner('loginErr', 'Enter your email and password.'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Logging in...';
+
+  try {
+    const res = await api({ action:'login', email, password:pw });
+    btn.disabled = false; btn.textContent = 'Log in to my quote tool →';
+
+    if (!res.success) { showBanner('loginErr', res.error || 'Login failed.'); return; }
+
+    saveSession(res.token, res.companyId, res.businessName);
+    applyPricing(res.pricing);
+    closeModal();
+    openCalcDirect();
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Log in to my quote tool →';
+    showBanner('loginErr', 'Could not connect. Check your internet and try again.');
+  }
+}
+
+// ════════════════════════════════════════
+//  SESSION MANAGEMENT
+// ════════════════════════════════════════
+function saveSession(token, companyId, businessName) {
+  session.token        = token;
+  session.companyId    = companyId;
+  session.businessName = businessName || 'Wood\'s Waste';
+  localStorage.setItem('ww_token', token);
+  localStorage.setItem('ww_cid',   companyId);
+  localStorage.setItem('ww_biz',   session.businessName);
+}
+
+function clearSession() {
+  session.token = session.companyId = null;
+  localStorage.removeItem('ww_token');
+  localStorage.removeItem('ww_cid');
+  localStorage.removeItem('ww_biz');
+}
+
+async function doLogout() {
+  if (!confirm('Log out of your quote tool?')) return;
+  if (session.token) {
+    api({ action:'logout', token: session.token }).catch(()=>{});
+  }
+  clearSession();
+  document.getElementById('calcPage').style.display    = 'none';
+  document.getElementById('marketingPage').style.display = 'block';
+  document.body.style.overflow = '';
+  resetCalc();
+}
+
+function applyPricing(p) {
+  if (!p) return;
+  userPricing = {
+    loads: p.loads || userPricing.loads,
+    specials: p.specials || {},
+    driveRate:     Number(p.driveRate)     || 1.5,
+    laborRate:     Number(p.laborRate)     || 35,
+    defaultMarkup: Number(p.defaultMarkup) || 35,
+  };
+}
+
+// ════════════════════════════════════════
+//  OPEN CALC
+// ════════════════════════════════════════
 function openCalc() {
   closeModal();
+  openCalcDirect();
+}
+
+function openCalcDirect() {
   document.getElementById('marketingPage').style.display = 'none';
-  document.getElementById('calcPage').style.display = 'block';
+  document.getElementById('calcPage').style.display      = 'block';
   document.body.style.overflow = '';
   initCalc();
 }
 
-// ── CALCULATOR ───────────────────────────────────────────
+// ════════════════════════════════════════
+//  CALCULATOR
+// ════════════════════════════════════════
 function initCalc() {
-  document.getElementById('calcNavCo').textContent = companyName;
+  document.getElementById('calcNavCo').textContent = session.businessName;
   document.getElementById('calcMarkup').value = userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent = userPricing.defaultMarkup + '%';
 
-  // Update load card cost labels
   Object.keys(userPricing.loads).forEach(key => {
     const l = userPricing.loads[key];
-    document.getElementById('cl-cost-'+key).textContent = '$'+l.low+'–$'+l.high;
+    const el = document.getElementById('cl-cost-'+key);
+    if (el) el.textContent = '$'+l.low+(l.low !== l.high ? '–$'+l.high : '');
   });
 
-  // Build specials grid
+  buildCalcSpecialsGrid();
+  loadHistory();
+  recalc();
+}
+
+function buildCalcSpecialsGrid() {
   const grid = document.getElementById('calcSpecialsGrid');
   grid.innerHTML = '';
+  selectedSpecials = {};
+
   const items = Object.keys(userPricing.specials).length > 0
-    ? Object.entries(userPricing.specials).map(([k,v])=>({key:k,...v,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'📦'}))
-    : SPECIAL_ITEMS_CONFIG.map(i=>({...i}));
+    ? Object.entries(userPricing.specials).map(([k,v])=>({ key:k, ...v, icon: SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon || '📦' }))
+    : SPECIAL_ITEMS_CONFIG;
 
   items.forEach(item => {
     selectedSpecials[item.key] = false;
@@ -1075,9 +1342,6 @@ function initCalc() {
     `;
     grid.appendChild(tag);
   });
-
-  recalc();
-  loadHistory();
 }
 
 function selectLoad(key) {
@@ -1089,8 +1353,7 @@ function selectLoad(key) {
 
 function toggleCalcSpecial(key) {
   selectedSpecials[key] = !selectedSpecials[key];
-  const el = document.getElementById('cs-'+key);
-  el.classList.toggle('sel', selectedSpecials[key]);
+  document.getElementById('cs-'+key).classList.toggle('sel', selectedSpecials[key]);
   recalc();
 }
 
@@ -1107,26 +1370,25 @@ function recalc() {
     return;
   }
 
-  const load     = userPricing.loads[selectedLoad];
-  const markup   = parseInt(document.getElementById('calcMarkup').value) / 100;
-  const miles    = parseFloat(document.getElementById('calcMiles').value)  || 0;
-  const hours    = parseFloat(document.getElementById('calcHours').value)  || 0;
+  const load      = userPricing.loads[selectedLoad];
+  const markup    = parseInt(document.getElementById('calcMarkup').value) / 100;
+  const miles     = parseFloat(document.getElementById('calcMiles').value) || 0;
+  const hours     = parseFloat(document.getElementById('calcHours').value) || 0;
   const driveRate = userPricing.driveRate || 1.5;
   const laborRate = userPricing.laborRate || 35;
 
-  // Special items cost
   let specialsCost = 0;
-  const specialSrc = Object.keys(userPricing.specials).length > 0 ? userPricing.specials : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  const specialSrc = Object.keys(userPricing.specials).length > 0
+    ? userPricing.specials
+    : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   Object.keys(selectedSpecials).forEach(k => {
-    if (selectedSpecials[k] && specialSrc[k]) specialsCost += specialSrc[k].fee;
+    if (selectedSpecials[k] && specialSrc[k]) specialsCost += Number(specialSrc[k].fee) || 0;
   });
 
-  const driveCost = Math.round(miles * 2 * driveRate); // round trip
+  const driveCost = Math.round(miles * 2 * driveRate);
   const laborCost = Math.round(hours * laborRate);
-
-  const baseLow  = load.low  + specialsCost + driveCost + laborCost;
-  const baseHigh = load.high + specialsCost + driveCost + laborCost;
-
+  const baseLow   = load.low  + specialsCost + driveCost + laborCost;
+  const baseHigh  = load.high + specialsCost + driveCost + laborCost;
   const quoteLow  = Math.round(baseLow  * (1 + markup));
   const quoteHigh = Math.round(baseHigh * (1 + markup));
 
@@ -1139,25 +1401,24 @@ function recalc() {
     priceEl.className = 'calc-result-price has-range';
   }
 
-  // Breakdown
   document.getElementById('calcBreakdown').style.display = 'flex';
   document.getElementById('bd-load').textContent = '$'+load.low+(load.low!==load.high?'–$'+load.high:'');
 
-  const specRow = document.getElementById('bd-specials-row');
-  specRow.style.display = specialsCost > 0 ? 'flex' : 'none';
+  const srRow = document.getElementById('bd-specials-row');
+  srRow.style.display = specialsCost > 0 ? 'flex' : 'none';
   document.getElementById('bd-specials').textContent = '+$'+specialsCost;
 
-  const driveRow = document.getElementById('bd-drive-row');
-  driveRow.style.display = driveCost > 0 ? 'flex' : 'none';
+  const drRow = document.getElementById('bd-drive-row');
+  drRow.style.display = driveCost > 0 ? 'flex' : 'none';
   document.getElementById('bd-drive').textContent = '+$'+driveCost+' ('+miles+' mi × 2 × $'+driveRate+')';
 
-  const laborRow = document.getElementById('bd-labor-row');
-  laborRow.style.display = laborCost > 0 ? 'flex' : 'none';
+  const lrRow = document.getElementById('bd-labor-row');
+  lrRow.style.display = laborCost > 0 ? 'flex' : 'none';
   document.getElementById('bd-labor').textContent = '+$'+laborCost+' ('+hours+'hr × $'+laborRate+')';
 
-  document.getElementById('bd-cost').textContent  = '$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
+  document.getElementById('bd-cost').textContent      = '$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
   document.getElementById('bd-markup-label').textContent = '+ '+(markup*100)+'% markup =';
-  document.getElementById('bd-quote').textContent = '$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
+  document.getElementById('bd-quote').textContent     = '$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
 }
 
 function resetCalc() {
@@ -1176,14 +1437,18 @@ function resetCalc() {
   document.getElementById('calcBreakdown').style.display = 'none';
 }
 
-// ── HISTORY ──────────────────────────────────────────────
-function saveJob() {
-  if (!selectedLoad) { alert('Select a load size first.'); return; }
+// ════════════════════════════════════════
+//  SAVE JOB
+// ════════════════════════════════════════
+async function saveJob() {
+  if (!selectedLoad) { showToast('⚠ Select a load size first', true); return; }
   const priceText = document.getElementById('calcFinalPrice').textContent;
-  if (priceText === '—') return;
+  if (priceText === '—' || priceText === 'Select a load size') return;
 
   const activeSpecials = Object.keys(selectedSpecials).filter(k => selectedSpecials[k]);
-  const specialSrc = Object.keys(userPricing.specials).length > 0 ? userPricing.specials : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  const specialSrc = Object.keys(userPricing.specials).length > 0
+    ? userPricing.specials
+    : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
 
   const entry = {
     id: Date.now(),
@@ -1193,43 +1458,176 @@ function saveJob() {
     miles: parseFloat(document.getElementById('calcMiles').value) || 0,
     hours: parseFloat(document.getElementById('calcHours').value) || 0,
     markup: parseInt(document.getElementById('calcMarkup').value),
-    ts: new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }),
+    ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),
   };
 
+  // Save locally first (instant feedback)
   jobHistory.unshift(entry);
-  if (jobHistory.length > 50) jobHistory = jobHistory.slice(0, 50);
+  if (jobHistory.length > 50) jobHistory = jobHistory.slice(0,50);
   persistHistory();
   renderHistory();
   showToast('✓ Job saved to history');
+
+  // Also persist to sheet if logged in
+  if (session.token) {
+    const loadMap = { minimum:{low:100,high:130}, quarter:{low:160,high:200}, half:{low:230,high:280}, full:{low:350,high:420} };
+    const load = userPricing.loads[selectedLoad] || loadMap[selectedLoad] || {low:0,high:0};
+    const markup = parseInt(document.getElementById('calcMarkup').value) / 100;
+    const miles  = parseFloat(document.getElementById('calcMiles').value) || 0;
+    const hours  = parseFloat(document.getElementById('calcHours').value) || 0;
+    const specialSrcE = Object.keys(userPricing.specials).length > 0 ? userPricing.specials : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+    let sCost = 0;
+    Object.keys(selectedSpecials).forEach(k => { if(selectedSpecials[k] && specialSrcE[k]) sCost += Number(specialSrcE[k].fee)||0; });
+    const dCost = Math.round(miles * 2 * (userPricing.driveRate||1.5));
+    const lCost = Math.round(hours * (userPricing.laborRate||35));
+    const base  = load.low + sCost + dCost + lCost;
+
+    api({
+      action:'saveJob', token:session.token,
+      price: priceText, load: selectedLoad,
+      specials: entry.specials, miles, hours,
+      markup: parseInt(document.getElementById('calcMarkup').value),
+      driveCost:sCost, laborCost:lCost, specialsCost:sCost, baseCost:base
+    }).catch(()=>{});
+  }
 }
 
+// ════════════════════════════════════════
+//  SETTINGS PANEL
+// ════════════════════════════════════════
+let sSpecialStates = {};
+
+function buildSettingsSpecialsGrid() {
+  const grid = document.getElementById('sSpecialsGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SPECIAL_ITEMS_CONFIG.forEach(item => {
+    sSpecialStates[item.key] = { enabled:true, fee:item.fee };
+    const row = document.createElement('div');
+    row.className = 's-special-row active';
+    row.id = 'ss-'+item.key;
+    row.innerHTML = `
+      <div class="s-sitem-left"><span>${item.icon}</span>${item.label}</div>
+      <div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0" /></div></div>
+      <div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>
+    `;
+    grid.appendChild(row);
+  });
+}
+
+function toggleSSpecial(key) {
+  sSpecialStates[key].enabled = !sSpecialStates[key].enabled;
+  document.getElementById('ss-'+key).classList.toggle('active', sSpecialStates[key].enabled);
+  const t = document.getElementById('sstoggle-'+key);
+  t.classList.toggle('on', sSpecialStates[key].enabled);
+  t.textContent = sSpecialStates[key].enabled ? '✓' : '+';
+}
+
+function openSettings() {
+  // Pre-fill settings with current userPricing
+  const l = userPricing.loads;
+  document.getElementById('s-min-low').value   = l.minimum.low;
+  document.getElementById('s-min-high').value  = l.minimum.high;
+  document.getElementById('s-qtr-low').value   = l.quarter.low;
+  document.getElementById('s-qtr-high').value  = l.quarter.high;
+  document.getElementById('s-half-low').value  = l.half.low;
+  document.getElementById('s-half-high').value = l.half.high;
+  document.getElementById('s-full-low').value  = l.full.low;
+  document.getElementById('s-full-high').value = l.full.high;
+  document.getElementById('s-drive').value     = userPricing.driveRate;
+  document.getElementById('s-labor').value     = userPricing.laborRate;
+  document.getElementById('sMarkup').value     = userPricing.defaultMarkup;
+  document.getElementById('sMarkupVal').textContent = userPricing.defaultMarkup + '%';
+
+  // Sync special states
+  SPECIAL_ITEMS_CONFIG.forEach(item => {
+    const saved = userPricing.specials[item.key];
+    const enabled = saved != null;
+    const fee = saved ? saved.fee : item.fee;
+    sSpecialStates[item.key] = { enabled, fee };
+    const row = document.getElementById('ss-'+item.key);
+    if (row) { row.classList.toggle('active', enabled); }
+    const t = document.getElementById('sstoggle-'+item.key);
+    if (t) { t.classList.toggle('on', enabled); t.textContent = enabled ? '✓' : '+'; }
+    const fInput = document.getElementById('ssfee-'+item.key);
+    if (fInput) fInput.value = fee;
+  });
+
+  document.getElementById('settingsPanel').classList.add('open');
+}
+
+function closeSettings() { document.getElementById('settingsPanel').classList.remove('open'); }
+function closeSettingsOutside(e) { if (e.target === document.getElementById('settingsPanel')) closeSettings(); }
+
+async function saveSettings() {
+  const btn = document.getElementById('settingsSaveBtn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  const specials = {};
+  SPECIAL_ITEMS_CONFIG.forEach(item => {
+    if (sSpecialStates[item.key]?.enabled)
+      specials[item.key] = { fee: sSpecialStates[item.key].fee, label: item.label, icon: item.icon };
+  });
+
+  const newPricing = {
+    loads: {
+      minimum: { low:nsv('s-min-low'),  high:nsv('s-min-high')  },
+      quarter: { low:nsv('s-qtr-low'),  high:nsv('s-qtr-high')  },
+      half:    { low:nsv('s-half-low'), high:nsv('s-half-high') },
+      full:    { low:nsv('s-full-low'), high:nsv('s-full-high') },
+    },
+    specials,
+    driveRate:     nsv('s-drive'),
+    laborRate:     nsv('s-labor'),
+    defaultMarkup: parseInt(document.getElementById('sMarkup').value),
+  };
+
+  // Save to server if logged in
+  if (session.token) {
+    try {
+      const res = await api({ action:'updatePricing', token:session.token, ...newPricing });
+      if (!res.success) { showToast('⚠ Could not save to server', true); }
+    } catch(e) { showToast('⚠ Could not reach server', true); }
+  }
+
+  applyPricing(newPricing);
+  initCalc(); // refresh calc labels
+  btn.disabled = false; btn.textContent = 'Save pricing changes';
+  closeSettings();
+  showToast('✓ Pricing updated');
+}
+
+// ════════════════════════════════════════
+//  HISTORY
+// ════════════════════════════════════════
+function saveJobLocal(entry) { /* already inline in saveJob */ }
+
 function loadHistory() {
-  try { jobHistory = JSON.parse(localStorage.getItem('ww_job_history') || '[]'); } catch(e) { jobHistory = []; }
+  try { jobHistory = JSON.parse(localStorage.getItem('ww_history')||'[]'); } catch(e) { jobHistory=[]; }
   renderHistory();
 }
 function persistHistory() {
-  try { localStorage.setItem('ww_job_history', JSON.stringify(jobHistory)); } catch(e) {}
+  try { localStorage.setItem('ww_history', JSON.stringify(jobHistory)); } catch(e) {}
 }
 function clearHistory() {
   if (!confirm('Clear all job history?')) return;
-  jobHistory = []; persistHistory(); renderHistory();
+  jobHistory=[]; persistHistory(); renderHistory();
 }
-
 function renderHistory() {
   const list = document.getElementById('historyList');
   if (!jobHistory.length) {
     list.innerHTML = '<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';
     return;
   }
-  const loadLabels = { minimum:'Min Load', quarter:'Quarter Load', half:'Half Load', full:'Full Truck' };
-  list.innerHTML = jobHistory.map(j => `
+  const loadLabels = {minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+  list.innerHTML = jobHistory.map(j=>`
     <div class="history-item">
       <div class="history-item-top">
         <div class="history-item-price">${j.price}</div>
         <div class="history-item-time">${j.ts}</div>
       </div>
       <div class="history-item-detail">
-        ${loadLabels[j.load]||j.load}${j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}
+        ${loadLabels[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}
       </div>
       <div class="history-item-markup">${j.markup}% markup</div>
     </div>
@@ -1238,30 +1636,74 @@ function renderHistory() {
 
 function openHistory()  { document.getElementById('historyPanel').classList.add('open'); }
 function closeHistory() { document.getElementById('historyPanel').classList.remove('open'); }
-function closeHistoryOutside(e) { if (e.target === document.getElementById('historyPanel')) closeHistory(); }
+function closeHistoryOutside(e) { if(e.target===document.getElementById('historyPanel')) closeHistory(); }
 
-function showToast(msg) {
+// ════════════════════════════════════════
+//  SAVING OVERLAY (for auto-login)
+// ════════════════════════════════════════
+function showSaving(msg) {
+  // Show a full-page loading state while auto-login runs
+  const overlay = document.createElement('div');
+  overlay.id = 'pageLoader';
+  overlay.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
+  overlay.innerHTML = `
+    <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:16px;"></div>
+    <p style="font-size:14px;color:rgba(255,255,255,.4);font-family:Inter,sans-serif;">${msg||'Loading...'}</p>
+  `;
+  document.body.appendChild(overlay);
+}
+function hideSaving() {
+  const el = document.getElementById('pageLoader');
+  if (el) el.remove();
+}
+
+// ════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════
+function showToast(msg, warn) {
   const t = document.getElementById('toast');
   t.textContent = msg;
+  t.style.background = warn ? '#b94a4a' : 'var(--green)';
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  setTimeout(()=>t.classList.remove('show'), 2400);
 }
 
-// ── UTILS ────────────────────────────────────────────────
-function numVal(id) { return Number(document.getElementById(id).value) || 0; }
+// ════════════════════════════════════════
+//  FORM UTILS
+// ════════════════════════════════════════
+function v(id)   { return (document.getElementById(id)?.value||'').trim(); }
+function nv(id)  { return Number(document.getElementById(id)?.value)||0; }
+function nsv(id) { return Number(document.getElementById(id)?.value)||0; }
 
-function fmt(el, type) {
-  if (type === 'card') {
-    let v = el.value.replace(/\D/g,'').slice(0,16);
-    el.value = v.replace(/(.{4})/g,'$1 ').trim();
-  } else {
-    let v = el.value.replace(/\D/g,'').slice(0,4);
-    if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
-    el.value = v;
-  }
+function setErr(fieldId, on) {
+  document.getElementById(fieldId)?.classList.toggle('has-error', on);
+}
+function clearFormErrors() {
+  ['f-first','f-last','f-biz','f-email','f-pw','f-card','f-exp','f-cvv'].forEach(id=>setErr(id,false));
+}
+function showBanner(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 5000);
+}
+function hideBanner(id) {
+  const el = document.getElementById(id); if(el) el.classList.remove('show');
 }
 
-document.addEventListener('keydown', e => { if (e.key==='Escape') { closeModal(); closeHistory(); } });
+function fmtCard(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+function fmtExp(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,4);
+  if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
+  el.value = v;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeHistory(); closeSettings(); }
+});
 </script>
 </body>
 </html>
