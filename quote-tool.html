@@ -1024,6 +1024,51 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 
 <div class="toast" id="toast"></div>
 
+  <!-- JOB ACTUAL DRAWER -->
+<div class="actual-panel" id="actualPanel" onclick="closeActualOutside(event)">
+  <div class="actual-drawer">
+    <div class="actual-header">
+      <div class="actual-title">How'd the job go?</div>
+      <button class="actual-close" onclick="closeActual()">✕</button>
+    </div>
+    <div class="actual-body">
+      <div class="actual-quoted" id="actualQuotedBox">
+        <div class="actual-quoted-label">You quoted</div>
+        <div class="actual-quoted-price" id="actualQuotedPrice">—</div>
+        <div class="actual-quoted-detail" id="actualQuotedDetail"></div>
+      </div>
+      <div class="actual-field">
+        <label>What did you actually charge?</label>
+        <div class="actual-dollar"><input type="number" class="actual-input" id="actualCharged" placeholder="0" min="0" oninput="onActualInput()"/></div>
+      </div>
+      <div class="actual-diff" id="actualDiff">
+        <div class="actual-diff-label" id="actualDiffLabel"></div>
+        <div class="actual-diff-val" id="actualDiffVal"></div>
+        <div class="actual-diff-sub" id="actualDiffSub"></div>
+      </div>
+      <div class="actual-field">
+        <label>How long did it actually take? (hours)</label>
+        <input type="number" class="actual-input" id="actualHours" placeholder="0" min="0" step="0.5"/>
+      </div>
+      <div class="actual-field">
+        <label>Any surprises? (optional)</label>
+        <textarea class="actual-input actual-notes-input" id="actualNotes" placeholder="Heavier than expected, extra items, longer drive..."></textarea>
+      </div>
+      <button class="actual-save-btn" onclick="saveActual()">Save job outcome</button>
+    </div>
+  </div>
+</div>
+<!-- INSIGHTS DRAWER -->
+<div class="insights-panel" id="insightsPanel" onclick="closeInsightsOutside(event)">
+  <div class="insights-drawer">
+    <div class="insights-header">
+      <div class="insights-title">Insights</div>
+      <button class="insights-close" onclick="closeInsights()">✕</button>
+    </div>
+    <div class="insights-body" id="insightsBody"></div>
+  </div>
+</div>
+
 <script>
 const API_URL    = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
 const STRIPE_PK  = 'pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY';
