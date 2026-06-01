@@ -1686,7 +1686,7 @@ function drawInsightCharts(logged, loadStats, loadLabels){
   // ── Chart 1: Quoted vs Actual (line chart, last 15 jobs) ──
   const recent=logged.slice(-15);
   const labels=recent.map((_,i)=>'Job '+(i+1));
-  const quotedVals=recent.map(j=>parseFloat(j.price.replace(/[^0-9.]/g,''))||0);
+const quotedVals=recent.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
   const actualVals=recent.map(j=>j.actual.charged||0);
   const ctx1=document.getElementById('chartQuotedActual')?.getContext('2d');
   if(ctx1){
