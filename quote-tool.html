@@ -1456,6 +1456,7 @@ async function analyzePhotos(){
   const markup=parseInt(document.getElementById('calcMarkup').value),markupFrac=markup/100;
   const loads=userPricing.loads;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  const jobNotes=document.getElementById('aiJobNotes')?.value?.trim();
   const pricingContext=`Your pricing (costs BEFORE markup):\n- Min Load: $${loads.minimum.low}–$${loads.minimum.high}\n- Quarter Load: $${loads.quarter.low}–$${loads.quarter.high}\n- Half Load: $${loads.half.low}–$${loads.half.high}\n- Full Truck: $${loads.full.low}–$${loads.full.high}\nSpecial item fees: ${Object.entries(specialSrc).map(([k,v])=>`${v.label||k}: $${v.fee}`).join(', ')}\nMarkup: ${markup}%`;
   for(let i=0;i<aiFiles.length;i++){
     try{
