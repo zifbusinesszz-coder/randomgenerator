@@ -231,6 +231,8 @@ footer{background:#ffffff;border-top:1px solid #e2e2e0;padding:32px 40px;}
 .fine-print{font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.5;}
 .err-banner{background:var(--red-l);border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none;}
 .err-banner.show{display:block;}
+.success-banner{background:var(--green-l);border:1px solid rgba(29,158,117,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--green-dk);margin-bottom:14px;display:none;}
+.success-banner.show{display:block;}
 .twofa-wrap{text-align:center;padding:10px 0;}
 .twofa-icon{font-size:40px;margin-bottom:12px;display:flex;justify-content:center;}
 .twofa-desc{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
@@ -297,8 +299,6 @@ footer{background:#ffffff;border-top:1px solid #e2e2e0;padding:32px 40px;}
 .calc-icon-btn.logout:hover{color:#ff6b6b;background:rgba(255,100,100,.08);border-color:rgba(255,100,100,.2);}
 .calc-icon-btn.ai-btn{color:#5DCAA5;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.08);}
 .calc-icon-btn.ai-btn:hover{color:#7DDBBA;background:rgba(29,158,117,.15);border-color:rgba(29,158,117,.5);}
-.calc-icon-btn.home-btn{color:rgba(255,255,255,.6);}
-.calc-icon-btn.home-btn:hover{color:white;}
 .calc-body{max-width:480px;margin:0 auto;padding:24px 20px 80px;position:relative;z-index:1;}
 .calc-section{margin-bottom:24px;}
 .calc-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--d-faint);margin-bottom:10px;}
@@ -349,6 +349,14 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .calc-btn-save:hover{background:var(--green-dk);}
 .calc-btn-reset{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border:1px solid var(--d-border);border-radius:8px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
 .calc-btn-reset:hover{color:white;border-color:var(--d-border2);}
+
+/* ── WELCOME BANNER ── */
+.welcome-banner{background:linear-gradient(135deg,rgba(29,158,117,0.15) 0%,rgba(29,158,117,0.05) 100%);border:1px solid rgba(29,158,117,.3);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:none;position:relative;}
+.welcome-banner.show{display:block;}
+.welcome-banner-close{position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,.4);font-size:14px;cursor:pointer;line-height:1;}
+.welcome-banner-close:hover{color:white;}
+.welcome-banner-title{font-size:13px;font-weight:700;color:white;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.welcome-banner-body{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;}
 
 /* ── AI PHOTO PANEL ── */
 .ai-panel{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);}
@@ -534,8 +542,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .chart-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--d-faint);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
 .chart-canvas-wrap{position:relative;width:100%;}
 canvas.insights-chart{width:100%!important;display:block;}
-
-/* tab pills inside insights */
 .insights-tabs{display:flex;gap:4px;margin-bottom:18px;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;}
 .insights-tab{flex:1;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;border:none;background:none;font-family:'Inter',sans-serif;text-align:center;}
 .insights-tab.active{background:rgba(255,255,255,.1);color:white;}
@@ -687,7 +693,7 @@ canvas.insights-chart{width:100%!important;display:block;}
       <div class="feat-card"><div class="feat-icon"><i class="ph ph-sliders" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you want the job. Slide it down to win a competitive bid.</div></div>
       <div class="feat-card"><div class="feat-icon"><i class="ph ph-gear" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote is calculated off your real numbers.</div></div>
       <div class="feat-card"><div class="feat-icon"><i class="ph ph-package" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds automatically.</div></div>
-      <div class="feat-card"><div class="feat-icon"><i class="ph ph-chart-line-up" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Job insights & charts</div><div class="feat-desc">Track quoted vs actual, profit trends, load performance, and markup history across every logged job.</div></div>
+      <div class="feat-card"><div class="feat-icon"><i class="ph ph-clock-countdown" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Job history & tracking</div><div class="feat-desc">Every saved quote goes into your history. Log what you actually charged after the job to track your real numbers over time.</div></div>
     </div>
   </div>
 </section>
@@ -706,7 +712,7 @@ canvas.insights-chart{width:100%!important;display:block;}
           <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
           <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
           <li class="pf"><span class="chk">✓</span> Markup slider (0–500%)</li>
-          <li class="pf"><span class="chk">✓</span> Job history & insights</li>
+          <li class="pf"><span class="chk">✓</span> Job history & tracking</li>
           <li class="pf"><span class="chk">✓</span> 14-day free trial</li>
         </ul>
         <a href="#" class="btn-plan-dark" onclick="openModal('starter');return false;">Start free trial</a>
@@ -721,7 +727,6 @@ canvas.insights-chart{width:100%!important;display:block;}
           <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting</li>
           <li class="pf"><span class="chk chk-green">✓</span> Per-photo breakdown + total</li>
           <li class="pf"><span class="chk chk-green">✓</span> AI uses your own rates</li>
-          <li class="pf"><span class="chk chk-green">✓</span> Job notes & customer info</li>
           <li class="pf"><span class="chk chk-green">✓</span> Insights dashboard & charts</li>
           <li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
         </ul>
@@ -765,7 +770,7 @@ canvas.insights-chart{width:100%!important;display:block;}
     <div class="footer-copy">© 2026 Wood's Waste · Farmington, MN</div>
   </div>
 </footer>
-</div><!-- /#marketingPage -->
+</div>
 
 <!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
@@ -790,6 +795,7 @@ canvas.insights-chart{width:100%!important;display:block;}
       </div>
     </div>
     <div class="modal-body">
+      <!-- STEP 1: Account info -->
       <div id="step1">
         <div class="err-banner" id="step1Err"></div>
         <div class="modal-trial-box"><i class="ph ph-lock" style="font-size:14px;flex-shrink:0;margin-top:1px;"></i><div><strong>No charge for 14 days.</strong> Card saved securely via Stripe. No charge today — plan activates on day 15. Cancel anytime.</div></div>
@@ -814,6 +820,8 @@ canvas.insights-chart{width:100%!important;display:block;}
           <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates. Cancel anytime before day 15.</p>
         </div>
       </div>
+
+      <!-- STEP 2: Email verification -->
       <div id="step2" style="display:none;">
         <div class="err-banner" id="step2Err"></div>
         <div class="twofa-wrap">
@@ -832,6 +840,8 @@ canvas.insights-chart{width:100%!important;display:block;}
           <button class="btn-back" onclick="goStep(1)" style="width:100%;margin-top:8px;">← Back</button>
         </div>
       </div>
+
+      <!-- STEP 3: Pricing setup -->
       <div id="step3" style="display:none;">
         <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. Update anytime in Settings.</div>
         <div class="pricing-section">
@@ -866,15 +876,59 @@ canvas.insights-chart{width:100%!important;display:block;}
           <button class="submit-btn" id="step3Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
         </div>
       </div>
+
+      <!-- LOGIN FORM -->
       <div id="loginForm" style="display:none;">
         <div class="err-banner" id="loginErr"></div>
+        <div class="success-banner" id="loginSuccess"></div>
         <div class="form-grid">
           <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
           <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password"/></div>
           <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
+          <p class="fine-print" style="text-align:center;margin-top:4px;">
+            <a href="#" onclick="showForgotPassword();return false;" style="color:var(--gray);font-weight:500;text-decoration:underline;">Forgot your password?</a>
+          </p>
           <p class="fine-print">Don't have an account? <a href="#" onclick="switchTab('signup');return false;" style="color:var(--black);font-weight:600;">Start a free trial →</a></p>
         </div>
       </div>
+
+      <!-- FORGOT PASSWORD FORM -->
+      <div id="forgotForm" style="display:none;">
+        <div class="err-banner" id="forgotErr"></div>
+        <div class="success-banner" id="forgotSuccess"></div>
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:36px;margin-bottom:12px;">🔑</div>
+          <div style="font-size:13px;color:var(--gray);line-height:1.7;">Enter your email and we'll send a reset code.</div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Email</label><input type="email" id="fp-email" placeholder="you@yourbusiness.com"/></div>
+          <button class="submit-btn" id="forgotBtn" onclick="sendResetCode()">Send reset code →</button>
+          <p class="fine-print"><a href="#" onclick="switchTab('login');return false;" style="color:var(--gray);font-weight:500;">← Back to login</a></p>
+        </div>
+      </div>
+
+      <!-- RESET CODE FORM -->
+      <div id="resetCodeForm" style="display:none;">
+        <div class="err-banner" id="resetErr"></div>
+        <div class="twofa-wrap">
+          <div class="twofa-icon"><i class="ph ph-key" style="font-size:40px;color:var(--black);"></i></div>
+          <div class="twofa-desc">We sent a 6-digit reset code to<br><strong id="reset-email-display"></strong></div>
+          <div class="twofa-code-row">
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r0" oninput="onResetDigit(this,0)" onkeydown="onResetDigitKey(event,0)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r1" oninput="onResetDigit(this,1)" onkeydown="onResetDigitKey(event,1)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r2" oninput="onResetDigit(this,2)" onkeydown="onResetDigitKey(event,2)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r3" oninput="onResetDigit(this,3)" onkeydown="onResetDigitKey(event,3)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r4" oninput="onResetDigit(this,4)" onkeydown="onResetDigitKey(event,4)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r5" oninput="onResetDigit(this,5)" onkeydown="onResetDigitKey(event,5)"/>
+          </div>
+          <div class="twofa-resend">Didn't get it? <a onclick="sendResetCode(true)">Resend code</a></div>
+          <div class="form-grid" style="margin-top:16px;">
+            <div class="field"><label>New password</label><input type="password" id="new-pw" placeholder="Min 8 characters"/></div>
+            <button class="submit-btn" id="resetBtn" onclick="doResetPassword()">Set new password →</button>
+          </div>
+        </div>
+      </div>
+
       <div class="saving-overlay" id="savingOverlay"><div class="saving-spinner"></div><p id="savingMsg">Setting up your account...</p></div>
       <div class="success-state" id="successState">
         <div class="success-mark"><i class="ph ph-check" style="font-size:22px;color:white;"></i></div>
@@ -911,6 +965,13 @@ canvas.insights-chart{width:100%!important;display:block;}
     </div>
   </nav>
   <div class="calc-body">
+    <!-- WELCOME BANNER (first login only) -->
+    <div class="welcome-banner" id="welcomeBanner">
+      <button class="welcome-banner-close" onclick="dismissWelcome()">✕</button>
+      <div class="welcome-banner-title"><i class="ph ph-hand-waving" style="font-size:14px;color:#5DCAA5;"></i> Welcome to your quote tool</div>
+      <div class="welcome-banner-body">Start by selecting a load size below, then add any special items. You'll have a quote number in under 60 seconds. Hit "Save to history" after each job to track your numbers over time.</div>
+    </div>
+
     <div class="calc-section">
       <div class="calc-section-title">Load size</div>
       <div class="calc-load-grid">
@@ -973,10 +1034,10 @@ canvas.insights-chart{width:100%!important;display:block;}
         <div><div class="ai-markup-val" id="aiMarkupDisplay">35%</div></div>
       </div>
       <div style="margin-bottom:16px;">
-  <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);display:block;margin-bottom:8px;">Job notes (optional)</label>
-  <textarea id="aiJobNotes" placeholder="e.g. 3-bedroom cleanout, lots of furniture. Customer says there's a fridge and treadmill..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-size:12px;color:white;font-family:'Inter',sans-serif;outline:none;resize:none;height:72px;line-height:1.6;" oninput="this.style.borderColor=this.value?'rgba(29,158,117,.5)':'rgba(255,255,255,.1)'"></textarea>
-  <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px;">This gets sent to the AI along with your photos</div>
-</div>
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);display:block;margin-bottom:8px;">Job notes (optional)</label>
+        <textarea id="aiJobNotes" placeholder="e.g. 3-bedroom cleanout, lots of furniture. Customer says there's a fridge and treadmill..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-size:12px;color:white;font-family:'Inter',sans-serif;outline:none;resize:none;height:72px;line-height:1.6;" oninput="this.style.borderColor=this.value?'rgba(29,158,117,.5)':'rgba(255,255,255,.1)'"></textarea>
+        <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px;">This gets sent to the AI along with your photos</div>
+      </div>
       <div class="ai-dropzone" id="aiDropzone" onclick="document.getElementById('aiFileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');handleAiFiles(event.dataTransfer.files)">
         <div class="ai-dropzone-icon"><i class="ph ph-camera" style="font-size:32px;"></i></div>
         <div class="ai-dropzone-title">Drop photos here or tap to upload</div>
@@ -1085,7 +1146,6 @@ canvas.insights-chart{width:100%!important;display:block;}
 
 <div class="toast" id="toast"></div>
 
-<!-- Chart.js CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <script>
@@ -1140,7 +1200,7 @@ function getRawPhone(){const d=document.getElementById('m-phone').value.replace(
 let currentPlan='starter';
 let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter'};
 let specialItemStates={},selectedLoad=null,selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
-let verificationToken=null,resendTimer=null;
+let verificationToken=null,resetToken=null,resendTimer=null;
 let userPricing={loads:{minimum:{low:100,high:130},quarter:{low:160,high:200},half:{low:230,high:280},full:{low:350,high:420}},specials:{},driveRate:1.5,laborRate:35,defaultMarkup:35};
 let aiFiles=[],aiResults=[],aiAnalyzed=false;
 let actualJobId=null;
@@ -1182,7 +1242,7 @@ function switchTab(tab){
   activeTab=tab;const isSig=tab==='signup';
   document.getElementById('tabSignup').classList.toggle('active',isSig);
   document.getElementById('tabLogin').classList.toggle('active',!isSig);
-  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);}
   else document.getElementById('loginForm').style.display='block';
   document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
@@ -1191,7 +1251,7 @@ function switchTab(tab){
   document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':'Log in to your quote tool';
 }
 function goStep(n){
-  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   if(n===1)document.getElementById('step1').style.display='block';
   if(n===2)document.getElementById('step2').style.display='block';
   if(n===3)document.getElementById('step3').style.display='block';
@@ -1203,6 +1263,63 @@ function goStep(n){
   document.getElementById('modal').scrollTop=0;
 }
 function updateStepDots(n){[1,2,3].forEach(i=>{document.getElementById('dot'+i).className='modal-step-dot'+(i<n?' done':i===n?' active':'');});}
+
+/* ── FORGOT PASSWORD ── */
+function showForgotPassword(){
+  ['step1','step2','step3','loginForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById('forgotForm').style.display='block';
+  document.getElementById('modalTitle').textContent='Reset your password';
+  document.getElementById('modalSubtitle').textContent='We\'ll send a 6-digit code to your email.';
+  document.getElementById('modalStepDots').style.display='none';
+  document.getElementById('modalPlanBadge').style.display='none';
+}
+async function sendResetCode(isResend=false){
+  const email=isResend?document.getElementById('reset-email-display').textContent:(document.getElementById('fp-email')?.value||'').trim();
+  if(!email){showBanner('forgotErr','Enter your email address.');return;}
+  const btn=document.getElementById('forgotBtn');if(btn){btn.disabled=true;btn.textContent='Sending...';}
+  try{
+    const res=await api({action:'sendResetCode',email});
+    if(btn){btn.disabled=false;btn.textContent='Send reset code →';}
+    if(!res.success){showBanner('forgotErr',res.error||'Could not send reset code. Check your email address.');return;}
+    resetToken=res.resetToken;
+    ['forgotForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    document.getElementById('resetCodeForm').style.display='block';
+    document.getElementById('reset-email-display').textContent=email;
+    document.getElementById('modalTitle').textContent='Enter your reset code';
+    document.getElementById('modalSubtitle').textContent='';
+    for(let i=0;i<6;i++){const el=document.getElementById('r'+i);if(el){el.value='';el.classList.remove('filled');}}
+    setTimeout(()=>document.getElementById('r0')?.focus(),200);
+    if(isResend)showToast('✓ New reset code sent');
+  }catch(e){if(btn){btn.disabled=false;btn.textContent='Send reset code →';}showBanner('forgotErr','Could not connect: '+e.message);}
+}
+function onResetDigit(el,idx){
+  el.value=el.value.replace(/[^0-9]/g,'').slice(-1);
+  el.classList.toggle('filled',el.value!=='');
+  if(el.value&&idx<5)document.getElementById('r'+(idx+1)).focus();
+}
+function onResetDigitKey(e,idx){if(e.key==='Backspace'&&!document.getElementById('r'+idx).value&&idx>0)document.getElementById('r'+(idx-1)).focus();}
+async function doResetPassword(){
+  const code=Array.from({length:6},(_,i)=>document.getElementById('r'+i).value).join('');
+  const newPw=(document.getElementById('new-pw')?.value||'').trim();
+  if(code.length<6){showBanner('resetErr','Enter the full 6-digit code.');return;}
+  if(newPw.length<8){showBanner('resetErr','Password must be at least 8 characters.');return;}
+  const btn=document.getElementById('resetBtn');btn.disabled=true;btn.textContent='Resetting...';
+  try{
+    const res=await api({action:'resetPassword',resetToken,code,newPassword:newPw});
+    btn.disabled=false;btn.textContent='Set new password →';
+    if(!res.success){showBanner('resetErr',res.error||'Incorrect code or code expired.');return;}
+    // Login with new password
+    if(res.token){
+      saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');
+      applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing||{}));
+      closeModal();openCalcDirect();
+    } else {
+      switchTab('login');
+      document.getElementById('loginSuccess').textContent='Password reset! Log in with your new password.';
+      document.getElementById('loginSuccess').classList.add('show');
+    }
+  }catch(e){btn.disabled=false;btn.textContent='Set new password →';showBanner('resetErr','Could not connect: '+e.message);}
+}
 
 async function goStep2(){
   clearFormErrors();
@@ -1288,12 +1405,13 @@ async function completeSignup(){
     if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goStep(2);return;}
     saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan);
     applyPricing(pricing);localStorage.setItem('ww_pricing',JSON.stringify(pricing));
+    localStorage.setItem('ww_new_user','1');
     if(currentPlan==='pro')document.getElementById('aiSuccessItem').style.display='flex';
     showSuccess();
   }catch(e){btn.disabled=false;btn.textContent='Save & open my quote tool →';showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
 }
 function showSuccess(){
-  ['step1','step2','step3','savingOverlay','loginForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['step1','step2','step3','savingOverlay','loginForm','forgotForm','resetCodeForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   document.getElementById('successState').style.display='block';
   document.getElementById('modalStepDots').style.display='none';
   document.getElementById('modalTitle').textContent="You're all set.";
@@ -1306,7 +1424,7 @@ async function doLogin(){
   const btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent='Logging in...';
   try{
     const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.textContent='Log in to my quote tool →';
-    if(!res.success){showBanner('loginErr',res.error||'Login failed.');return;}
+    if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
     saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');
     applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
     closeModal();openCalcDirect();
@@ -1336,6 +1454,15 @@ function initCalc(){
   document.getElementById('aiNavBtn').style.display=session.plan==='pro'?'inline-flex':'none';
   Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
   buildCalcSpecialsGrid();loadHistory();recalc();
+  // Show welcome banner for new users
+  const isNew=localStorage.getItem('ww_new_user');
+  const banner=document.getElementById('welcomeBanner');
+  if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
+}
+
+function dismissWelcome(){
+  const banner=document.getElementById('welcomeBanner');
+  if(banner)banner.classList.remove('show');
 }
 
 function buildCalcSpecialsGrid(){
@@ -1587,24 +1714,19 @@ function closeInsights(){document.getElementById('insightsPanel').classList.remo
 function closeInsightsOutside(e){if(e.target===document.getElementById('insightsPanel'))closeInsights();}
 
 function renderInsights(){
-  // destroy old charts first
   Object.values(insightCharts).forEach(c=>{try{c.destroy();}catch(e){}});insightCharts={};
-
   const body=document.getElementById('insightsBody');
   const logged=jobHistory.filter(j=>j.actual?.charged);
   if(logged.length<1){
     body.innerHTML='<div class="insights-empty">Log at least 1 job outcome to see insights.<br><br>After saving a quote, tap "How\'d it go?" in history to record what actually happened.</div>';
     return;
   }
-
   const diffs=logged.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
   const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
   const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
-  const totalGained=diffs.filter(d=>d>0).reduce((a,b)=>a+b,0);
   const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
   const totalRevenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
   const avgRevenue=Math.round(totalRevenue/logged.length);
-
   const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
   const loadStats={};
   ['minimum','quarter','half','full'].forEach(k=>{
@@ -1612,20 +1734,12 @@ function renderInsights(){
     const d=jobs.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
     loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
   });
-
   const alerts=[];
   Object.entries(loadStats).forEach(([k,s])=>{if(s.count>=2&&s.avgDiff<-30)alerts.push(`Your <strong>${loadLabels[k]}</strong> quotes are averaging <strong>$${Math.abs(Math.round(s.avgDiff))} under</strong> what you charge. Consider raising that load rate.`);});
   const timeLogged=logged.filter(j=>j.actual?.hours&&j.hours);
   if(timeLogged.length>=2){const avgOver=timeLogged.map(j=>j.actual.hours-j.hours).reduce((a,b)=>a+b,0)/timeLogged.length;if(avgOver>0.4)alerts.push(`Jobs are taking <strong>${avgOver.toFixed(1)} hours longer</strong> on average than you quote. Your labor cost may be underestimated.`);}
-
   let html='';
-
-  // Alerts
-  if(alerts.length){
-    html+=`<div class="insights-alert"><div class="insights-alert-label">⚡ Heads up</div>${alerts.map(a=>`<div class="insights-alert-text">${a}</div>`).join('<br>')}</div>`;
-  }
-
-  // KPI grid
+  if(alerts.length){html+=`<div class="insights-alert"><div class="insights-alert-label">⚡ Heads up</div>${alerts.map(a=>`<div class="insights-alert-text">${a}</div>`).join('<br>')}</div>`;}
   html+=`<div class="insights-stat-grid">
     <div class="insights-stat ${avgDiff>=0?'positive':'negative'}">
       <div class="insights-stat-label">Avg vs quoted</div>
@@ -1648,8 +1762,6 @@ function renderInsights(){
       <div class="insights-stat-sub">total undercharges</div>
     </div>
   </div>`;
-
-  // Charts section
   html+=`
   <div class="chart-card">
     <div class="chart-card-title"><i class="ph ph-chart-line-up" style="font-size:13px;color:#5DCAA5;"></i> Quoted vs. Actual charged</div>
@@ -1667,8 +1779,6 @@ function renderInsights(){
     <div class="chart-card-title"><i class="ph ph-gauge" style="font-size:13px;color:rgba(255,255,255,.4);"></i> Markup distribution</div>
     <div class="chart-canvas-wrap"><canvas id="chartMarkup" class="insights-chart" height="140"></canvas></div>
   </div>`;
-
-  // By load size
   if(Object.keys(loadStats).length){
     html+=`<div class="insights-section-title" style="margin-top:4px;">By load size</div>`;
     Object.entries(loadStats).forEach(([k,s])=>{
@@ -1676,77 +1786,30 @@ function renderInsights(){
       html+=`<div class="insights-load-row"><div class="insights-load-name">${loadLabels[k]}</div><div class="insights-load-stats"><div class="insights-load-avg">$${s.avgCharged} avg charged</div><div class="insights-load-diff ${cls}">${s.count} job${s.count>1?'s':''} · ${sign}$${Math.abs(Math.round(s.avgDiff))} vs quoted · ${s.avgDiff>10?'charging well':s.avgDiff<-10?'undercharging':'on track'}</div></div></div>`;
     });
   }
-
   body.innerHTML=html;
-
-  // Draw charts after DOM update
   requestAnimationFrame(()=>drawInsightCharts(logged,loadStats,loadLabels));
 }
 
-function drawInsightCharts(logged, loadStats, loadLabels){
-  const gridColor='rgba(255,255,255,0.07)';
-  const tickColor='rgba(255,255,255,0.35)';
-  const chartDefaults={
-    plugins:{legend:{display:false}},
-    scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10,family:'Inter'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10,family:'Inter'},callback:v=>'$'+v}}}
-  };
-
-  // ── Chart 1: Quoted vs Actual (line chart, last 15 jobs) ──
+function drawInsightCharts(logged,loadStats,loadLabels){
+  const gridColor='rgba(255,255,255,0.07)',tickColor='rgba(255,255,255,0.35)';
+  const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10,family:'Inter'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:10,family:'Inter'},callback:v=>'$'+v}}}};
   const recent=logged.slice(-15);
   const labels=recent.map((_,i)=>'Job '+(i+1));
-const quotedVals=recent.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
+  const quotedVals=recent.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
   const actualVals=recent.map(j=>j.actual.charged||0);
   const ctx1=document.getElementById('chartQuotedActual')?.getContext('2d');
-  if(ctx1){
-    insightCharts.quotedActual=new Chart(ctx1,{
-      type:'line',
-      data:{
-        labels,
-        datasets:[
-          {label:'Quoted',data:quotedVals,borderColor:'rgba(255,255,255,0.3)',backgroundColor:'rgba(255,255,255,0.04)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.5)',tension:0.3,fill:false},
-          {label:'Actual',data:actualVals,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.12)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1D9E75',tension:0.3,fill:true}
-        ]
-      },
-      options:{...chartDefaults,plugins:{legend:{display:true,position:'top',labels:{color:'rgba(255,255,255,0.5)',font:{size:10,family:'Inter'},boxWidth:10,padding:12}}}}
-    });
-  }
-
-  // ── Chart 2: Avg revenue by load size (bar) ──
-  const lKeys=Object.keys(loadStats);const lLabels=lKeys.map(k=>loadLabels[k]);const lRevs=lKeys.map(k=>loadStats[k].avgCharged);
+  if(ctx1){insightCharts.quotedActual=new Chart(ctx1,{type:'line',data:{labels,datasets:[{label:'Quoted',data:quotedVals,borderColor:'rgba(255,255,255,0.3)',backgroundColor:'rgba(255,255,255,0.04)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.5)',tension:0.3,fill:false},{label:'Actual',data:actualVals,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.12)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1D9E75',tension:0.3,fill:true}]},options:{...chartDefaults,plugins:{legend:{display:true,position:'top',labels:{color:'rgba(255,255,255,0.5)',font:{size:10,family:'Inter'},boxWidth:10,padding:12}}}}});}
+  const lKeys=Object.keys(loadStats);
   const ctx2=document.getElementById('chartLoadRevenue')?.getContext('2d');
-  if(ctx2&&lKeys.length){
-    insightCharts.loadRevenue=new Chart(ctx2,{
-      type:'bar',
-      data:{labels:lLabels,datasets:[{data:lRevs,backgroundColor:['rgba(29,158,117,0.5)','rgba(29,158,117,0.6)','rgba(29,158,117,0.75)','rgba(29,158,117,0.9)'],borderColor:'rgba(29,158,117,1)',borderWidth:1,borderRadius:5}]},
-      options:chartDefaults
-    });
-  }
-
-  // ── Chart 3: Over/Under per job (bar, green/red) ──
+  if(ctx2&&lKeys.length){insightCharts.loadRevenue=new Chart(ctx2,{type:'bar',data:{labels:lKeys.map(k=>loadLabels[k]),datasets:[{data:lKeys.map(k=>loadStats[k].avgCharged),backgroundColor:['rgba(29,158,117,0.5)','rgba(29,158,117,0.6)','rgba(29,158,117,0.75)','rgba(29,158,117,0.9)'],borderColor:'rgba(29,158,117,1)',borderWidth:1,borderRadius:5}]},options:chartDefaults});}
   const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
   const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
-  const diffColors=diffVals.map(d=>d>=0?'rgba(29,158,117,0.7)':'rgba(192,57,43,0.7)');
   const ctx3=document.getElementById('chartDiff')?.getContext('2d');
-  if(ctx3){
-    insightCharts.diff=new Chart(ctx3,{
-      type:'bar',
-      data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffColors,borderRadius:4}]},
-      options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}
-    });
-  }
-
-  // ── Chart 4: Markup distribution (horizontal bar histogram) ──
-  const markupBuckets={};
-  jobHistory.forEach(j=>{const m=Math.round(j.markup/10)*10;markupBuckets[m]=(markupBuckets[m]||0)+1;});
+  if(ctx3){insightCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(29,158,117,0.7)':'rgba(192,57,43,0.7)'),borderRadius:4}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
+  const markupBuckets={};jobHistory.forEach(j=>{const m=Math.round(j.markup/10)*10;markupBuckets[m]=(markupBuckets[m]||0)+1;});
   const mbKeys=Object.keys(markupBuckets).sort((a,b)=>a-b);
   const ctx4=document.getElementById('chartMarkup')?.getContext('2d');
-  if(ctx4&&mbKeys.length){
-    insightCharts.markup=new Chart(ctx4,{
-      type:'bar',
-      data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(245,166,35,0.6)',borderColor:'rgba(245,166,35,1)',borderWidth:1,borderRadius:4}]},
-      options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}
-    });
-  }
+  if(ctx4&&mbKeys.length){insightCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(245,166,35,0.6)',borderColor:'rgba(245,166,35,1)',borderWidth:1,borderRadius:4}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
 }
 
 /* ── UTILS ── */
