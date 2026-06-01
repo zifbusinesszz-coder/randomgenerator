@@ -972,6 +972,11 @@ canvas.insights-chart{width:100%!important;display:block;}
         <div><div class="ai-markup-label">Current markup</div><div class="ai-markup-note">AI will price using this + your saved rates</div></div>
         <div><div class="ai-markup-val" id="aiMarkupDisplay">35%</div></div>
       </div>
+      <div style="margin-bottom:16px;">
+  <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);display:block;margin-bottom:8px;">Job notes (optional)</label>
+  <textarea id="aiJobNotes" placeholder="e.g. 3-bedroom cleanout, lots of furniture. Customer says there's a fridge and treadmill..." style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-size:12px;color:white;font-family:'Inter',sans-serif;outline:none;resize:none;height:72px;line-height:1.6;" oninput="this.style.borderColor=this.value?'rgba(29,158,117,.5)':'rgba(255,255,255,.1)'"></textarea>
+  <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px;">This gets sent to the AI along with your photos</div>
+</div>
       <div class="ai-dropzone" id="aiDropzone" onclick="document.getElementById('aiFileInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');handleAiFiles(event.dataTransfer.files)">
         <div class="ai-dropzone-icon"><i class="ph ph-camera" style="font-size:32px;"></i></div>
         <div class="ai-dropzone-title">Drop photos here or tap to upload</div>
