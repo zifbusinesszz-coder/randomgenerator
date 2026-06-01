@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quote Tool — Wood's Waste | Built for Junk Removal Companies</title>
-<meta name="description" content="The instant quote calculator we built for our own junk removal business — now available for yours. Stop losing jobs to slow quotes.">
+<title>Quote Tool — Wood's Waste | For Junk Removal Companies</title>
+<meta name="description" content="Know exactly what to charge before you call the customer back. Built by junk removal operators, for junk removal operators.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -16,11 +16,14 @@
   --border: #e0e0e0;
   --dark2: #1a1a1a;
   --green: #1D9E75;
+  --green-light: #e1f5ee;
+  --green-dark: #0F6E56;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
 
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 60px; padding: 0 40px;
@@ -29,11 +32,7 @@ nav {
   border-bottom: 1px solid var(--border);
 }
 .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-mark {
-  width: 30px; height: 30px; background: var(--black); border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; color: white;
-}
+.nav-logo-mark { width: 30px; height: 30px; background: var(--black); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 900; color: white; }
 .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--black); line-height: 1.1; }
 .nav-logo-sub { font-size: 10px; color: var(--gray); font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: 0.04em; }
 .nav-links { display: flex; align-items: center; gap: 28px; }
@@ -42,24 +41,10 @@ nav {
 .nav-cta { background: var(--black); color: white !important; padding: 8px 18px; border-radius: 6px; font-size: 13px !important; font-weight: 600 !important; }
 .nav-cta:hover { background: #333 !important; }
 
-.hero {
-  min-height: 100vh;
-  display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-  gap: 60px; max-width: 1100px; margin: 0 auto;
-  padding: 100px 40px 80px;
-}
-.hero::before {
-  content: '';
-  position: fixed; inset: 0; z-index: -1;
-  background-image: repeating-linear-gradient(135deg, transparent, transparent 60px, rgba(0,0,0,0.018) 60px, rgba(0,0,0,0.018) 61px);
-  pointer-events: none;
-}
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--black); color: white;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 5px 12px; border-radius: 4px; margin-bottom: 20px;
-}
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; max-width: 1100px; margin: 0 auto; padding: 100px 40px 80px; position: relative; }
+.hero::before { content: ''; position: fixed; inset: 0; z-index: -1; background-image: repeating-linear-gradient(135deg, transparent, transparent 60px, rgba(0,0,0,0.018) 60px, rgba(0,0,0,0.018) 61px); pointer-events: none; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--black); color: white; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 4px; margin-bottom: 20px; }
 .hero-eyebrow span { opacity: 0.5; }
 .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 900; line-height: 1.05; letter-spacing: -2px; color: var(--black); margin-bottom: 20px; }
 .hero h1 u { text-decoration: none; border-bottom: 4px solid var(--black); }
@@ -76,38 +61,47 @@ nav {
 .hero-proof-text { line-height: 1.5; }
 .hero-proof-text strong { color: var(--black); }
 
-.hero-demo { background: var(--black); border-radius: 16px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.2); }
-.demo-topbar { padding: 12px 16px; background: rgba(255,255,255,0.06); display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.demo-dot { width: 10px; height: 10px; border-radius: 50%; }
-.demo-url { flex: 1; background: rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.4); }
-.demo-inner { padding: 24px 22px 28px; }
-.demo-logo { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-.demo-headline { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: white; margin-bottom: 4px; }
-.demo-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 18px; }
-.demo-progress { display: flex; gap: 4px; margin-bottom: 18px; }
-.demo-prog { height: 2px; flex: 1; border-radius: 1px; background: rgba(255,255,255,0.12); }
-.demo-prog.on { background: white; }
-.demo-load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-.demo-card { border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; transition: all 0.2s; }
-.demo-card.sel { border: 1.5px solid white; background: rgba(255,255,255,0.07); }
-.demo-card-icon { font-size: 16px; margin-bottom: 4px; }
-.demo-card-name { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.85); }
-.demo-card-price { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-.demo-est { background: rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.08); }
-.demo-est-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
-.demo-est-range { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: white; }
-.demo-est-note { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 4px; }
-.demo-btn { display: block; width: 100%; margin-top: 12px; background: white; color: var(--black); border: none; border-radius: 6px; padding: 10px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; }
+/* PHONE MOCKUP */
+.hero-phone { display: flex; justify-content: center; align-items: center; }
+.phone-frame { width: 280px; background: var(--black); border-radius: 36px; padding: 12px; box-shadow: 0 32px 80px rgba(0,0,0,0.25); }
+.phone-notch { width: 80px; height: 6px; background: #222; border-radius: 3px; margin: 0 auto 14px; }
+.phone-screen { background: #111; border-radius: 26px; padding: 18px 16px 20px; }
+.phone-app-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.phone-app-name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 900; color: white; }
+.phone-app-badge { font-size: 9px; font-weight: 700; background: var(--green); color: white; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.05em; }
+.phone-job-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+.phone-load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+.phone-load-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 6px; text-align: center; }
+.phone-load-card.sel { border-color: white; background: rgba(255,255,255,0.06); }
+.phone-load-icon { font-size: 14px; }
+.phone-load-name { font-size: 9px; font-weight: 600; color: rgba(255,255,255,0.7); margin-top: 3px; }
+.phone-specials { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.phone-special-tag { font-size: 9px; font-weight: 600; padding: 3px 7px; border-radius: 10px; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+.phone-special-tag.on { background: rgba(29,158,117,0.2); color: #5DCAA5; border-color: rgba(29,158,117,0.3); }
+.phone-markup-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.phone-markup-label { font-size: 9px; color: rgba(255,255,255,0.4); white-space: nowrap; }
+.phone-markup-track { flex: 1; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; }
+.phone-markup-fill { position: absolute; left: 0; top: 0; height: 100%; width: 45%; background: var(--green); border-radius: 2px; }
+.phone-markup-thumb { position: absolute; top: 50%; left: 45%; transform: translate(-50%,-50%); width: 10px; height: 10px; background: white; border-radius: 50%; }
+.phone-markup-val { font-size: 10px; font-weight: 700; color: white; }
+.phone-result { background: rgba(29,158,117,0.12); border: 1px solid rgba(29,158,117,0.25); border-radius: 10px; padding: 10px 12px; }
+.phone-result-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-bottom: 2px; }
+.phone-result-price { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; color: white; }
+.phone-result-breakdown { font-size: 9px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+.phone-result-btn { display: block; width: 100%; margin-top: 8px; background: var(--green); color: white; border: none; border-radius: 6px; padding: 8px; font-size: 10px; font-weight: 700; text-align: center; font-family: 'Inter', sans-serif; }
 
+/* STRIP */
 .strip { background: var(--off); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 40px; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
 .strip-item { font-size: 13px; color: var(--gray); display: flex; align-items: center; gap: 8px; }
 .strip-item strong { color: var(--black); }
 
+/* SECTIONS */
 section { padding: 90px 40px; }
 .section-inner { max-width: 1000px; margin: 0 auto; }
 .section-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 10px; }
 .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; letter-spacing: -1.5px; color: var(--black); margin-bottom: 40px; max-width: 560px; line-height: 1.1; }
 
+/* ORIGIN */
 .origin { background: white; }
 .origin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
 .origin-body p { font-size: 15px; color: var(--gray); line-height: 1.85; margin-bottom: 16px; }
@@ -119,6 +113,7 @@ section { padding: 90px 40px; }
 .origin-stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--black); letter-spacing: -1px; }
 .origin-stat-label { font-size: 13px; color: var(--gray); margin-top: 4px; line-height: 1.5; }
 
+/* HOW IT WORKS */
 .how { background: var(--off); }
 .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
 .step-card { background: white; border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
@@ -127,6 +122,7 @@ section { padding: 90px 40px; }
 .step-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--black); margin-bottom: 8px; }
 .step-desc { font-size: 13px; color: var(--gray); line-height: 1.75; }
 
+/* FEATURES */
 .features { background: white; }
 .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
 .feat-card { border: 1px solid var(--border); border-radius: 12px; padding: 26px; transition: all 0.2s; position: relative; overflow: hidden; }
@@ -137,6 +133,7 @@ section { padding: 90px 40px; }
 .feat-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
 .feat-desc { font-size: 13px; color: var(--gray); line-height: 1.75; }
 
+/* PRICING */
 .pricing { background: var(--off); }
 .pricing-inner { max-width: 720px; margin: 0 auto; }
 .pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -164,126 +161,7 @@ section { padding: 90px 40px; }
 .btn-plan-light:hover { background: #f0f0f0; }
 .pricing-note { text-align: center; font-size: 12px; color: var(--gray); margin-top: 18px; }
 
-/* ====================== MODAL ====================== */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-  align-items: flex-start; justify-content: center;
-  padding: 40px 20px; overflow-y: auto;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: white; border-radius: 20px; width: 100%; max-width: 600px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.3);
-  animation: modalIn 0.25s ease both;
-  margin: auto;
-}
-@keyframes modalIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
-.modal-header { background: var(--black); padding: 24px 28px 20px; border-radius: 20px 20px 0 0; position: relative; }
-.modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.modal-close:hover { background: rgba(255,255,255,0.2); }
-.modal-plan-badge { display: inline-block; background: rgba(255,255,255,0.12); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; }
-.modal-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: white; margin-bottom: 4px; }
-.modal-header p { font-size: 12px; color: rgba(255,255,255,0.5); }
-
-/* Step indicator inside header */
-.modal-steps { display: flex; gap: 6px; margin-top: 14px; }
-.modal-step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: all 0.3s; }
-.modal-step-dot.active { background: white; width: 20px; border-radius: 3px; }
-.modal-step-dot.done { background: rgba(255,255,255,0.6); }
-
-.modal-body { padding: 24px 28px 28px; }
-
-/* FORM STYLES */
-.modal-trial-box { background: #f5f5f5; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--gray); line-height: 1.6; margin-bottom: 20px; display: flex; gap: 8px; align-items: flex-start; }
-.modal-trial-box strong { color: var(--black); }
-.form-grid { display: flex; flex-direction: column; gap: 14px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field label { font-size: 12px; font-weight: 600; color: var(--black); }
-.field input, .field select {
-  padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px;
-  font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
-  transition: border-color 0.2s; background: white; color: var(--black);
-}
-.field input:focus, .field select:focus { border-color: var(--black); }
-.field input::placeholder { color: #bbb; }
-.divider { height: 1px; background: var(--border); margin: 4px 0; }
-.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 2px; }
-.card-note { font-size: 11px; color: #aaa; margin-top: 2px; }
-
-.submit-btn { width: 100%; padding: 13px; background: var(--black); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 6px; transition: background 0.2s; }
-.submit-btn:hover { background: #333; }
-.submit-btn:disabled { background: #aaa; cursor: default; }
-.submit-btn.green { background: var(--green); }
-.submit-btn.green:hover { background: #0F6E56; }
-.btn-back { background: none; border: 1.5px solid var(--border); color: var(--gray); border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
-.btn-back:hover { border-color: var(--black); color: var(--black); }
-.btn-row { display: flex; gap: 10px; margin-top: 6px; }
-.fine-print { font-size: 11px; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.5; }
-
-/* STEP 2 — PRICING SETUP */
-.pricing-section { margin-bottom: 22px; }
-.pricing-section-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
-.load-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px; }
-.load-row-label { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 6px; }
-.load-row-label span { font-size: 14px; }
-.price-input-wrap { position: relative; }
-.price-input-wrap::before { content: '$'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--gray); pointer-events: none; }
-.price-input-wrap input { padding-left: 22px !important; }
-.load-range-sep { text-align: center; font-size: 11px; color: var(--gray); align-self: center; }
-
-.special-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.special-item-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; gap: 10px; transition: all 0.15s; }
-.special-item-row:hover { border-color: #aaa; }
-.special-item-row.active { border-color: var(--black); background: #fafafa; }
-.sitem-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--black); font-weight: 500; }
-.sitem-icon { font-size: 15px; }
-.sitem-fee { display: flex; align-items: center; gap: 4px; }
-.sitem-fee .price-input-wrap input { width: 70px; font-size: 12px; padding: 5px 6px 5px 18px !important; border-radius: 5px; }
-.sitem-toggle { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; transition: all 0.15s; }
-.sitem-toggle.on { background: var(--black); border-color: var(--black); color: white; }
-
-/* DRIVE + TIME ROW */
-.extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.extras-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-.extras-card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 10px; }
-.range-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-.range-row input[type=range] { flex: 1; accent-color: var(--black); }
-.range-val { font-size: 13px; font-weight: 700; color: var(--black); min-width: 40px; }
-.extras-rate-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray); }
-.extras-rate-row .price-input-wrap input { width: 70px; }
-
-/* STEP 3 — EMBED CODE */
-.embed-step {}
-.embed-hero { background: var(--black); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
-.embed-hero-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-.embed-code { font-family: 'Space Mono', monospace; font-size: 11px; color: #7ec8a0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px 14px; word-break: break-all; line-height: 1.6; margin-bottom: 12px; }
-.copy-btn { background: rgba(255,255,255,0.1); border: none; color: white; font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
-.copy-btn:hover { background: rgba(255,255,255,0.18); }
-.copy-btn.copied { background: var(--green); }
-.platform-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px; }
-.platform-pill { border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; text-align: center; font-size: 11px; font-weight: 600; color: var(--gray); cursor: pointer; transition: all 0.15s; }
-.platform-pill.sel { border-color: var(--black); color: var(--black); background: var(--off); }
-.platform-pill .platform-icon { font-size: 18px; display: block; margin-bottom: 4px; }
-
-/* SUCCESS STATE */
-.success-state { display: none; text-align: center; padding: 20px 10px 10px; }
-.success-mark { width: 56px; height: 56px; background: var(--black); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; }
-.success-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; margin-bottom: 8px; }
-.success-state p { font-size: 13px; color: var(--gray); line-height: 1.7; margin-bottom: 20px; }
-.success-next { background: var(--off); border-radius: 10px; padding: 16px; text-align: left; margin-bottom: 16px; }
-.success-next-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 8px; }
-.success-next-item { font-size: 13px; color: var(--black); padding: 5px 0; display: flex; gap: 8px; }
-.sheet-saved-badge { display: inline-flex; align-items: center; gap: 6px; background: #e1f5ee; color: #0F6E56; font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
-
-/* SAVING STATE */
-.saving-overlay { display: none; text-align: center; padding: 40px 20px; }
-.saving-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--black); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.saving-overlay p { font-size: 14px; color: var(--gray); }
-
+/* TESTIMONIAL */
 .testimonial { background: white; }
 .testimonial-inner { max-width: 680px; margin: 0 auto; text-align: center; }
 .stars { font-size: 18px; letter-spacing: 2px; margin-bottom: 18px; }
@@ -291,6 +169,7 @@ section { padding: 90px 40px; }
 .testimonial-author { font-size: 13px; color: var(--gray); font-weight: 500; }
 .testimonial-author strong { color: var(--black); }
 
+/* CTA BOTTOM */
 .cta-bottom { background: var(--black); text-align: center; position: relative; overflow: hidden; }
 .cta-bottom::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(135deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px); }
 .cta-bottom h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 900; color: white; letter-spacing: -2px; margin-bottom: 12px; position: relative; }
@@ -298,6 +177,7 @@ section { padding: 90px 40px; }
 .cta-bottom .btn-primary { background: white; color: var(--black); position: relative; }
 .cta-bottom .btn-primary:hover { background: #eee; }
 
+/* FOOTER */
 footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08); padding: 32px 40px; }
 .footer-inner { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
 .footer-logo { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: white; }
@@ -306,26 +186,212 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
 .footer-links a:hover { color: rgba(255,255,255,0.7); }
 .footer-copy { font-size: 12px; color: rgba(255,255,255,0.25); }
 
+/* ====================== MODAL ====================== */
+.modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 20px; width: 100%; max-width: 600px; box-shadow: 0 40px 100px rgba(0,0,0,0.3); animation: modalIn 0.25s ease both; margin: auto; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+.modal-header { background: var(--black); padding: 24px 28px 20px; border-radius: 20px 20px 0 0; position: relative; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.1); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { background: rgba(255,255,255,0.2); }
+.modal-plan-badge { display: inline-block; background: rgba(255,255,255,0.12); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); padding: 4px 10px; border-radius: 4px; margin-bottom: 10px; }
+.modal-header h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: white; margin-bottom: 4px; }
+.modal-header p { font-size: 12px; color: rgba(255,255,255,0.5); }
+.modal-steps { display: flex; gap: 6px; margin-top: 14px; }
+.modal-step-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: all 0.3s; }
+.modal-step-dot.active { background: white; width: 20px; border-radius: 3px; }
+.modal-step-dot.done { background: rgba(255,255,255,0.6); }
+.modal-body { padding: 24px 28px 28px; }
+
+/* FORM */
+.modal-trial-box { background: #f5f5f5; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--gray); line-height: 1.6; margin-bottom: 20px; display: flex; gap: 8px; align-items: flex-start; }
+.modal-trial-box strong { color: var(--black); }
+.form-grid { display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 12px; font-weight: 600; color: var(--black); }
+.field input, .field select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 13px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; background: white; color: var(--black); }
+.field input:focus, .field select:focus { border-color: var(--black); }
+.field input::placeholder { color: #bbb; }
+.divider { height: 1px; background: var(--border); margin: 4px 0; }
+.section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 2px; }
+.card-note { font-size: 11px; color: #aaa; margin-top: 2px; }
+.submit-btn { width: 100%; padding: 13px; background: var(--black); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; margin-top: 6px; transition: background 0.2s; }
+.submit-btn:hover { background: #333; }
+.submit-btn:disabled { background: #aaa; cursor: default; }
+.submit-btn.green { background: var(--green); }
+.submit-btn.green:hover { background: var(--green-dark); }
+.btn-back { background: none; border: 1.5px solid var(--border); color: var(--gray); border-radius: 8px; padding: 13px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'Inter', sans-serif; }
+.btn-back:hover { border-color: var(--black); color: var(--black); }
+.btn-row { display: flex; gap: 10px; margin-top: 6px; }
+.fine-print { font-size: 11px; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.5; }
+
+/* STEP 2 PRICING */
+.pricing-section { margin-bottom: 22px; }
+.pricing-section-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+.load-row { display: grid; grid-template-columns: 130px 1fr 1fr; gap: 10px; align-items: center; margin-bottom: 8px; }
+.load-row-label { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 6px; }
+.price-input-wrap { position: relative; }
+.price-input-wrap::before { content: '$'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--gray); pointer-events: none; }
+.price-input-wrap input { padding-left: 22px !important; }
+.special-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.special-item-row { display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; gap: 10px; transition: all 0.15s; }
+.special-item-row:hover { border-color: #aaa; }
+.special-item-row.active { border-color: var(--black); background: #fafafa; }
+.sitem-left { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--black); font-weight: 500; }
+.sitem-icon { font-size: 15px; }
+.sitem-fee .price-input-wrap input { width: 70px; font-size: 12px; padding: 5px 6px 5px 18px !important; border-radius: 5px; }
+.sitem-toggle { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; transition: all 0.15s; }
+.sitem-toggle.on { background: var(--black); border-color: var(--black); color: white; }
+.extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.extras-card { border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+.extras-card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 10px; }
+.range-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.range-row input[type=range] { flex: 1; accent-color: var(--black); }
+.range-val { font-size: 13px; font-weight: 700; color: var(--black); min-width: 44px; }
+.extras-rate-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray); flex-wrap: wrap; }
+.extras-rate-row .price-input-wrap input { width: 70px; }
+
+/* MARKUP SLIDER in signup */
+.markup-signup-card { border: 1.5px solid var(--black); border-radius: 10px; padding: 16px; background: #fafafa; margin-bottom: 0; }
+.markup-signup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.markup-signup-title { font-size: 12px; font-weight: 700; color: var(--black); }
+.markup-signup-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--black); }
+.markup-signup-sub { font-size: 11px; color: var(--gray); margin-top: 6px; }
+
+/* SUCCESS STATE */
+.success-state { display: none; text-align: center; padding: 20px 10px 10px; }
+.success-mark { width: 56px; height: 56px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 22px; }
+.success-state h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+.success-state p { font-size: 13px; color: var(--gray); line-height: 1.7; margin-bottom: 20px; }
+.success-next { background: var(--off); border-radius: 10px; padding: 16px; text-align: left; margin-bottom: 16px; }
+.success-next-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 8px; }
+.success-next-item { font-size: 13px; color: var(--black); padding: 5px 0; display: flex; gap: 8px; }
+.sheet-saved-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green-dark); font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
+.saving-overlay { display: none; text-align: center; padding: 40px 20px; }
+.saving-spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--black); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.saving-overlay p { font-size: 14px; color: var(--gray); }
+
+/* ====================== CALCULATOR PAGE ====================== */
+#calcPage { display: none; min-height: 100vh; background: #0a0a0a; }
+.calc-nav { height: 54px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.calc-nav-logo { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 900; color: white; }
+.calc-nav-co { font-size: 12px; color: rgba(255,255,255,0.4); }
+.calc-nav-right { display: flex; align-items: center; gap: 12px; }
+.calc-history-btn { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.calc-history-btn:hover { color: white; background: rgba(255,255,255,0.1); }
+.calc-body { max-width: 480px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* Calc sections */
+.calc-section { margin-bottom: 24px; }
+.calc-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+.calc-load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.calc-load-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; transition: all 0.15s; }
+.calc-load-card:hover { border-color: rgba(255,255,255,0.3); }
+.calc-load-card.sel { border-color: white; background: rgba(255,255,255,0.06); }
+.calc-load-icon { font-size: 22px; margin-bottom: 6px; }
+.calc-load-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.calc-load-cost { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+.calc-specials-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.calc-special-tag { border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 10px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; }
+.calc-special-tag:hover { border-color: rgba(255,255,255,0.25); }
+.calc-special-tag.sel { border-color: var(--green); background: rgba(29,158,117,0.1); }
+.calc-special-left { display: flex; align-items: center; gap: 7px; }
+.calc-special-icon { font-size: 14px; }
+.calc-special-name { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); }
+.calc-special-tag.sel .calc-special-name { color: #5DCAA5; }
+.calc-special-fee { font-size: 10px; color: rgba(255,255,255,0.3); }
+.calc-special-tag.sel .calc-special-fee { color: rgba(93,202,165,0.6); }
+
+/* Drive + time inputs */
+.calc-inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.calc-input-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; }
+.calc-input-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+.calc-input-field { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 10px; font-size: 14px; font-weight: 600; color: white; width: 100%; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.15s; }
+.calc-input-field:focus { border-color: rgba(255,255,255,0.3); }
+.calc-input-field::placeholder { color: rgba(255,255,255,0.2); font-weight: 400; }
+.calc-input-unit { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+/* Markup slider */
+.calc-markup-card { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; }
+.calc-markup-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.calc-markup-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
+.calc-markup-pct { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; color: white; }
+.calc-markup-note { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+input[type=range].calc-slider { width: 100%; accent-color: var(--green); height: 4px; }
+
+/* Result */
+.calc-result { border: 1px solid rgba(29,158,117,0.3); background: rgba(29,158,117,0.08); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+.calc-result-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+.calc-result-price { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: white; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
+.calc-result-price.has-range { font-size: 36px; }
+.calc-result-breakdown { margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; display: flex; flex-direction: column; gap: 5px; }
+.calc-breakdown-row { display: flex; justify-content: space-between; font-size: 12px; }
+.calc-breakdown-label { color: rgba(255,255,255,0.4); }
+.calc-breakdown-val { color: rgba(255,255,255,0.7); font-weight: 600; }
+.calc-breakdown-row.total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 2px; }
+.calc-breakdown-row.total .calc-breakdown-label { color: rgba(255,255,255,0.7); font-weight: 600; }
+.calc-breakdown-row.total .calc-breakdown-val { color: white; font-weight: 700; }
+.calc-markup-line { font-size: 11px; color: rgba(93,202,165,0.7); margin-top: 2px; }
+
+.calc-action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.calc-btn-save { background: var(--green); color: white; border: none; border-radius: 8px; padding: 13px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+.calc-btn-save:hover { background: var(--green-dark); }
+.calc-btn-reset { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 13px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.calc-btn-reset:hover { color: white; border-color: rgba(255,255,255,0.25); }
+
+/* HISTORY PANEL */
+.history-panel { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+.history-panel.open { display: block; }
+.history-drawer { position: absolute; right: 0; top: 0; bottom: 0; width: 340px; background: #111; border-left: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; animation: drawerIn 0.22s ease both; }
+@keyframes drawerIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.history-header { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+.history-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 900; color: white; }
+.history-close { background: rgba(255,255,255,0.08); border: none; color: rgba(255,255,255,0.6); width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.history-list { flex: 1; overflow-y: auto; padding: 12px; }
+.history-empty { text-align: center; padding: 40px 20px; font-size: 13px; color: rgba(255,255,255,0.25); }
+.history-item { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
+.history-item:hover { border-color: rgba(255,255,255,0.2); }
+.history-item-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.history-item-price { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: white; }
+.history-item-time { font-size: 10px; color: rgba(255,255,255,0.3); }
+.history-item-detail { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+.history-item-markup { display: inline-block; font-size: 10px; font-weight: 600; color: #5DCAA5; background: rgba(29,158,117,0.15); padding: 2px 7px; border-radius: 8px; margin-top: 4px; }
+.history-clear { padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+.history-clear-btn { width: 100%; background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.35); border-radius: 6px; padding: 8px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+.history-clear-btn:hover { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.6); }
+
+/* SAVED TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--green); color: white; font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 20px; z-index: 400; transition: transform 0.3s ease; pointer-events: none; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+
 @media (max-width: 768px) {
   nav { padding: 0 20px; }
   .nav-links { display: none; }
   .hero { grid-template-columns: 1fr; padding: 90px 20px 60px; gap: 40px; }
-  .hero-demo { display: none; }
+  .hero-phone { display: none; }
   section { padding: 60px 20px; }
   .origin-grid, .steps-grid, .features-grid, .pricing-cards { grid-template-columns: 1fr; }
   .strip { padding: 20px; gap: 20px; justify-content: flex-start; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
   .load-row { grid-template-columns: 110px 1fr 1fr; }
   .special-grid { grid-template-columns: 1fr; }
-  .extras-grid { grid-template-columns: 1fr; }
-  .platform-list { grid-template-columns: 1fr 1fr; }
+  .extras-grid, .calc-inputs-grid, .calc-action-row { grid-template-columns: 1fr; }
+  .history-drawer { width: 100%; }
+  .calc-load-grid, .calc-specials-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
+<!-- MARKETING SITE -->
+<div id="marketingPage">
+
 <nav>
-  <a href="https://woodswastemn.com" class="nav-logo">
+  <a href="#" class="nav-logo">
     <div class="nav-logo-mark">W</div>
     <div>
       <div class="nav-logo-text">Wood's Waste</div>
@@ -345,8 +411,8 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
 <div class="hero">
   <div class="hero-left">
     <div class="hero-eyebrow">Built by Wood's Waste <span>·</span> Farmington, MN</div>
-    <h1>We built it.<br>It <u>worked.</u><br>Now it's yours.</h1>
-    <p class="hero-sub">We were losing jobs because we couldn't quote fast enough. So we built our own instant estimator. It tripled our lead conversions. Now we're making it available to other junk removal companies.</p>
+    <h1>Know what to<br>charge <u>before</u><br>you call back.</h1>
+    <p class="hero-sub">You're on a job, the phone rings, customer wants a price. You used to guess. Now you punch in the load size, the drive, the special items — and we tell you exactly what to quote.</p>
     <div class="hero-actions">
       <a href="#pricing" class="btn-primary" onclick="openModal('starter')">Start free trial →</a>
       <a href="#how" class="btn-ghost">See how it works</a>
@@ -358,47 +424,42 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
         <div class="ava" style="background:#555;">MR</div>
       </div>
       <div class="hero-proof-text">
-        <strong>Junk removal companies</strong> already using it<br>across the midwest
+        <strong>Junk removal operators</strong> pricing jobs confidently<br>across the midwest
       </div>
     </div>
   </div>
-  <div class="hero-demo">
-    <div class="demo-topbar">
-      <div class="demo-dot" style="background:#ff5f57;"></div>
-      <div class="demo-dot" style="background:#febc2e; margin-left:4px;"></div>
-      <div class="demo-dot" style="background:#28c840; margin-left:4px;"></div>
-      <div class="demo-url">yourbusiness.com/quote</div>
-    </div>
-    <div class="demo-inner">
-      <div class="demo-logo" id="demoName">Your Company</div>
-      <div class="demo-headline">Instant Quote</div>
-      <div class="demo-sub">Get a price estimate in 60 seconds</div>
-      <div class="demo-progress">
-        <div class="demo-prog on"></div>
-        <div class="demo-prog" id="dp2"></div>
-        <div class="demo-prog" id="dp3"></div>
-      </div>
-      <div id="demoStep1">
-        <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:rgba(255,255,255,0.4); margin-bottom:10px;">How much junk?</div>
-        <div class="demo-load-grid">
-          <div class="demo-card" id="dc1" onclick="demoSelect(1)"><div class="demo-card-icon">📦</div><div class="demo-card-name">Min Load</div><div class="demo-card-price">From $150</div></div>
-          <div class="demo-card" id="dc2" onclick="demoSelect(2)"><div class="demo-card-icon">🛋️</div><div class="demo-card-name">Quarter Load</div><div class="demo-card-price">From $225</div></div>
-          <div class="demo-card" id="dc3" onclick="demoSelect(3)"><div class="demo-card-icon">🏠</div><div class="demo-card-name">Half Load</div><div class="demo-card-price">From $325</div></div>
-          <div class="demo-card" id="dc4" onclick="demoSelect(4)"><div class="demo-card-icon">🚛</div><div class="demo-card-name">Full Truck</div><div class="demo-card-price">From $500</div></div>
+
+  <!-- Phone mockup -->
+  <div class="hero-phone">
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="phone-app-bar">
+          <div class="phone-app-name">Quote Tool</div>
+          <div class="phone-app-badge">LIVE</div>
         </div>
-      </div>
-      <div id="demoStep2" style="display:none;">
-        <div class="demo-est">
-          <div class="demo-est-label">Your estimate</div>
-          <div class="demo-est-range" id="demoRange">$325–$425</div>
-          <div class="demo-est-note">Final price confirmed on-site · no surprise fees</div>
+        <div class="phone-job-label">Load size</div>
+        <div class="phone-load-grid">
+          <div class="phone-load-card"><div class="phone-load-icon">📦</div><div class="phone-load-name">Min Load</div></div>
+          <div class="phone-load-card sel"><div class="phone-load-icon">🛋️</div><div class="phone-load-name">Half Load</div></div>
         </div>
-        <button class="demo-btn" onclick="demoBook()">Book free quote visit →</button>
-      </div>
-      <div id="demoStep3" style="display:none; text-align:center; padding:10px 0;">
-        <div style="font-size:28px; margin-bottom:8px;">✓</div>
-        <div style="font-family:'Playfair Display',serif; font-size:14px; font-weight:900; color:white; margin-bottom:4px;">You're booked!</div>
-        <div style="font-size:10px; color:rgba(255,255,255,0.4);">We'll call to confirm your window.</div>
+        <div class="phone-job-label">Special items</div>
+        <div class="phone-specials" style="margin-bottom:10px;">
+          <div class="phone-special-tag on">🛏️ Mattress +$40</div>
+          <div class="phone-special-tag on">📺 TV +$25</div>
+          <div class="phone-special-tag">🧊 Fridge</div>
+        </div>
+        <div class="phone-markup-row">
+          <div class="phone-markup-label">Markup</div>
+          <div class="phone-markup-track"><div class="phone-markup-fill"></div><div class="phone-markup-thumb"></div></div>
+          <div class="phone-markup-val">35%</div>
+        </div>
+        <div class="phone-result">
+          <div class="phone-result-label">Quote the customer</div>
+          <div class="phone-result-price">$554</div>
+          <div class="phone-result-breakdown">Cost $410 · 35% markup · 18 mi drive</div>
+          <div class="phone-result-btn">Save to job history →</div>
+        </div>
       </div>
     </div>
   </div>
@@ -406,11 +467,11 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
 </section>
 
 <div class="strip">
-  <div class="strip-item">⚡ <strong>2-minute</strong> setup</div>
-  <div class="strip-item">📱 <strong>Mobile-first</strong> design</div>
-  <div class="strip-item">💰 <strong>$0</strong> setup fee</div>
-  <div class="strip-item">🔒 <strong>14-day</strong> free trial</div>
-  <div class="strip-item">🎨 <strong>Your branding,</strong> your rates</div>
+  <div class="strip-item">📱 <strong>Works on any phone</strong></div>
+  <div class="strip-item">⚡ <strong>Quote in under 60 sec</strong></div>
+  <div class="strip-item">💰 <strong>Your costs, your markup</strong></div>
+  <div class="strip-item">📋 <strong>Full job history</strong></div>
+  <div class="strip-item">🔒 <strong>14-day free trial</strong></div>
 </div>
 
 <section class="origin" id="origin">
@@ -418,16 +479,16 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
     <div class="origin-grid">
       <div class="origin-body">
         <p class="section-eyebrow">Our story</p>
-        <h2 class="section-title">We were you a year ago.</h2>
-        <p>Griffin and Gavin started Wood's Waste out of Farmington, MN. Good reputation, solid reviews — but too many jobs slipping away because we couldn't get back to people fast enough with a number.</p>
-        <p>Customers don't wait. They call three companies and go with whoever gives them a price first. We were usually third.</p>
-        <p>So we built an instant quote calculator for our own site. Customers pick a load size, flag any special items, and get a price range on the spot — before they ever pick up the phone.</p>
-        <p>The difference was immediate. More bookings, fewer no-answers, more jobs closed while we were still on a truck. We started getting calls from other operators asking how we did it. So here we are.</p>
+        <h2 class="section-title">We were guessing. We stopped.</h2>
+        <p>Griffin and Gavin started Wood's Waste out of Farmington, MN. Good operators, solid work — but pricing jobs on the fly meant inconsistent quotes, lost margin, and the occasional job we should've charged more for.</p>
+        <p>Customer calls, you're covered in sweat on someone's lawn, you throw out a number. Sometimes you nail it. Sometimes you leave $200 on the table. Sometimes you quote too high and lose the job.</p>
+        <p>So we built a calculator we could pull up on our phones in real time. Load size, special items, miles out, how long it'll take — plug it in and it spits out a number that actually covers your costs and hits your margin.</p>
+        <p>Other operators started asking about it. So now we're making it available. Two minutes to set up your rates. Works on any phone. No app install.</p>
       </div>
       <div class="origin-stat-stack">
-        <div class="origin-stat"><div class="origin-stat-num">3×</div><div class="origin-stat-label">more leads converted after adding the quote tool to our site</div></div>
-        <div class="origin-stat"><div class="origin-stat-num">68%</div><div class="origin-stat-label">of customers go with the first company to give them a price</div></div>
-        <div class="origin-stat"><div class="origin-stat-num">24/7</div><div class="origin-stat-label">the tool works even when you're on a job and can't answer</div></div>
+        <div class="origin-stat"><div class="origin-stat-num">$200+</div><div class="origin-stat-label">average margin operators leave behind when pricing jobs from memory</div></div>
+        <div class="origin-stat"><div class="origin-stat-num">60 sec</div><div class="origin-stat-label">to get a confident quote number while the customer is still on the phone</div></div>
+        <div class="origin-stat"><div class="origin-stat-num">500%</div><div class="origin-stat-label">maximum markup — slide it up or down depending on the job</div></div>
       </div>
     </div>
   </div>
@@ -436,11 +497,26 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
 <section class="how" id="how">
   <div class="section-inner">
     <p class="section-eyebrow">How it works</p>
-    <h2 class="section-title">Up and running in under 10 minutes.</h2>
+    <h2 class="section-title">Sign up once. Price every job.</h2>
     <div class="steps-grid">
-      <div class="step-card"><div class="step-num">01 / 03</div><span class="step-icon">⚙️</span><div class="step-title">Enter your pricing</div><div class="step-desc">Set your load rates, local dump fees, labor costs, and markup. Your market, your numbers — we don't touch them.</div></div>
-      <div class="step-card"><div class="step-num">02 / 03</div><span class="step-icon">🔗</span><div class="step-title">Paste one line of code</div><div class="step-desc">Drop a single script tag onto any webpage — Squarespace, Wix, WordPress, custom-built. No developer needed.</div></div>
-      <div class="step-card"><div class="step-num">03 / 03</div><span class="step-icon">💰</span><div class="step-title">Convert more leads</div><div class="step-desc">Customers get an instant price range and can book directly from your site. You get the job. We get out of the way.</div></div>
+      <div class="step-card">
+        <div class="step-num">01 / 03</div>
+        <span class="step-icon">⚙️</span>
+        <div class="step-title">Enter your costs</div>
+        <div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market — we just do the math.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02 / 03</div>
+        <span class="step-icon">📱</span>
+        <div class="step-title">Pull it up on your phone</div>
+        <div class="step-desc">No app to install. Open your dashboard on any phone, browser, or tablet. Punch in the job details while you're standing in the driveway.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03 / 03</div>
+        <span class="step-icon">💰</span>
+        <div class="step-title">Quote with confidence</div>
+        <div class="step-desc">The tool shows your cost, your markup, and your final quote number. Call the customer back in 30 seconds with a real number, not a guess.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -448,14 +524,38 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
 <section class="features" id="features">
   <div class="section-inner">
     <p class="section-eyebrow">Features</p>
-    <h2 class="section-title">Everything a junk removal operator actually needs.</h2>
+    <h2 class="section-title">Built for how the job actually works.</h2>
     <div class="features-grid">
-      <div class="feat-card"><span class="feat-icon">📷</span><div class="feat-title">AI photo estimation</div><div class="feat-desc">Customers upload a photo of their junk. AI estimates the cubic yards and suggests a load size — no guessing required on either end.</div></div>
-      <div class="feat-card"><span class="feat-icon">⚙️</span><div class="feat-title">Your rates, your market</div><div class="feat-desc">Set your exact local dump fees, labor rates, and markup. Every quote reflects your real costs — not some national average.</div></div>
-      <div class="feat-card"><span class="feat-icon">📦</span><div class="feat-title">Special item pricing</div><div class="feat-desc">Mattresses, tires, fridges, TVs — all priced accurately with your local surcharges built in. No more surprises for you or your customers.</div></div>
-      <div class="feat-card"><span class="feat-icon">🎨</span><div class="feat-title">Your branding, your colors</div><div class="feat-desc">The calculator shows your company name, colors, and logo. Customers never know or need to know it's powered by Wood's Waste.</div></div>
-      <div class="feat-card"><span class="feat-icon">📱</span><div class="feat-title">Mobile-first design</div><div class="feat-desc">Most customers are on their phones. The tool is fully optimized for mobile — large tap targets, fast load, smooth experience.</div></div>
-      <div class="feat-card"><span class="feat-icon">📊</span><div class="feat-title">Analytics dashboard</div><div class="feat-desc">See how many quotes your page generates, what load sizes customers select most, and update your pricing anytime from a simple dashboard.</div></div>
+      <div class="feat-card">
+        <span class="feat-icon">🎚️</span>
+        <div class="feat-title">Markup slider up to 500%</div>
+        <div class="feat-desc">Slide it up when you really want the job or the customer is easy. Slide it down for a difficult site or a tight market. Your margin, your call — every single time.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">⚙️</span>
+        <div class="feat-title">Your costs, locked in</div>
+        <div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once at signup. Every quote after that is calculated off your real numbers — not industry averages.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📦</span>
+        <div class="feat-title">Special item surcharges</div>
+        <div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies to the job and the fee gets added automatically. No forgetting to charge for the fridge.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🗺️</span>
+        <div class="feat-title">Drive distance factored in</div>
+        <div class="feat-desc">Type in the miles and your per-mile rate kicks in automatically. Jobs 40 miles out should cost more than jobs down the street. Now they will.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📋</span>
+        <div class="feat-title">Job history log</div>
+        <div class="feat-desc">Every quote you save gets logged with the price, load size, markup, and timestamp. Look back at past jobs, spot patterns, and know what you actually charged.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📱</span>
+        <div class="feat-title">Works on any device</div>
+        <div class="feat-desc">No app to install. Open it on your phone, tablet, or laptop. Works on iOS, Android, whatever. If it has a browser, it works.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -468,12 +568,12 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
       <div class="pricing-card">
         <div class="pricing-plan">Starter</div>
         <div class="pricing-price">$29<span>/mo</span></div>
-        <div class="pricing-desc">Everything you need to start converting more leads today.</div>
+        <div class="pricing-desc">Everything you need to start pricing jobs confidently today.</div>
         <ul class="pricing-features">
-          <li class="pf"><span class="chk">✓</span> Embeddable quote calculator</li>
-          <li class="pf"><span class="chk">✓</span> Custom pricing & dump fees</li>
+          <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
+          <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
           <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
-          <li class="pf"><span class="chk">✓</span> Mobile optimized</li>
+          <li class="pf"><span class="chk">✓</span> Markup slider (0–500%)</li>
           <li class="pf"><span class="chk">✓</span> 14-day free trial</li>
         </ul>
         <a href="#" class="btn-plan-dark" onclick="openModal('starter'); return false;">Start free trial</a>
@@ -482,13 +582,13 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-plan">Pro</div>
         <div class="pricing-price">$59<span>/mo</span></div>
-        <div class="pricing-desc">For growing companies that want every advantage.</div>
+        <div class="pricing-desc">For operators who want to track every job and tighten their margins.</div>
         <ul class="pricing-features">
           <li class="pf"><span class="chk">✓</span> Everything in Starter</li>
-          <li class="pf"><span class="chk">✓</span> AI photo estimation</li>
-          <li class="pf"><span class="chk">✓</span> Quote analytics dashboard</li>
-          <li class="pf"><span class="chk">✓</span> Lead capture & email alerts</li>
-          <li class="pf"><span class="chk">✓</span> Custom branding & colors</li>
+          <li class="pf"><span class="chk">✓</span> Full job history log</li>
+          <li class="pf"><span class="chk">✓</span> Job notes & customer info</li>
+          <li class="pf"><span class="chk">✓</span> Margin analytics</li>
+          <li class="pf"><span class="chk">✓</span> Multi-user (share with crew)</li>
           <li class="pf"><span class="chk">✓</span> Priority support from Griffin</li>
         </ul>
         <a href="#" class="btn-plan-light" onclick="openModal('pro'); return false;">Start free trial</a>
@@ -502,14 +602,14 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
   <div class="testimonial-inner">
     <p class="section-eyebrow" style="text-align:center;">From the field</p>
     <div class="stars">★★★★★</div>
-    <div class="testimonial-quote">"We used to lose jobs just because we couldn't get back to people fast enough. This fixed that overnight."</div>
-    <div class="testimonial-author"><strong>Griffin W.</strong> · Wood's Waste, Farmington MN · the guy who built it</div>
+    <div class="testimonial-quote">"I used to throw out a number and hope. Now I actually know what I'm making on every job before I say a word to the customer."</div>
+    <div class="testimonial-author"><strong>Griffin W.</strong> · Wood's Waste, Farmington MN · built it for himself first</div>
   </div>
 </section>
 
 <section class="cta-bottom">
   <div style="position:relative; z-index:1;">
-    <h2>Ready to close more jobs?</h2>
+    <h2>Stop guessing on price.</h2>
     <p>14-day free trial. No charge until it's working for you.</p>
     <a href="#" class="btn-primary" onclick="openModal('pro'); return false;">Start free →</a>
   </div>
@@ -527,10 +627,11 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
   </div>
 </footer>
 
+</div><!-- /marketingPage -->
+
 <!-- ===================== MODAL ===================== -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal" id="modal">
-
     <div class="modal-header" id="modalHeader">
       <button class="modal-close" onclick="closeModal()">✕</button>
       <div class="modal-plan-badge" id="modalPlanBadge">Starter Plan — $29/mo</div>
@@ -539,10 +640,8 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
       <div class="modal-steps" id="modalStepDots">
         <div class="modal-step-dot active" id="dot1"></div>
         <div class="modal-step-dot" id="dot2"></div>
-        <div class="modal-step-dot" id="dot3"></div>
       </div>
     </div>
-
     <div class="modal-body">
 
       <!-- STEP 1: Account + Payment -->
@@ -572,168 +671,247 @@ footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08);
         </div>
       </div>
 
-      <!-- STEP 2: Pricing Configuration -->
+      <!-- STEP 2: Pricing Config -->
       <div id="step2" style="display:none;">
-        <div style="font-size:13px; color:var(--gray); margin-bottom:18px; line-height:1.6;">Set your rates below — this is what shows in <em>your</em> quote tool. You can update these anytime from your dashboard.</div>
+        <div style="font-size:13px; color:var(--gray); margin-bottom:18px; line-height:1.6;">Set your costs once — every job you price will use these numbers. You can update them anytime.</div>
 
-        <!-- Load Sizes -->
         <div class="pricing-section">
-          <div class="pricing-section-title">🚛 Load size pricing <span style="font-size:11px; font-weight:400; color:var(--gray); margin-left:4px;">(low / high range per load)</span></div>
+          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px; font-weight:400; color:var(--gray); margin-left:4px;">(what it costs YOU — before markup)</span></div>
           <div class="load-row" style="margin-bottom:4px;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--gray);">Load</div>
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--gray); text-align:center;">Low</div>
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--gray); text-align:center;">High</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);">Load</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);text-align:center;">Low</div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);text-align:center;">High</div>
           </div>
-          <div class="load-row">
-            <div class="load-row-label"><span>📦</span> Min Load</div>
-            <div class="price-input-wrap"><input type="number" id="p-min-low" placeholder="150" value="150" min="0" /></div>
-            <div class="price-input-wrap"><input type="number" id="p-min-high" placeholder="200" value="200" min="0" /></div>
-          </div>
-          <div class="load-row">
-            <div class="load-row-label"><span>🛋️</span> Quarter Load</div>
-            <div class="price-input-wrap"><input type="number" id="p-qtr-low" placeholder="225" value="225" min="0" /></div>
-            <div class="price-input-wrap"><input type="number" id="p-qtr-high" placeholder="300" value="300" min="0" /></div>
-          </div>
-          <div class="load-row">
-            <div class="load-row-label"><span>🏠</span> Half Load</div>
-            <div class="price-input-wrap"><input type="number" id="p-half-low" placeholder="325" value="325" min="0" /></div>
-            <div class="price-input-wrap"><input type="number" id="p-half-high" placeholder="425" value="425" min="0" /></div>
-          </div>
-          <div class="load-row">
-            <div class="load-row-label"><span>🚛</span> Full Truck</div>
-            <div class="price-input-wrap"><input type="number" id="p-full-low" placeholder="500" value="500" min="0" /></div>
-            <div class="price-input-wrap"><input type="number" id="p-full-high" placeholder="650" value="650" min="0" /></div>
-          </div>
+          <div class="load-row"><div class="load-row-label"><span>📦</span> Min Load</div><div class="price-input-wrap"><input type="number" id="p-min-low" value="100" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-min-high" value="130" min="0" /></div></div>
+          <div class="load-row"><div class="load-row-label"><span>🛋️</span> Quarter Load</div><div class="price-input-wrap"><input type="number" id="p-qtr-low" value="160" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-qtr-high" value="200" min="0" /></div></div>
+          <div class="load-row"><div class="load-row-label"><span>🏠</span> Half Load</div><div class="price-input-wrap"><input type="number" id="p-half-low" value="230" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-half-high" value="280" min="0" /></div></div>
+          <div class="load-row"><div class="load-row-label"><span>🚛</span> Full Truck</div><div class="price-input-wrap"><input type="number" id="p-full-low" value="350" min="0" /></div><div class="price-input-wrap"><input type="number" id="p-full-high" value="420" min="0" /></div></div>
         </div>
 
-        <!-- Special Items -->
         <div class="pricing-section">
-          <div class="pricing-section-title">📦 Special item surcharges <span style="font-size:11px; font-weight:400; color:var(--gray); margin-left:4px;">(toggle on/off per item)</span></div>
+          <div class="pricing-section-title">📦 Special item fees <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(added on top of load cost)</span></div>
           <div class="special-grid" id="specialGrid"></div>
         </div>
 
-        <!-- Drive Distance + Estimated Time -->
         <div class="pricing-section">
-          <div class="pricing-section-title">🗺️ Drive distance & time rates</div>
+          <div class="pricing-section-title">🗺️ Drive & labor costs</div>
           <div class="extras-grid">
             <div class="extras-card">
-              <div class="extras-card-title">Max drive distance</div>
-              <div class="range-row">
-                <input type="range" id="maxDrive" min="5" max="100" value="30" step="5" oninput="updateRanges()" />
-                <span class="range-val" id="maxDriveVal">30 mi</span>
+              <div class="extras-card-title">Drive rate</div>
+              <div class="extras-rate-row" style="margin-bottom:8px;">
+                <div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;" /></div>
+                <span>per mile</span>
               </div>
-              <div class="extras-rate-row">
-                <span>+</span>
-                <div class="price-input-wrap"><input type="number" id="driveRate" value="2" min="0" placeholder="2" style="width:60px;" /></div>
-                <span>per mile over 10 mi</span>
-              </div>
+              <div style="font-size:11px; color:var(--gray);">Applied to full round-trip distance</div>
             </div>
             <div class="extras-card">
-              <div class="extras-card-title">Estimated job time</div>
-              <div class="range-row">
-                <input type="range" id="estTime" min="30" max="300" value="90" step="15" oninput="updateRanges()" />
-                <span class="range-val" id="estTimeVal">90 min</span>
-              </div>
-              <div class="extras-rate-row">
-                <span>Labor rate:</span>
-                <div class="price-input-wrap"><input type="number" id="laborRate" value="45" min="0" placeholder="45" style="width:70px;" /></div>
+              <div class="extras-card-title">Labor rate</div>
+              <div class="extras-rate-row" style="margin-bottom:8px;">
+                <div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;" /></div>
                 <span>/hr per person</span>
               </div>
+              <div style="font-size:11px; color:var(--gray);">Used to calculate job time cost</div>
             </div>
           </div>
         </div>
 
-        <div class="btn-row">
+        <div class="pricing-section" style="margin-bottom:0;">
+          <div class="pricing-section-title">🎚️ Default markup</div>
+          <div class="markup-signup-card">
+            <div class="markup-signup-header">
+              <div class="markup-signup-title">Your default markup percentage</div>
+              <div class="markup-signup-val" id="signupMarkupVal">35%</div>
+            </div>
+            <input type="range" id="signupMarkup" min="0" max="500" value="35" step="5" style="width:100%; accent-color:var(--black);" oninput="document.getElementById('signupMarkupVal').textContent=this.value+'%'" />
+            <div class="markup-signup-sub">You can slide this up or down on every individual job. This is just your starting point.</div>
+          </div>
+        </div>
+
+        <div class="btn-row" style="margin-top:20px;">
           <button class="btn-back" onclick="goStep(1)">← Back</button>
-          <button class="submit-btn" id="step2Btn" onclick="goStep3()" style="flex:1;">Save pricing & get embed code →</button>
+          <button class="submit-btn" id="step2Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
         </div>
       </div>
 
-      <!-- STEP 3: Embed Code -->
-      <div id="step3" style="display:none;" class="embed-step">
-        <div class="embed-hero">
-          <div class="embed-hero-label">Your embed code</div>
-          <div class="embed-code" id="embedCodeBlock"></div>
-          <button class="copy-btn" id="copyBtn" onclick="copyEmbed()">Copy code</button>
-        </div>
-
-        <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray); margin-bottom:10px;">Paste it into your site</div>
-        <div class="platform-list">
-          <div class="platform-pill sel" onclick="setPlatform(this,'wordpress')"><span class="platform-icon">🟦</span>WordPress</div>
-          <div class="platform-pill" onclick="setPlatform(this,'squarespace')"><span class="platform-icon">⬛</span>Squarespace</div>
-          <div class="platform-pill" onclick="setPlatform(this,'wix')"><span class="platform-icon">🟨</span>Wix</div>
-          <div class="platform-pill" onclick="setPlatform(this,'webflow')"><span class="platform-icon">🔵</span>Webflow</div>
-          <div class="platform-pill" onclick="setPlatform(this,'html')"><span class="platform-icon">📄</span>Custom HTML</div>
-          <div class="platform-pill" onclick="setPlatform(this,'other')"><span class="platform-icon">🔧</span>Other</div>
-        </div>
-        <div id="platformInstructions" style="font-size:12px; color:var(--gray); line-height:1.7; background:var(--off); border-radius:8px; padding:12px 14px; margin-bottom:16px;"></div>
-
-        <div class="btn-row">
-          <button class="btn-back" onclick="goStep(2)">← Edit pricing</button>
-          <button class="submit-btn green" style="flex:1;" onclick="finishSetup()">All done — I'm live! 🎉</button>
-        </div>
-      </div>
-
-      <!-- SAVING OVERLAY -->
+      <!-- SAVING -->
       <div class="saving-overlay" id="savingOverlay">
         <div class="saving-spinner"></div>
-        <p id="savingMsg">Saving your pricing to your account...</p>
+        <p>Setting up your account...</p>
       </div>
 
       <!-- SUCCESS -->
       <div class="success-state" id="successState">
         <div class="success-mark">✓</div>
         <div class="sheet-saved-badge">✓ Pricing saved to your account</div>
-        <h3>You're live!</h3>
-        <p>Your quote tool is active and your pricing is saved. Customers on your site can now get instant estimates 24/7.</p>
+        <h3>You're all set.</h3>
+        <p>Your costs are saved. Pull up the quote tool on your phone anytime you need a number — takes about 30 seconds per job.</p>
         <div class="success-next">
-          <div class="success-next-label">What happens next</div>
-          <div class="success-next-item">📧 Check your email for your dashboard login</div>
-          <div class="success-next-item">📊 Watch leads come in from the analytics tab</div>
-          <div class="success-next-item">⚙️ Update pricing anytime from your dashboard</div>
-          <div class="success-next-item">📞 Griffin will text you to make sure it's working</div>
+          <div class="success-next-label">Good to know</div>
+          <div class="success-next-item">📧 Dashboard login sent to your email</div>
+          <div class="success-next-item">🎚️ Markup slider starts at your default — change it per job</div>
+          <div class="success-next-item">📋 Every saved quote goes into your job history</div>
+          <div class="success-next-item">📞 Griffin will text to make sure everything looks right</div>
         </div>
-        <p style="font-size:13px; color:var(--gray);">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black); font-weight:600;">(507) 298-1179</a></p>
+        <button class="submit-btn green" onclick="openCalc()" style="margin-top:0;">Open my quote tool →</button>
+        <p style="font-size:13px; color:var(--gray); margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black); font-weight:600;">(507) 298-1179</a></p>
       </div>
 
     </div>
   </div>
 </div>
 
+<!-- ===================== CALCULATOR PAGE ===================== -->
+<div id="calcPage">
+  <nav class="calc-nav">
+    <div>
+      <div class="calc-nav-logo">Quote Tool</div>
+      <div class="calc-nav-co" id="calcNavCo">Wood's Waste</div>
+    </div>
+    <div class="calc-nav-right">
+      <button class="calc-history-btn" onclick="openHistory()">History</button>
+    </div>
+  </nav>
+
+  <div class="calc-body">
+
+    <div class="calc-section">
+      <div class="calc-section-title">Load size</div>
+      <div class="calc-load-grid">
+        <div class="calc-load-card" id="cl-minimum" onclick="selectLoad('minimum')">
+          <div class="calc-load-icon">📦</div>
+          <div class="calc-load-name">Min Load</div>
+          <div class="calc-load-cost" id="cl-cost-minimum">$100–$130</div>
+        </div>
+        <div class="calc-load-card" id="cl-quarter" onclick="selectLoad('quarter')">
+          <div class="calc-load-icon">🛋️</div>
+          <div class="calc-load-name">Quarter Load</div>
+          <div class="calc-load-cost" id="cl-cost-quarter">$160–$200</div>
+        </div>
+        <div class="calc-load-card" id="cl-half" onclick="selectLoad('half')">
+          <div class="calc-load-icon">🏠</div>
+          <div class="calc-load-name">Half Load</div>
+          <div class="calc-load-cost" id="cl-cost-half">$230–$280</div>
+        </div>
+        <div class="calc-load-card" id="cl-full" onclick="selectLoad('full')">
+          <div class="calc-load-icon">🚛</div>
+          <div class="calc-load-name">Full Truck</div>
+          <div class="calc-load-cost" id="cl-cost-full">$350–$420</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-section">
+      <div class="calc-section-title">Special items</div>
+      <div class="calc-specials-grid" id="calcSpecialsGrid"></div>
+    </div>
+
+    <div class="calc-section">
+      <div class="calc-section-title">Drive & time</div>
+      <div class="calc-inputs-grid">
+        <div class="calc-input-card">
+          <div class="calc-input-label">Drive distance</div>
+          <input type="number" class="calc-input-field" id="calcMiles" placeholder="0" min="0" oninput="recalc()" />
+          <div class="calc-input-unit">miles one way</div>
+        </div>
+        <div class="calc-input-card">
+          <div class="calc-input-label">Job time</div>
+          <input type="number" class="calc-input-field" id="calcHours" placeholder="0" min="0" step="0.5" oninput="recalc()" />
+          <div class="calc-input-unit">hours · <span id="calcCrewNote">1 person</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-section">
+      <div class="calc-markup-card">
+        <div class="calc-markup-top">
+          <div class="calc-markup-label">Markup</div>
+          <div class="calc-markup-pct" id="calcMarkupPct">35%</div>
+        </div>
+        <input type="range" class="calc-slider" id="calcMarkup" min="0" max="500" value="35" step="5" oninput="onMarkupSlide()" />
+        <div class="calc-markup-note">Slide up for easy jobs, down to win a competitive bid</div>
+      </div>
+    </div>
+
+    <div class="calc-result" id="calcResult">
+      <div class="calc-result-label">Quote the customer</div>
+      <div class="calc-result-price" id="calcFinalPrice">—</div>
+      <div class="calc-result-breakdown" id="calcBreakdown" style="display:none;">
+        <div class="calc-breakdown-row"><span class="calc-breakdown-label">Load cost</span><span class="calc-breakdown-val" id="bd-load">—</span></div>
+        <div class="calc-breakdown-row" id="bd-specials-row" style="display:none;"><span class="calc-breakdown-label">Special items</span><span class="calc-breakdown-val" id="bd-specials">—</span></div>
+        <div class="calc-breakdown-row" id="bd-drive-row" style="display:none;"><span class="calc-breakdown-label">Drive</span><span class="calc-breakdown-val" id="bd-drive">—</span></div>
+        <div class="calc-breakdown-row" id="bd-labor-row" style="display:none;"><span class="calc-breakdown-label">Labor</span><span class="calc-breakdown-val" id="bd-labor">—</span></div>
+        <div class="calc-breakdown-row total"><span class="calc-breakdown-label">Your cost</span><span class="calc-breakdown-val" id="bd-cost">—</span></div>
+        <div class="calc-breakdown-row total"><span class="calc-breakdown-label" id="bd-markup-label">+ markup</span><span class="calc-breakdown-val" id="bd-quote">—</span></div>
+      </div>
+    </div>
+
+    <div class="calc-action-row">
+      <button class="calc-btn-save" onclick="saveJob()">Save to history</button>
+      <button class="calc-btn-reset" onclick="resetCalc()">Clear</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- HISTORY PANEL -->
+<div class="history-panel" id="historyPanel" onclick="closeHistoryOutside(event)">
+  <div class="history-drawer">
+    <div class="history-header">
+      <div class="history-title">Job history</div>
+      <button class="history-close" onclick="closeHistory()">✕</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>
+    </div>
+    <div class="history-clear">
+      <button class="history-clear-btn" onclick="clearHistory()">Clear all history</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Job saved to history</div>
+
 <script>
-// ── CONFIG ──────────────────────────────────────────────
-// Replace with your deployed Google Apps Script Web App URL
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 const SPECIAL_ITEMS_CONFIG = [
-  { key: 'mattress',    icon: '🛏️', label: 'Mattress',     fee: 40 },
-  { key: 'boxspring',   icon: '🛏️', label: 'Box Spring',   fee: 30 },
-  { key: 'fridge',      icon: '🧊', label: 'Refrigerator', fee: 50 },
-  { key: 'washer',      icon: '🫧', label: 'Washer/Dryer',  fee: 45 },
-  { key: 'tv',          icon: '📺', label: 'TV (any size)', fee: 25 },
-  { key: 'tire',        icon: '🔘', label: 'Tire',          fee: 15 },
-  { key: 'piano',       icon: '🎹', label: 'Piano',         fee: 150 },
-  { key: 'hottub',      icon: '🛁', label: 'Hot Tub',       fee: 250 },
-  { key: 'ac',          icon: '❄️', label: 'A/C Unit',      fee: 35 },
-  { key: 'paint',       icon: '🪣', label: 'Paint Cans',    fee: 20 },
+  { key: 'mattress',  icon: '🛏️', label: 'Mattress',     fee: 40  },
+  { key: 'boxspring', icon: '🛏️', label: 'Box Spring',   fee: 30  },
+  { key: 'fridge',    icon: '🧊', label: 'Refrigerator', fee: 50  },
+  { key: 'washer',    icon: '🫧', label: 'Washer/Dryer', fee: 45  },
+  { key: 'tv',        icon: '📺', label: 'TV',           fee: 25  },
+  { key: 'tire',      icon: '🔘', label: 'Tire',         fee: 15  },
+  { key: 'piano',     icon: '🎹', label: 'Piano',        fee: 150 },
+  { key: 'hottub',    icon: '🛁', label: 'Hot Tub',      fee: 250 },
+  { key: 'ac',        icon: '❄️', label: 'A/C Unit',     fee: 35  },
+  { key: 'paint',     icon: '🪣', label: 'Paint Cans',   fee: 20  },
 ];
 
-const PLATFORM_INSTRUCTIONS = {
-  wordpress:   'In WordPress, go to <strong>Appearance → Theme Editor</strong> or use a plugin like "Header & Footer Scripts". Paste the code just before the closing <code>&lt;/body&gt;</code> tag on your Quote or Contact page.',
-  squarespace: 'In Squarespace, edit the page → click the <strong>+</strong> button → choose <strong>Embed</strong> block → paste the code inside.',
-  wix:         'In Wix, click <strong>Add → Embed → Embed a Widget</strong>. Paste the code into the HTML/CSS/JS editor that appears.',
-  webflow:     'In Webflow, select a section → go to <strong>Settings → Custom Code → Before &lt;/body&gt; tag</strong>. Paste the code there.',
-  html:        'Open your HTML file and paste the code just before the closing <code>&lt;/body&gt;</code> tag on the page where you want the calculator to appear.',
-  other:       'Find your site\'s "custom code" or "embed" section and paste the script tag where you want the calculator to appear — typically before the closing body tag.',
+// ── STATE ────────────────────────────────────────────────
+let currentPlan   = 'starter';
+let companyId     = '';
+let companyName   = 'Your Company';
+let specialItemStates = {};
+let selectedLoad  = null;
+let selectedSpecials = {};
+let jobHistory    = [];
+
+// Pricing loaded from signup (defaults shown)
+let userPricing = {
+  loads: {
+    minimum: { low: 100, high: 130 },
+    quarter: { low: 160, high: 200 },
+    half:    { low: 230, high: 280 },
+    full:    { low: 350, high: 420 },
+  },
+  specials: {},
+  driveRate: 1.50,
+  laborRate: 35,
+  defaultMarkup: 35,
 };
 
-// ── STATE ────────────────────────────────────────────────
-let currentPlan = 'starter';
-let currentStep = 1;
-let companyId = '';
-let specialItemStates = {};
-
-// ── INIT SPECIAL ITEMS ───────────────────────────────────
+// ── SIGNUP SPECIAL ITEMS ─────────────────────────────────
 function buildSpecialGrid() {
   const grid = document.getElementById('specialGrid');
   SPECIAL_ITEMS_CONFIG.forEach(item => {
@@ -742,13 +920,8 @@ function buildSpecialGrid() {
     row.className = 'special-item-row active';
     row.id = 'srow-' + item.key;
     row.innerHTML = `
-      <div class="sitem-left">
-        <span class="sitem-icon">${item.icon}</span>
-        ${item.label}
-      </div>
-      <div class="sitem-fee">
-        <div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)" /></div>
-      </div>
+      <div class="sitem-left"><span class="sitem-icon">${item.icon}</span>${item.label}</div>
+      <div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)" /></div></div>
       <div class="sitem-toggle on" id="stoggle-${item.key}" onclick="toggleSpecial('${item.key}')">✓</div>
     `;
     grid.appendChild(row);
@@ -758,23 +931,12 @@ buildSpecialGrid();
 
 function toggleSpecial(key) {
   specialItemStates[key].enabled = !specialItemStates[key].enabled;
-  const row = document.getElementById('srow-' + key);
-  const toggle = document.getElementById('stoggle-' + key);
-  row.classList.toggle('active', specialItemStates[key].enabled);
-  toggle.classList.toggle('on', specialItemStates[key].enabled);
-  toggle.textContent = specialItemStates[key].enabled ? '✓' : '+';
+  document.getElementById('srow-' + key).classList.toggle('active', specialItemStates[key].enabled);
+  const t = document.getElementById('stoggle-' + key);
+  t.classList.toggle('on', specialItemStates[key].enabled);
+  t.textContent = specialItemStates[key].enabled ? '✓' : '+';
 }
-
-function updateSpecialFee(key, val) {
-  specialItemStates[key].fee = Number(val) || 0;
-}
-
-function updateRanges() {
-  document.getElementById('maxDriveVal').textContent = document.getElementById('maxDrive').value + ' mi';
-  const mins = parseInt(document.getElementById('estTime').value);
-  document.getElementById('estTimeVal').textContent = mins >= 60 ? (mins/60).toFixed(1).replace('.0','') + ' hr' : mins + ' min';
-}
-updateRanges();
+function updateSpecialFee(key, val) { specialItemStates[key].fee = Number(val) || 0; }
 
 // ── MODAL ────────────────────────────────────────────────
 function openModal(plan) {
@@ -788,43 +950,26 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-function closeModalOutside(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
+function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
 function goStep(n) {
-  currentStep = n;
-  [1,2,3].forEach(i => {
-    const el = document.getElementById('step'+i);
-    if(el) el.style.display = i === n ? 'block' : 'none';
-  });
+  [1,2].forEach(i => { const el = document.getElementById('step'+i); if(el) el.style.display = i===n?'block':'none'; });
   document.getElementById('savingOverlay').style.display = 'none';
   document.getElementById('successState').style.display = 'none';
   updateStepDots(n);
-  updateModalHeader(n);
+  const titles = ['Start your free trial','Set your costs & markup'];
+  const subs   = ['14 days free. Card required — charged only after trial ends.','Takes 2 minutes. Change any of this anytime.'];
+  document.getElementById('modalTitle').textContent    = titles[n-1] || '';
+  document.getElementById('modalSubtitle').textContent = subs[n-1]   || '';
   document.getElementById('modal').scrollTop = 0;
 }
-
 function updateStepDots(n) {
-  [1,2,3].forEach(i => {
-    const dot = document.getElementById('dot'+i);
-    dot.className = 'modal-step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+  [1,2].forEach(i => {
+    const d = document.getElementById('dot'+i);
+    d.className = 'modal-step-dot' + (i<n?' done':i===n?' active':'');
   });
 }
 
-function updateModalHeader(n) {
-  const titles = ['Start your free trial', 'Set your pricing', 'Get your embed code'];
-  const subs = [
-    '14 days free. Card required — charged only after trial ends.',
-    'Takes 2 minutes. Update anytime from your dashboard.',
-    'Paste one line of code on any page.'
-  ];
-  document.getElementById('modalTitle').textContent = titles[n-1];
-  document.getElementById('modalSubtitle').textContent = subs[n-1];
-  document.getElementById('modalStepDots').style.display = n > 3 ? 'none' : 'flex';
-}
-
-// ── STEP NAVIGATION ──────────────────────────────────────
 function goStep2() {
   const first = document.getElementById('m-first').value.trim();
   const last  = document.getElementById('m-last').value.trim();
@@ -833,177 +978,290 @@ function goStep2() {
   const card  = document.getElementById('m-card').value.replace(/\s/g,'');
   const exp   = document.getElementById('m-exp').value.trim();
   const cvv   = document.getElementById('m-cvv').value.trim();
-
-  if (!first || !last || !biz || !email || card.length < 16 || exp.length < 4 || cvv.length < 3) {
+  if (!first||!last||!biz||!email||card.length<16||exp.length<4||cvv.length<3) {
     alert('Please fill in all fields to continue.');
     return;
   }
-
-  // Generate company ID from biz name
-  companyId = biz.toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,30) + '_' + Date.now().toString(36);
-  document.getElementById('demoName').textContent = biz;
+  companyName = biz;
+  companyId = biz.toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,30)+'_'+Date.now().toString(36);
   goStep(2);
 }
 
-function goStep3() {
+function completeSignup() {
   const btn = document.getElementById('step2Btn');
-  btn.disabled = true;
-  btn.textContent = 'Saving...';
+  btn.disabled = true; btn.textContent = 'Saving...';
 
-  const payload = collectPricingPayload();
-
-  saveToSheet(payload).then(() => {
-    btn.disabled = false;
-    btn.textContent = 'Save pricing & get embed code →';
-    buildEmbedCode();
-    setPlatform(document.querySelector('.platform-pill.sel'), 'wordpress');
-    goStep(3);
-  }).catch(err => {
-    btn.disabled = false;
-    btn.textContent = 'Save pricing & get embed code →';
-    console.error('Sheet save error:', err);
-    // Still let them proceed — data shown in console for manual entry
-    buildEmbedCode();
-    setPlatform(document.querySelector('.platform-pill.sel'), 'wordpress');
-    goStep(3);
-  });
-}
-
-function finishSetup() {
-  [1,2,3].forEach(i => {
-    const el = document.getElementById('step' + i);
-    if(el) el.style.display = 'none';
-  });
-  document.getElementById('savingOverlay').style.display = 'none';
-  document.getElementById('successState').style.display = 'block';
-  document.getElementById('modalStepDots').style.display = 'none';
-  document.getElementById('modalTitle').textContent = "You're live!";
-  document.getElementById('modalSubtitle').textContent = '';
-}
-
-// ── DATA COLLECTION ──────────────────────────────────────
-function collectPricingPayload() {
-  const loadRates = {
-    minimum:  { low: numVal('p-min-low'),  high: numVal('p-min-high')  },
-    quarter:  { low: numVal('p-qtr-low'),  high: numVal('p-qtr-high')  },
-    half:     { low: numVal('p-half-low'), high: numVal('p-half-high') },
-    full:     { low: numVal('p-full-low'), high: numVal('p-full-high') },
+  // Pull pricing from form into userPricing
+  userPricing.loads = {
+    minimum: { low: numVal('p-min-low'),  high: numVal('p-min-high')  },
+    quarter: { low: numVal('p-qtr-low'),  high: numVal('p-qtr-high')  },
+    half:    { low: numVal('p-half-low'), high: numVal('p-half-high') },
+    full:    { low: numVal('p-full-low'), high: numVal('p-full-high') },
   };
-
-  const specialItems = {};
+  userPricing.specials = {};
   SPECIAL_ITEMS_CONFIG.forEach(item => {
-    if (specialItemStates[item.key].enabled) {
-      specialItems[item.key] = {
-        fee: specialItemStates[item.key].fee,
-        label: item.label
-      };
-    }
+    if (specialItemStates[item.key].enabled)
+      userPricing.specials[item.key] = { fee: specialItemStates[item.key].fee, label: item.label };
   });
+  userPricing.driveRate     = numVal('driveRate');
+  userPricing.laborRate     = numVal('laborRate');
+  userPricing.defaultMarkup = parseInt(document.getElementById('signupMarkup').value);
 
-  const driveSettings = {
-    maxDistanceMiles:  parseInt(document.getElementById('maxDrive').value),
-    perMileRateOver10: numVal('driveRate'),
+  const payload = {
+    action: 'signup', companyId, businessName: companyName,
+    ownerName: document.getElementById('m-first').value.trim()+' '+document.getElementById('m-last').value.trim(),
+    email: document.getElementById('m-email').value.trim(),
+    phone: document.getElementById('m-phone').value.trim(),
+    plan: currentPlan, trialStart: new Date().toISOString(),
+    ...userPricing
   };
 
-  const timeSettings = {
-    estimatedMinutes: parseInt(document.getElementById('estTime').value),
-    laborRatePerHr:   numVal('laborRate'),
-  };
-
-  return {
-    companyId,
-    businessName: document.getElementById('m-biz').value.trim(),
-    ownerName:    document.getElementById('m-first').value.trim() + ' ' + document.getElementById('m-last').value.trim(),
-    email:        document.getElementById('m-email').value.trim(),
-    phone:        document.getElementById('m-phone').value.trim(),
-    plan:         currentPlan,
-    trialStart:   new Date().toISOString(),
-    loadRates,
-    specialItems,
-    driveSettings,
-    timeSettings,
-  };
+  saveToSheet(payload).finally(() => {
+    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
+    [1,2].forEach(i => { const el=document.getElementById('step'+i); if(el) el.style.display='none'; });
+    document.getElementById('savingOverlay').style.display = 'none';
+    document.getElementById('successState').style.display  = 'block';
+    document.getElementById('modalStepDots').style.display = 'none';
+    document.getElementById('modalTitle').textContent      = "You're all set.";
+    document.getElementById('modalSubtitle').textContent   = '';
+  });
 }
 
+async function saveToSheet(payload) {
+  try {
+    await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
+  } catch(e) { console.error('Sheet save:', e); }
+}
+
+function openCalc() {
+  closeModal();
+  document.getElementById('marketingPage').style.display = 'none';
+  document.getElementById('calcPage').style.display = 'block';
+  document.body.style.overflow = '';
+  initCalc();
+}
+
+// ── CALCULATOR ───────────────────────────────────────────
+function initCalc() {
+  document.getElementById('calcNavCo').textContent = companyName;
+  document.getElementById('calcMarkup').value = userPricing.defaultMarkup;
+  document.getElementById('calcMarkupPct').textContent = userPricing.defaultMarkup + '%';
+
+  // Update load card cost labels
+  Object.keys(userPricing.loads).forEach(key => {
+    const l = userPricing.loads[key];
+    document.getElementById('cl-cost-'+key).textContent = '$'+l.low+'–$'+l.high;
+  });
+
+  // Build specials grid
+  const grid = document.getElementById('calcSpecialsGrid');
+  grid.innerHTML = '';
+  const items = Object.keys(userPricing.specials).length > 0
+    ? Object.entries(userPricing.specials).map(([k,v])=>({key:k,...v,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'📦'}))
+    : SPECIAL_ITEMS_CONFIG.map(i=>({...i}));
+
+  items.forEach(item => {
+    selectedSpecials[item.key] = false;
+    const tag = document.createElement('div');
+    tag.className = 'calc-special-tag';
+    tag.id = 'cs-'+item.key;
+    tag.onclick = () => toggleCalcSpecial(item.key);
+    tag.innerHTML = `
+      <div class="calc-special-left">
+        <span class="calc-special-icon">${item.icon}</span>
+        <span class="calc-special-name">${item.label}</span>
+      </div>
+      <span class="calc-special-fee">+$${item.fee}</span>
+    `;
+    grid.appendChild(tag);
+  });
+
+  recalc();
+  loadHistory();
+}
+
+function selectLoad(key) {
+  selectedLoad = key;
+  document.querySelectorAll('.calc-load-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('cl-'+key).classList.add('sel');
+  recalc();
+}
+
+function toggleCalcSpecial(key) {
+  selectedSpecials[key] = !selectedSpecials[key];
+  const el = document.getElementById('cs-'+key);
+  el.classList.toggle('sel', selectedSpecials[key]);
+  recalc();
+}
+
+function onMarkupSlide() {
+  const v = document.getElementById('calcMarkup').value;
+  document.getElementById('calcMarkupPct').textContent = v + '%';
+  recalc();
+}
+
+function recalc() {
+  if (!selectedLoad) {
+    document.getElementById('calcFinalPrice').textContent = 'Select a load size';
+    document.getElementById('calcBreakdown').style.display = 'none';
+    return;
+  }
+
+  const load     = userPricing.loads[selectedLoad];
+  const markup   = parseInt(document.getElementById('calcMarkup').value) / 100;
+  const miles    = parseFloat(document.getElementById('calcMiles').value)  || 0;
+  const hours    = parseFloat(document.getElementById('calcHours').value)  || 0;
+  const driveRate = userPricing.driveRate || 1.5;
+  const laborRate = userPricing.laborRate || 35;
+
+  // Special items cost
+  let specialsCost = 0;
+  const specialSrc = Object.keys(userPricing.specials).length > 0 ? userPricing.specials : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  Object.keys(selectedSpecials).forEach(k => {
+    if (selectedSpecials[k] && specialSrc[k]) specialsCost += specialSrc[k].fee;
+  });
+
+  const driveCost = Math.round(miles * 2 * driveRate); // round trip
+  const laborCost = Math.round(hours * laborRate);
+
+  const baseLow  = load.low  + specialsCost + driveCost + laborCost;
+  const baseHigh = load.high + specialsCost + driveCost + laborCost;
+
+  const quoteLow  = Math.round(baseLow  * (1 + markup));
+  const quoteHigh = Math.round(baseHigh * (1 + markup));
+
+  const priceEl = document.getElementById('calcFinalPrice');
+  if (quoteLow === quoteHigh) {
+    priceEl.textContent = '$' + quoteLow.toLocaleString();
+    priceEl.className = 'calc-result-price';
+  } else {
+    priceEl.textContent = '$' + quoteLow.toLocaleString() + '–$' + quoteHigh.toLocaleString();
+    priceEl.className = 'calc-result-price has-range';
+  }
+
+  // Breakdown
+  document.getElementById('calcBreakdown').style.display = 'flex';
+  document.getElementById('bd-load').textContent = '$'+load.low+(load.low!==load.high?'–$'+load.high:'');
+
+  const specRow = document.getElementById('bd-specials-row');
+  specRow.style.display = specialsCost > 0 ? 'flex' : 'none';
+  document.getElementById('bd-specials').textContent = '+$'+specialsCost;
+
+  const driveRow = document.getElementById('bd-drive-row');
+  driveRow.style.display = driveCost > 0 ? 'flex' : 'none';
+  document.getElementById('bd-drive').textContent = '+$'+driveCost+' ('+miles+' mi × 2 × $'+driveRate+')';
+
+  const laborRow = document.getElementById('bd-labor-row');
+  laborRow.style.display = laborCost > 0 ? 'flex' : 'none';
+  document.getElementById('bd-labor').textContent = '+$'+laborCost+' ('+hours+'hr × $'+laborRate+')';
+
+  document.getElementById('bd-cost').textContent  = '$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
+  document.getElementById('bd-markup-label').textContent = '+ '+(markup*100)+'% markup =';
+  document.getElementById('bd-quote').textContent = '$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
+}
+
+function resetCalc() {
+  selectedLoad = null;
+  Object.keys(selectedSpecials).forEach(k => {
+    selectedSpecials[k] = false;
+    const el = document.getElementById('cs-'+k);
+    if(el) el.classList.remove('sel');
+  });
+  document.querySelectorAll('.calc-load-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('calcMiles').value  = '';
+  document.getElementById('calcHours').value  = '';
+  document.getElementById('calcMarkup').value = userPricing.defaultMarkup;
+  document.getElementById('calcMarkupPct').textContent = userPricing.defaultMarkup + '%';
+  document.getElementById('calcFinalPrice').textContent = '—';
+  document.getElementById('calcBreakdown').style.display = 'none';
+}
+
+// ── HISTORY ──────────────────────────────────────────────
+function saveJob() {
+  if (!selectedLoad) { alert('Select a load size first.'); return; }
+  const priceText = document.getElementById('calcFinalPrice').textContent;
+  if (priceText === '—') return;
+
+  const activeSpecials = Object.keys(selectedSpecials).filter(k => selectedSpecials[k]);
+  const specialSrc = Object.keys(userPricing.specials).length > 0 ? userPricing.specials : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+
+  const entry = {
+    id: Date.now(),
+    price: priceText,
+    load: selectedLoad,
+    specials: activeSpecials.map(k => specialSrc[k]?.label || k),
+    miles: parseFloat(document.getElementById('calcMiles').value) || 0,
+    hours: parseFloat(document.getElementById('calcHours').value) || 0,
+    markup: parseInt(document.getElementById('calcMarkup').value),
+    ts: new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }),
+  };
+
+  jobHistory.unshift(entry);
+  if (jobHistory.length > 50) jobHistory = jobHistory.slice(0, 50);
+  persistHistory();
+  renderHistory();
+  showToast('✓ Job saved to history');
+}
+
+function loadHistory() {
+  try { jobHistory = JSON.parse(localStorage.getItem('ww_job_history') || '[]'); } catch(e) { jobHistory = []; }
+  renderHistory();
+}
+function persistHistory() {
+  try { localStorage.setItem('ww_job_history', JSON.stringify(jobHistory)); } catch(e) {}
+}
+function clearHistory() {
+  if (!confirm('Clear all job history?')) return;
+  jobHistory = []; persistHistory(); renderHistory();
+}
+
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!jobHistory.length) {
+    list.innerHTML = '<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';
+    return;
+  }
+  const loadLabels = { minimum:'Min Load', quarter:'Quarter Load', half:'Half Load', full:'Full Truck' };
+  list.innerHTML = jobHistory.map(j => `
+    <div class="history-item">
+      <div class="history-item-top">
+        <div class="history-item-price">${j.price}</div>
+        <div class="history-item-time">${j.ts}</div>
+      </div>
+      <div class="history-item-detail">
+        ${loadLabels[j.load]||j.load}${j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}
+      </div>
+      <div class="history-item-markup">${j.markup}% markup</div>
+    </div>
+  `).join('');
+}
+
+function openHistory()  { document.getElementById('historyPanel').classList.add('open'); }
+function closeHistory() { document.getElementById('historyPanel').classList.remove('open'); }
+function closeHistoryOutside(e) { if (e.target === document.getElementById('historyPanel')) closeHistory(); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── UTILS ────────────────────────────────────────────────
 function numVal(id) { return Number(document.getElementById(id).value) || 0; }
 
-// ── GOOGLE SHEET SAVE ────────────────────────────────────
-async function saveToSheet(payload) {
-  // POST to your Apps Script endpoint
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'signup',
-      ...payload
-    }),
-    // Apps Script doesn't support CORS preflight well — use no-cors in production
-    // or configure CORS in your Apps Script doPost to return proper headers
-    mode: 'no-cors',
-  });
-  // no-cors returns opaque response — we can't read it but the write goes through
-  return true;
-}
-
-// ── EMBED CODE ───────────────────────────────────────────
-function buildEmbedCode() {
-  const code = `<script src="https://quotetool.woodswastemn.com/embed.js" data-company="${companyId}"><\/script>`;
-  document.getElementById('embedCodeBlock').textContent = code;
-}
-
-function copyEmbed() {
-  const code = document.getElementById('embedCodeBlock').textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy code'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-
-function setPlatform(el, key) {
-  document.querySelectorAll('.platform-pill').forEach(p => p.classList.remove('sel'));
-  if(el) el.classList.add('sel');
-  document.getElementById('platformInstructions').innerHTML = PLATFORM_INSTRUCTIONS[key] || '';
-}
-
-// ── CARD FORMAT ──────────────────────────────────────────
 function fmt(el, type) {
   if (type === 'card') {
     let v = el.value.replace(/\D/g,'').slice(0,16);
     el.value = v.replace(/(.{4})/g,'$1 ').trim();
   } else {
     let v = el.value.replace(/\D/g,'').slice(0,4);
-    if (v.length >= 3) v = v.slice(0,2) + ' / ' + v.slice(2);
+    if (v.length >= 3) v = v.slice(0,2)+' / '+v.slice(2);
     el.value = v;
   }
 }
 
-// ── DEMO WIDGET ──────────────────────────────────────────
-const demoRanges = { 1:'$150–$200', 2:'$225–$300', 3:'$325–$425', 4:'$500–$650' };
-function demoSelect(n) {
-  [1,2,3,4].forEach(i => document.getElementById('dc'+i).classList.remove('sel'));
-  document.getElementById('dc'+n).classList.add('sel');
-  document.getElementById('demoRange').textContent = demoRanges[n];
-  setTimeout(() => {
-    document.getElementById('demoStep1').style.display = 'none';
-    document.getElementById('demoStep2').style.display = 'block';
-    document.getElementById('dp2').classList.add('on');
-  }, 300);
-}
-function demoBook() {
-  document.getElementById('demoStep2').style.display = 'none';
-  document.getElementById('demoStep3').style.display = 'block';
-  document.getElementById('dp3').classList.add('on');
-  setTimeout(() => {
-    document.getElementById('demoStep3').style.display = 'none';
-    document.getElementById('demoStep1').style.display = 'block';
-    ['dp2','dp3'].forEach(id => document.getElementById(id).classList.remove('on'));
-    [1,2,3,4].forEach(i => document.getElementById('dc'+i).classList.remove('sel'));
-  }, 2800);
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeModal(); closeHistory(); } });
 </script>
 </body>
 </html>
