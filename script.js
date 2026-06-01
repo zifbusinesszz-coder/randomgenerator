@@ -184,4 +184,137 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     });
 });
 
-// Form submit
+// ── JOB ACTUAL & INSIGHTS ──
+let actualJobId = null;
+
+function openActual(jobId) {
+  const job = jobHistory.find(j => j.id === jobId);
+  if (!job) return;
+  actualJobId = jobId;
+  document.getElementById('actualQuotedPrice').textContent = job.price;
+  const ll = {minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
+  const parts = [ll[job.load]||job.load];
+  if (job.specials && job.specials.length) parts.push(job.specials.join(', '));
+  if (job.miles) parts.push(job.miles+' mi');
+  document.getElementById('actualQuotedDetail').textContent = parts.join(' · ');
+  document.getElementById('actualCharged').value = '';
+  document.getElementById('actualHours').value = job.hours || '';
+  document.getElementById('actualNotes').value = job.actual?.notes || '';
+  document.getElementById('actualDiff').style.display = 'none';
+  document.getElementById('actualPanel').classList.add('open');
+}
+function closeActual() { document.getElementById('actualPanel').classList.remove('open'); }
+function closeActualOutside(e) { if (e.target === document.getElementById('actualPanel')) closeActual(); }
+
+function onActualInput() {
+  const charged = parseFloat(document.getElementById('actualCharged').value) || 0;
+  const job = jobHistory.find(j => j.id === actualJobId);
+  if (!job || !charged) { document.getElementById('actualDiff').style.display = 'none'; return; }
+  const quotedMid = parseFloat(job.price.replace(/[^0-9.]/g,'')) || 0;
+  const diff = charged - quotedMid;
+  const diffEl = document.getElementById('actualDiff');
+  diffEl.style.display = 'block';
+  diffEl.className = 'actual-diff ' + (diff >= 0 ? 'over' : 'under');
+  document.getElementById('actualDiffLabel').textContent = diff >= 0 ? 'Charged more than quoted' : 'Charged less than quoted';
+  document.getElementById('actualDiffVal').textContent = (diff >= 0 ? '+' : '') + '$' + Math.abs(Math.round(diff));
+  document.getElementById('actualDiffSub').textContent = diff >= 0 ? 'Good — you captured extra value' : 'You left money on the table';
+}
+
+function saveActual() {
+  const job = jobHistory.find(j => j.id === actualJobId);
+  if (!job) return;
+  const charged = parseFloat(document.getElementById('actualCharged').value) || null;
+  const hours = parseFloat(document.getElementById('actualHours').value) || null;
+  const notes = document.getElementById('actualNotes').value.trim();
+  job.actual = { charged, hours, notes, loggedAt: new Date().toISOString() };
+  persistHistory(); renderHistory();
+  closeActual();
+  showToast('✓ Job outcome saved');
+  refreshInsightsBtn();
+}
+
+function refreshInsightsBtn() {
+  const hasActuals = jobHistory.some(j => j.actual?.charged);
+  const btn = document.getElementById('insightsNavBtn');
+  if (btn) btn.style.display = hasActuals ? 'inline-flex' : 'none';
+}
+
+function openInsights() {
+  renderInsights();
+  document.getElementById('insightsPanel').classList.add('open');
+}
+function closeInsights() { document.getElementById('insightsPanel').classList.remove('open'); }
+function closeInsightsOutside(e) { if (e.target === document.getElementById('insightsPanel')) closeInsights(); }
+
+function renderInsights() {
+  const body = document.getElementById('insightsBody');
+  const logged = jobHistory.filter(j => j.actual?.charged);
+  if (logged.length < 2) {
+    body.innerHTML = '<div class="insights-empty">Log at least 2 job outcomes to see insights.<br><br>After saving a quote, tap "How\'d it go?" in history to record what actually happened.</div>';
+    return;
+  }
+  const diffs = logged.map(j => {
+    const quoted = parseFloat(j.price.replace(/[^0-9.]/g,'')) || 0;
+    return j.actual.charged - quoted;
+  });
+  const avgDiff = diffs.reduce((a,b) => a+b, 0) / diffs.length;
+  const totalLeft = diffs.filter(d => d < 0).reduce((a,b) => a+b, 0);
+  const winRate = Math.round((diffs.filter(d => d >= 0).length / diffs.length) * 100);
+
+  const loadKeys = ['minimum','quarter','half','full'];
+  const loadLabels = {minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+  const loadStats = {};
+  loadKeys.forEach(k => {
+    const jobs = logged.filter(j => j.load === k);
+    if (!jobs.length) return;
+    const d = jobs.map(j => j.actual.charged - (parseFloat(j.price.replace(/[^0-9.]/g,''))||0));
+    loadStats[k] = { count: jobs.length, avgDiff: d.reduce((a,b)=>a+b,0)/d.length };
+  });
+
+  const alerts = [];
+  Object.entries(loadStats).forEach(([k,s]) => {
+    if (s.count >= 2 && s.avgDiff < -30) alerts.push(`Your <strong>${loadLabels[k]}</strong> quotes are averaging <strong>$${Math.abs(Math.round(s.avgDiff))} under</strong> what you charge. Consider raising that load rate.`);
+  });
+  const timeLogged = logged.filter(j => j.actual?.hours && j.hours);
+  if (timeLogged.length >= 2) {
+    const avgOver = timeLogged.map(j => j.actual.hours - j.hours).reduce((a,b)=>a+b,0) / timeLogged.length;
+    if (avgOver > 0.4) alerts.push(`Jobs are taking <strong>${avgOver.toFixed(1)} hours longer</strong> on average than you quote. Your labor cost may be underestimated.`);
+  }
+
+  let html = '';
+  if (alerts.length) {
+    html += '<div class="insights-alert"><div class="insights-alert-label">⚡ Heads up</div>' + alerts.map(a => `<div class="insights-alert-text">${a}</div>`).join('<br>') + '</div>';
+  }
+  html += `<div class="insights-stat-grid">
+    <div class="insights-stat ${avgDiff >= 0 ? 'positive' : 'negative'}">
+      <div class="insights-stat-label">Avg vs quoted</div>
+      <div class="insights-stat-val">${avgDiff >= 0 ? '+' : ''}$${Math.abs(Math.round(avgDiff))}</div>
+      <div class="insights-stat-sub">${logged.length} jobs logged</div>
+    </div>
+    <div class="insights-stat ${winRate >= 50 ? 'positive' : 'negative'}">
+      <div class="insights-stat-label">Quoted right</div>
+      <div class="insights-stat-val">${winRate}%</div>
+      <div class="insights-stat-sub">charged ≥ quoted</div>
+    </div>
+    <div class="insights-stat negative">
+      <div class="insights-stat-label">Left on table</div>
+      <div class="insights-stat-val">$${Math.abs(Math.round(totalLeft))}</div>
+      <div class="insights-stat-sub">total undercharges</div>
+    </div>
+    <div class="insights-stat">
+      <div class="insights-stat-label">Jobs tracked</div>
+      <div class="insights-stat-val">${logged.length}</div>
+      <div class="insights-stat-sub">of ${jobHistory.length} total</div>
+    </div>
+  </div>`;
+
+  if (Object.keys(loadStats).length) {
+    html += '<div class="insights-section-title">By load size</div>';
+    Object.entries(loadStats).forEach(([k,s]) => {
+      const cls = s.avgDiff > 10 ? 'pos' : s.avgDiff < -10 ? 'neg' : 'neu';
+      const sign = s.avgDiff >= 0 ? '+' : '';
+      html += `<div class="insights-load-row"><div class="insights-load-name">${loadLabels[k]}</div><div class="insights-load-stats"><div class="insights-load-avg">${sign}$${Math.abs(Math.round(s.avgDiff))} avg</div><div class="insights-load-diff ${cls}">${s.count} job${s.count>1?'s':''} · ${s.avgDiff > 10 ? 'charging well' : s.avgDiff < -10 ? 'undercharging' : 'on track'}</div></div></div>`;
+    });
+  }
+  body.innerHTML = html;
+}
