@@ -1553,14 +1553,14 @@ Rules:
 - Only include special items you can actually see
 - specialsFound must use exact labels from: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}`;
 
-      const response=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{ 'Content-Type':'application/json', 'x-api-key':ANTHROPIC_API_KEY, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-ipc':'true' },
-        body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:300, messages:[{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:mediaType, data:b64 } },{ type:'text', text:prompt }] }] })
-      });
-      const data=await response.json();
-      if(!response.ok) throw new Error(data.error?.message||'API error');
-      const text=data.content?.[0]?.text||'';
+    const response=await api({
+    action:'aiAnalyzePhoto',
+    image:b64,
+    mediaType:aiFiles[i].type||'image/jpeg',
+    prompt:prompt
+            });
+    if(!response.success) throw new Error(response.error||'AI error');
+      const text=response.text;
       let parsed; try{ parsed=JSON.parse(text.replace(/```json|```/g,'').trim()); }catch(e){ throw new Error('Could not parse AI response'); }
       const loadKey=parsed.loadKey||'quarter';
       const loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter;
