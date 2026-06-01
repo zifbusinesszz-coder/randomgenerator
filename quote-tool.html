@@ -1589,7 +1589,7 @@ function renderInsights(){
     return;
   }
 
-  const diffs=logged.map(j=>{const quoted=parseFloat(j.price.replace(/[^0-9,]/g,'').split('–')[0])||0;return j.actual.charged-quoted;});
+  const diffs=logged.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
   const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
   const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
   const totalGained=diffs.filter(d=>d>0).reduce((a,b)=>a+b,0);
