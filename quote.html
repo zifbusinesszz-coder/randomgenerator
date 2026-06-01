@@ -1012,10 +1012,23 @@ let userPricing = {
           applyPricing(res.pricing);
           openCalcDirect();
         } else {
-          clearSession();
+          // Session invalid on server but we have local pricing — just open anyway
+          const localPricing = localStorage.getItem('ww_pricing');
+          if (localPricing) {
+            try { applyPricing(JSON.parse(localPricing)); } catch(e) {}
+          }
+          openCalcDirect();
         }
       })
-      .catch(() => { hideSaving(); clearSession(); });
+      .catch(() => {
+        hideSaving();
+        // Network error — open with whatever pricing we have locally
+        const localPricing = localStorage.getItem('ww_pricing');
+        if (localPricing) {
+          try { applyPricing(JSON.parse(localPricing)); } catch(e) {}
+        }
+        openCalcDirect();
+      });
   }
 })();
 
