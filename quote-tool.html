@@ -1601,7 +1601,7 @@ function renderInsights(){
   const loadStats={};
   ['minimum','quarter','half','full'].forEach(k=>{
     const jobs=logged.filter(j=>j.load===k);if(!jobs.length)return;
-    const d=jobs.map(j=>j.actual.charged-(parseFloat(j.price.replace(/[^0-9.]/g,''))||0));
+    const d=jobs.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
     loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
   });
 
