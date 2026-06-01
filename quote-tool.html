@@ -1042,6 +1042,22 @@ const SPECIAL_ITEMS_CONFIG = [
   { key:'paint',     icon:'paint-bucket', label:'Paint Cans',   fee:20  },
 ];
 
+  function getVisualCue(key){
+  const cues={
+    mattress:'flat rectangular padded surface, usually white/gray/striped, often leaning or lying flat',
+    boxspring:'flat rectangular grid frame, looks like a mattress but with visible coil/grid structure underneath',
+    fridge:'large white or stainless steel box with one or two doors, taller than wide',
+    washer:'white or gray cylindrical or boxy appliance, front-load has round door, top-load has flat lid',
+    tv:'flat black screen, thin profile, may have stand or be face-down',
+    tire:'black rubber ring, may be on a rim or bare, often stacked',
+    piano:'large wooden keyboard instrument, upright has vertical strings, grand is horizontal with lid',
+    hottub:'large molded plastic or acrylic tub, usually square or oval, 5-8 feet across',
+    ac:'metal/plastic box unit, window units are rectangular with vents, central units are outdoor metal boxes',
+    paint:'cylindrical metal cans, often stacked or grouped, may show paint drips on exterior',
+  };
+  return cues[key]||'look carefully for this item';
+}
+
 function itemIcon(key) {
   const cfg = SPECIAL_ITEMS_CONFIG.find(x => x.key === key);
   if (!cfg) return '<i class="ph ph-package" style="font-size:15px;"></i>';
