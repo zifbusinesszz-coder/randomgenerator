@@ -1036,14 +1036,20 @@ let userPricing = {
 //  API HELPER
 // ════════════════════════════════════════
 async function api(payload) {
+  const formData = new FormData();
+  formData.append('payload', JSON.stringify(payload));
+  
   const res = await fetch(API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: formData,
   });
-  return res.json();
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch(e) {
+    throw new Error('Bad response: ' + text.slice(0, 100));
+  }
 }
-
 // ════════════════════════════════════════
 //  MODAL
 // ════════════════════════════════════════
