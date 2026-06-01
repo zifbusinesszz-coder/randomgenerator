@@ -1535,7 +1535,7 @@ Markup: ${markup}%`;
     try{
       const b64=await readFileBase64(aiFiles[i]);
       const mediaType=aiFiles[i].type||'image/jpeg';
-const prompt=`You are a highly experienced junk removal estimator for Wood's Waste in Farmington, MN. You have 10+ years identifying items in junk piles and you never miss a billable item.
+const prompt=`You are looking at a real junk removal job. Your job is to protect the operator from underpricing. Every missed item costs them money. Be thorough and aggressive.
 
 ${pricingContext}
 
@@ -1554,6 +1554,8 @@ Go through this list and ask yourself "do I see this?" for each one:
 □ Hot Tub (even partially disassembled)
 □ A/C Unit (window unit, portable unit, or central unit)
 □ Paint Cans (any number of cans, full or empty)
+
+There can be multiple of each, if so count that towards the price.
 
 If you see ANY of the above, include them in specialsFound using the EXACT label from this list: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}
 
