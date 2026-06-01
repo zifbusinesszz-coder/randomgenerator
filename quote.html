@@ -7,13 +7,13 @@
 <meta name="description" content="Know exactly what to charge before you call the customer back.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<!-- Stripe.js — loads before anything else -->
 <script src="https://js.stripe.com/v3/"></script>
 <style>
 :root {
   --black:#0a0a0a;--white:#ffffff;--off:#f4f4f2;--gray:#777;--border:#e2e2e0;
   --green:#1D9E75;--green-l:#e1f5ee;--green-dk:#0F6E56;
   --red:#c0392b;--red-l:#fff0f0;
+  --gold:#F5A623;
   --d-bg:#0a0a0a;--d-surface:#141414;--d-card:#1c1c1c;
   --d-border:rgba(255,255,255,0.1);--d-border2:rgba(255,255,255,0.18);
   --d-text:#ffffff;--d-muted:rgba(255,255,255,0.45);--d-faint:rgba(255,255,255,0.2);
@@ -21,34 +21,43 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-logo-mark{width:32px;height:32px;background:var(--black);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:white;}
-.nav-logo-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--black);line-height:1.1;}
-.nav-logo-sub{font-size:10px;color:var(--gray);font-weight:400;letter-spacing:0.04em;}
+.nav-logo img{height:38px;width:auto;display:block;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;line-height:1.1;}
+.nav-logo-sub{font-size:10px;color:rgba(255,255,255,0.4);font-weight:400;letter-spacing:0.04em;}
 .nav-links{display:flex;align-items:center;gap:28px;}
-.nav-links a{font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;transition:color .2s;}
-.nav-links a:hover{color:var(--black);}
-.nav-cta{background:var(--black)!important;color:white!important;padding:8px 18px;border-radius:6px;font-size:13px!important;font-weight:600!important;}
-.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;max-width:1100px;margin:0 auto;padding:120px 40px 80px;}
-.hero::before{content:'';position:fixed;inset:0;z-index:-1;background-image:repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(0,0,0,.016) 60px,rgba(0,0,0,.016) 61px);pointer-events:none;}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--black);color:white;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:4px;margin-bottom:20px;}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:var(--black);margin-bottom:20px;}
-.hero h1 u{text-decoration:none;border-bottom:4px solid var(--black);}
-.hero-sub{font-size:16px;color:var(--gray);line-height:1.8;max-width:440px;margin-bottom:32px;}
+.nav-links a{font-size:13px;font-weight:500;color:rgba(255,255,255,0.55);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:white;}
+.nav-cta{background:white!important;color:var(--black)!important;padding:8px 18px;border-radius:6px;font-size:13px!important;font-weight:600!important;}
+.nav-cta:hover{background:#eee!important;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:60px;max-width:1100px;margin:0 auto;padding:120px 40px 80px;position:relative;}
+.hero-bg{position:fixed;inset:0;z-index:-1;background:#0a0a0a;}
+.hero-bg::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(255,255,255,.012) 60px,rgba(255,255,255,.012) 61px);}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+.hero-orb-1{width:500px;height:500px;top:-100px;right:-100px;background:radial-gradient(circle,rgba(29,158,117,0.18) 0%,transparent 70%);}
+.hero-orb-2{width:400px;height:400px;bottom:-80px;left:-80px;background:radial-gradient(circle,rgba(245,166,35,0.08) 0%,transparent 70%);}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.12);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:4px;margin-bottom:20px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:white;margin-bottom:20px;}
+.hero h1 .highlight{color:var(--green);}
+.hero-sub{font-size:16px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:440px;margin-bottom:32px;}
 .hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-.btn-primary{background:var(--black);color:white;padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
-.btn-primary:hover{background:#333;transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.15);}
-.btn-ghost{background:transparent;color:var(--black);padding:13px 24px;border-radius:8px;font-size:14px;font-weight:500;border:1.5px solid var(--border);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
-.btn-ghost:hover{border-color:var(--black);}
-.hero-proof{display:flex;align-items:center;gap:14px;margin-top:24px;font-size:12px;color:var(--gray);}
+.btn-primary{background:white;color:var(--black);padding:13px 28px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .2s;}
+.btn-primary:hover{background:#eee;transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.3);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.7);padding:13px 24px;border-radius:8px;font-size:14px;font-weight:500;border:1.5px solid rgba(255,255,255,0.15);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.4);color:white;}
+.hero-proof{display:flex;align-items:center;gap:14px;margin-top:24px;font-size:12px;color:rgba(255,255,255,0.4);}
 .hero-proof-ava{display:flex;}
-.ava{width:28px;height:28px;border-radius:50%;border:2px solid white;background:var(--black);color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-8px;}
+.ava{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:#333;color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-8px;}
 .ava:first-child{margin-left:0;}
 .hero-phone{display:flex;justify-content:center;align-items:center;}
-.phone-frame{width:280px;background:var(--black);border-radius:36px;padding:12px;box-shadow:0 32px 80px rgba(0,0,0,.25);}
+.phone-frame{width:280px;background:#111;border-radius:36px;padding:12px;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,0.06);}
 .phone-notch{width:80px;height:6px;background:#222;border-radius:3px;margin:0 auto 14px;}
-.phone-screen{background:#111;border-radius:26px;padding:18px 16px 20px;}
+.phone-screen{background:#0d0d0d;border-radius:26px;padding:18px 16px 20px;}
 .phone-app-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .phone-app-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:900;color:white;}
 .phone-app-badge{font-size:9px;font-weight:700;background:var(--green);color:white;padding:2px 7px;border-radius:10px;letter-spacing:.05em;}
@@ -72,14 +81,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;d
 .phone-result-price{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:white;}
 .phone-result-breakdown{font-size:9px;color:rgba(255,255,255,.4);margin-top:3px;}
 .phone-result-btn{display:block;width:100%;margin-top:8px;background:var(--green);color:white;border:none;border-radius:6px;padding:8px;font-size:10px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;cursor:pointer;}
-.strip{background:var(--off);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 40px;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;}
-.strip-item{font-size:13px;color:var(--gray);display:flex;align-items:center;gap:8px;}
-.strip-item strong{color:var(--black);}
-section{padding:90px 40px;}
+
+/* ── PROMO BANNER (matches woodswastemn.com style) ── */
+.promo-banner{position:relative;overflow:hidden;padding:28px 40px;background:#111;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);}
+.promo-banner::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.015) 41px);}
+.promo-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.promo-left{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.promo-badge{background:var(--gold);color:var(--black);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:4px;}
+.promo-text{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;}
+.promo-text span{color:var(--green);}
+.promo-sub{font-size:13px;color:rgba(255,255,255,0.45);}
+.promo-link{font-size:13px;font-weight:600;color:var(--black);background:white;padding:9px 20px;border-radius:6px;text-decoration:none;white-space:nowrap;transition:background .2s;}
+.promo-link:hover{background:#eee;}
+
+/* ── STRIP ── */
+.strip{background:#111;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:20px 40px;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;}
+.strip-item{font-size:13px;color:rgba(255,255,255,0.45);display:flex;align-items:center;gap:8px;}
+.strip-item strong{color:white;}
+
+/* ── SECTIONS ── */
+section.light{background:var(--white);}
+section.dark{background:#0a0a0a;}
+section.mid{background:#f4f4f2;}
 .section-inner{max-width:1000px;margin:0 auto;}
 .section-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin-bottom:10px;}
+.section-eyebrow.light-text{color:rgba(255,255,255,0.4);}
 .section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-1.5px;color:var(--black);margin-bottom:40px;max-width:560px;line-height:1.1;}
-.origin{background:white;}
+.section-title.white{color:white;}
+
+/* origin */
 .origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
 .origin-body p{font-size:15px;color:var(--gray);line-height:1.85;margin-bottom:16px;}
 .origin-stat-stack{display:flex;flex-direction:column;gap:16px;}
@@ -89,30 +119,37 @@ section{padding:90px 40px;}
 .origin-stat:hover::before{transform:scaleX(1);}
 .origin-stat-num{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:var(--black);letter-spacing:-1px;}
 .origin-stat-label{font-size:13px;color:var(--gray);margin-top:4px;line-height:1.5;}
-.how{background:var(--off);}
+
+/* steps */
 .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
 .step-card{background:white;border:1px solid var(--border);border-radius:14px;padding:28px;}
 .step-num{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;}
 .step-icon{font-size:26px;margin-bottom:12px;display:block;}
 .step-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;}
 .step-desc{font-size:13px;color:var(--gray);line-height:1.75;}
-.features{background:white;}
+
+/* features */
 .features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
 .feat-card{border:1px solid var(--border);border-radius:12px;padding:26px;transition:all .2s;position:relative;overflow:hidden;}
 .feat-card:hover{border-color:var(--black);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.06);}
 .feat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--black);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
 .feat-card:hover::after{transform:scaleX(1);}
+.feat-card.pro-feat{border-color:rgba(29,158,117,0.3);background:linear-gradient(135deg,rgba(29,158,117,0.03) 0%,transparent 100%);}
+.feat-card.pro-feat::after{background:var(--green);}
+.feat-card.pro-feat:hover{border-color:var(--green);}
 .feat-icon{font-size:24px;margin-bottom:12px;display:block;}
 .feat-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--black);margin-bottom:6px;}
 .feat-desc{font-size:13px;color:var(--gray);line-height:1.75;}
-.pricing{background:var(--off);}
+.pro-badge-inline{display:inline-block;background:var(--green);color:white;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;}
+
+/* pricing */
 .pricing-inner{max-width:720px;margin:0 auto;}
 .pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 .pricing-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:30px 26px;position:relative;transition:all .2s;}
 .pricing-card:hover{border-color:#888;}
 .pricing-card.featured{background:var(--black);border-color:var(--black);}
 .pricing-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--black);color:white;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;white-space:nowrap;}
-.pricing-card.featured .pricing-badge{background:white;color:var(--black);}
+.pricing-card.featured .pricing-badge{background:var(--green);color:white;}
 .pricing-plan{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
 .pricing-card.featured .pricing-plan{color:rgba(255,255,255,.5);}
 .pricing-price{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;letter-spacing:-2px;margin-bottom:4px;}
@@ -125,36 +162,49 @@ section{padding:90px 40px;}
 .pricing-card.featured .pf{border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.8);}
 .pf:last-child{border-bottom:none;}
 .chk{font-size:12px;font-weight:700;}
+.chk-green{color:var(--green);}
 .btn-plan-dark{display:block;width:100%;padding:11px;background:var(--black);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:background .2s;}
 .btn-plan-dark:hover{background:#333;}
-.btn-plan-light{display:block;width:100%;padding:11px;background:white;color:var(--black);border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:background .2s;}
-.btn-plan-light:hover{background:#f0f0f0;}
+.btn-plan-green{display:block;width:100%;padding:11px;background:var(--green);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:background .2s;}
+.btn-plan-green:hover{background:var(--green-dk);}
 .pricing-note{text-align:center;font-size:12px;color:var(--gray);margin-top:18px;}
-.testimonial{background:white;}
+
+/* testimonial */
 .testimonial-inner{max-width:680px;margin:0 auto;text-align:center;}
-.stars{font-size:18px;letter-spacing:2px;margin-bottom:18px;}
+.stars{font-size:18px;letter-spacing:2px;margin-bottom:18px;color:var(--gold);}
 .testimonial-quote{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2rem);color:var(--black);line-height:1.55;margin-bottom:20px;font-weight:700;}
 .testimonial-author{font-size:13px;color:var(--gray);font-weight:500;}
-.cta-bottom{background:var(--black);text-align:center;position:relative;overflow:hidden;padding:90px 40px;}
+
+/* CTA bottom — dark like main site */
+.cta-bottom{background:#111;text-align:center;position:relative;overflow:hidden;padding:90px 40px;}
 .cta-bottom::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px);}
+.cta-bottom-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(29,158,117,0.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
 .cta-bottom h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:900;color:white;letter-spacing:-2px;margin-bottom:12px;position:relative;}
 .cta-bottom p{font-size:16px;color:rgba(255,255,255,.45);margin-bottom:28px;position:relative;}
 .cta-bottom .btn-primary{background:white;color:var(--black);position:relative;}
 .cta-bottom .btn-primary:hover{background:#eee;}
-footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);padding:32px 40px;}
+
+/* footer — dark like main site */
+footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32px 40px;}
 .footer-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-.footer-logo{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white;}
+.footer-logo{display:flex;align-items:center;gap:10px;}
+.footer-logo img{height:32px;width:auto;}
+.footer-logo-text{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white;}
 .footer-links{display:flex;gap:24px;}
 .footer-links a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
 .footer-links a:hover{color:rgba(255,255,255,.7);}
 .footer-copy{font-size:12px;color:rgba(255,255,255,.25);}
 
 /* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
 .modal-overlay.open{display:flex;}
-.modal{background:white;border-radius:20px;width:100%;max-width:600px;box-shadow:0 40px 100px rgba(0,0,0,.3);animation:modalIn .25s ease both;margin:auto;}
+.modal{background:white;border-radius:20px;width:100%;max-width:600px;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:modalIn .25s ease both;margin:auto;}
 @keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
 .modal-header{background:var(--black);padding:24px 28px 20px;border-radius:20px 20px 0 0;position:relative;}
+.modal-header-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.modal-header-logo img{height:32px;width:auto;}
+.modal-header-logo-text{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:white;line-height:1.1;}
+.modal-header-logo-sub{font-size:10px;color:rgba(255,255,255,0.35);}
 .modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:white;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .modal-close:hover{background:rgba(255,255,255,.2);}
 .modal-plan-badge{display:inline-block;background:rgba(255,255,255,.12);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:4px 10px;border-radius:4px;margin-bottom:10px;}
@@ -172,8 +222,7 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .modal-trial-box strong{color:var(--black);}
 .form-grid{display:flex;flex-direction:column;gap:14px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.field{display:flex;flex-direction:column;gap:5px;}
+.field{display:flex;flex-direction:column;gap:5px;position:relative;}
 .field label{font-size:12px;font-weight:600;color:var(--black);}
 .field input,.field select{padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;background:white;color:var(--black);}
 .field input:focus,.field select:focus{border-color:var(--black);}
@@ -181,10 +230,7 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .field .error-hint{font-size:11px;color:var(--red);display:none;}
 .field.has-error input{border-color:var(--red);}
 .field.has-error .error-hint{display:block;}
-/* phone field valid indicator */
 .field.phone-valid input{border-color:var(--green);}
-.field.phone-valid::after{content:'✓';color:var(--green);font-size:12px;font-weight:700;position:absolute;right:12px;top:50%;transform:translateY(-50%);}
-.field{position:relative;}
 .divider{height:1px;background:var(--border);margin:4px 0;}
 .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:2px;}
 .stripe-card-wrap{border:1px solid var(--border);border-radius:7px;padding:10px 12px;transition:border-color .2s;background:white;}
@@ -203,8 +249,6 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .fine-print{font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.5;}
 .err-banner{background:var(--red-l);border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none;}
 .err-banner.show{display:block;}
-
-/* 2FA step */
 .twofa-wrap{text-align:center;padding:10px 0;}
 .twofa-icon{font-size:40px;margin-bottom:12px;}
 .twofa-desc{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
@@ -217,8 +261,6 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .twofa-resend a{color:var(--black);font-weight:600;cursor:pointer;text-decoration:none;}
 .twofa-resend a:hover{text-decoration:underline;}
 .twofa-resend .countdown{font-weight:600;color:var(--gray);}
-
-/* Pricing setup step */
 .pricing-section{margin-bottom:22px;}
 .pricing-section-title{font-size:13px;font-weight:700;color:var(--black);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
 .load-row{display:grid;grid-template-columns:130px 1fr 1fr;gap:10px;align-items:center;margin-bottom:8px;}
@@ -262,14 +304,15 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 #calcPage{display:none;min-height:100vh;background:var(--d-bg);color:var(--d-text);}
 .calc-nav{height:58px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--d-surface);border-bottom:1px solid var(--d-border);position:sticky;top:0;z-index:50;}
 .calc-nav-left{display:flex;align-items:center;gap:12px;}
-.calc-nav-mark{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:white;flex-shrink:0;}
-.calc-nav-logo{font-family:'Playfair Display',serif;font-size:15px;font-weight:900;color:var(--d-text);}
+.calc-nav-logo-img{height:30px;width:auto;}
 .calc-nav-co{font-size:11px;color:var(--d-muted);}
 .calc-nav-right{display:flex;align-items:center;gap:8px;}
 .calc-icon-btn{font-size:12px;font-weight:600;color:var(--d-muted);background:rgba(255,255,255,.06);border:1px solid var(--d-border);padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;}
 .calc-icon-btn:hover{color:var(--d-text);background:rgba(255,255,255,.1);border-color:var(--d-border2);}
 .calc-icon-btn.logout{color:rgba(255,100,100,.7);}
 .calc-icon-btn.logout:hover{color:#ff6b6b;background:rgba(255,100,100,.08);border-color:rgba(255,100,100,.2);}
+.calc-icon-btn.ai-btn{color:#5DCAA5;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.08);}
+.calc-icon-btn.ai-btn:hover{color:#7DDBBA;background:rgba(29,158,117,.15);border-color:rgba(29,158,117,.5);}
 .calc-body{max-width:480px;margin:0 auto;padding:24px 20px 80px;}
 .calc-section{margin-bottom:24px;}
 .calc-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--d-faint);margin-bottom:10px;}
@@ -319,10 +362,72 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .calc-btn-save:hover{background:var(--green-dk);}
 .calc-btn-reset{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border:1px solid var(--d-border);border-radius:8px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
 .calc-btn-reset:hover{color:white;border-color:var(--d-border2);}
+
+/* ── AI PHOTO PANEL ── */
+.ai-panel{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);}
+.ai-panel.open{display:block;}
+.ai-drawer{position:absolute;right:0;top:0;bottom:0;width:420px;background:var(--d-surface);border-left:1px solid var(--d-border);display:flex;flex-direction:column;animation:drawerIn .22s ease both;overflow-y:auto;}
+@keyframes drawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.ai-header{padding:18px 20px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;}
+.ai-header-left{display:flex;align-items:center;gap:10px;}
+.ai-header-icon{width:32px;height:32px;background:rgba(29,158,117,0.2);border:1px solid rgba(29,158,117,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.ai-header-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;}
+.ai-header-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
+.ai-header-badge{font-size:9px;font-weight:700;background:var(--green);color:white;padding:2px 8px;border-radius:10px;letter-spacing:.05em;}
+.ai-close{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.6);width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.ai-body{padding:20px;flex:1;}
+.ai-markup-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;background:rgba(29,158,117,.08);border:1px solid rgba(29,158,117,.2);border-radius:10px;padding:12px 14px;}
+.ai-markup-label{font-size:11px;color:rgba(255,255,255,.5);}
+.ai-markup-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;}
+.ai-markup-note{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+/* drop zone */
+.ai-dropzone{border:1.5px dashed rgba(255,255,255,.15);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);margin-bottom:16px;}
+.ai-dropzone:hover,.ai-dropzone.dragover{border-color:var(--green);background:rgba(29,158,117,.06);}
+.ai-dropzone-icon{font-size:32px;margin-bottom:10px;}
+.ai-dropzone-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px;}
+.ai-dropzone-sub{font-size:11px;color:rgba(255,255,255,.35);}
+.ai-file-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.ai-file-item{border:1px solid var(--d-border);background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.ai-file-thumb{width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;background:#333;}
+.ai-file-thumb-placeholder{width:44px;height:44px;border-radius:6px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-file-info{flex:1;min-width:0;}
+.ai-file-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ai-file-size{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
+.ai-file-status{font-size:10px;margin-top:3px;}
+.ai-file-status.pending{color:rgba(255,255,255,.3);}
+.ai-file-status.analyzing{color:var(--gold);}
+.ai-file-status.done{color:#5DCAA5;}
+.ai-file-status.error{color:#ff6b6b;}
+.ai-file-remove{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;padding:4px;flex-shrink:0;}
+.ai-file-remove:hover{color:rgba(255,255,255,.6);}
+/* per-photo result card */
+.ai-photo-result{border:1px solid rgba(29,158,117,.25);background:rgba(29,158,117,.06);border-radius:10px;padding:12px 14px;margin-top:6px;}
+.ai-photo-result-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.ai-photo-result-title{font-size:11px;font-weight:700;color:#5DCAA5;text-transform:uppercase;letter-spacing:.06em;}
+.ai-photo-result-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;}
+.ai-photo-result-rows{display:flex;flex-direction:column;gap:4px;}
+.ai-photo-result-row{display:flex;justify-content:space-between;font-size:11px;}
+.ai-photo-result-row .lbl{color:rgba(255,255,255,.4);}
+.ai-photo-result-row .val{color:rgba(255,255,255,.7);font-weight:600;}
+.ai-photo-result-items{font-size:11px;color:rgba(255,255,255,.45);margin-top:6px;line-height:1.6;}
+/* total */
+.ai-total-card{border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);border-radius:12px;padding:16px 18px;margin-bottom:16px;}
+.ai-total-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:6px;}
+.ai-total-price{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:white;letter-spacing:-2px;line-height:1;}
+.ai-total-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;}
+.ai-total-rows{margin-top:12px;border-top:1px solid rgba(255,255,255,.07);padding-top:10px;display:flex;flex-direction:column;gap:4px;}
+.ai-analyze-btn{width:100%;padding:13px;background:var(--green);color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.ai-analyze-btn:hover{background:var(--green-dk);}
+.ai-analyze-btn:disabled{background:#3a5a50;color:rgba(255,255,255,.4);cursor:default;}
+.ai-save-btn{width:100%;padding:12px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;margin-top:8px;}
+.ai-save-btn:hover{background:rgba(255,255,255,.12);color:white;}
+.ai-empty{text-align:center;padding:20px 0;font-size:13px;color:rgba(255,255,255,.25);}
+.ai-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;}
+
+/* settings / history drawers */
 .settings-panel{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);}
 .settings-panel.open{display:block;}
 .settings-drawer{position:absolute;right:0;top:0;bottom:0;width:380px;background:var(--d-surface);border-left:1px solid var(--d-border);display:flex;flex-direction:column;animation:drawerIn .22s ease both;overflow-y:auto;}
-@keyframes drawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
 .settings-header{padding:18px 20px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;}
 .settings-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;}
 .settings-close{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.6);width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
@@ -368,6 +473,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .history-item-time{font-size:10px;color:rgba(255,255,255,.3);}
 .history-item-detail{font-size:11px;color:rgba(255,255,255,.4);line-height:1.5;}
 .history-item-markup{display:inline-block;font-size:10px;font-weight:600;color:#5DCAA5;background:rgba(29,158,117,.15);padding:2px 7px;border-radius:8px;margin-top:4px;}
+.history-item-ai{display:inline-block;font-size:10px;font-weight:600;color:var(--gold);background:rgba(245,166,35,.12);padding:2px 7px;border-radius:8px;margin-top:4px;margin-left:4px;}
 .history-clear{padding:12px 20px;border-top:1px solid var(--d-border);}
 .history-clear-btn{width:100%;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.35);border-radius:6px;padding:8px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
 .history-clear-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6);}
@@ -383,100 +489,124 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   .footer-inner{flex-direction:column;align-items:flex-start;}
   .load-row{grid-template-columns:100px 1fr 1fr;}.special-grid{grid-template-columns:1fr;}
   .extras-grid,.calc-inputs-grid,.calc-action-row{grid-template-columns:1fr;}
-  .history-drawer,.settings-drawer{width:100%;}
+  .history-drawer,.settings-drawer,.ai-drawer{width:100%;}
   .calc-load-grid,.calc-specials-grid,.s-specials-grid{grid-template-columns:1fr 1fr;}
-  .form-row-3{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
   .twofa-code-row{gap:6px;}.twofa-digit{width:38px;height:46px;font-size:18px;}
+  .promo-content{flex-direction:column;gap:12px;}
 }
 </style>
 </head>
 <body>
 
+<!-- ══ MARKETING PAGE ══ -->
 <div id="marketingPage">
 <nav>
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-mark">W</div>
-    <div><div class="nav-logo-text">Wood's Waste</div><div class="nav-logo-sub">Quote Tool</div></div>
+  <a href="https://woodswastemn.com" class="nav-logo">
+    <img src="logo.PNG" alt="Wood's Waste">
+    <div>
+      <div class="nav-logo-text">Wood's Waste</div>
+      <div class="nav-logo-sub">Quote Tool</div>
+    </div>
   </a>
+  <div class="hero-bg"><div class="hero-orb hero-orb-1"></div><div class="hero-orb hero-orb-2"></div></div>
   <div class="nav-links">
-    <a href="#how">How it works</a><a href="#features">Features</a><a href="#pricing">Pricing</a>
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
     <a href="tel:5072981179">(507) 298-1179</a>
     <a href="#" onclick="openModal('login');return false;">Log in</a>
     <a href="#" class="nav-cta" onclick="openModal('pro');return false;">Start Free Trial</a>
   </div>
 </nav>
 
-<section style="padding-top:0;padding-bottom:0;">
-<div class="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">Built by Wood's Waste <span style="opacity:.5">·</span> Farmington, MN</div>
-    <h1>Know what to<br>charge <u>before</u><br>you call back.</h1>
-    <p class="hero-sub">You're on a job, the phone rings, customer wants a price. You used to guess. Now you punch in the load size, the drive, the special items — and we tell you exactly what to quote.</p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary" onclick="openModal('starter');return false;">Start free trial →</a>
-      <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
-    </div>
-    <div class="hero-proof">
-      <div class="hero-proof-ava">
-        <div class="ava">GW</div><div class="ava" style="background:#333;">JH</div><div class="ava" style="background:#555;">MR</div>
+<!-- HERO -->
+<section style="padding:0;background:#0a0a0a;">
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
+      <h1>Know what to charge <span class="highlight">before</span> you call back.</h1>
+      <p class="hero-sub">You're on a job, the phone rings, customer wants a price. Punch in the load size, drive, and special items — get a number that actually covers your costs and hits your margin.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary" onclick="openModal('starter');return false;">Start free trial →</a>
+        <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
       </div>
-      <div style="line-height:1.5;font-size:12px;color:var(--gray);"><strong style="color:var(--black);">Junk removal operators</strong> pricing jobs confidently<br>across the midwest</div>
+      <div class="hero-proof">
+        <div class="hero-proof-ava">
+          <div class="ava">GW</div><div class="ava">JH</div><div class="ava">MR</div>
+        </div>
+        <div style="line-height:1.5;"><strong style="color:white;">Junk removal operators</strong> pricing jobs confidently across the midwest</div>
+      </div>
+    </div>
+    <div class="hero-phone">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-app-bar"><div class="phone-app-name">Quote Tool</div><div class="phone-app-badge">PRO</div></div>
+          <div class="phone-job-label">Load size</div>
+          <div class="phone-load-grid">
+            <div class="phone-load-card"><div class="phone-load-icon">📦</div><div class="phone-load-name">Min Load</div></div>
+            <div class="phone-load-card sel"><div class="phone-load-icon">🛋️</div><div class="phone-load-name">Half Load</div></div>
+          </div>
+          <div class="phone-job-label">Special items</div>
+          <div class="phone-specials">
+            <div class="phone-special-tag on">🛏️ Mattress +$40</div>
+            <div class="phone-special-tag on">📺 TV +$25</div>
+            <div class="phone-special-tag">🧊 Fridge</div>
+          </div>
+          <div class="phone-markup-row">
+            <div class="phone-markup-label">Markup</div>
+            <div class="phone-markup-track"><div class="phone-markup-fill"></div><div class="phone-markup-thumb"></div></div>
+            <div class="phone-markup-val">35%</div>
+          </div>
+          <div class="phone-result">
+            <div class="phone-result-label">Quote the customer</div>
+            <div class="phone-result-price">$554</div>
+            <div class="phone-result-breakdown">Cost $410 · 35% markup · 18 mi drive</div>
+            <div class="phone-result-btn">Save to job history →</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="hero-phone">
-    <div class="phone-frame">
-      <div class="phone-notch"></div>
-      <div class="phone-screen">
-        <div class="phone-app-bar"><div class="phone-app-name">Quote Tool</div><div class="phone-app-badge">LIVE</div></div>
-        <div class="phone-job-label">Load size</div>
-        <div class="phone-load-grid">
-          <div class="phone-load-card"><div class="phone-load-icon">📦</div><div class="phone-load-name">Min Load</div></div>
-          <div class="phone-load-card sel"><div class="phone-load-icon">🛋️</div><div class="phone-load-name">Half Load</div></div>
-        </div>
-        <div class="phone-job-label">Special items</div>
-        <div class="phone-specials">
-          <div class="phone-special-tag on">🛏️ Mattress +$40</div>
-          <div class="phone-special-tag on">📺 TV +$25</div>
-          <div class="phone-special-tag">🧊 Fridge</div>
-        </div>
-        <div class="phone-markup-row">
-          <div class="phone-markup-label">Markup</div>
-          <div class="phone-markup-track"><div class="phone-markup-fill"></div><div class="phone-markup-thumb"></div></div>
-          <div class="phone-markup-val">35%</div>
-        </div>
-        <div class="phone-result">
-          <div class="phone-result-label">Quote the customer</div>
-          <div class="phone-result-price">$554</div>
-          <div class="phone-result-breakdown">Cost $410 · 35% markup · 18 mi drive</div>
-          <div class="phone-result-btn">Save to job history →</div>
-        </div>
+</section>
+
+<!-- PROMO BANNER (matches main site) -->
+<div class="promo-banner">
+  <div class="promo-content">
+    <div class="promo-left">
+      <span class="promo-badge">New Feature</span>
+      <div>
+        <div class="promo-text">AI Photo Quoting — <span>Point. Snap. Price.</span></div>
+        <div class="promo-sub">Upload a photo of the pile and AI identifies load size, special items, and quotes using your rates. Pro plan only.</div>
       </div>
     </div>
+    <a href="#" class="promo-link" onclick="openModal('pro');return false;">Try Pro Free →</a>
   </div>
 </div>
-</section>
 
 <div class="strip">
   <div class="strip-item">📱 <strong>Works on any phone</strong></div>
   <div class="strip-item">⚡ <strong>Quote in under 60 sec</strong></div>
-  <div class="strip-item">💰 <strong>Your costs, your markup</strong></div>
+  <div class="strip-item">🤖 <strong>AI photo quoting (Pro)</strong></div>
   <div class="strip-item">📋 <strong>Full job history</strong></div>
   <div class="strip-item">🔒 <strong>14-day free trial</strong></div>
 </div>
 
-<section class="origin" id="origin">
+<!-- ORIGIN -->
+<section class="light" style="padding:90px 40px;" id="origin">
   <div class="section-inner">
     <div class="origin-grid">
       <div class="origin-body">
         <p class="section-eyebrow">Our story</p>
         <h2 class="section-title">We were guessing. We stopped.</h2>
         <p>Griffin and Gavin started Wood's Waste out of Farmington, MN. Good operators, solid work — but pricing jobs on the fly meant inconsistent quotes, lost margin, and the occasional job we should've charged more for.</p>
-        <p>Customer calls, you're covered in sweat on someone's lawn, you throw out a number. Sometimes you nail it. Sometimes you leave $200 on the table. Sometimes you quote too high and lose the job.</p>
-        <p>So we built a calculator we could pull up on our phones in real time. Load size, special items, miles out, how long it'll take — plug it in and it spits out a number that actually covers your costs and hits your margin.</p>
-        <p>Other operators started asking about it. So now we're making it available. Two minutes to set up your rates. Works on any phone. No app install.</p>
+        <p>Customer calls, you're covered in sweat on someone's lawn, you throw out a number. Sometimes you nail it. Sometimes you leave $200 on the table.</p>
+        <p>So we built a calculator we could pull up on our phones in real time. Then we added AI — point your phone at the pile, and it estimates load size, spots the mattress and the fridge, and quotes using your own rates.</p>
+        <p>Other operators started asking about it. So now we're making it available.</p>
       </div>
       <div class="origin-stat-stack">
-        <div class="origin-stat"><div class="origin-stat-num">$200+</div><div class="origin-stat-label">average margin operators leave behind when pricing jobs from memory</div></div>
+        <div class="origin-stat"><div class="origin-stat-num">$200+</div><div class="origin-stat-label">average margin operators leave behind when pricing from memory</div></div>
         <div class="origin-stat"><div class="origin-stat-num">60 sec</div><div class="origin-stat-label">to get a confident quote number while the customer is still on the phone</div></div>
         <div class="origin-stat"><div class="origin-stat-num">500%</div><div class="origin-stat-label">maximum markup — slide it up or down depending on the job</div></div>
       </div>
@@ -484,34 +614,45 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </section>
 
-<section class="how" id="how">
+<!-- HOW IT WORKS -->
+<section class="mid" style="padding:90px 40px;" id="how">
   <div class="section-inner">
     <p class="section-eyebrow">How it works</p>
     <h2 class="section-title">Sign up once. Price every job.</h2>
     <div class="steps-grid">
-      <div class="step-card"><div class="step-num">01 / 03</div><span class="step-icon">⚙️</span><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market — we just do the math.</div></div>
-      <div class="step-card"><div class="step-num">02 / 03</div><span class="step-icon">📱</span><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone, browser, or tablet. Punch in the job details while you're standing in the driveway.</div></div>
-      <div class="step-card"><div class="step-num">03 / 03</div><span class="step-icon">💰</span><div class="step-title">Quote with confidence</div><div class="step-desc">The tool shows your cost, your markup, and your final quote number. Call the customer back in 30 seconds with a real number, not a guess.</div></div>
+      <div class="step-card"><div class="step-num">01 / 03</div><span class="step-icon">⚙️</span><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market.</div></div>
+      <div class="step-card"><div class="step-num">02 / 03</div><span class="step-icon">📱</span><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone or tablet while you're standing in the driveway.</div></div>
+      <div class="step-card"><div class="step-num">03 / 03</div><span class="step-icon">💰</span><div class="step-title">Quote with confidence</div><div class="step-desc">See your cost, your markup, and your final number. Call back in 30 seconds with a real quote, not a guess.</div></div>
     </div>
   </div>
 </section>
 
-<section class="features" id="features">
+<!-- FEATURES -->
+<section class="light" style="padding:90px 40px;" id="features">
   <div class="section-inner">
     <p class="section-eyebrow">Features</p>
     <h2 class="section-title">Built for how the job actually works.</h2>
     <div class="features-grid">
-      <div class="feat-card"><span class="feat-icon">🎚️</span><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you really want the job or the customer is easy. Slide it down for a difficult site or a tight market.</div></div>
-      <div class="feat-card"><span class="feat-icon">⚙️</span><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote after that is calculated off your real numbers.</div></div>
-      <div class="feat-card"><span class="feat-icon">📦</span><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee gets added automatically.</div></div>
-      <div class="feat-card"><span class="feat-icon">🗺️</span><div class="feat-title">Drive distance factored in</div><div class="feat-desc">Type in the miles and your per-mile rate kicks in automatically. Jobs 40 miles out cost more than jobs down the street.</div></div>
-      <div class="feat-card"><span class="feat-icon">📋</span><div class="feat-title">Job history log</div><div class="feat-desc">Every quote you save gets logged with the price, load size, markup, and timestamp. Look back at past jobs and spot patterns.</div></div>
-      <div class="feat-card"><span class="feat-icon">📱</span><div class="feat-title">Works on any device</div><div class="feat-desc">No app to install. Open it on your phone, tablet, or laptop. Works on iOS, Android, whatever. If it has a browser, it works.</div></div>
+      <div class="feat-card pro-feat">
+        <span class="feat-icon">📸</span>
+        <div class="feat-title">AI Photo Quoting <span class="pro-badge-inline">PRO</span></div>
+        <div class="feat-desc">Upload photos of the pile — AI identifies load size and special items, then quotes using your exact rates. Price per photo with a combined total.</div>
+      </div>
+      <div class="feat-card pro-feat">
+        <span class="feat-icon">🧠</span>
+        <div class="feat-title">Your Rates, AI's Eyes <span class="pro-badge-inline">PRO</span></div>
+        <div class="feat-desc">The AI doesn't use generic pricing. It scans the photo and plugs what it sees into your load costs, special item fees, and markup settings.</div>
+      </div>
+      <div class="feat-card"><span class="feat-icon">🎚️</span><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you want the job. Slide it down to win a competitive bid.</div></div>
+      <div class="feat-card"><span class="feat-icon">⚙️</span><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote is calculated off your real numbers.</div></div>
+      <div class="feat-card"><span class="feat-icon">📦</span><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds automatically.</div></div>
+      <div class="feat-card"><span class="feat-icon">📋</span><div class="feat-title">Job history log</div><div class="feat-desc">Every quote you save gets logged with price, load size, markup, and timestamp.</div></div>
     </div>
   </div>
 </section>
 
-<section class="pricing" id="pricing">
+<!-- PRICING -->
+<section class="mid" style="padding:90px 40px;" id="pricing">
   <div class="pricing-inner">
     <p class="section-eyebrow" style="text-align:center;">Pricing</p>
     <h2 class="section-title" style="text-align:center;max-width:100%;margin-bottom:32px;">Simple, honest pricing.</h2>
@@ -519,12 +660,13 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       <div class="pricing-card">
         <div class="pricing-plan">Starter</div>
         <div class="pricing-price">$29<span>/mo</span></div>
-        <div class="pricing-desc">Everything you need to start pricing jobs confidently today.</div>
+        <div class="pricing-desc">Manual calculator with everything you need to price jobs confidently.</div>
         <ul class="pricing-features">
           <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
           <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
           <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
           <li class="pf"><span class="chk">✓</span> Markup slider (0–500%)</li>
+          <li class="pf"><span class="chk">✓</span> Job history log</li>
           <li class="pf"><span class="chk">✓</span> 14-day free trial</li>
         </ul>
         <a href="#" class="btn-plan-dark" onclick="openModal('starter');return false;">Start free trial</a>
@@ -533,23 +675,24 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-plan">Pro</div>
         <div class="pricing-price">$59<span>/mo</span></div>
-        <div class="pricing-desc">For operators who want to track every job and tighten their margins.</div>
+        <div class="pricing-desc">Everything in Starter plus AI photo quoting — point, snap, price.</div>
         <ul class="pricing-features">
-          <li class="pf"><span class="chk">✓</span> Everything in Starter</li>
-          <li class="pf"><span class="chk">✓</span> Full job history log</li>
-          <li class="pf"><span class="chk">✓</span> Job notes & customer info</li>
-          <li class="pf"><span class="chk">✓</span> Margin analytics</li>
-          <li class="pf"><span class="chk">✓</span> Multi-user (share with crew)</li>
-          <li class="pf"><span class="chk">✓</span> Priority support from Griffin</li>
+          <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
+          <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting 📸</li>
+          <li class="pf"><span class="chk chk-green">✓</span> Per-photo breakdown + total</li>
+          <li class="pf"><span class="chk chk-green">✓</span> AI uses your own rates</li>
+          <li class="pf"><span class="chk chk-green">✓</span> Job notes & customer info</li>
+          <li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
         </ul>
-        <a href="#" class="btn-plan-light" onclick="openModal('pro');return false;">Start free trial</a>
+        <a href="#" class="btn-plan-green" onclick="openModal('pro');return false;">Start free trial</a>
       </div>
     </div>
-    <p class="pricing-note">14-day free trial on both plans. Card required to start — you won't be charged until day 15. Cancel anytime.</p>
+    <p class="pricing-note">14-day free trial on both plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
   </div>
 </section>
 
-<section class="testimonial">
+<!-- TESTIMONIAL -->
+<section class="light" style="padding:90px 40px;">
   <div class="testimonial-inner">
     <p class="section-eyebrow" style="text-align:center;">From the field</p>
     <div class="stars">★★★★★</div>
@@ -558,7 +701,9 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </section>
 
+<!-- CTA BOTTOM -->
 <section class="cta-bottom">
+  <div class="cta-bottom-orb"></div>
   <div style="position:relative;z-index:1;">
     <h2>Stop guessing on price.</h2>
     <p>14-day free trial. No charge until it's working for you.</p>
@@ -568,7 +713,10 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-logo">Wood's Waste Quote Tool</div>
+    <div class="footer-logo">
+      <img src="logo.PNG" alt="Wood's Waste">
+      <div class="footer-logo-text">Wood's Waste Quote Tool</div>
+    </div>
     <div class="footer-links">
       <a href="https://woodswastemn.com">woodswastemn.com</a>
       <a href="tel:5072981179">(507) 298-1179</a>
@@ -577,15 +725,20 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
     <div class="footer-copy">© 2026 Wood's Waste · Farmington, MN</div>
   </div>
 </footer>
-</div>
+</div><!-- /#marketingPage -->
 
-<!-- ══════════════════════════════════════════════
-     MODAL
-══════════════════════════════════════════════ -->
+<!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal" id="modal">
     <div class="modal-header" id="modalHeader">
       <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-header-logo">
+        <img src="logo.PNG" alt="Wood's Waste">
+        <div>
+          <div class="modal-header-logo-text">Wood's Waste</div>
+          <div class="modal-header-logo-sub">Quote Tool</div>
+        </div>
+      </div>
       <div class="modal-plan-badge" id="modalPlanBadge">Starter Plan — $29/mo</div>
       <h3 id="modalTitle">Start your free trial</h3>
       <p id="modalSubtitle">14 days free. Card required — charged only after trial ends.</p>
@@ -593,7 +746,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Create account</button>
         <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log in</button>
       </div>
-      <!-- step dots: 1=account, 2=verify email, 3=pricing -->
       <div class="modal-steps" id="modalStepDots">
         <div class="modal-step-dot active" id="dot1"></div>
         <div class="modal-step-dot" id="dot2"></div>
@@ -601,11 +753,10 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       </div>
     </div>
     <div class="modal-body">
-
-      <!-- ── STEP 1: Account + Payment ── -->
+      <!-- STEP 1 -->
       <div id="step1">
         <div class="err-banner" id="step1Err"></div>
-        <div class="modal-trial-box"><span>🔒</span><div><strong>No charge for 14 days.</strong> Your card is saved securely via Stripe. No charge today — your plan activates on day 15. Cancel anytime.</div></div>
+        <div class="modal-trial-box"><span>🔒</span><div><strong>No charge for 14 days.</strong> Card saved securely via Stripe. No charge today — plan activates on day 15. Cancel anytime.</div></div>
         <div class="form-grid">
           <div class="form-row">
             <div class="field" id="f-first"><label>First name</label><input type="text" id="m-first" placeholder="Griffin"/><span class="error-hint">Required</span></div>
@@ -621,12 +772,9 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <div class="field" id="f-pw"><label>Password</label><input type="password" id="m-pw" placeholder="Min 8 characters"/><span class="error-hint">Min 8 characters</span></div>
           <div class="divider"></div>
           <div class="section-label">Payment — Stripe secured · charged only after trial</div>
-          <!-- Stripe Card Element mounts here -->
           <div>
             <label style="font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:5px;">Card</label>
-            <div class="stripe-card-wrap" id="stripeCardWrap">
-              <div id="cardElement"></div>
-            </div>
+            <div class="stripe-card-wrap" id="stripeCardWrap"><div id="cardElement"></div></div>
             <div class="stripe-card-error" id="cardErrors"></div>
             <div class="stripe-lock-note">🔒 Card info never touches our server — encrypted by Stripe</div>
           </div>
@@ -634,34 +782,30 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates. Cancel anytime before day 15.</p>
         </div>
       </div>
-
-      <!-- ── STEP 2: 2FA Email Verification ── -->
+      <!-- STEP 2 -->
       <div id="step2" style="display:none;">
         <div class="err-banner" id="step2Err"></div>
         <div class="twofa-wrap">
           <div class="twofa-icon">📬</div>
           <div class="twofa-desc">We sent a 6-digit code to<br><strong id="twofa-email-display"></strong><br>Enter it below to verify your email.</div>
-          <div class="twofa-code-row" id="twofaDigits">
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d0" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d1" oninput="onDigit(this,1)" onkeydown="onDigitKey(event,1)"/>
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d2" oninput="onDigit(this,2)" onkeydown="onDigitKey(event,2)"/>
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d3" oninput="onDigit(this,3)" onkeydown="onDigitKey(event,3)"/>
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d4" oninput="onDigit(this,4)" onkeydown="onDigitKey(event,4)"/>
-            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d5" oninput="onDigit(this,5)" onkeydown="onDigitKey(event,5)"/>
+          <div class="twofa-code-row">
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d0" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d1" oninput="onDigit(this,1)" onkeydown="onDigitKey(event,1)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d2" oninput="onDigit(this,2)" onkeydown="onDigitKey(event,2)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d3" oninput="onDigit(this,3)" onkeydown="onDigitKey(event,3)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d4" oninput="onDigit(this,4)" onkeydown="onDigitKey(event,4)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d5" oninput="onDigit(this,5)" onkeydown="onDigitKey(event,5)"/>
           </div>
           <div class="twofa-resend">Didn't get it? <a onclick="resendCode()" id="resendLink">Resend code</a> <span class="countdown" id="resendCountdown"></span></div>
           <button class="submit-btn" id="verifyBtn" onclick="verifyCode()">Verify &amp; continue →</button>
-          <div style="margin-top:10px;">
-            <button class="btn-back" onclick="goStep(1)" style="width:100%;margin-top:4px;">← Back</button>
-          </div>
+          <button class="btn-back" onclick="goStep(1)" style="width:100%;margin-top:8px;">← Back</button>
         </div>
       </div>
-
-      <!-- ── STEP 3: Pricing setup ── -->
+      <!-- STEP 3 -->
       <div id="step3" style="display:none;">
-        <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. You can update them anytime in Settings.</div>
+        <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. Update anytime in Settings.</div>
         <div class="pricing-section">
-          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(what it costs YOU — before markup)</span></div>
+          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(cost to YOU before markup)</span></div>
           <div class="load-row" style="margin-bottom:4px;">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);">Load</div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);text-align:center;">Low</div>
@@ -679,16 +823,16 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <div class="pricing-section">
           <div class="pricing-section-title">🗺️ Drive & labor costs</div>
           <div class="extras-grid">
-            <div class="extras-card"><div class="extras-card-title">Drive rate</div><div class="extras-rate-row" style="margin-bottom:8px;"><div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;"/></div><span>per mile</span></div><div style="font-size:11px;color:var(--gray);">Applied to full round-trip distance</div></div>
-            <div class="extras-card"><div class="extras-card-title">Labor rate</div><div class="extras-rate-row" style="margin-bottom:8px;"><div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;"/></div><span>/hr per person</span></div><div style="font-size:11px;color:var(--gray);">Used to calculate job time cost</div></div>
+            <div class="extras-card"><div class="extras-card-title">Drive rate</div><div class="extras-rate-row"><div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;"/></div><span>per mile</span></div></div>
+            <div class="extras-card"><div class="extras-card-title">Labor rate</div><div class="extras-rate-row"><div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;"/></div><span>/hr per person</span></div></div>
           </div>
         </div>
         <div class="pricing-section" style="margin-bottom:0;">
           <div class="pricing-section-title">🎚️ Default markup</div>
           <div class="markup-signup-card">
-            <div class="markup-signup-header"><div class="markup-signup-title">Your default markup percentage</div><div class="markup-signup-val" id="signupMarkupVal">35%</div></div>
+            <div class="markup-signup-header"><div class="markup-signup-title">Your default markup %</div><div class="markup-signup-val" id="signupMarkupVal">35%</div></div>
             <input type="range" id="signupMarkup" min="0" max="500" value="35" step="5" style="width:100%;accent-color:var(--black);" oninput="document.getElementById('signupMarkupVal').textContent=this.value+'%'"/>
-            <div class="markup-signup-sub">You can slide this up or down on every individual job. This is just your starting point.</div>
+            <div class="markup-signup-sub">You can slide this per job. This is just your starting point.</div>
           </div>
         </div>
         <div class="btn-row" style="margin-top:20px;">
@@ -696,7 +840,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <button class="submit-btn" id="step3Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
         </div>
       </div>
-
       <!-- LOGIN -->
       <div id="loginForm" style="display:none;">
         <div class="err-banner" id="loginErr"></div>
@@ -707,41 +850,38 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <p class="fine-print">Don't have an account? <a href="#" onclick="switchTab('signup');return false;" style="color:var(--black);font-weight:600;">Start a free trial →</a></p>
         </div>
       </div>
-
-      <!-- SAVING -->
       <div class="saving-overlay" id="savingOverlay"><div class="saving-spinner"></div><p id="savingMsg">Setting up your account...</p></div>
-
-      <!-- SUCCESS -->
       <div class="success-state" id="successState">
         <div class="success-mark">✓</div>
         <div class="sheet-saved-badge">✓ Pricing saved to your account</div>
         <h3>You're all set.</h3>
-        <p>Your costs are saved. Pull up the quote tool on your phone anytime — takes about 30 seconds per job.</p>
+        <p>Your costs are saved. Pull up the quote tool on your phone anytime — 30 seconds per job.</p>
         <div class="success-next">
           <div class="success-next-label">Good to know</div>
           <div class="success-next-item">🎚️ Markup slider starts at your default — change it per job</div>
           <div class="success-next-item">📋 Every saved quote goes into your job history</div>
-          <div class="success-next-item">⚙️ Edit your prices anytime in Settings</div>
+          <div id="aiSuccessItem" style="display:none;" class="success-next-item">📸 AI photo quoting is ready — tap the AI button in your dashboard</div>
           <div class="success-next-item">📞 Griffin will text to make sure everything looks right</div>
         </div>
         <button class="submit-btn green" onclick="openCalc()">Open my quote tool →</button>
         <p style="font-size:13px;color:var(--gray);margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
       </div>
+    </div>
+  </div>
+</div>
 
-    </div><!-- /.modal-body -->
-  </div><!-- /.modal -->
-</div><!-- /.modal-overlay -->
-
-<!-- ══════════════════════════════════════════════
-     CALC PAGE (unchanged from original)
-══════════════════════════════════════════════ -->
+<!-- ══ CALC PAGE ══ -->
 <div id="calcPage">
   <nav class="calc-nav">
     <div class="calc-nav-left">
-      <div class="calc-nav-mark">W</div>
-      <div><div class="calc-nav-logo">Quote Tool</div><div class="calc-nav-co" id="calcNavCo">Wood's Waste</div></div>
+      <img src="logo.PNG" alt="Wood's Waste" class="calc-nav-logo-img"/>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:white;">Quote Tool</div>
+        <div class="calc-nav-co" id="calcNavCo">Wood's Waste</div>
+      </div>
     </div>
     <div class="calc-nav-right">
+      <button class="calc-icon-btn ai-btn" id="aiNavBtn" onclick="openAiPanel()" style="display:none;">📸 AI Quote</button>
       <button class="calc-icon-btn" onclick="openSettings()">⚙ Settings</button>
       <button class="calc-icon-btn" onclick="openHistory()">History</button>
       <button class="calc-icon-btn logout" onclick="doLogout()">Log out</button>
@@ -775,7 +915,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <div class="calc-markup-note">Slide up for easy jobs, down to win a competitive bid</div>
       </div>
     </div>
-    <div class="calc-result" id="calcResult">
+    <div class="calc-result">
       <div class="calc-result-label">Quote the customer</div>
       <div class="calc-result-price" id="calcFinalPrice">—</div>
       <div class="calc-result-breakdown" id="calcBreakdown" style="display:none;">
@@ -794,13 +934,69 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </div>
 
+<!-- ══ AI PHOTO PANEL ══ -->
+<div class="ai-panel" id="aiPanel" onclick="closeAiOutside(event)">
+  <div class="ai-drawer">
+    <div class="ai-header">
+      <div class="ai-header-left">
+        <div class="ai-header-icon">📸</div>
+        <div>
+          <div class="ai-header-title">AI Photo Quote</div>
+          <div class="ai-header-sub">Upload photos — get a quote using your rates</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="ai-header-badge">PRO</span>
+        <button class="ai-close" onclick="closeAiPanel()">✕</button>
+      </div>
+    </div>
+    <div class="ai-body">
+      <!-- Markup display -->
+      <div class="ai-markup-row">
+        <div>
+          <div class="ai-markup-label">Current markup</div>
+          <div class="ai-markup-note">AI will price using this + your saved rates</div>
+        </div>
+        <div>
+          <div class="ai-markup-val" id="aiMarkupDisplay">35%</div>
+        </div>
+      </div>
+      <!-- Drop zone -->
+      <div class="ai-dropzone" id="aiDropzone"
+        onclick="document.getElementById('aiFileInput').click()"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="event.preventDefault();this.classList.remove('dragover');handleAiFiles(event.dataTransfer.files)">
+        <div class="ai-dropzone-icon">📷</div>
+        <div class="ai-dropzone-title">Drop photos here or tap to upload</div>
+        <div class="ai-dropzone-sub">JPG, PNG, HEIC — up to 5 photos at once</div>
+      </div>
+      <input type="file" id="aiFileInput" multiple accept="image/*,.heic,.heif" style="display:none;" onchange="handleAiFiles(this.files)"/>
+      <!-- File list with per-photo results -->
+      <div class="ai-file-list" id="aiFileList"></div>
+      <!-- Grand total -->
+      <div id="aiTotalCard" style="display:none;" class="ai-total-card">
+        <div class="ai-total-label">Combined quote — all photos</div>
+        <div class="ai-total-price" id="aiTotalPrice">—</div>
+        <div class="ai-total-sub" id="aiTotalSub"></div>
+        <div class="ai-total-rows" id="aiTotalRows"></div>
+      </div>
+      <!-- Analyze button -->
+      <button class="ai-analyze-btn" id="aiAnalyzeBtn" onclick="analyzePhotos()" disabled>
+        <span id="aiBtnText">📸 Add photos to analyze</span>
+      </button>
+      <button class="ai-save-btn" id="aiSaveBtn" onclick="saveAiJob()" style="display:none;">Save AI quote to history</button>
+    </div>
+  </div>
+</div>
+
 <!-- SETTINGS DRAWER -->
 <div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
   <div class="settings-drawer">
     <div class="settings-header"><div class="settings-title">Settings</div><button class="settings-close" onclick="closeSettings()">✕</button></div>
     <div class="settings-body">
       <div style="margin-bottom:20px;">
-        <div class="settings-section-title" style="margin-bottom:16px;">🚛 Load costs (your cost before markup)</div>
+        <div class="settings-section-title" style="margin-bottom:16px;">🚛 Load costs (before markup)</div>
         <div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;align-items:center;margin-bottom:6px;">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);">Load</div>
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);text-align:center;">Low</div>
@@ -846,9 +1042,11 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 // ══════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════
-const API_URL         = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
-// ↓ Replace with your actual Stripe publishable key (starts with pk_live_ or pk_test_)
-const STRIPE_PK       = 'pk_test_51TdRllLv7e6ZQD8xMTUFQzzWT7Tp008Wlin2L5b9TOZRZ3wL79NS1haN4c1vizJCpO1cXwlkmetWIWlJwxhnsxZg00HH5xCNur';
+const API_URL    = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
+const STRIPE_PK  = 'pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY';
+// Anthropic API — used for AI photo quoting (Pro only)
+// This is called client-side for the AI feature; restrict by domain in your Anthropic settings
+const ANTHROPIC_API_KEY = 'REPLACE_WITH_YOUR_ANTHROPIC_API_KEY';
 
 const SPECIAL_ITEMS_CONFIG = [
   { key:'mattress',  icon:'🛏️', label:'Mattress',     fee:40  },
@@ -864,851 +1062,634 @@ const SPECIAL_ITEMS_CONFIG = [
 ];
 
 // ══════════════════════════════════════
-//  STRIPE SETUP
+//  STRIPE
 // ══════════════════════════════════════
 let stripe, cardElement, cardComplete = false;
-
 function initStripe() {
   if (stripe) return;
   try {
     stripe = Stripe(STRIPE_PK);
     const elements = stripe.elements();
-    cardElement = elements.create('card', {
-      style: {
-        base: {
-          fontFamily: "'Inter', sans-serif",
-          fontSize: '13px',
-          color: '#0a0a0a',
-          '::placeholder': { color: '#bbb' },
-        },
-        invalid: { color: '#c0392b' },
-      },
-    });
+    cardElement = elements.create('card', { style:{ base:{ fontFamily:"'Inter',sans-serif", fontSize:'13px', color:'#0a0a0a', '::placeholder':{ color:'#bbb' } }, invalid:{ color:'#c0392b' } } });
     cardElement.mount('#cardElement');
     cardElement.on('change', e => {
-      const wrap = document.getElementById('stripeCardWrap');
-      const err  = document.getElementById('cardErrors');
-      cardComplete = e.complete;
-      if (e.error) {
-        err.textContent = e.error.message;
-        wrap.classList.add('error');
-        wrap.classList.remove('focused');
-      } else {
-        err.textContent = '';
-        wrap.classList.remove('error');
-      }
+      const wrap=document.getElementById('stripeCardWrap'), err=document.getElementById('cardErrors');
+      cardComplete=e.complete;
+      if(e.error){ err.textContent=e.error.message; wrap.classList.add('error'); wrap.classList.remove('focused'); }
+      else { err.textContent=''; wrap.classList.remove('error'); }
     });
-    cardElement.on('focus', () => document.getElementById('stripeCardWrap').classList.add('focused'));
-    cardElement.on('blur',  () => document.getElementById('stripeCardWrap').classList.remove('focused'));
-  } catch(e) {
-    console.warn('Stripe not available:', e.message);
-  }
+    cardElement.on('focus',()=>document.getElementById('stripeCardWrap').classList.add('focused'));
+    cardElement.on('blur', ()=>document.getElementById('stripeCardWrap').classList.remove('focused'));
+  } catch(e){ console.warn('Stripe:',e.message); }
 }
 
 // ══════════════════════════════════════
-//  PHONE VALIDATION (NANP — US/CA)
+//  PHONE
 // ══════════════════════════════════════
 function onPhoneInput(el) {
-  // Strip non-digits
-  let digits = el.value.replace(/\D/g, '').slice(0, 10);
-  // Format as (XXX) XXX-XXXX
-  let fmt = '';
-  if (digits.length > 0) fmt = '(' + digits.slice(0,3);
-  if (digits.length >= 4) fmt += ') ' + digits.slice(3,6);
-  if (digits.length >= 7) fmt += '-' + digits.slice(6,10);
-  el.value = fmt;
-  // Validate
-  const field = document.getElementById('f-phone');
-  const valid = isValidPhone(digits);
-  field.classList.toggle('phone-valid', valid && digits.length === 10);
-  field.classList.toggle('has-error', digits.length > 0 && !valid);
+  let digits=el.value.replace(/\D/g,'').slice(0,10), fmt='';
+  if(digits.length>0) fmt='('+digits.slice(0,3);
+  if(digits.length>=4) fmt+=') '+digits.slice(3,6);
+  if(digits.length>=7) fmt+='-'+digits.slice(6,10);
+  el.value=fmt;
+  const field=document.getElementById('f-phone');
+  const valid=isValidPhone(digits);
+  field.classList.toggle('phone-valid', valid && digits.length===10);
+  field.classList.toggle('has-error', digits.length>0 && !valid);
 }
-
-function isValidPhone(digits) {
-  if (digits.length !== 10) return false;
-  const areaCode  = digits.slice(0,3);
-  const exchange  = digits.slice(3,6);
-  // NANP rules: area code and exchange can't start with 0 or 1
-  if (areaCode[0] === '0' || areaCode[0] === '1') return false;
-  if (exchange[0] === '0' || exchange[1] === '1') return false;
-  // No N11 area codes (211, 311, 411, 511, 611, 711, 811, 911)
-  if (/^[2-9]11$/.test(areaCode)) return false;
+function isValidPhone(d) {
+  if(d.length!==10) return false;
+  if(d[0]==='0'||d[0]==='1') return false;
+  if(d[3]==='0'||d[3]==='1') return false;
+  if(/^[2-9]11$/.test(d.slice(0,3))) return false;
   return true;
 }
-
 function getRawPhone() {
-  const digits = document.getElementById('m-phone').value.replace(/\D/g,'');
-  return digits.length === 10 ? '+1' + digits : null;
+  const d=document.getElementById('m-phone').value.replace(/\D/g,'');
+  return d.length===10?'+1'+d:null;
 }
 
 // ══════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════
-let currentPlan = 'starter';
-let session = {
-  token:        localStorage.getItem('ww_token') || null,
-  companyId:    localStorage.getItem('ww_cid')   || null,
-  businessName: localStorage.getItem('ww_biz')   || "Wood's Waste",
-};
-let specialItemStates = {};
-let selectedLoad      = null;
-let selectedSpecials  = {};
-let jobHistory        = [];
-let activeTab         = 'signup';
-let sSpecialStates    = {};
-let verificationToken = null; // returned from sendVerificationCode
-let resendTimer       = null;
-
-let userPricing = {
-  loads: {
-    minimum: { low:100, high:130 },
-    quarter: { low:160, high:200 },
-    half:    { low:230, high:280 },
-    full:    { low:350, high:420 },
-  },
-  specials: {}, driveRate:1.5, laborRate:35, defaultMarkup:35,
-};
+let currentPlan='starter';
+let session={ token:localStorage.getItem('ww_token')||null, companyId:localStorage.getItem('ww_cid')||null, businessName:localStorage.getItem('ww_biz')||"Wood's Waste", plan:localStorage.getItem('ww_plan')||'starter' };
+let specialItemStates={}, selectedLoad=null, selectedSpecials={}, jobHistory=[], activeTab='signup', sSpecialStates={};
+let verificationToken=null, resendTimer=null;
+let userPricing={ loads:{ minimum:{low:100,high:130}, quarter:{low:160,high:200}, half:{low:230,high:280}, full:{low:350,high:420} }, specials:{}, driveRate:1.5, laborRate:35, defaultMarkup:35 };
+// AI state
+let aiFiles=[], aiResults=[], aiAnalyzed=false;
 
 // ══════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════
-(function init() {
-  buildSpecialGrid();
-  buildSettingsSpecialsGrid();
-  if (session.token) {
+(function init(){
+  buildSpecialGrid(); buildSettingsSpecialsGrid();
+  if(session.token){
     showPageLoader('Logging you back in...');
-    api({ action:'getUser', token: session.token })
-      .then(res => {
-        hidePageLoader();
-        if (res.success) {
-          session.businessName = res.businessName;
-          session.companyId    = res.companyId;
-          applyPricing(res.pricing);
-          localStorage.setItem('ww_pricing', JSON.stringify(res.pricing));
-        } else {
-          loadLocalPricing();
-        }
-        openCalcDirect();
-      })
-      .catch(() => {
-        hidePageLoader();
-        loadLocalPricing();
-        openCalcDirect();
-      });
+    api({action:'getUser',token:session.token}).then(res=>{
+      hidePageLoader();
+      if(res.success){ session.businessName=res.businessName; session.companyId=res.companyId; session.plan=res.plan||'starter'; applyPricing(res.pricing); localStorage.setItem('ww_pricing',JSON.stringify(res.pricing)); }
+      else loadLocalPricing();
+      openCalcDirect();
+    }).catch(()=>{ hidePageLoader(); loadLocalPricing(); openCalcDirect(); });
   }
 })();
 
-function loadLocalPricing() {
-  try {
-    var lp = localStorage.getItem('ww_pricing');
-    if (lp) applyPricing(JSON.parse(lp));
-  } catch(e) {}
-}
+function loadLocalPricing(){ try{ const lp=localStorage.getItem('ww_pricing'); if(lp) applyPricing(JSON.parse(lp)); }catch(e){} }
 
 // ══════════════════════════════════════
 //  API
 // ══════════════════════════════════════
-async function api(payload) {
-  const fd = new FormData();
-  fd.append('payload', JSON.stringify(payload));
-  const res  = await fetch(API_URL, { method:'POST', body:fd });
-  const text = await res.text();
-  try { return JSON.parse(text); }
-  catch(e) { throw new Error('Bad response: ' + text.slice(0,120)); }
+async function api(payload){
+  const fd=new FormData(); fd.append('payload',JSON.stringify(payload));
+  const res=await fetch(API_URL,{method:'POST',body:fd});
+  const text=await res.text();
+  try{ return JSON.parse(text); } catch(e){ throw new Error('Bad response: '+text.slice(0,120)); }
 }
 
 // ══════════════════════════════════════
 //  MODAL
 // ══════════════════════════════════════
-function openModal(planOrMode) {
-  if (planOrMode === 'login') { switchTab('login'); }
-  else {
-    currentPlan = planOrMode;
-    document.getElementById('modalPlanBadge').textContent = planOrMode === 'pro' ? 'Pro Plan — $59/mo' : 'Starter Plan — $29/mo';
-    switchTab('signup');
-  }
+function openModal(planOrMode){
+  if(planOrMode==='login'){ switchTab('login'); }
+  else{ currentPlan=planOrMode; document.getElementById('modalPlanBadge').textContent=planOrMode==='pro'?'Pro Plan — $59/mo':'Starter Plan — $29/mo'; switchTab('signup'); }
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  // Mount Stripe after modal is visible
-  setTimeout(initStripe, 50);
+  document.body.style.overflow='hidden';
+  setTimeout(initStripe,50);
 }
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-  document.getElementById('savingOverlay').style.display = 'none';
-  document.getElementById('successState').style.display  = 'none';
-  if (resendTimer) clearInterval(resendTimer);
-}
-function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow=''; document.getElementById('savingOverlay').style.display='none'; document.getElementById('successState').style.display='none'; if(resendTimer) clearInterval(resendTimer); }
+function closeModalOutside(e){ if(e.target===document.getElementById('modalOverlay')) closeModal(); }
 
-function switchTab(tab) {
-  activeTab = tab;
-  const isSig = tab === 'signup';
-  document.getElementById('tabSignup').classList.toggle('active', isSig);
-  document.getElementById('tabLogin').classList.toggle('active', !isSig);
-  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  if (isSig) {
-    document.getElementById('step1').style.display = 'block';
-    updateStepDots(1);
-    setTimeout(initStripe, 50);
-  } else {
-    document.getElementById('loginForm').style.display = 'block';
-  }
-  document.getElementById('modalStepDots').style.display   = isSig ? 'flex' : 'none';
-  document.getElementById('modalPlanBadge').style.display  = isSig ? 'inline-block' : 'none';
-  document.getElementById('modalTitle').textContent    = isSig ? 'Start your free trial' : 'Welcome back';
-  document.getElementById('modalSubtitle').textContent = isSig ? '14 days free. Card required — charged only after trial ends.' : 'Log in to your quote tool';
+function switchTab(tab){
+  activeTab=tab; const isSig=tab==='signup';
+  document.getElementById('tabSignup').classList.toggle('active',isSig);
+  document.getElementById('tabLogin').classList.toggle('active',!isSig);
+  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  if(isSig){ document.getElementById('step1').style.display='block'; updateStepDots(1); setTimeout(initStripe,50); }
+  else document.getElementById('loginForm').style.display='block';
+  document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
+  document.getElementById('modalPlanBadge').style.display=isSig?'inline-block':'none';
+  document.getElementById('modalTitle').textContent=isSig?'Start your free trial':'Welcome back';
+  document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':'Log in to your quote tool';
 }
 
-function goStep(n) {
-  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  if (n===1) document.getElementById('step1').style.display = 'block';
-  if (n===2) document.getElementById('step2').style.display = 'block';
-  if (n===3) document.getElementById('step3').style.display = 'block';
+function goStep(n){
+  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  if(n===1) document.getElementById('step1').style.display='block';
+  if(n===2) document.getElementById('step2').style.display='block';
+  if(n===3) document.getElementById('step3').style.display='block';
   updateStepDots(n);
-  const titles = ['Start your free trial','Verify your email','Set your costs & markup'];
-  const subs   = ['14 days free. Card required — charged only after trial ends.','','Takes 2 minutes. Change any of this anytime.'];
-  document.getElementById('modalTitle').textContent    = titles[n-1]||'';
-  document.getElementById('modalSubtitle').textContent = subs[n-1]||'';
-  document.getElementById('modal').scrollTop = 0;
+  const titles=['Start your free trial','Verify your email','Set your costs & markup'];
+  const subs=['14 days free. Card required — charged only after trial ends.','','Takes 2 minutes. Change any of this anytime.'];
+  document.getElementById('modalTitle').textContent=titles[n-1]||'';
+  document.getElementById('modalSubtitle').textContent=subs[n-1]||'';
+  document.getElementById('modal').scrollTop=0;
 }
-
-function updateStepDots(n) {
-  [1,2,3].forEach(i => {
-    document.getElementById('dot'+i).className = 'modal-step-dot'+(i<n?' done':i===n?' active':'');
-  });
-}
+function updateStepDots(n){ [1,2,3].forEach(i=>{ document.getElementById('dot'+i).className='modal-step-dot'+(i<n?' done':i===n?' active':''); }); }
 
 // ══════════════════════════════════════
-//  STEP 1 → validate + tokenize card + send verification email
+//  STEP 1
 // ══════════════════════════════════════
-async function goStep2() {
+async function goStep2(){
   clearFormErrors();
-  const first = v('m-first'), last = v('m-last'), biz = v('m-biz');
-  const email = v('m-email'), pw = v('m-pw');
-  const phone = getRawPhone();
-  let valid = true;
-  if (!first)                       { setErr('f-first',true); valid=false; }
-  if (!last)                        { setErr('f-last', true); valid=false; }
-  if (!biz)                         { setErr('f-biz',  true); valid=false; }
-  if (!email||!email.includes('@')) { setErr('f-email',true); valid=false; }
-  if (!phone) {
-    setErr('f-phone',true);
-    document.getElementById('phone-err').textContent = 'Enter a valid 10-digit US/CA phone number';
-    valid=false;
-  }
-  if (!pw||pw.length<8)             { setErr('f-pw',true); valid=false; }
-  if (!cardComplete) {
-    document.getElementById('cardErrors').textContent = 'Please complete your card information.';
-    document.getElementById('stripeCardWrap').classList.add('error');
-    valid=false;
-  }
-  if (!valid) { showBanner('step1Err','Please fill in all required fields above.'); return; }
+  const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();
+  let valid=true;
+  if(!first){setErr('f-first',true);valid=false;}
+  if(!last){setErr('f-last',true);valid=false;}
+  if(!biz){setErr('f-biz',true);valid=false;}
+  if(!email||!email.includes('@')){setErr('f-email',true);valid=false;}
+  if(!phone){setErr('f-phone',true);document.getElementById('phone-err').textContent='Enter a valid 10-digit US/CA phone number';valid=false;}
+  if(!pw||pw.length<8){setErr('f-pw',true);valid=false;}
+  if(!cardComplete){document.getElementById('cardErrors').textContent='Please complete your card information.';document.getElementById('stripeCardWrap').classList.add('error');valid=false;}
+  if(!valid){showBanner('step1Err','Please fill in all required fields above.');return;}
   hideBanner('step1Err');
-
-  const btn = document.getElementById('step1Btn');
-  btn.disabled = true; btn.textContent = 'Tokenizing card...';
-
-  // Create Stripe PaymentMethod so the card number never hits our server
-  let pmId = null;
-  if (stripe && cardElement) {
-    try {
-      const { paymentMethod, error } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-        billing_details: {
-          name: first + ' ' + last,
-          email: email,
-          phone: phone,
-        },
-      });
-      if (error) {
-        document.getElementById('cardErrors').textContent = error.message;
-        document.getElementById('stripeCardWrap').classList.add('error');
-        btn.disabled = false; btn.textContent = 'Continue — verify your email →';
-        return;
-      }
-      pmId = paymentMethod.id;
-    } catch(e) {
-      // Stripe not configured yet — allow flow to continue for testing
-      console.warn('Stripe tokenization skipped:', e.message);
-    }
+  const btn=document.getElementById('step1Btn');
+  btn.disabled=true; btn.textContent='Tokenizing card...';
+  let pmId=null;
+  if(stripe&&cardElement){
+    try{
+      const{paymentMethod,error}=await stripe.createPaymentMethod({type:'card',card:cardElement,billing_details:{name:first+' '+last,email,phone}});
+      if(error){document.getElementById('cardErrors').textContent=error.message;document.getElementById('stripeCardWrap').classList.add('error');btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
+      pmId=paymentMethod.id;
+    }catch(e){console.warn('Stripe skip:',e.message);}
   }
-
-  btn.textContent = 'Sending verification code...';
-
-  // Request verification code from backend
-  try {
-    const res = await api({ action:'sendVerificationCode', email, businessName: biz, phone });
-    if (!res.success) {
-      showBanner('step1Err', res.error || 'Could not send verification email.');
-      btn.disabled = false; btn.textContent = 'Continue — verify your email →';
-      return;
-    }
-    verificationToken = res.verificationToken;
-    // Store payment method id in a closure for use in step 3
-    window._pendingPaymentMethodId = pmId;
-  } catch(e) {
-    showBanner('step1Err', 'Could not connect: ' + e.message);
-    btn.disabled = false; btn.textContent = 'Continue — verify your email →';
-    return;
-  }
-
-  btn.disabled = false; btn.textContent = 'Continue — verify your email →';
-
-  // Show 2FA step
-  document.getElementById('twofa-email-display').textContent = email;
-  clearDigits();
-  goStep(2);
-  startResendCountdown();
-  setTimeout(() => { document.getElementById('d0').focus(); }, 200);
+  btn.textContent='Sending verification code...';
+  try{
+    const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
+    if(!res.success){showBanner('step1Err',res.error||'Could not send verification email.');btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
+    verificationToken=res.verificationToken;
+    window._pendingPaymentMethodId=pmId;
+  }catch(e){showBanner('step1Err','Could not connect: '+e.message);btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
+  btn.disabled=false; btn.textContent='Continue — verify your email →';
+  document.getElementById('twofa-email-display').textContent=email;
+  clearDigits(); goStep(2); startResendCountdown();
+  setTimeout(()=>document.getElementById('d0').focus(),200);
 }
 
 // ══════════════════════════════════════
-//  2FA — DIGITS
+//  2FA
 // ══════════════════════════════════════
-function clearDigits() {
-  for (let i=0;i<6;i++) {
-    const el=document.getElementById('d'+i);
-    el.value='';
-    el.classList.remove('filled');
-  }
+function clearDigits(){ for(let i=0;i<6;i++){const el=document.getElementById('d'+i);el.value='';el.classList.remove('filled');} }
+function onDigit(el,idx){
+  el.value=el.value.replace(/[^0-9]/g,'').slice(-1);
+  el.classList.toggle('filled',el.value!=='');
+  if(el.value&&idx<5) document.getElementById('d'+(idx+1)).focus();
+  if(idx===5&&el.value){ const code=Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join(''); if(code.length===6) setTimeout(verifyCode,100); }
 }
-
-function onDigit(el, idx) {
-  // Accept only digits
-  el.value = el.value.replace(/[^0-9]/g,'').slice(-1);
-  el.classList.toggle('filled', el.value !== '');
-  if (el.value && idx < 5) document.getElementById('d'+(idx+1)).focus();
-  // Auto-verify when all 6 filled
-  if (idx===5 && el.value) {
-    const code = Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
-    if (code.length===6) setTimeout(verifyCode, 100);
-  }
-}
-
-function onDigitKey(e, idx) {
-  if (e.key==='Backspace' && !document.getElementById('d'+idx).value && idx>0) {
-    document.getElementById('d'+(idx-1)).focus();
-  }
-}
-
-async function verifyCode() {
-  const code = Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
-  if (code.length<6) { showBanner('step2Err','Enter the full 6-digit code.'); return; }
-  const btn = document.getElementById('verifyBtn');
-  btn.disabled = true; btn.textContent = 'Verifying...';
-  try {
-    const res = await api({ action:'verifyCode', verificationToken, code });
-    btn.disabled = false; btn.textContent = 'Verify & continue →';
-    if (!res.success) {
-      showBanner('step2Err', res.error || 'Incorrect code. Please try again.');
-      clearDigits();
-      document.getElementById('d0').focus();
-      return;
-    }
-    // Code verified — advance to pricing setup
-    if (resendTimer) clearInterval(resendTimer);
+function onDigitKey(e,idx){ if(e.key==='Backspace'&&!document.getElementById('d'+idx).value&&idx>0) document.getElementById('d'+(idx-1)).focus(); }
+async function verifyCode(){
+  const code=Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
+  if(code.length<6){showBanner('step2Err','Enter the full 6-digit code.');return;}
+  const btn=document.getElementById('verifyBtn'); btn.disabled=true; btn.textContent='Verifying...';
+  try{
+    const res=await api({action:'verifyCode',verificationToken,code});
+    btn.disabled=false; btn.textContent='Verify & continue →';
+    if(!res.success){showBanner('step2Err',res.error||'Incorrect code.');clearDigits();document.getElementById('d0').focus();return;}
+    if(resendTimer) clearInterval(resendTimer);
     goStep(3);
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'Verify & continue →';
-    showBanner('step2Err', 'Could not connect: ' + e.message);
-  }
+  }catch(e){btn.disabled=false;btn.textContent='Verify & continue →';showBanner('step2Err','Could not connect: '+e.message);}
 }
-
-async function resendCode() {
-  const email = v('m-email');
-  const biz   = v('m-biz');
-  const phone = getRawPhone();
-  try {
-    const res = await api({ action:'sendVerificationCode', email, businessName:biz, phone });
-    if (res.success) {
-      verificationToken = res.verificationToken;
-      clearDigits();
-      document.getElementById('d0').focus();
-      showToast('✓ New code sent');
-      startResendCountdown();
-    } else {
-      showToast('⚠ Could not resend: ' + (res.error||''), true);
-    }
-  } catch(e) {
-    showToast('⚠ Network error', true);
-  }
+async function resendCode(){
+  const email=v('m-email'),biz=v('m-biz'),phone=getRawPhone();
+  try{
+    const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
+    if(res.success){verificationToken=res.verificationToken;clearDigits();document.getElementById('d0').focus();showToast('✓ New code sent');startResendCountdown();}
+    else showToast('⚠ Could not resend: '+(res.error||''),true);
+  }catch(e){showToast('⚠ Network error',true);}
 }
-
-function startResendCountdown() {
-  if (resendTimer) clearInterval(resendTimer);
-  let sec = 60;
-  const link = document.getElementById('resendLink');
-  const cd   = document.getElementById('resendCountdown');
-  link.style.pointerEvents = 'none';
-  link.style.opacity = '0.4';
-  cd.textContent = '('+sec+'s)';
-  resendTimer = setInterval(() => {
-    sec--;
-    cd.textContent = sec > 0 ? '('+sec+'s)' : '';
-    if (sec <= 0) {
-      clearInterval(resendTimer);
-      link.style.pointerEvents = '';
-      link.style.opacity = '';
-      cd.textContent = '';
-    }
-  }, 1000);
+function startResendCountdown(){
+  if(resendTimer) clearInterval(resendTimer);
+  let sec=60;
+  const link=document.getElementById('resendLink'),cd=document.getElementById('resendCountdown');
+  link.style.pointerEvents='none'; link.style.opacity='0.4'; cd.textContent='('+sec+'s)';
+  resendTimer=setInterval(()=>{ sec--; cd.textContent=sec>0?'('+sec+'s)':''; if(sec<=0){clearInterval(resendTimer);link.style.pointerEvents='';link.style.opacity='';cd.textContent='';} },1000);
 }
 
 // ══════════════════════════════════════
-//  STEP 3 → complete signup
+//  STEP 3 / SIGNUP
 // ══════════════════════════════════════
-function buildSpecialGrid() {
-  const grid = document.getElementById('specialGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  SPECIAL_ITEMS_CONFIG.forEach(item => {
-    specialItemStates[item.key] = { enabled:true, fee:item.fee };
-    const row = document.createElement('div');
-    row.className = 'special-item-row active';
-    row.id = 'srow-'+item.key;
-    row.innerHTML = `<div class="sitem-left"><span class="sitem-icon">${item.icon}</span>${item.label}</div><div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)"/></div></div><div class="sitem-toggle on" id="stoggle-${item.key}" onclick="toggleSpecial('${item.key}')">✓</div>`;
+function buildSpecialGrid(){
+  const grid=document.getElementById('specialGrid'); if(!grid) return;
+  grid.innerHTML='';
+  SPECIAL_ITEMS_CONFIG.forEach(item=>{
+    specialItemStates[item.key]={enabled:true,fee:item.fee};
+    const row=document.createElement('div'); row.className='special-item-row active'; row.id='srow-'+item.key;
+    row.innerHTML=`<div class="sitem-left"><span class="sitem-icon">${item.icon}</span>${item.label}</div><div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)"/></div></div><div class="sitem-toggle on" id="stoggle-${item.key}" onclick="toggleSpecial('${item.key}')">✓</div>`;
     grid.appendChild(row);
   });
 }
-function toggleSpecial(key) {
-  specialItemStates[key].enabled = !specialItemStates[key].enabled;
-  document.getElementById('srow-'+key).classList.toggle('active', specialItemStates[key].enabled);
-  const t = document.getElementById('stoggle-'+key);
-  t.classList.toggle('on', specialItemStates[key].enabled);
-  t.textContent = specialItemStates[key].enabled ? '✓' : '+';
-}
-function updateSpecialFee(key, val) { specialItemStates[key].fee = Number(val)||0; }
+function toggleSpecial(key){ specialItemStates[key].enabled=!specialItemStates[key].enabled; document.getElementById('srow-'+key).classList.toggle('active',specialItemStates[key].enabled); const t=document.getElementById('stoggle-'+key); t.classList.toggle('on',specialItemStates[key].enabled); t.textContent=specialItemStates[key].enabled?'✓':'+'; }
+function updateSpecialFee(key,val){ specialItemStates[key].fee=Number(val)||0; }
 
-async function completeSignup() {
-  const btn = document.getElementById('step3Btn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
-  const specials = {};
-  SPECIAL_ITEMS_CONFIG.forEach(item => {
-    if (specialItemStates[item.key].enabled)
-      specials[item.key] = { fee:specialItemStates[item.key].fee, label:item.label, icon:item.icon };
-  });
-
-  const pricing = {
-    loads: {
-      minimum: { low:nv('p-min-low'),  high:nv('p-min-high')  },
-      quarter: { low:nv('p-qtr-low'),  high:nv('p-qtr-high')  },
-      half:    { low:nv('p-half-low'), high:nv('p-half-high') },
-      full:    { low:nv('p-full-low'), high:nv('p-full-high') },
-    },
-    specials,
-    driveRate:     nv('driveRate'),
-    laborRate:     nv('laborRate'),
-    defaultMarkup: parseInt(document.getElementById('signupMarkup').value),
-  };
-
-  const payload = {
-    action:          'signup',
-    businessName:    v('m-biz'),
-    ownerName:       v('m-first')+' '+v('m-last'),
-    email:           v('m-email'),
-    phone:           getRawPhone() || v('m-phone'),
-    password:        v('m-pw'),
-    plan:            currentPlan,
-    trialStart:      new Date().toISOString(),
-    paymentMethodId: window._pendingPaymentMethodId || null,
-    verificationToken,
-    ...pricing,
-  };
-
-  try {
-    const res = await api(payload);
-    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
-    if (!res.success) {
-      showBanner('step2Err', res.error || 'Something went wrong. Please try again.');
-      goStep(2); return;
-    }
-    saveSession(res.token, res.companyId, res.businessName || v('m-biz'));
-    applyPricing(pricing);
-    localStorage.setItem('ww_pricing', JSON.stringify(pricing));
+async function completeSignup(){
+  const btn=document.getElementById('step3Btn'); btn.disabled=true; btn.textContent='Saving...';
+  const specials={};
+  SPECIAL_ITEMS_CONFIG.forEach(item=>{ if(specialItemStates[item.key].enabled) specials[item.key]={fee:specialItemStates[item.key].fee,label:item.label,icon:item.icon}; });
+  const pricing={ loads:{ minimum:{low:nv('p-min-low'),high:nv('p-min-high')}, quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high')}, half:{low:nv('p-half-low'),high:nv('p-half-high')}, full:{low:nv('p-full-low'),high:nv('p-full-high')} }, specials, driveRate:nv('driveRate'), laborRate:nv('laborRate'), defaultMarkup:parseInt(document.getElementById('signupMarkup').value) };
+  const payload={ action:'signup', businessName:v('m-biz'), ownerName:v('m-first')+' '+v('m-last'), email:v('m-email'), phone:getRawPhone()||v('m-phone'), password:v('m-pw'), plan:currentPlan, trialStart:new Date().toISOString(), paymentMethodId:window._pendingPaymentMethodId||null, verificationToken, ...pricing };
+  try{
+    const res=await api(payload);
+    btn.disabled=false; btn.textContent='Save & open my quote tool →';
+    if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goStep(2);return;}
+    saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan);
+    applyPricing(pricing); localStorage.setItem('ww_pricing',JSON.stringify(pricing));
+    if(currentPlan==='pro') document.getElementById('aiSuccessItem').style.display='flex';
     showSuccess();
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
-    showBanner('step2Err', 'Could not connect: ' + e.message);
-    goStep(2);
-  }
+  }catch(e){ btn.disabled=false; btn.textContent='Save & open my quote tool →'; showBanner('step2Err','Could not connect: '+e.message); goStep(2); }
 }
 
-function showSuccess() {
-  ['step1','step2','step3','savingOverlay','loginForm'].forEach(id => {
-    const el=document.getElementById(id); if(el) el.style.display='none';
-  });
-  document.getElementById('successState').style.display  = 'block';
-  document.getElementById('modalStepDots').style.display = 'none';
-  document.getElementById('modalTitle').textContent      = "You're all set.";
-  document.getElementById('modalSubtitle').textContent   = '';
+function showSuccess(){
+  ['step1','step2','step3','savingOverlay','loginForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  document.getElementById('successState').style.display='block';
+  document.getElementById('modalStepDots').style.display='none';
+  document.getElementById('modalTitle').textContent="You're all set.";
+  document.getElementById('modalSubtitle').textContent='';
 }
 
 // ══════════════════════════════════════
 //  LOGIN
 // ══════════════════════════════════════
-async function doLogin() {
-  const email = v('l-email'), pw = v('l-pw');
-  if (!email||!pw) { showBanner('loginErr','Enter your email and password.'); return; }
-  const btn = document.getElementById('loginBtn');
-  btn.disabled = true; btn.textContent = 'Logging in...';
-  try {
-    const res = await api({ action:'login', email, password:pw });
-    btn.disabled = false; btn.textContent = 'Log in to my quote tool →';
-    if (!res.success) { showBanner('loginErr', res.error || 'Login failed.'); return; }
-    saveSession(res.token, res.companyId, res.businessName);
-    applyPricing(res.pricing);
-    localStorage.setItem('ww_pricing', JSON.stringify(res.pricing));
-    closeModal();
-    openCalcDirect();
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'Log in to my quote tool →';
-    showBanner('loginErr', 'Could not connect: ' + e.message);
-  }
+async function doLogin(){
+  const email=v('l-email'),pw=v('l-pw');
+  if(!email||!pw){showBanner('loginErr','Enter your email and password.');return;}
+  const btn=document.getElementById('loginBtn'); btn.disabled=true; btn.textContent='Logging in...';
+  try{
+    const res=await api({action:'login',email,password:pw});
+    btn.disabled=false; btn.textContent='Log in to my quote tool →';
+    if(!res.success){showBanner('loginErr',res.error||'Login failed.');return;}
+    saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');
+    applyPricing(res.pricing); localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
+    closeModal(); openCalcDirect();
+  }catch(e){ btn.disabled=false; btn.textContent='Log in to my quote tool →'; showBanner('loginErr','Could not connect: '+e.message); }
 }
 
 // ══════════════════════════════════════
 //  SESSION
 // ══════════════════════════════════════
-function saveSession(token, companyId, businessName) {
-  session.token = token; session.companyId = companyId;
-  session.businessName = businessName || "Wood's Waste";
-  localStorage.setItem('ww_token', token);
-  localStorage.setItem('ww_cid',   companyId);
-  localStorage.setItem('ww_biz',   session.businessName);
+function saveSession(token,companyId,businessName,plan){
+  session.token=token; session.companyId=companyId;
+  session.businessName=businessName||"Wood's Waste";
+  session.plan=plan||'starter';
+  localStorage.setItem('ww_token',token);
+  localStorage.setItem('ww_cid',companyId);
+  localStorage.setItem('ww_biz',session.businessName);
+  localStorage.setItem('ww_plan',session.plan);
 }
-function clearSession() {
-  session.token = session.companyId = null;
-  localStorage.removeItem('ww_token');
-  localStorage.removeItem('ww_cid');
-  localStorage.removeItem('ww_biz');
-}
-async function doLogout() {
-  if (!confirm('Log out of your quote tool?')) return;
-  if (session.token) api({ action:'logout', token:session.token }).catch(()=>{});
+function clearSession(){ session.token=session.companyId=null; ['ww_token','ww_cid','ww_biz','ww_plan'].forEach(k=>localStorage.removeItem(k)); }
+async function doLogout(){
+  if(!confirm('Log out of your quote tool?')) return;
+  if(session.token) api({action:'logout',token:session.token}).catch(()=>{});
   clearSession();
-  document.getElementById('calcPage').style.display     = 'none';
-  document.getElementById('marketingPage').style.display = 'block';
-  document.body.style.overflow = '';
-  resetCalc();
+  document.getElementById('calcPage').style.display='none';
+  document.getElementById('marketingPage').style.display='block';
+  document.body.style.overflow=''; resetCalc();
 }
-function applyPricing(p) {
-  if (!p) return;
-  userPricing = {
-    loads:         p.loads         || userPricing.loads,
-    specials:      p.specials      || {},
-    driveRate:     Number(p.driveRate)     || 1.5,
-    laborRate:     Number(p.laborRate)     || 35,
-    defaultMarkup: Number(p.defaultMarkup) || 35,
-  };
+function applyPricing(p){
+  if(!p) return;
+  userPricing={ loads:p.loads||userPricing.loads, specials:p.specials||{}, driveRate:Number(p.driveRate)||1.5, laborRate:Number(p.laborRate)||35, defaultMarkup:Number(p.defaultMarkup)||35 };
 }
 
 // ══════════════════════════════════════
 //  OPEN CALC
 // ══════════════════════════════════════
-function openCalc() { closeModal(); openCalcDirect(); }
-function openCalcDirect() {
-  document.getElementById('marketingPage').style.display = 'none';
-  document.getElementById('calcPage').style.display      = 'block';
-  document.body.style.overflow = '';
+function openCalc(){ closeModal(); openCalcDirect(); }
+function openCalcDirect(){
+  document.getElementById('marketingPage').style.display='none';
+  document.getElementById('calcPage').style.display='block';
+  document.body.style.overflow='';
   initCalc();
 }
 
 // ══════════════════════════════════════
-//  CALCULATOR (unchanged logic)
+//  CALCULATOR
 // ══════════════════════════════════════
-function initCalc() {
-  document.getElementById('calcNavCo').textContent = session.businessName;
-  document.getElementById('calcMarkup').value = userPricing.defaultMarkup;
-  document.getElementById('calcMarkupPct').textContent = userPricing.defaultMarkup + '%';
-  Object.keys(userPricing.loads).forEach(key => {
-    const l = userPricing.loads[key];
-    const el = document.getElementById('cl-cost-'+key);
-    if (el) el.textContent = '$'+l.low+(l.low!==l.high?'–$'+l.high:'');
+function initCalc(){
+  document.getElementById('calcNavCo').textContent=session.businessName;
+  document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
+  document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
+  // Show AI button for Pro users
+  const aiBtn=document.getElementById('aiNavBtn');
+  aiBtn.style.display=session.plan==='pro'?'block':'none';
+  Object.keys(userPricing.loads).forEach(key=>{
+    const l=userPricing.loads[key], el=document.getElementById('cl-cost-'+key);
+    if(el) el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');
   });
-  buildCalcSpecialsGrid();
-  loadHistory();
-  recalc();
+  buildCalcSpecialsGrid(); loadHistory(); recalc();
 }
 
-function buildCalcSpecialsGrid() {
-  const grid = document.getElementById('calcSpecialsGrid');
-  grid.innerHTML = '';
-  selectedSpecials = {};
-  const items = Object.keys(userPricing.specials).length > 0
-    ? Object.entries(userPricing.specials).map(([k,vv])=>({ key:k, ...vv, icon: SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'📦' }))
-    : SPECIAL_ITEMS_CONFIG;
-  items.forEach(item => {
-    selectedSpecials[item.key] = false;
-    const tag = document.createElement('div');
-    tag.className = 'calc-special-tag';
-    tag.id = 'cs-'+item.key;
-    tag.onclick = () => toggleCalcSpecial(item.key);
-    tag.innerHTML = `<div class="calc-special-left"><span class="calc-special-icon">${item.icon}</span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
+function buildCalcSpecialsGrid(){
+  const grid=document.getElementById('calcSpecialsGrid'); grid.innerHTML=''; selectedSpecials={};
+  const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'📦'})):SPECIAL_ITEMS_CONFIG;
+  items.forEach(item=>{
+    selectedSpecials[item.key]=false;
+    const tag=document.createElement('div'); tag.className='calc-special-tag'; tag.id='cs-'+item.key;
+    tag.onclick=()=>toggleCalcSpecial(item.key);
+    tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon">${item.icon}</span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
     grid.appendChild(tag);
   });
 }
 
-function selectLoad(key) {
-  selectedLoad = key;
-  document.querySelectorAll('.calc-load-card').forEach(c => c.classList.remove('sel'));
-  document.getElementById('cl-'+key).classList.add('sel');
-  recalc();
-}
-function toggleCalcSpecial(key) {
-  selectedSpecials[key] = !selectedSpecials[key];
-  document.getElementById('cs-'+key).classList.toggle('sel', selectedSpecials[key]);
-  recalc();
-}
-function onMarkupSlide() {
-  document.getElementById('calcMarkupPct').textContent = document.getElementById('calcMarkup').value + '%';
-  recalc();
+function selectLoad(key){ selectedLoad=key; document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel')); document.getElementById('cl-'+key).classList.add('sel'); recalc(); }
+function toggleCalcSpecial(key){ selectedSpecials[key]=!selectedSpecials[key]; document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]); recalc(); }
+function onMarkupSlide(){ document.getElementById('calcMarkupPct').textContent=document.getElementById('calcMarkup').value+'%'; recalc(); }
+
+function recalc(){
+  if(!selectedLoad){ document.getElementById('calcFinalPrice').textContent='Select a load size'; document.getElementById('calcBreakdown').style.display='none'; return; }
+  const load=userPricing.loads[selectedLoad], markup=parseInt(document.getElementById('calcMarkup').value)/100;
+  const miles=parseFloat(document.getElementById('calcMiles').value)||0, hours=parseFloat(document.getElementById('calcHours').value)||0;
+  const driveRate=userPricing.driveRate||1.5, laborRate=userPricing.laborRate||35;
+  const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  let specialsCost=0; Object.keys(selectedSpecials).forEach(k=>{if(selectedSpecials[k]&&specialSrc[k]) specialsCost+=Number(specialSrc[k].fee)||0;});
+  const driveCost=Math.round(miles*2*driveRate), laborCost=Math.round(hours*laborRate);
+  const baseLow=load.low+specialsCost+driveCost+laborCost, baseHigh=load.high+specialsCost+driveCost+laborCost;
+  const quoteLow=Math.round(baseLow*(1+markup)), quoteHigh=Math.round(baseHigh*(1+markup));
+  const priceEl=document.getElementById('calcFinalPrice');
+  if(quoteLow===quoteHigh){priceEl.textContent='$'+quoteLow.toLocaleString();priceEl.className='calc-result-price';}
+  else{priceEl.textContent='$'+quoteLow.toLocaleString()+'–$'+quoteHigh.toLocaleString();priceEl.className='calc-result-price has-range';}
+  document.getElementById('calcBreakdown').style.display='flex';
+  document.getElementById('bd-load').textContent='$'+load.low+(load.low!==load.high?'–$'+load.high:'');
+  document.getElementById('bd-specials-row').style.display=specialsCost>0?'flex':'none';
+  document.getElementById('bd-specials').textContent='+$'+specialsCost;
+  document.getElementById('bd-drive-row').style.display=driveCost>0?'flex':'none';
+  document.getElementById('bd-drive').textContent='+$'+driveCost+' ('+miles+' mi × 2 × $'+driveRate+')';
+  document.getElementById('bd-labor-row').style.display=laborCost>0?'flex':'none';
+  document.getElementById('bd-labor').textContent='+$'+laborCost+' ('+hours+'hr × $'+laborRate+')';
+  document.getElementById('bd-cost').textContent='$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
+  document.getElementById('bd-markup-label').textContent='+ '+(markup*100)+'% markup =';
+  document.getElementById('bd-quote').textContent='$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
 }
 
-function recalc() {
-  if (!selectedLoad) {
-    document.getElementById('calcFinalPrice').textContent = 'Select a load size';
-    document.getElementById('calcBreakdown').style.display = 'none';
-    return;
+function resetCalc(){
+  selectedLoad=null;
+  Object.keys(selectedSpecials).forEach(k=>{selectedSpecials[k]=false;const el=document.getElementById('cs-'+k);if(el)el.classList.remove('sel');});
+  document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('calcMiles').value=''; document.getElementById('calcHours').value='';
+  document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
+  document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
+  document.getElementById('calcFinalPrice').textContent='—';
+  document.getElementById('calcBreakdown').style.display='none';
+}
+
+// ══════════════════════════════════════
+//  SAVE JOB (manual)
+// ══════════════════════════════════════
+async function saveJob(){
+  if(!selectedLoad){showToast('⚠ Select a load size first',true);return;}
+  const priceText=document.getElementById('calcFinalPrice').textContent;
+  if(priceText==='—'||priceText==='Select a load size') return;
+  const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  const activeSpecials=Object.keys(selectedSpecials).filter(k=>selectedSpecials[k]);
+  const entry={ id:Date.now(), price:priceText, load:selectedLoad, specials:activeSpecials.map(k=>specialSrc[k]?.label||k), miles:parseFloat(document.getElementById('calcMiles').value)||0, hours:parseFloat(document.getElementById('calcHours').value)||0, markup:parseInt(document.getElementById('calcMarkup').value), ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}), aiQuote:false };
+  jobHistory.unshift(entry); if(jobHistory.length>50) jobHistory=jobHistory.slice(0,50);
+  persistHistory(); renderHistory(); showToast('✓ Job saved to history');
+  if(session.token){
+    const load=userPricing.loads[selectedLoad]||{low:0,high:0};
+    const markup=parseInt(document.getElementById('calcMarkup').value)/100;
+    const miles=parseFloat(document.getElementById('calcMiles').value)||0, hours=parseFloat(document.getElementById('calcHours').value)||0;
+    let sCost=0; Object.keys(selectedSpecials).forEach(k=>{if(selectedSpecials[k]&&specialSrc[k])sCost+=Number(specialSrc[k].fee)||0;});
+    const dCost=Math.round(miles*2*(userPricing.driveRate||1.5)), lCost=Math.round(hours*(userPricing.laborRate||35));
+    api({action:'saveJob',token:session.token,price:priceText,load:selectedLoad,specials:entry.specials,miles,hours,markup:parseInt(document.getElementById('calcMarkup').value),driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost}).catch(()=>{});
   }
-  const load      = userPricing.loads[selectedLoad];
-  const markup    = parseInt(document.getElementById('calcMarkup').value) / 100;
-  const miles     = parseFloat(document.getElementById('calcMiles').value) || 0;
-  const hours     = parseFloat(document.getElementById('calcHours').value) || 0;
-  const driveRate = userPricing.driveRate || 1.5;
-  const laborRate = userPricing.laborRate || 35;
-  const specialSrc = Object.keys(userPricing.specials).length > 0
-    ? userPricing.specials
-    : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
-  let specialsCost = 0;
-  Object.keys(selectedSpecials).forEach(k => { if (selectedSpecials[k] && specialSrc[k]) specialsCost += Number(specialSrc[k].fee)||0; });
-  const driveCost = Math.round(miles * 2 * driveRate);
-  const laborCost = Math.round(hours * laborRate);
-  const baseLow   = load.low  + specialsCost + driveCost + laborCost;
-  const baseHigh  = load.high + specialsCost + driveCost + laborCost;
-  const quoteLow  = Math.round(baseLow  * (1 + markup));
-  const quoteHigh = Math.round(baseHigh * (1 + markup));
-  const priceEl = document.getElementById('calcFinalPrice');
-  if (quoteLow === quoteHigh) { priceEl.textContent = '$'+quoteLow.toLocaleString(); priceEl.className='calc-result-price'; }
-  else { priceEl.textContent = '$'+quoteLow.toLocaleString()+'–$'+quoteHigh.toLocaleString(); priceEl.className='calc-result-price has-range'; }
-  document.getElementById('calcBreakdown').style.display = 'flex';
-  document.getElementById('bd-load').textContent = '$'+load.low+(load.low!==load.high?'–$'+load.high:'');
-  document.getElementById('bd-specials-row').style.display = specialsCost>0?'flex':'none';
-  document.getElementById('bd-specials').textContent = '+$'+specialsCost;
-  document.getElementById('bd-drive-row').style.display = driveCost>0?'flex':'none';
-  document.getElementById('bd-drive').textContent = '+$'+driveCost+' ('+miles+' mi × 2 × $'+driveRate+')';
-  document.getElementById('bd-labor-row').style.display = laborCost>0?'flex':'none';
-  document.getElementById('bd-labor').textContent = '+$'+laborCost+' ('+hours+'hr × $'+laborRate+')';
-  document.getElementById('bd-cost').textContent = '$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
-  document.getElementById('bd-markup-label').textContent = '+ '+(markup*100)+'% markup =';
-  document.getElementById('bd-quote').textContent = '$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
-}
-
-function resetCalc() {
-  selectedLoad = null;
-  Object.keys(selectedSpecials).forEach(k => { selectedSpecials[k]=false; const el=document.getElementById('cs-'+k); if(el) el.classList.remove('sel'); });
-  document.querySelectorAll('.calc-load-card').forEach(c => c.classList.remove('sel'));
-  document.getElementById('calcMiles').value  = '';
-  document.getElementById('calcHours').value  = '';
-  document.getElementById('calcMarkup').value = userPricing.defaultMarkup;
-  document.getElementById('calcMarkupPct').textContent = userPricing.defaultMarkup + '%';
-  document.getElementById('calcFinalPrice').textContent = '—';
-  document.getElementById('calcBreakdown').style.display = 'none';
 }
 
 // ══════════════════════════════════════
-//  SAVE JOB
+//  AI PHOTO QUOTING (Pro only)
 // ══════════════════════════════════════
-async function saveJob() {
-  if (!selectedLoad) { showToast('⚠ Select a load size first', true); return; }
-  const priceText = document.getElementById('calcFinalPrice').textContent;
-  if (priceText === '—' || priceText === 'Select a load size') return;
-  const specialSrc = Object.keys(userPricing.specials).length > 0
-    ? userPricing.specials
-    : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
-  const activeSpecials = Object.keys(selectedSpecials).filter(k => selectedSpecials[k]);
-  const entry = {
-    id: Date.now(), price: priceText, load: selectedLoad,
-    specials: activeSpecials.map(k => specialSrc[k]?.label || k),
-    miles: parseFloat(document.getElementById('calcMiles').value)||0,
-    hours: parseFloat(document.getElementById('calcHours').value)||0,
-    markup: parseInt(document.getElementById('calcMarkup').value),
-    ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),
-  };
-  jobHistory.unshift(entry);
-  if (jobHistory.length > 50) jobHistory = jobHistory.slice(0,50);
+function openAiPanel(){
+  if(session.plan!=='pro'){showToast('⚠ AI quoting is a Pro feature',true);return;}
+  aiFiles=[]; aiResults=[]; aiAnalyzed=false;
+  renderAiFileList();
+  document.getElementById('aiTotalCard').style.display='none';
+  document.getElementById('aiSaveBtn').style.display='none';
+  document.getElementById('aiAnalyzeBtn').disabled=true;
+  document.getElementById('aiBtnText').textContent='📸 Add photos to analyze';
+  document.getElementById('aiMarkupDisplay').textContent=document.getElementById('calcMarkup').value+'%';
+  document.getElementById('aiPanel').classList.add('open');
+}
+function closeAiPanel(){ document.getElementById('aiPanel').classList.remove('open'); }
+function closeAiOutside(e){ if(e.target===document.getElementById('aiPanel')) closeAiPanel(); }
+
+function handleAiFiles(files){
+  const remaining=5-aiFiles.length;
+  Array.from(files).slice(0,remaining).forEach(f=>{
+    if(!aiFiles.find(x=>x.name===f.name&&x.size===f.size)) aiFiles.push(f);
+  });
+  aiAnalyzed=false; aiResults=[];
+  document.getElementById('aiTotalCard').style.display='none';
+  document.getElementById('aiSaveBtn').style.display='none';
+  renderAiFileList();
+  const btn=document.getElementById('aiAnalyzeBtn');
+  btn.disabled=aiFiles.length===0;
+  document.getElementById('aiBtnText').textContent=aiFiles.length>0?`📸 Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'📸 Add photos to analyze';
+}
+
+function renderAiFileList(){
+  const list=document.getElementById('aiFileList'); list.innerHTML='';
+  if(aiFiles.length===0){ list.innerHTML='<div class="ai-empty">No photos added yet</div>'; return; }
+  aiFiles.forEach((f,idx)=>{
+    const item=document.createElement('div'); item.className='ai-file-item'; item.id='ai-file-'+idx;
+    const size=f.size<1024*1024?Math.round(f.size/1024)+'KB':(f.size/1024/1024).toFixed(1)+'MB';
+    const result=aiResults[idx];
+    let statusHtml='<div class="ai-file-status pending">Ready to analyze</div>';
+    if(result&&result.status==='analyzing') statusHtml='<div class="ai-file-status analyzing">⏳ Analyzing...</div>';
+    else if(result&&result.status==='done') statusHtml='<div class="ai-file-status done">✓ $'+result.quoteLow+(result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:'')+'</div>';
+    else if(result&&result.status==='error') statusHtml='<div class="ai-file-status error">⚠ '+result.error+'</div>';
+    item.innerHTML=`<div class="ai-file-thumb-placeholder" id="ai-thumb-${idx}">📷</div><div class="ai-file-info"><div class="ai-file-name">${f.name}</div><div class="ai-file-size">${size}</div>${statusHtml}</div><button class="ai-file-remove" onclick="removeAiFile(${idx})">✕</button>`;
+    list.appendChild(item);
+    // Load thumb
+    const reader=new FileReader(); reader.onload=e=>{ const th=document.getElementById('ai-thumb-'+idx); if(th){ th.innerHTML=''; const img=document.createElement('img'); img.className='ai-file-thumb'; img.src=e.target.result; th.appendChild(img); th.style.background='none'; } }; reader.readAsDataURL(f);
+    // Add per-photo result card below if done
+    if(result&&result.status==='done'){
+      const rc=document.createElement('div'); rc.className='ai-photo-result';
+      rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.loadLabel}</span></div><div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.join(', ')+'</div>':''}`;
+      list.appendChild(rc);
+    }
+  });
+}
+
+function removeAiFile(idx){ aiFiles.splice(idx,1); aiResults.splice(idx,1); aiAnalyzed=false; document.getElementById('aiTotalCard').style.display='none'; document.getElementById('aiSaveBtn').style.display='none'; renderAiFileList(); const btn=document.getElementById('aiAnalyzeBtn'); btn.disabled=aiFiles.length===0; document.getElementById('aiBtnText').textContent=aiFiles.length>0?`📸 Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'📸 Add photos to analyze'; }
+
+async function analyzePhotos(){
+  if(aiFiles.length===0) return;
+  const btn=document.getElementById('aiAnalyzeBtn');
+  btn.disabled=true;
+  document.getElementById('aiTotalCard').style.display='none';
+  document.getElementById('aiSaveBtn').style.display='none';
+  aiResults=aiFiles.map(()=>({status:'analyzing'}));
+  renderAiFileList();
+  const markup=parseInt(document.getElementById('calcMarkup').value);
+  const markupFrac=markup/100;
+  // Build pricing context string for the AI
+  const loads=userPricing.loads;
+  const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
+  const pricingContext=`Your pricing (costs BEFORE markup):
+- Min Load: $${loads.minimum.low}–$${loads.minimum.high}
+- Quarter Load: $${loads.quarter.low}–$${loads.quarter.high}
+- Half Load: $${loads.half.low}–$${loads.half.high}
+- Full Truck: $${loads.full.low}–$${loads.full.high}
+Special item fees: ${Object.entries(specialSrc).map(([k,v])=>`${v.label||k}: $${v.fee}`).join(', ')}
+Markup: ${markup}%`;
+
+  // Process each photo
+  for(let i=0;i<aiFiles.length;i++){
+    try{
+      const b64=await readFileBase64(aiFiles[i]);
+      const mediaType=aiFiles[i].type||'image/jpeg';
+      const prompt=`You are a junk removal pricing assistant for Wood's Waste, a junk removal company in Farmington, MN.
+
+${pricingContext}
+
+Look at this photo of junk/items to be removed. Analyze it and respond ONLY with valid JSON in this exact format (no markdown, no explanation):
+{
+  "loadKey": "minimum|quarter|half|full",
+  "loadLabel": "Min Load|Quarter Load|Half Load|Full Truck",
+  "specialsFound": ["Mattress","Refrigerator"],
+  "reasoning": "Brief 1-sentence explanation of what you see"
+}
+
+Rules:
+- Choose the load size that best fits what you see in the photo
+- Only include special items you can actually see
+- specialsFound must use exact labels from: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}`;
+
+      const response=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'x-api-key':ANTHROPIC_API_KEY, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-ipc':'true' },
+        body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:300, messages:[{ role:'user', content:[{ type:'image', source:{ type:'base64', media_type:mediaType, data:b64 } },{ type:'text', text:prompt }] }] })
+      });
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.error?.message||'API error');
+      const text=data.content?.[0]?.text||'';
+      let parsed; try{ parsed=JSON.parse(text.replace(/```json|```/g,'').trim()); }catch(e){ throw new Error('Could not parse AI response'); }
+      const loadKey=parsed.loadKey||'quarter';
+      const loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter;
+      let specialsCost=0;
+      const specialsApplied=[];
+      (parsed.specialsFound||[]).forEach(label=>{ const found=Object.entries(specialSrc).find(([k,v])=>(v.label||v)===label); if(found){ specialsCost+=Number(found[1].fee)||0; specialsApplied.push(label); } });
+      const baseLow=loadCosts.low+specialsCost, baseHigh=loadCosts.high+specialsCost;
+      const quoteLow=Math.round(baseLow*(1+markupFrac)), quoteHigh=Math.round(baseHigh*(1+markupFrac));
+      const markupAdded=Math.round(((quoteLow+quoteHigh)/2)-((baseLow+baseHigh)/2));
+      aiResults[i]={ status:'done', loadKey, loadLabel:parsed.loadLabel||loadKey, specialsFound:specialsApplied, baseLow, baseHigh, quoteLow, quoteHigh, markupPct:markup, markupAdded, reasoning:parsed.reasoning||'' };
+    }catch(err){
+      aiResults[i]={ status:'error', error:err.message.slice(0,60) };
+    }
+    renderAiFileList();
+  }
+
+  // Calculate total
+  const doneResults=aiResults.filter(r=>r&&r.status==='done');
+  if(doneResults.length>0){
+    const totalLow=doneResults.reduce((s,r)=>s+r.quoteLow,0);
+    const totalHigh=doneResults.reduce((s,r)=>s+r.quoteHigh,0);
+    const totalCard=document.getElementById('aiTotalCard');
+    totalCard.style.display='block';
+    document.getElementById('aiTotalPrice').textContent='$'+totalLow+(totalLow!==totalHigh?'–$'+totalHigh:'');
+    document.getElementById('aiTotalSub').textContent=doneResults.length+' photo'+( doneResults.length>1?'s':'')+' analyzed · '+markup+'% markup applied';
+    const rows=document.getElementById('aiTotalRows');
+    rows.innerHTML=doneResults.map((r,i)=>`<div class="ai-breakdown-row" style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:rgba(255,255,255,.4);">Photo ${i+1} — ${r.loadLabel}</span><span style="color:rgba(255,255,255,.7);font-weight:600;">$${r.quoteLow}${r.quoteLow!==r.quoteHigh?'–$'+r.quoteHigh:''}</span></div>`).join('');
+    document.getElementById('aiSaveBtn').style.display='block';
+    aiAnalyzed=true;
+  }
+  btn.disabled=false;
+  document.getElementById('aiBtnText').textContent=`📸 Re-analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`;
+}
+
+async function saveAiJob(){
+  const doneResults=aiResults.filter(r=>r&&r.status==='done');
+  if(doneResults.length===0) return;
+  const totalLow=doneResults.reduce((s,r)=>s+r.quoteLow,0);
+  const totalHigh=doneResults.reduce((s,r)=>s+r.quoteHigh,0);
+  const priceText='$'+totalLow+(totalLow!==totalHigh?'–$'+totalHigh:'');
+  const allSpecials=[...new Set(doneResults.flatMap(r=>r.specialsFound))];
+  const markup=parseInt(document.getElementById('calcMarkup').value);
+  const entry={ id:Date.now(), price:priceText, load:'ai-multi', specials:allSpecials, miles:0, hours:0, markup, ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}), aiQuote:true, photoCount:doneResults.length };
+  jobHistory.unshift(entry); if(jobHistory.length>50) jobHistory=jobHistory.slice(0,50);
   persistHistory(); renderHistory();
-  showToast('✓ Job saved to history');
-  if (session.token) {
-    const load = userPricing.loads[selectedLoad] || {low:0,high:0};
-    const markup = parseInt(document.getElementById('calcMarkup').value)/100;
-    const miles  = parseFloat(document.getElementById('calcMiles').value)||0;
-    const hours  = parseFloat(document.getElementById('calcHours').value)||0;
-    let sCost = 0;
-    Object.keys(selectedSpecials).forEach(k => { if(selectedSpecials[k]&&specialSrc[k]) sCost+=Number(specialSrc[k].fee)||0; });
-    const dCost = Math.round(miles*2*(userPricing.driveRate||1.5));
-    const lCost = Math.round(hours*(userPricing.laborRate||35));
-    const base  = load.low + sCost + dCost + lCost;
-    api({ action:'saveJob', token:session.token, price:priceText, load:selectedLoad, specials:entry.specials, miles, hours, markup:parseInt(document.getElementById('calcMarkup').value), driveCost:dCost, laborCost:lCost, specialsCost:sCost, baseCost:base }).catch(()=>{});
-  }
+  showToast('✓ AI quote saved to history');
+  closeAiPanel();
 }
+
+function readFileBase64(file){ return new Promise((resolve,reject)=>{ const r=new FileReader(); r.onload=e=>resolve(e.target.result.split(',')[1]); r.onerror=reject; r.readAsDataURL(file); }); }
 
 // ══════════════════════════════════════
 //  SETTINGS
 // ══════════════════════════════════════
-function buildSettingsSpecialsGrid() {
-  const grid = document.getElementById('sSpecialsGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  SPECIAL_ITEMS_CONFIG.forEach(item => {
-    sSpecialStates[item.key] = { enabled:true, fee:item.fee };
-    const row = document.createElement('div');
-    row.className = 's-special-row active';
-    row.id = 'ss-'+item.key;
-    row.innerHTML = `<div class="s-sitem-left"><span>${item.icon}</span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>`;
+function buildSettingsSpecialsGrid(){
+  const grid=document.getElementById('sSpecialsGrid'); if(!grid) return;
+  grid.innerHTML='';
+  SPECIAL_ITEMS_CONFIG.forEach(item=>{
+    sSpecialStates[item.key]={enabled:true,fee:item.fee};
+    const row=document.createElement('div'); row.className='s-special-row active'; row.id='ss-'+item.key;
+    row.innerHTML=`<div class="s-sitem-left"><span>${item.icon}</span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>`;
     grid.appendChild(row);
   });
 }
-function toggleSSpecial(key) {
-  sSpecialStates[key].enabled = !sSpecialStates[key].enabled;
-  document.getElementById('ss-'+key).classList.toggle('active', sSpecialStates[key].enabled);
-  const t = document.getElementById('sstoggle-'+key);
-  t.classList.toggle('on', sSpecialStates[key].enabled);
-  t.textContent = sSpecialStates[key].enabled ? '✓' : '+';
-}
-function openSettings() {
-  const l = userPricing.loads;
-  document.getElementById('s-min-low').value   = l.minimum.low;
-  document.getElementById('s-min-high').value  = l.minimum.high;
-  document.getElementById('s-qtr-low').value   = l.quarter.low;
-  document.getElementById('s-qtr-high').value  = l.quarter.high;
-  document.getElementById('s-half-low').value  = l.half.low;
-  document.getElementById('s-half-high').value = l.half.high;
-  document.getElementById('s-full-low').value  = l.full.low;
-  document.getElementById('s-full-high').value = l.full.high;
-  document.getElementById('s-drive').value     = userPricing.driveRate;
-  document.getElementById('s-labor').value     = userPricing.laborRate;
-  document.getElementById('sMarkup').value     = userPricing.defaultMarkup;
-  document.getElementById('sMarkupVal').textContent = userPricing.defaultMarkup + '%';
-  SPECIAL_ITEMS_CONFIG.forEach(item => {
-    const saved = userPricing.specials[item.key];
-    const enabled = saved != null;
-    const fee = saved ? saved.fee : item.fee;
-    sSpecialStates[item.key] = { enabled, fee };
-    const row = document.getElementById('ss-'+item.key);
-    if (row) row.classList.toggle('active', enabled);
-    const t = document.getElementById('sstoggle-'+item.key);
-    if (t) { t.classList.toggle('on', enabled); t.textContent = enabled ? '✓' : '+'; }
-    const fi = document.getElementById('ssfee-'+item.key);
-    if (fi) fi.value = fee;
+function toggleSSpecial(key){ sSpecialStates[key].enabled=!sSpecialStates[key].enabled; document.getElementById('ss-'+key).classList.toggle('active',sSpecialStates[key].enabled); const t=document.getElementById('sstoggle-'+key); t.classList.toggle('on',sSpecialStates[key].enabled); t.textContent=sSpecialStates[key].enabled?'✓':'+'; }
+
+function openSettings(){
+  const l=userPricing.loads;
+  ['s-min-low','s-min-high','s-qtr-low','s-qtr-high','s-half-low','s-half-high','s-full-low','s-full-high'].forEach((id,i)=>{
+    const keys=[['minimum','low'],['minimum','high'],['quarter','low'],['quarter','high'],['half','low'],['half','high'],['full','low'],['full','high']];
+    document.getElementById(id).value=l[keys[i][0]][keys[i][1]];
+  });
+  document.getElementById('s-drive').value=userPricing.driveRate;
+  document.getElementById('s-labor').value=userPricing.laborRate;
+  document.getElementById('sMarkup').value=userPricing.defaultMarkup;
+  document.getElementById('sMarkupVal').textContent=userPricing.defaultMarkup+'%';
+  SPECIAL_ITEMS_CONFIG.forEach(item=>{
+    const saved=userPricing.specials[item.key], enabled=saved!=null, fee=saved?saved.fee:item.fee;
+    sSpecialStates[item.key]={enabled,fee};
+    const row=document.getElementById('ss-'+item.key); if(row) row.classList.toggle('active',enabled);
+    const t=document.getElementById('sstoggle-'+item.key); if(t){t.classList.toggle('on',enabled);t.textContent=enabled?'✓':'+';}
+    const fi=document.getElementById('ssfee-'+item.key); if(fi) fi.value=fee;
   });
   document.getElementById('settingsPanel').classList.add('open');
 }
-function closeSettings() { document.getElementById('settingsPanel').classList.remove('open'); }
-function closeSettingsOutside(e) { if (e.target===document.getElementById('settingsPanel')) closeSettings(); }
+function closeSettings(){ document.getElementById('settingsPanel').classList.remove('open'); }
+function closeSettingsOutside(e){ if(e.target===document.getElementById('settingsPanel')) closeSettings(); }
 
-async function saveSettings() {
-  const btn = document.getElementById('settingsSaveBtn');
-  btn.disabled = true; btn.textContent = 'Saving...';
-  const specials = {};
-  SPECIAL_ITEMS_CONFIG.forEach(item => {
-    if (sSpecialStates[item.key]?.enabled)
-      specials[item.key] = { fee:sSpecialStates[item.key].fee, label:item.label, icon:item.icon };
-  });
-  const newPricing = {
-    loads: {
-      minimum: { low:nsv('s-min-low'),  high:nsv('s-min-high')  },
-      quarter: { low:nsv('s-qtr-low'),  high:nsv('s-qtr-high')  },
-      half:    { low:nsv('s-half-low'), high:nsv('s-half-high') },
-      full:    { low:nsv('s-full-low'), high:nsv('s-full-high') },
-    },
-    specials, driveRate:nsv('s-drive'), laborRate:nsv('s-labor'),
-    defaultMarkup: parseInt(document.getElementById('sMarkup').value),
-  };
-  if (session.token) {
-    try {
-      const res = await api({ action:'updatePricing', token:session.token, ...newPricing });
-      if (!res.success) showToast('⚠ Could not save to server', true);
-    } catch(e) { showToast('⚠ Could not reach server', true); }
-  }
-  applyPricing(newPricing);
-  localStorage.setItem('ww_pricing', JSON.stringify(newPricing));
-  initCalc();
-  btn.disabled = false; btn.textContent = 'Save pricing changes';
-  closeSettings();
-  showToast('✓ Pricing updated');
+async function saveSettings(){
+  const btn=document.getElementById('settingsSaveBtn'); btn.disabled=true; btn.textContent='Saving...';
+  const specials={};
+  SPECIAL_ITEMS_CONFIG.forEach(item=>{ if(sSpecialStates[item.key]?.enabled) specials[item.key]={fee:sSpecialStates[item.key].fee,label:item.label,icon:item.icon}; });
+  const newPricing={ loads:{ minimum:{low:nsv('s-min-low'),high:nsv('s-min-high')}, quarter:{low:nsv('s-qtr-low'),high:nsv('s-qtr-high')}, half:{low:nsv('s-half-low'),high:nsv('s-half-high')}, full:{low:nsv('s-full-low'),high:nsv('s-full-high')} }, specials, driveRate:nsv('s-drive'), laborRate:nsv('s-labor'), defaultMarkup:parseInt(document.getElementById('sMarkup').value) };
+  if(session.token){ try{ const res=await api({action:'updatePricing',token:session.token,...newPricing}); if(!res.success) showToast('⚠ Could not save to server',true); }catch(e){showToast('⚠ Could not reach server',true);} }
+  applyPricing(newPricing); localStorage.setItem('ww_pricing',JSON.stringify(newPricing));
+  initCalc(); btn.disabled=false; btn.textContent='Save pricing changes';
+  closeSettings(); showToast('✓ Pricing updated');
 }
 
 // ══════════════════════════════════════
 //  HISTORY
 // ══════════════════════════════════════
-function loadHistory() {
-  try { jobHistory = JSON.parse(localStorage.getItem('ww_history')||'[]'); } catch(e) { jobHistory=[]; }
-  renderHistory();
+function loadHistory(){ try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];} renderHistory(); }
+function persistHistory(){ try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){} }
+function clearHistory(){ if(!confirm('Clear all job history?')) return; jobHistory=[]; persistHistory(); renderHistory(); }
+function renderHistory(){
+  const list=document.getElementById('historyList');
+  if(!jobHistory.length){list.innerHTML='<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';return;}
+  const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
+  list.innerHTML=jobHistory.map(j=>`<div class="history-item"><div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts}</div></div><div class="history-item-detail">${ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div><div>${j.aiQuote?'<span class="history-item-ai">📸 AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span></div></div>`).join('');
 }
-function persistHistory() { try { localStorage.setItem('ww_history', JSON.stringify(jobHistory)); } catch(e) {} }
-function clearHistory() { if (!confirm('Clear all job history?')) return; jobHistory=[]; persistHistory(); renderHistory(); }
-function renderHistory() {
-  const list = document.getElementById('historyList');
-  if (!jobHistory.length) { list.innerHTML = '<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>'; return; }
-  const ll = {minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
-  list.innerHTML = jobHistory.map(j=>`<div class="history-item"><div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts}</div></div><div class="history-item-detail">${ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div><div class="history-item-markup">${j.markup}% markup</div></div>`).join('');
-}
-function openHistory()  { document.getElementById('historyPanel').classList.add('open'); }
-function closeHistory() { document.getElementById('historyPanel').classList.remove('open'); }
-function closeHistoryOutside(e) { if(e.target===document.getElementById('historyPanel')) closeHistory(); }
+function openHistory(){ document.getElementById('historyPanel').classList.add('open'); }
+function closeHistory(){ document.getElementById('historyPanel').classList.remove('open'); }
+function closeHistoryOutside(e){ if(e.target===document.getElementById('historyPanel')) closeHistory(); }
 
 // ══════════════════════════════════════
-//  PAGE LOADER
+//  PAGE LOADER / TOAST / UTILS
 // ══════════════════════════════════════
-function showPageLoader(msg) {
-  const d = document.createElement('div');
-  d.id = 'pageLoader';
-  d.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';
-  d.innerHTML = `<div style="width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:16px;"></div><p style="font-size:14px;color:rgba(255,255,255,.4);font-family:Inter,sans-serif;">${msg||'Loading...'}</p>`;
-  document.body.appendChild(d);
-}
-function hidePageLoader() { const el=document.getElementById('pageLoader'); if(el) el.remove(); }
-
-// ══════════════════════════════════════
-//  TOAST
-// ══════════════════════════════════════
-function showToast(msg, warn) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.background = warn ? '#b94a4a' : '#1D9E75';
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2400);
-}
-
-// ══════════════════════════════════════
-//  FORM UTILS
-// ══════════════════════════════════════
-function v(id)   { return (document.getElementById(id)?.value||'').trim(); }
-function nv(id)  { return Number(document.getElementById(id)?.value)||0; }
-function nsv(id) { return Number(document.getElementById(id)?.value)||0; }
-function setErr(fid, on) { document.getElementById(fid)?.classList.toggle('has-error', on); }
-function clearFormErrors() {
-  ['f-first','f-last','f-biz','f-email','f-phone','f-pw'].forEach(id=>setErr(id,false));
-}
-function showBanner(id, msg) {
-  const el=document.getElementById(id); if(!el) return;
-  el.textContent=msg; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),8000);
-}
-function hideBanner(id) { const el=document.getElementById(id); if(el) el.classList.remove('show'); }
-document.addEventListener('keydown', e => {
-  if(e.key==='Escape'){closeModal();closeHistory();closeSettings();}
-});
+function showPageLoader(msg){ const d=document.createElement('div'); d.id='pageLoader'; d.style.cssText='position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;'; d.innerHTML=`<div style="width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:16px;"></div><p style="font-size:14px;color:rgba(255,255,255,.4);font-family:Inter,sans-serif;">${msg||'Loading...'}</p>`; document.body.appendChild(d); }
+function hidePageLoader(){ const el=document.getElementById('pageLoader'); if(el) el.remove(); }
+function showToast(msg,warn){ const t=document.getElementById('toast'); t.textContent=msg; t.style.background=warn?'#b94a4a':'#1D9E75'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+function v(id){ return (document.getElementById(id)?.value||'').trim(); }
+function nv(id){ return Number(document.getElementById(id)?.value)||0; }
+function nsv(id){ return Number(document.getElementById(id)?.value)||0; }
+function setErr(fid,on){ document.getElementById(fid)?.classList.toggle('has-error',on); }
+function clearFormErrors(){ ['f-first','f-last','f-biz','f-email','f-phone','f-pw'].forEach(id=>setErr(id,false)); }
+function showBanner(id,msg){ const el=document.getElementById(id); if(!el) return; el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),8000); }
+function hideBanner(id){ const el=document.getElementById(id); if(el) el.classList.remove('show'); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();} });
 </script>
 </body>
-</html>
 </html>
