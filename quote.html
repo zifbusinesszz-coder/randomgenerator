@@ -7,10 +7,13 @@
 <meta name="description" content="Know exactly what to charge before you call the customer back.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- Stripe.js — loads before anything else -->
+<script src="https://js.stripe.com/v3/"></script>
 <style>
 :root {
   --black:#0a0a0a;--white:#ffffff;--off:#f4f4f2;--gray:#777;--border:#e2e2e0;
   --green:#1D9E75;--green-l:#e1f5ee;--green-dk:#0F6E56;
+  --red:#c0392b;--red-l:#fff0f0;
   --d-bg:#0a0a0a;--d-surface:#141414;--d-card:#1c1c1c;
   --d-border:rgba(255,255,255,0.1);--d-border2:rgba(255,255,255,0.18);
   --d-text:#ffffff;--d-muted:rgba(255,255,255,0.45);--d-faint:rgba(255,255,255,0.2);
@@ -145,6 +148,8 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .footer-links a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
 .footer-links a:hover{color:rgba(255,255,255,.7);}
 .footer-copy{font-size:12px;color:rgba(255,255,255,.25);}
+
+/* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
 .modal-overlay.open{display:flex;}
 .modal{background:white;border-radius:20px;width:100%;max-width:600px;box-shadow:0 40px 100px rgba(0,0,0,.3);animation:modalIn .25s ease both;margin:auto;}
@@ -173,12 +178,20 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .field input,.field select{padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;background:white;color:var(--black);}
 .field input:focus,.field select:focus{border-color:var(--black);}
 .field input::placeholder{color:#bbb;}
-.field .error-hint{font-size:11px;color:#c0392b;display:none;}
-.field.has-error input{border-color:#c0392b;}
+.field .error-hint{font-size:11px;color:var(--red);display:none;}
+.field.has-error input{border-color:var(--red);}
 .field.has-error .error-hint{display:block;}
+/* phone field valid indicator */
+.field.phone-valid input{border-color:var(--green);}
+.field.phone-valid::after{content:'✓';color:var(--green);font-size:12px;font-weight:700;position:absolute;right:12px;top:50%;transform:translateY(-50%);}
+.field{position:relative;}
 .divider{height:1px;background:var(--border);margin:4px 0;}
 .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray);margin-bottom:2px;}
-.card-note{font-size:11px;color:#aaa;margin-top:2px;}
+.stripe-card-wrap{border:1px solid var(--border);border-radius:7px;padding:10px 12px;transition:border-color .2s;background:white;}
+.stripe-card-wrap.focused{border-color:var(--black);}
+.stripe-card-wrap.error{border-color:var(--red);}
+.stripe-card-error{font-size:11px;color:var(--red);margin-top:5px;min-height:16px;}
+.stripe-lock-note{font-size:11px;color:#aaa;margin-top:4px;display:flex;align-items:center;gap:5px;}
 .submit-btn{width:100%;padding:13px;background:var(--black);color:white;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px;transition:background .2s;}
 .submit-btn:hover{background:#333;}
 .submit-btn:disabled{background:#aaa;cursor:default;}
@@ -188,8 +201,24 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .btn-back:hover{border-color:var(--black);color:var(--black);}
 .btn-row{display:flex;gap:10px;margin-top:6px;}
 .fine-print{font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.5;}
-.err-banner{background:#fff0f0;border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:#c0392b;margin-bottom:14px;display:none;}
+.err-banner{background:var(--red-l);border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none;}
 .err-banner.show{display:block;}
+
+/* 2FA step */
+.twofa-wrap{text-align:center;padding:10px 0;}
+.twofa-icon{font-size:40px;margin-bottom:12px;}
+.twofa-desc{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
+.twofa-desc strong{color:var(--black);}
+.twofa-code-row{display:flex;justify-content:center;gap:8px;margin-bottom:6px;}
+.twofa-digit{width:44px;height:52px;border:1.5px solid var(--border);border-radius:8px;text-align:center;font-size:22px;font-weight:700;font-family:'Space Mono',monospace;outline:none;transition:border-color .2s;background:white;color:var(--black);}
+.twofa-digit:focus{border-color:var(--black);}
+.twofa-digit.filled{border-color:var(--green);}
+.twofa-resend{font-size:12px;color:var(--gray);margin-top:10px;margin-bottom:20px;}
+.twofa-resend a{color:var(--black);font-weight:600;cursor:pointer;text-decoration:none;}
+.twofa-resend a:hover{text-decoration:underline;}
+.twofa-resend .countdown{font-weight:600;color:var(--gray);}
+
+/* Pricing setup step */
 .pricing-section{margin-bottom:22px;}
 .pricing-section-title{font-size:13px;font-weight:700;color:var(--black);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;}
 .load-row{display:grid;grid-template-columns:130px 1fr 1fr;gap:10px;align-items:center;margin-bottom:8px;}
@@ -228,6 +257,8 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.08);paddin
 .saving-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .saving-overlay p{font-size:14px;color:var(--gray);}
+
+/* ── CALC PAGE ── */
 #calcPage{display:none;min-height:100vh;background:var(--d-bg);color:var(--d-text);}
 .calc-nav{height:58px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--d-surface);border-bottom:1px solid var(--d-border);position:sticky;top:0;z-index:50;}
 .calc-nav-left{display:flex;align-items:center;gap:12px;}
@@ -342,6 +373,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .history-clear-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6);}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:white;font-size:13px;font-weight:600;padding:10px 20px;border-radius:20px;z-index:400;transition:transform .3s ease;pointer-events:none;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
+
 @media(max-width:768px){
   nav{padding:0 20px;}.nav-links{display:none;}
   .hero{grid-template-columns:1fr;padding:90px 20px 60px;gap:40px;}.hero-phone{display:none;}
@@ -354,6 +386,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   .history-drawer,.settings-drawer{width:100%;}
   .calc-load-grid,.calc-specials-grid,.s-specials-grid{grid-template-columns:1fr 1fr;}
   .form-row-3{grid-template-columns:1fr 1fr;}
+  .twofa-code-row{gap:6px;}.twofa-digit{width:38px;height:46px;font-size:18px;}
 }
 </style>
 </head>
@@ -546,7 +579,9 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 </footer>
 </div>
 
-<!-- MODAL -->
+<!-- ══════════════════════════════════════════════
+     MODAL
+══════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
   <div class="modal" id="modal">
     <div class="modal-header" id="modalHeader">
@@ -558,49 +593,72 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Create account</button>
         <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log in</button>
       </div>
+      <!-- step dots: 1=account, 2=verify email, 3=pricing -->
       <div class="modal-steps" id="modalStepDots">
         <div class="modal-step-dot active" id="dot1"></div>
         <div class="modal-step-dot" id="dot2"></div>
+        <div class="modal-step-dot" id="dot3"></div>
       </div>
     </div>
     <div class="modal-body">
-      <!-- STEP 1 -->
+
+      <!-- ── STEP 1: Account + Payment ── -->
       <div id="step1">
         <div class="err-banner" id="step1Err"></div>
-        <div class="modal-trial-box"><span>🔒</span><div><strong>No charge for 14 days.</strong> Your card is saved to activate your plan after the trial. Cancel anytime before day 15 and you'll never be billed.</div></div>
+        <div class="modal-trial-box"><span>🔒</span><div><strong>No charge for 14 days.</strong> Your card is saved securely via Stripe. No charge today — your plan activates on day 15. Cancel anytime.</div></div>
         <div class="form-grid">
           <div class="form-row">
             <div class="field" id="f-first"><label>First name</label><input type="text" id="m-first" placeholder="Griffin"/><span class="error-hint">Required</span></div>
             <div class="field" id="f-last"><label>Last name</label><input type="text" id="m-last" placeholder="Wood"/><span class="error-hint">Required</span></div>
           </div>
           <div class="field" id="f-biz"><label>Business name</label><input type="text" id="m-biz" placeholder="Your Junk Removal Co."/><span class="error-hint">Required</span></div>
-          <div class="field" id="f-email"><label>Email</label><input type="email" id="m-email" placeholder="you@yourbusiness.com"/><span class="error-hint">Valid email required</span></div>
-          <div class="field"><label>Phone</label><input type="tel" id="m-phone" placeholder="(507) 555-0100"/></div>
+          <div class="field" id="f-email"><label>Email — we'll send a verification code</label><input type="email" id="m-email" placeholder="you@yourbusiness.com"/><span class="error-hint">Valid email required</span></div>
+          <div class="field" id="f-phone">
+            <label>Phone number</label>
+            <input type="tel" id="m-phone" placeholder="(507) 555-0100" oninput="onPhoneInput(this)" maxlength="14"/>
+            <span class="error-hint" id="phone-err">Enter a valid US/CA phone number</span>
+          </div>
           <div class="field" id="f-pw"><label>Password</label><input type="password" id="m-pw" placeholder="Min 8 characters"/><span class="error-hint">Min 8 characters</span></div>
           <div class="divider"></div>
-          <div class="section-label">Payment info — trial starts today, billed on day 15</div>
-          <div class="field" id="f-card"><label>Card number</label><input type="text" id="m-card" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"/><span class="error-hint">Enter a valid card number</span></div>
-          <div class="form-row-3">
-            <div class="field" id="f-exp" style="grid-column:1/3"><label>Expiry</label><input type="text" id="m-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)"/><span class="error-hint">Required</span></div>
-            <div class="field" id="f-cvv"><label>CVV</label><input type="text" id="m-cvv" placeholder="•••" maxlength="4"/><span class="error-hint">Required</span></div>
+          <div class="section-label">Payment — Stripe secured · charged only after trial</div>
+          <!-- Stripe Card Element mounts here -->
+          <div>
+            <label style="font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:5px;">Card</label>
+            <div class="stripe-card-wrap" id="stripeCardWrap">
+              <div id="cardElement"></div>
+            </div>
+            <div class="stripe-card-error" id="cardErrors"></div>
+            <div class="stripe-lock-note">🔒 Card info never touches our server — encrypted by Stripe</div>
           </div>
-          <div class="card-note">🔒 Your card info is encrypted and stored securely. No charge today.</div>
-          <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — set up your pricing →</button>
-          <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates at the listed rate. Cancel anytime.</p>
+          <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — verify your email →</button>
+          <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates. Cancel anytime before day 15.</p>
         </div>
       </div>
-      <!-- LOGIN -->
-      <div id="loginForm" style="display:none;">
-        <div class="err-banner" id="loginErr"></div>
-        <div class="form-grid">
-          <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
-          <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password"/></div>
-          <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
-          <p class="fine-print">Don't have an account? <a href="#" onclick="switchTab('signup');return false;" style="color:var(--black);font-weight:600;">Start a free trial →</a></p>
-        </div>
-      </div>
-      <!-- STEP 2 -->
+
+      <!-- ── STEP 2: 2FA Email Verification ── -->
       <div id="step2" style="display:none;">
+        <div class="err-banner" id="step2Err"></div>
+        <div class="twofa-wrap">
+          <div class="twofa-icon">📬</div>
+          <div class="twofa-desc">We sent a 6-digit code to<br><strong id="twofa-email-display"></strong><br>Enter it below to verify your email.</div>
+          <div class="twofa-code-row" id="twofaDigits">
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d0" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d1" oninput="onDigit(this,1)" onkeydown="onDigitKey(event,1)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d2" oninput="onDigit(this,2)" onkeydown="onDigitKey(event,2)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d3" oninput="onDigit(this,3)" onkeydown="onDigitKey(event,3)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d4" oninput="onDigit(this,4)" onkeydown="onDigitKey(event,4)"/>
+            <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]" id="d5" oninput="onDigit(this,5)" onkeydown="onDigitKey(event,5)"/>
+          </div>
+          <div class="twofa-resend">Didn't get it? <a onclick="resendCode()" id="resendLink">Resend code</a> <span class="countdown" id="resendCountdown"></span></div>
+          <button class="submit-btn" id="verifyBtn" onclick="verifyCode()">Verify &amp; continue →</button>
+          <div style="margin-top:10px;">
+            <button class="btn-back" onclick="goStep(1)" style="width:100%;margin-top:4px;">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Pricing setup ── -->
+      <div id="step3" style="display:none;">
         <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. You can update them anytime in Settings.</div>
         <div class="pricing-section">
           <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(what it costs YOU — before markup)</span></div>
@@ -634,12 +692,25 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           </div>
         </div>
         <div class="btn-row" style="margin-top:20px;">
-          <button class="btn-back" onclick="goStep(1)">← Back</button>
-          <button class="submit-btn" id="step2Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
+          <button class="btn-back" onclick="goStep(2)">← Back</button>
+          <button class="submit-btn" id="step3Btn" onclick="completeSignup()" style="flex:1;">Save & open my quote tool →</button>
         </div>
       </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm" style="display:none;">
+        <div class="err-banner" id="loginErr"></div>
+        <div class="form-grid">
+          <div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
+          <div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password"/></div>
+          <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
+          <p class="fine-print">Don't have an account? <a href="#" onclick="switchTab('signup');return false;" style="color:var(--black);font-weight:600;">Start a free trial →</a></p>
+        </div>
+      </div>
+
       <!-- SAVING -->
       <div class="saving-overlay" id="savingOverlay"><div class="saving-spinner"></div><p id="savingMsg">Setting up your account...</p></div>
+
       <!-- SUCCESS -->
       <div class="success-state" id="successState">
         <div class="success-mark">✓</div>
@@ -656,11 +727,14 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <button class="submit-btn green" onclick="openCalc()">Open my quote tool →</button>
         <p style="font-size:13px;color:var(--gray);margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- CALC PAGE -->
+    </div><!-- /.modal-body -->
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- ══════════════════════════════════════════════
+     CALC PAGE (unchanged from original)
+══════════════════════════════════════════════ -->
 <div id="calcPage">
   <nav class="calc-nav">
     <div class="calc-nav-left">
@@ -720,7 +794,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </div>
 
-<!-- SETTINGS -->
+<!-- SETTINGS DRAWER -->
 <div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
   <div class="settings-drawer">
     <div class="settings-header"><div class="settings-title">Settings</div><button class="settings-close" onclick="closeSettings()">✕</button></div>
@@ -757,7 +831,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </div>
 
-<!-- HISTORY -->
+<!-- HISTORY DRAWER -->
 <div class="history-panel" id="historyPanel" onclick="closeHistoryOutside(event)">
   <div class="history-drawer">
     <div class="history-header"><div class="history-title">Job history</div><button class="history-close" onclick="closeHistory()">✕</button></div>
@@ -770,9 +844,11 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 
 <script>
 // ══════════════════════════════════════
-//  CONFIG — paste your Apps Script URL here
+//  CONFIG
 // ══════════════════════════════════════
-const API_URL = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
+const API_URL         = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
+// ↓ Replace with your actual Stripe publishable key (starts with pk_live_ or pk_test_)
+const STRIPE_PK       = 'pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY';
 
 const SPECIAL_ITEMS_CONFIG = [
   { key:'mattress',  icon:'🛏️', label:'Mattress',     fee:40  },
@@ -786,6 +862,84 @@ const SPECIAL_ITEMS_CONFIG = [
   { key:'ac',        icon:'❄️', label:'A/C Unit',     fee:35  },
   { key:'paint',     icon:'🪣', label:'Paint Cans',   fee:20  },
 ];
+
+// ══════════════════════════════════════
+//  STRIPE SETUP
+// ══════════════════════════════════════
+let stripe, cardElement, cardComplete = false;
+
+function initStripe() {
+  if (stripe) return;
+  try {
+    stripe = Stripe(STRIPE_PK);
+    const elements = stripe.elements();
+    cardElement = elements.create('card', {
+      style: {
+        base: {
+          fontFamily: "'Inter', sans-serif",
+          fontSize: '13px',
+          color: '#0a0a0a',
+          '::placeholder': { color: '#bbb' },
+        },
+        invalid: { color: '#c0392b' },
+      },
+    });
+    cardElement.mount('#cardElement');
+    cardElement.on('change', e => {
+      const wrap = document.getElementById('stripeCardWrap');
+      const err  = document.getElementById('cardErrors');
+      cardComplete = e.complete;
+      if (e.error) {
+        err.textContent = e.error.message;
+        wrap.classList.add('error');
+        wrap.classList.remove('focused');
+      } else {
+        err.textContent = '';
+        wrap.classList.remove('error');
+      }
+    });
+    cardElement.on('focus', () => document.getElementById('stripeCardWrap').classList.add('focused'));
+    cardElement.on('blur',  () => document.getElementById('stripeCardWrap').classList.remove('focused'));
+  } catch(e) {
+    console.warn('Stripe not available:', e.message);
+  }
+}
+
+// ══════════════════════════════════════
+//  PHONE VALIDATION (NANP — US/CA)
+// ══════════════════════════════════════
+function onPhoneInput(el) {
+  // Strip non-digits
+  let digits = el.value.replace(/\D/g, '').slice(0, 10);
+  // Format as (XXX) XXX-XXXX
+  let fmt = '';
+  if (digits.length > 0) fmt = '(' + digits.slice(0,3);
+  if (digits.length >= 4) fmt += ') ' + digits.slice(3,6);
+  if (digits.length >= 7) fmt += '-' + digits.slice(6,10);
+  el.value = fmt;
+  // Validate
+  const field = document.getElementById('f-phone');
+  const valid = isValidPhone(digits);
+  field.classList.toggle('phone-valid', valid && digits.length === 10);
+  field.classList.toggle('has-error', digits.length > 0 && !valid);
+}
+
+function isValidPhone(digits) {
+  if (digits.length !== 10) return false;
+  const areaCode  = digits.slice(0,3);
+  const exchange  = digits.slice(3,6);
+  // NANP rules: area code and exchange can't start with 0 or 1
+  if (areaCode[0] === '0' || areaCode[0] === '1') return false;
+  if (exchange[0] === '0' || exchange[1] === '1') return false;
+  // No N11 area codes (211, 311, 411, 511, 611, 711, 811, 911)
+  if (/^[2-9]11$/.test(areaCode)) return false;
+  return true;
+}
+
+function getRawPhone() {
+  const digits = document.getElementById('m-phone').value.replace(/\D/g,'');
+  return digits.length === 10 ? '+1' + digits : null;
+}
 
 // ══════════════════════════════════════
 //  STATE
@@ -802,6 +956,8 @@ let selectedSpecials  = {};
 let jobHistory        = [];
 let activeTab         = 'signup';
 let sSpecialStates    = {};
+let verificationToken = null; // returned from sendVerificationCode
+let resendTimer       = null;
 
 let userPricing = {
   loads: {
@@ -850,7 +1006,7 @@ function loadLocalPricing() {
 }
 
 // ══════════════════════════════════════
-//  API — sends as FormData so GAS can read e.parameter.payload
+//  API
 // ══════════════════════════════════════
 async function api(payload) {
   const fd = new FormData();
@@ -873,12 +1029,15 @@ function openModal(planOrMode) {
   }
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  // Mount Stripe after modal is visible
+  setTimeout(initStripe, 50);
 }
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
   document.getElementById('savingOverlay').style.display = 'none';
   document.getElementById('successState').style.display  = 'none';
+  if (resendTimer) clearInterval(resendTimer);
 }
 function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
 
@@ -887,40 +1046,224 @@ function switchTab(tab) {
   const isSig = tab === 'signup';
   document.getElementById('tabSignup').classList.toggle('active', isSig);
   document.getElementById('tabLogin').classList.toggle('active', !isSig);
-  document.getElementById('step1').style.display       = isSig ? 'block' : 'none';
-  document.getElementById('step2').style.display       = 'none';
-  document.getElementById('loginForm').style.display   = isSig ? 'none' : 'block';
-  document.getElementById('savingOverlay').style.display = 'none';
-  document.getElementById('successState').style.display  = 'none';
-  document.getElementById('modalStepDots').style.display = isSig ? 'flex' : 'none';
-  document.getElementById('modalPlanBadge').style.display = isSig ? 'inline-block' : 'none';
+  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  if (isSig) {
+    document.getElementById('step1').style.display = 'block';
+    updateStepDots(1);
+    setTimeout(initStripe, 50);
+  } else {
+    document.getElementById('loginForm').style.display = 'block';
+  }
+  document.getElementById('modalStepDots').style.display   = isSig ? 'flex' : 'none';
+  document.getElementById('modalPlanBadge').style.display  = isSig ? 'inline-block' : 'none';
   document.getElementById('modalTitle').textContent    = isSig ? 'Start your free trial' : 'Welcome back';
   document.getElementById('modalSubtitle').textContent = isSig ? '14 days free. Card required — charged only after trial ends.' : 'Log in to your quote tool';
-  if (isSig) updateStepDots(1);
 }
 
 function goStep(n) {
-  document.getElementById('step1').style.display = n===1 ? 'block' : 'none';
-  document.getElementById('step2').style.display = n===2 ? 'block' : 'none';
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('savingOverlay').style.display = 'none';
-  document.getElementById('successState').style.display  = 'none';
+  ['step1','step2','step3','loginForm','savingOverlay','successState'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  if (n===1) document.getElementById('step1').style.display = 'block';
+  if (n===2) document.getElementById('step2').style.display = 'block';
+  if (n===3) document.getElementById('step3').style.display = 'block';
   updateStepDots(n);
-  const titles = ['Start your free trial','Set your costs & markup'];
-  const subs   = ['14 days free. Card required — charged only after trial ends.','Takes 2 minutes. Change any of this anytime.'];
+  const titles = ['Start your free trial','Verify your email','Set your costs & markup'];
+  const subs   = ['14 days free. Card required — charged only after trial ends.','','Takes 2 minutes. Change any of this anytime.'];
   document.getElementById('modalTitle').textContent    = titles[n-1]||'';
   document.getElementById('modalSubtitle').textContent = subs[n-1]||'';
   document.getElementById('modal').scrollTop = 0;
 }
 
 function updateStepDots(n) {
-  [1,2].forEach(i => {
+  [1,2,3].forEach(i => {
     document.getElementById('dot'+i).className = 'modal-step-dot'+(i<n?' done':i===n?' active':'');
   });
 }
 
 // ══════════════════════════════════════
-//  SIGNUP
+//  STEP 1 → validate + tokenize card + send verification email
+// ══════════════════════════════════════
+async function goStep2() {
+  clearFormErrors();
+  const first = v('m-first'), last = v('m-last'), biz = v('m-biz');
+  const email = v('m-email'), pw = v('m-pw');
+  const phone = getRawPhone();
+  let valid = true;
+  if (!first)                       { setErr('f-first',true); valid=false; }
+  if (!last)                        { setErr('f-last', true); valid=false; }
+  if (!biz)                         { setErr('f-biz',  true); valid=false; }
+  if (!email||!email.includes('@')) { setErr('f-email',true); valid=false; }
+  if (!phone) {
+    setErr('f-phone',true);
+    document.getElementById('phone-err').textContent = 'Enter a valid 10-digit US/CA phone number';
+    valid=false;
+  }
+  if (!pw||pw.length<8)             { setErr('f-pw',true); valid=false; }
+  if (!cardComplete) {
+    document.getElementById('cardErrors').textContent = 'Please complete your card information.';
+    document.getElementById('stripeCardWrap').classList.add('error');
+    valid=false;
+  }
+  if (!valid) { showBanner('step1Err','Please fill in all required fields above.'); return; }
+  hideBanner('step1Err');
+
+  const btn = document.getElementById('step1Btn');
+  btn.disabled = true; btn.textContent = 'Tokenizing card...';
+
+  // Create Stripe PaymentMethod so the card number never hits our server
+  let pmId = null;
+  if (stripe && cardElement) {
+    try {
+      const { paymentMethod, error } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+        billing_details: {
+          name: first + ' ' + last,
+          email: email,
+          phone: phone,
+        },
+      });
+      if (error) {
+        document.getElementById('cardErrors').textContent = error.message;
+        document.getElementById('stripeCardWrap').classList.add('error');
+        btn.disabled = false; btn.textContent = 'Continue — verify your email →';
+        return;
+      }
+      pmId = paymentMethod.id;
+    } catch(e) {
+      // Stripe not configured yet — allow flow to continue for testing
+      console.warn('Stripe tokenization skipped:', e.message);
+    }
+  }
+
+  btn.textContent = 'Sending verification code...';
+
+  // Request verification code from backend
+  try {
+    const res = await api({ action:'sendVerificationCode', email, businessName: biz, phone });
+    if (!res.success) {
+      showBanner('step1Err', res.error || 'Could not send verification email.');
+      btn.disabled = false; btn.textContent = 'Continue — verify your email →';
+      return;
+    }
+    verificationToken = res.verificationToken;
+    // Store payment method id in a closure for use in step 3
+    window._pendingPaymentMethodId = pmId;
+  } catch(e) {
+    showBanner('step1Err', 'Could not connect: ' + e.message);
+    btn.disabled = false; btn.textContent = 'Continue — verify your email →';
+    return;
+  }
+
+  btn.disabled = false; btn.textContent = 'Continue — verify your email →';
+
+  // Show 2FA step
+  document.getElementById('twofa-email-display').textContent = email;
+  clearDigits();
+  goStep(2);
+  startResendCountdown();
+  setTimeout(() => { document.getElementById('d0').focus(); }, 200);
+}
+
+// ══════════════════════════════════════
+//  2FA — DIGITS
+// ══════════════════════════════════════
+function clearDigits() {
+  for (let i=0;i<6;i++) {
+    const el=document.getElementById('d'+i);
+    el.value='';
+    el.classList.remove('filled');
+  }
+}
+
+function onDigit(el, idx) {
+  // Accept only digits
+  el.value = el.value.replace(/[^0-9]/g,'').slice(-1);
+  el.classList.toggle('filled', el.value !== '');
+  if (el.value && idx < 5) document.getElementById('d'+(idx+1)).focus();
+  // Auto-verify when all 6 filled
+  if (idx===5 && el.value) {
+    const code = Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
+    if (code.length===6) setTimeout(verifyCode, 100);
+  }
+}
+
+function onDigitKey(e, idx) {
+  if (e.key==='Backspace' && !document.getElementById('d'+idx).value && idx>0) {
+    document.getElementById('d'+(idx-1)).focus();
+  }
+}
+
+async function verifyCode() {
+  const code = Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
+  if (code.length<6) { showBanner('step2Err','Enter the full 6-digit code.'); return; }
+  const btn = document.getElementById('verifyBtn');
+  btn.disabled = true; btn.textContent = 'Verifying...';
+  try {
+    const res = await api({ action:'verifyCode', verificationToken, code });
+    btn.disabled = false; btn.textContent = 'Verify & continue →';
+    if (!res.success) {
+      showBanner('step2Err', res.error || 'Incorrect code. Please try again.');
+      clearDigits();
+      document.getElementById('d0').focus();
+      return;
+    }
+    // Code verified — advance to pricing setup
+    if (resendTimer) clearInterval(resendTimer);
+    goStep(3);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Verify & continue →';
+    showBanner('step2Err', 'Could not connect: ' + e.message);
+  }
+}
+
+async function resendCode() {
+  const email = v('m-email');
+  const biz   = v('m-biz');
+  const phone = getRawPhone();
+  try {
+    const res = await api({ action:'sendVerificationCode', email, businessName:biz, phone });
+    if (res.success) {
+      verificationToken = res.verificationToken;
+      clearDigits();
+      document.getElementById('d0').focus();
+      showToast('✓ New code sent');
+      startResendCountdown();
+    } else {
+      showToast('⚠ Could not resend: ' + (res.error||''), true);
+    }
+  } catch(e) {
+    showToast('⚠ Network error', true);
+  }
+}
+
+function startResendCountdown() {
+  if (resendTimer) clearInterval(resendTimer);
+  let sec = 60;
+  const link = document.getElementById('resendLink');
+  const cd   = document.getElementById('resendCountdown');
+  link.style.pointerEvents = 'none';
+  link.style.opacity = '0.4';
+  cd.textContent = '('+sec+'s)';
+  resendTimer = setInterval(() => {
+    sec--;
+    cd.textContent = sec > 0 ? '('+sec+'s)' : '';
+    if (sec <= 0) {
+      clearInterval(resendTimer);
+      link.style.pointerEvents = '';
+      link.style.opacity = '';
+      cd.textContent = '';
+    }
+  }, 1000);
+}
+
+// ══════════════════════════════════════
+//  STEP 3 → complete signup
 // ══════════════════════════════════════
 function buildSpecialGrid() {
   const grid = document.getElementById('specialGrid');
@@ -944,28 +1287,8 @@ function toggleSpecial(key) {
 }
 function updateSpecialFee(key, val) { specialItemStates[key].fee = Number(val)||0; }
 
-function goStep2() {
-  clearFormErrors();
-  const first = v('m-first'), last = v('m-last'), biz = v('m-biz');
-  const email = v('m-email'), pw = v('m-pw');
-  const card  = v('m-card').replace(/\s/g,'');
-  const exp   = v('m-exp'), cvv = v('m-cvv');
-  let valid = true;
-  if (!first)                         { setErr('f-first',true); valid=false; }
-  if (!last)                          { setErr('f-last', true); valid=false; }
-  if (!biz)                           { setErr('f-biz',  true); valid=false; }
-  if (!email||!email.includes('@'))   { setErr('f-email',true); valid=false; }
-  if (!pw||pw.length<8)               { setErr('f-pw',   true); valid=false; }
-  if (card.length<16)                 { setErr('f-card', true); valid=false; }
-  if (exp.length<4)                   { setErr('f-exp',  true); valid=false; }
-  if (cvv.length<3)                   { setErr('f-cvv',  true); valid=false; }
-  if (!valid) { showBanner('step1Err','Please fill in all fields above.'); return; }
-  hideBanner('step1Err');
-  goStep(2);
-}
-
 async function completeSignup() {
-  const btn = document.getElementById('step2Btn');
+  const btn = document.getElementById('step3Btn');
   btn.disabled = true; btn.textContent = 'Saving...';
 
   const specials = {};
@@ -988,14 +1311,16 @@ async function completeSignup() {
   };
 
   const payload = {
-    action:'signup',
-    businessName: v('m-biz'),
-    ownerName:    v('m-first')+' '+v('m-last'),
-    email:        v('m-email'),
-    phone:        v('m-phone'),
-    password:     v('m-pw'),
-    plan:         currentPlan,
-    trialStart:   new Date().toISOString(),
+    action:          'signup',
+    businessName:    v('m-biz'),
+    ownerName:       v('m-first')+' '+v('m-last'),
+    email:           v('m-email'),
+    phone:           getRawPhone() || v('m-phone'),
+    password:        v('m-pw'),
+    plan:            currentPlan,
+    trialStart:      new Date().toISOString(),
+    paymentMethodId: window._pendingPaymentMethodId || null,
+    verificationToken,
     ...pricing,
   };
 
@@ -1003,8 +1328,8 @@ async function completeSignup() {
     const res = await api(payload);
     btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
     if (!res.success) {
-      showBanner('step1Err', res.error || 'Something went wrong. Please try again.');
-      goStep(1); return;
+      showBanner('step2Err', res.error || 'Something went wrong. Please try again.');
+      goStep(2); return;
     }
     saveSession(res.token, res.companyId, res.businessName || v('m-biz'));
     applyPricing(pricing);
@@ -1012,13 +1337,15 @@ async function completeSignup() {
     showSuccess();
   } catch(e) {
     btn.disabled = false; btn.textContent = 'Save & open my quote tool →';
-    showBanner('step1Err', 'Could not connect: ' + e.message);
-    goStep(1);
+    showBanner('step2Err', 'Could not connect: ' + e.message);
+    goStep(2);
   }
 }
 
 function showSuccess() {
-  ['step1','step2','savingOverlay','loginForm'].forEach(id => { const el=document.getElementById(id); if(el) el.style.display='none'; });
+  ['step1','step2','step3','savingOverlay','loginForm'].forEach(id => {
+    const el=document.getElementById(id); if(el) el.style.display='none';
+  });
   document.getElementById('successState').style.display  = 'block';
   document.getElementById('modalStepDots').style.display = 'none';
   document.getElementById('modalTitle').textContent      = "You're all set.";
@@ -1096,7 +1423,7 @@ function openCalcDirect() {
 }
 
 // ══════════════════════════════════════
-//  CALCULATOR
+//  CALCULATOR (unchanged logic)
 // ══════════════════════════════════════
 function initCalc() {
   document.getElementById('calcNavCo').textContent = session.businessName;
@@ -1158,24 +1485,20 @@ function recalc() {
   const hours     = parseFloat(document.getElementById('calcHours').value) || 0;
   const driveRate = userPricing.driveRate || 1.5;
   const laborRate = userPricing.laborRate || 35;
-
   const specialSrc = Object.keys(userPricing.specials).length > 0
     ? userPricing.specials
     : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   let specialsCost = 0;
   Object.keys(selectedSpecials).forEach(k => { if (selectedSpecials[k] && specialSrc[k]) specialsCost += Number(specialSrc[k].fee)||0; });
-
   const driveCost = Math.round(miles * 2 * driveRate);
   const laborCost = Math.round(hours * laborRate);
   const baseLow   = load.low  + specialsCost + driveCost + laborCost;
   const baseHigh  = load.high + specialsCost + driveCost + laborCost;
   const quoteLow  = Math.round(baseLow  * (1 + markup));
   const quoteHigh = Math.round(baseHigh * (1 + markup));
-
   const priceEl = document.getElementById('calcFinalPrice');
   if (quoteLow === quoteHigh) { priceEl.textContent = '$'+quoteLow.toLocaleString(); priceEl.className='calc-result-price'; }
   else { priceEl.textContent = '$'+quoteLow.toLocaleString()+'–$'+quoteHigh.toLocaleString(); priceEl.className='calc-result-price has-range'; }
-
   document.getElementById('calcBreakdown').style.display = 'flex';
   document.getElementById('bd-load').textContent = '$'+load.low+(load.low!==load.high?'–$'+load.high:'');
   document.getElementById('bd-specials-row').style.display = specialsCost>0?'flex':'none';
@@ -1208,12 +1531,10 @@ async function saveJob() {
   if (!selectedLoad) { showToast('⚠ Select a load size first', true); return; }
   const priceText = document.getElementById('calcFinalPrice').textContent;
   if (priceText === '—' || priceText === 'Select a load size') return;
-
   const specialSrc = Object.keys(userPricing.specials).length > 0
     ? userPricing.specials
     : Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   const activeSpecials = Object.keys(selectedSpecials).filter(k => selectedSpecials[k]);
-
   const entry = {
     id: Date.now(), price: priceText, load: selectedLoad,
     specials: activeSpecials.map(k => specialSrc[k]?.label || k),
@@ -1222,12 +1543,10 @@ async function saveJob() {
     markup: parseInt(document.getElementById('calcMarkup').value),
     ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),
   };
-
   jobHistory.unshift(entry);
   if (jobHistory.length > 50) jobHistory = jobHistory.slice(0,50);
   persistHistory(); renderHistory();
   showToast('✓ Job saved to history');
-
   if (session.token) {
     const load = userPricing.loads[selectedLoad] || {low:0,high:0};
     const markup = parseInt(document.getElementById('calcMarkup').value)/100;
@@ -1377,12 +1696,19 @@ function v(id)   { return (document.getElementById(id)?.value||'').trim(); }
 function nv(id)  { return Number(document.getElementById(id)?.value)||0; }
 function nsv(id) { return Number(document.getElementById(id)?.value)||0; }
 function setErr(fid, on) { document.getElementById(fid)?.classList.toggle('has-error', on); }
-function clearFormErrors() { ['f-first','f-last','f-biz','f-email','f-pw','f-card','f-exp','f-cvv'].forEach(id=>setErr(id,false)); }
-function showBanner(id, msg) { const el=document.getElementById(id); if(!el) return; el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),6000); }
+function clearFormErrors() {
+  ['f-first','f-last','f-biz','f-email','f-phone','f-pw'].forEach(id=>setErr(id,false));
+}
+function showBanner(id, msg) {
+  const el=document.getElementById(id); if(!el) return;
+  el.textContent=msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),8000);
+}
 function hideBanner(id) { const el=document.getElementById(id); if(el) el.classList.remove('show'); }
-function fmtCard(el) { let vv=el.value.replace(/\D/g,'').slice(0,16); el.value=vv.replace(/(.{4})/g,'$1 ').trim(); }
-function fmtExp(el)  { let vv=el.value.replace(/\D/g,'').slice(0,4); if(vv.length>=3) vv=vv.slice(0,2)+' / '+vv.slice(2); el.value=vv; }
-document.addEventListener('keydown', e => { if(e.key==='Escape'){closeModal();closeHistory();closeSettings();} });
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){closeModal();closeHistory();closeSettings();}
+});
 </script>
 </body>
+</html>
 </html>
