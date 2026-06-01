@@ -3,175 +3,484 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Instant Quote | Wood's Waste Junk Removal</title>
+<title>Instant Quote Calculator | Wood's Waste Junk Removal</title>
 <meta name="description" content="Get an instant junk removal quote from Wood's Waste. Serving Farmington, Apple Valley, Lakeville, Burnsville & south metro Minnesota. Call (507) 298-1179.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="canonical" href="https://woodswastemn.com/quote">
+<link rel="icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-:root {
-  --green: #2d6a4f;
-  --green-light: #40916c;
-  --green-pale: #d8f3dc;
-  --dark: #0d1b12;
-  --dark2: #1a2e1f;
-  --text: #1b2d22;
-  --muted: #5a7262;
-  --border: #d4e6d9;
-  --white: #ffffff;
-  --cream: #f7faf8;
-  --accent: #52b788;
+*, *::before, *::after { box-sizing: border-box; }
+
+.quote-hero {
+  padding: 160px 40px 100px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 16px; line-height: 1.6; }
+.quote-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg, transparent, transparent 60px,
+    rgba(0,0,0,0.018) 60px, rgba(0,0,0,0.018) 61px
+  );
+}
+.quote-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.quote-breadcrumb {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 20px;
+  font-family: 'Inter', sans-serif;
+}
+.quote-breadcrumb a { color: #999; text-decoration: none; }
+.quote-breadcrumb a:hover { color: #111; }
+.quote-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: #0a0a0a;
+  margin-bottom: 24px;
+}
+.quote-hero h1 span {
+  display: inline-block;
+  background: #0a0a0a;
+  color: white;
+  padding: 0 12px 4px;
+  border-radius: 4px;
+}
+.quote-hero p {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #777;
+  max-width: 600px;
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
 
-/* NAV */
-nav { background: var(--dark); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
-.nav-logo { height: 38px; }
-.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-.nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-.nav-links a:hover { color: var(--white); }
-.nav-cta { background: var(--green); color: white !important; padding: 8px 18px; border-radius: 6px; }
-
-/* HERO */
-.hero { background: var(--dark2); color: white; padding: 4rem 2rem 3rem; text-align: center; border-bottom: 3px solid var(--green); }
-.hero-tag { display: inline-block; background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 1rem; }
-.hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: 0.03em; line-height: 1; margin-bottom: 0.75rem; }
-.hero h1 span { color: var(--accent); }
-.hero p { color: rgba(255,255,255,0.65); font-size: 15px; max-width: 480px; margin: 0 auto; }
-
-/* MAIN LAYOUT */
-.container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-
-/* STEP PROGRESS */
-.progress { display: flex; gap: 0; margin-bottom: 2.5rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
-.progress-step { flex: 1; padding: 12px 8px; text-align: center; font-size: 13px; font-weight: 500; background: white; color: var(--muted); border-right: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+/* PROGRESS */
+.progress-bar {
+  background: #f5f5f5;
+  padding: 0;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 64px;
+  z-index: 50;
+}
+.progress-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+}
+.progress-step {
+  flex: 1;
+  padding: 16px 12px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #aaa;
+  border-right: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f5f5f5;
+}
 .progress-step:last-child { border-right: none; }
-.progress-step.active { background: var(--green); color: white; }
-.progress-step.done { background: var(--green-pale); color: var(--green); }
-.step-num { display: block; font-size: 11px; font-weight: 600; opacity: 0.7; margin-bottom: 2px; }
+.progress-step .step-num { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; opacity: 0.6; }
+.progress-step.active { background: #0a0a0a; color: white; }
+.progress-step.active .step-num { opacity: 0.6; }
+.progress-step.done { background: white; color: #111; }
+
+/* MAIN */
+.quote-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+}
 
 /* CARDS */
-.card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
-.card-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
-.card-title svg { color: var(--green); }
-.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
-.badge-green { background: var(--green-pale); color: var(--green); }
-.badge-blue { background: #e0f0ff; color: #1a6faa; }
+.q-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 32px 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.q-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: #0a0a0a;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.q-card:hover::before { transform: scaleX(1); }
+.q-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.badge-dark { background: #0a0a0a; color: white; }
+.badge-gray { background: #f0f0f0; color: #555; }
 
 /* FORM ELEMENTS */
-label.lbl { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
-input[type=number], input[type=text], select {
-  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text);
-  background: var(--cream); margin-bottom: 14px; transition: border 0.2s;
+.lbl {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
 }
-input[type=number]:focus, input[type=text]:focus { outline: none; border-color: var(--green); background: white; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+input[type=number], input[type=text] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: #111;
+  background: #fafafa;
+  margin-bottom: 16px;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+input[type=number]:focus, input[type=text]:focus {
+  border-color: #0a0a0a;
+  background: white;
+}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 
-/* LOAD SIZE BUTTONS */
-.load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0; }
-.load-btn { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 10px; cursor: pointer; text-align: center; background: white; transition: all 0.15s; }
-.load-btn:hover { border-color: var(--green-light); background: var(--cream); }
-.load-btn.selected { border: 2px solid var(--green); background: var(--green-pale); }
-.load-icon { font-size: 22px; margin-bottom: 4px; }
-.load-size { font-size: 14px; font-weight: 600; color: var(--text); }
-.load-yards { font-size: 11px; color: var(--muted); margin: 2px 0; }
-.load-price { font-size: 16px; font-weight: 700; color: var(--green); }
+/* LOAD SIZE */
+.load-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.load-btn {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px 10px 16px;
+  cursor: pointer;
+  text-align: center;
+  background: white;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.load-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: #0a0a0a;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.load-btn:hover { border-color: #0a0a0a; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.load-btn:hover::before { transform: scaleX(1); }
+.load-btn.selected { border: 2px solid #0a0a0a; background: #f5f5f5; }
+.load-btn.selected::before { transform: scaleX(1); }
+.load-icon { font-size: 28px; margin-bottom: 8px; }
+.load-size { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: #0a0a0a; }
+.load-yards { font-family: 'Inter', sans-serif; font-size: 11px; color: #999; margin: 3px 0; }
+.load-price { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; color: #0a0a0a; margin-top: 6px; }
 
 /* ITEMS */
-.item-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
 .item-row:last-child { border-bottom: none; }
-.item-icon { font-size: 18px; width: 28px; text-align: center; }
-.item-name { flex: 1; font-size: 14px; color: var(--text); }
-.item-fee { font-size: 12px; color: var(--muted); margin-right: 8px; }
-.qty-ctrl { display: flex; align-items: center; gap: 8px; }
-.qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.15s; font-weight: 300; }
-.qty-btn:hover { border-color: var(--green); color: var(--green); }
-.qty-num { font-size: 15px; font-weight: 600; min-width: 22px; text-align: center; color: var(--text); }
+.item-icon { font-size: 20px; width: 30px; text-align: center; flex-shrink: 0; }
+.item-name { flex: 1; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: #222; }
+.item-fee { font-family: 'Space Mono', monospace; font-size: 11px; color: #aaa; margin-right: 8px; }
+.qty-ctrl { display: flex; align-items: center; gap: 10px; }
+.qty-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  color: #333;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.qty-btn:hover { border-color: #0a0a0a; color: #0a0a0a; background: #f5f5f5; }
+.qty-num { font-family: 'Space Mono', monospace; font-size: 15px; font-weight: 700; min-width: 22px; text-align: center; color: #0a0a0a; }
 
-/* PHOTO UPLOAD */
-.photo-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 12px; }
-.photo-zone:hover { border-color: var(--green); background: var(--green-pale); }
-.photo-zone svg { color: var(--muted); margin-bottom: 8px; }
-.photo-zone p { font-size: 13px; color: var(--muted); }
-.photo-zone small { font-size: 11px; color: var(--muted); opacity: 0.7; }
-.photo-preview { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; display: none; border: 1px solid var(--border); }
-.ai-result { background: var(--green-pale); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--green); margin-bottom: 12px; display: none; line-height: 1.6; }
-.analyzing { background: #fff8e1; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #7a5c00; display: none; }
-
-/* BUTTONS */
-.btn-primary { background: var(--green); color: white; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.2s; letter-spacing: 0.02em; }
-.btn-primary:hover { background: var(--green-light); }
-.btn-secondary { background: white; color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 22px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
-.btn-secondary:hover { border-color: var(--green); color: var(--green); }
-.btn-row { display: flex; gap: 10px; margin-top: 8px; }
-.btn-row .btn-primary { flex: 1; }
-
-/* SUMMARY */
-.summary-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text); }
-.summary-line:last-child { border-bottom: none; }
-.summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; padding: 14px 0 4px; color: var(--text); }
-.price-range-box { background: var(--dark2); color: white; border-radius: 12px; padding: 1.5rem; text-align: center; margin: 1rem 0; }
-.price-range-box .label { color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
-.price-range-box .range { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--accent); letter-spacing: 0.03em; line-height: 1; }
-.price-range-box small { font-size: 12px; color: rgba(255,255,255,0.5); display: block; margin-top: 4px; }
-.cta-call { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--green-pale); border-radius: 10px; padding: 1rem; margin-top: 1rem; text-decoration: none; color: var(--green); font-weight: 600; font-size: 15px; border: 1.5px solid var(--green); transition: all 0.2s; }
-.cta-call:hover { background: var(--green); color: white; }
-.divider { font-size: 12px; color: var(--muted); text-align: center; margin: 0.5rem 0; }
+/* PHOTO */
+.photo-zone {
+  border: 1.5px dashed #ccc;
+  border-radius: 10px;
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fafafa;
+  margin-bottom: 12px;
+}
+.photo-zone:hover { border-color: #0a0a0a; background: #f5f5f5; }
+.photo-zone p { font-family: 'Inter', sans-serif; font-size: 14px; color: #666; margin: 8px 0 4px; }
+.photo-zone small { font-family: 'Inter', sans-serif; font-size: 11px; color: #aaa; }
+.photo-preview { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; display: none; border: 1px solid #e0e0e0; }
+.ai-result {
+  background: #f0f0f0;
+  border-left: 3px solid #0a0a0a;
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #333;
+  display: none;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.analyzing {
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #92400e;
+  display: none;
+  margin-bottom: 12px;
+}
 
 /* SECTION HEADER */
-.section-header { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 1.5rem 0 0.75rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
-.section-header:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.section-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #aaa;
+  margin: 24px 0 14px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+.section-sub:first-child { border-top: none; padding-top: 0; margin-top: 0; }
 
-/* FOOTER */
-footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 2rem; font-size: 13px; }
-footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+/* BUTTONS */
+.btn-dark {
+  background: #0a0a0a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+  transition: background 0.2s;
+}
+.btn-dark:hover { background: #333; }
+.btn-outline {
+  background: white;
+  color: #0a0a0a;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover { border-color: #0a0a0a; }
+.btn-row { display: flex; gap: 12px; margin-top: 8px; }
+.btn-row .btn-dark { flex: 1; }
+
+/* SUMMARY */
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+.summary-line:last-child { border-bottom: none; }
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 16px 0 4px;
+  color: #0a0a0a;
+  border-top: 2px solid #0a0a0a;
+  margin-top: 8px;
+}
+.price-range-box {
+  background: #0a0a0a;
+  color: white;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  margin: 24px 0;
+  position: relative;
+  overflow: hidden;
+}
+.price-range-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg, transparent, transparent 40px,
+    rgba(255,255,255,0.025) 40px, rgba(255,255,255,0.025) 41px
+  );
+}
+.price-range-box .pr-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 10px;
+  display: block;
+  position: relative;
+}
+.price-range-box .pr-value {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  position: relative;
+}
+.price-range-box small {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  display: block;
+  margin-top: 8px;
+  position: relative;
+}
+.cta-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1.5px solid #ddd;
+  border-radius: 10px;
+  padding: 14px;
+  text-decoration: none;
+  color: #0a0a0a;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 12px;
+  transition: all 0.2s;
+}
+.cta-call:hover { border-color: #0a0a0a; background: #f5f5f5; }
 
 .hidden { display: none !important; }
 
-@media (max-width: 520px) {
-  .grid2 { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .quote-hero { padding: 120px 20px 60px; }
+  .quote-hero h1 { font-size: 40px; }
+  .quote-main { padding: 32px 20px 60px; }
   .load-grid { grid-template-columns: 1fr 1fr; }
-  .nav-links { display: none; }
-  .hero h1 { font-size: 2.2rem; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .quote-hero h1 { font-size: 32px; }
+  .load-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <img src="https://woodswastemn.com/logo.PNG" alt="Wood's Waste" class="nav-logo">
-  <div class="nav-links">
-    <a href="https://woodswastemn.com/#services">Services</a>
-    <a href="https://woodswastemn.com/#about">About</a>
-    <a href="https://woodswastemn.com/#service-area">Areas</a>
-    <a href="tel:5072981179" class="nav-cta">📞 (507) 298-1179</a>
+<!-- Navigation (matches existing site) -->
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-section">
+      <img src="logo.PNG" alt="Wood's Waste Logo" class="logo-image">
+    </div>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="index.html#services" class="nav-link">Services</a></li>
+      <li><a href="index.html#about" class="nav-link">About</a></li>
+      <li><a href="index.html#service-area" class="nav-link">Areas</a></li>
+      <li><a href="index.html#form" class="nav-link">Quote</a></li>
+      <li><a href="tel:5072981179" class="nav-cta mobile-cta">Call Now</a></li>
+    </ul>
+    <a href="tel:5072981179" class="nav-cta desktop-cta">Call Now</a>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-tag">Instant Pricing Tool</div>
-  <h1>Get Your <span>Free Quote</span><br>In Seconds</h1>
-  <p>No obligation. No surprises. Just an honest estimate for your junk removal job.</p>
+<!-- Hero -->
+<section class="quote-hero">
+  <div class="quote-hero-bg"></div>
+  <div class="quote-hero-content">
+    <p class="quote-breadcrumb"><a href="index.html">Home</a> → Instant Quote Calculator</p>
+    <h1>Get Your Price<br><span>Instantly.</span></h1>
+    <p>No phone tag. No waiting. Build your quote in under two minutes — we'll confirm and show up ready to work.</p>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:13px;color:#999;"><span style="color:#f59e0b;">★★★★★</span> 5.0 Google Rating</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">⚡ Same-day available</div>
+      <div style="font-family:'Inter',sans-serif;font-size:13px;color:#999;">🤝 No obligation</div>
+    </div>
+  </div>
+</section>
+
+<!-- Progress bar -->
+<div class="progress-bar">
+  <div class="progress-inner">
+    <div class="progress-step active" id="ps1" onclick="goStep(1)"><span class="step-num">Step 01</span>Your Rates</div>
+    <div class="progress-step" id="ps2" onclick="goStep(2)"><span class="step-num">Step 02</span>Build Quote</div>
+    <div class="progress-step" id="ps3" onclick="goStep(3)"><span class="step-num">Step 03</span>Your Price</div>
+  </div>
 </div>
 
-<div class="container">
-
-  <div class="progress">
-    <div class="progress-step active" id="ps1" onclick="goStep(1)"><span class="step-num">Step 1</span>Your Rates</div>
-    <div class="progress-step" id="ps2" onclick="goStep(2)"><span class="step-num">Step 2</span>Build Quote</div>
-    <div class="progress-step" id="ps3" onclick="goStep(3)"><span class="step-num">Step 3</span>Your Price</div>
-  </div>
+<div class="quote-main">
 
   <!-- STEP 1 -->
   <div id="step1">
-    <div class="card">
-      <div class="card-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        Set your base load prices
-      </div>
+    <div class="q-card">
+      <div class="q-card-title">Set your base load prices</div>
       <div class="grid2">
         <div><label class="lbl">Quarter load ($)</label><input type="number" id="base_quarter" value="75"></div>
         <div><label class="lbl">Half load ($)</label><input type="number" id="base_half" value="150"></div>
@@ -179,7 +488,7 @@ footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
         <div><label class="lbl">Full load ($)</label><input type="number" id="base_full" value="300"></div>
       </div>
 
-      <p class="section-header">What does your local dump charge you?</p>
+      <p class="section-sub">What does your local dump charge you?</p>
       <div class="grid2">
         <div><label class="lbl">Mattress (each)</label><input type="number" id="fee_mattress" value="25"></div>
         <div><label class="lbl">Box spring (each)</label><input type="number" id="fee_boxspring" value="15"></div>
@@ -191,47 +500,47 @@ footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
         <div><label class="lbl">Your markup on dump fees %</label><input type="number" id="markup" value="50"></div>
       </div>
 
-      <p class="section-header">Labor</p>
+      <p class="section-sub">Labor</p>
       <div><label class="lbl">Your labor rate ($ per person / hr)</label><input type="number" id="labor_rate" value="45"></div>
 
-      <button class="btn-primary" onclick="goStep(2)">Save & Build Quote →</button>
+      <button class="btn-dark" onclick="goStep(2)">Save & Build Quote →</button>
     </div>
   </div>
 
   <!-- STEP 2 -->
   <div id="step2" class="hidden">
-    <div class="card">
-      <div class="card-title">Load size</div>
-      <div class="load-grid" id="load-grid">
+    <div class="q-card">
+      <div class="q-card-title">Load size</div>
+      <div class="load-grid">
         <button class="load-btn" onclick="selectLoad('quarter')" id="lb_quarter">
           <div class="load-icon">🗑️</div>
-          <div class="load-size">Quarter load</div>
+          <div class="load-size">Quarter</div>
           <div class="load-yards">~1–2 cu yds</div>
           <div class="load-price" id="lp_quarter">$75</div>
         </button>
         <button class="load-btn" onclick="selectLoad('half')" id="lb_half">
           <div class="load-icon">📦</div>
-          <div class="load-size">Half load</div>
+          <div class="load-size">Half</div>
           <div class="load-yards">~3–4 cu yds</div>
           <div class="load-price" id="lp_half">$150</div>
         </button>
         <button class="load-btn" onclick="selectLoad('three')" id="lb_three">
           <div class="load-icon">🚛</div>
-          <div class="load-size">Three quarter</div>
+          <div class="load-size">¾ Load</div>
           <div class="load-yards">~5–6 cu yds</div>
           <div class="load-price" id="lp_three">$225</div>
         </button>
         <button class="load-btn" onclick="selectLoad('full')" id="lb_full">
           <div class="load-icon">🏗️</div>
-          <div class="load-size">Full load</div>
+          <div class="load-size">Full</div>
           <div class="load-yards">~7–9 cu yds</div>
           <div class="load-price" id="lp_full">$300</div>
         </button>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Special items <span class="badge badge-green">dump fees added</span></div>
+    <div class="q-card">
+      <div class="q-card-title">Special items <span class="badge badge-dark">dump fees added</span></div>
       <div id="items-list">
         <div class="item-row"><span class="item-icon">🛏️</span><span class="item-name">Mattress</span><span class="item-fee" id="df_mattress"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('mattress',-1)">−</button><span class="qty-num" id="q_mattress">0</span><button class="qty-btn" onclick="changeQty('mattress',1)">+</button></div></div>
         <div class="item-row"><span class="item-icon">🛏️</span><span class="item-name">Box spring</span><span class="item-fee" id="df_boxspring"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('boxspring',-1)">−</button><span class="qty-num" id="q_boxspring">0</span><button class="qty-btn" onclick="changeQty('boxspring',1)">+</button></div></div>
@@ -243,22 +552,22 @@ footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Photo estimate <span class="badge badge-blue">AI powered</span></div>
+    <div class="q-card">
+      <div class="q-card-title">Photo estimate <span class="badge badge-gray">AI powered</span></div>
       <div class="photo-zone" onclick="document.getElementById('photoInput').click()">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div style="font-size:32px;">📷</div>
         <p>Tap to upload a photo of the junk</p>
         <small>AI will estimate cubic yards and suggest a load size</small>
       </div>
       <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
       <img id="photoPreview" class="photo-preview">
-      <div class="analyzing" id="analyzing">⏳ Analyzing your photo...</div>
+      <div class="analyzing" id="analyzing">⏳ Analyzing your photo with AI...</div>
       <div class="ai-result" id="aiResult"></div>
-      <button class="btn-secondary hidden" id="analyzeBtn" onclick="analyzePhoto()" style="width:100%; margin-top:4px;">✨ Analyze photo with AI</button>
+      <button class="btn-outline hidden" id="analyzeBtn" onclick="analyzePhoto()" style="width:100%; margin-top:4px;">✨ Analyze photo with AI</button>
     </div>
 
-    <div class="card">
-      <div class="card-title">Labor estimate</div>
+    <div class="q-card">
+      <div class="q-card-title">Labor estimate</div>
       <div class="grid2">
         <div><label class="lbl">Estimated hours</label><input type="number" id="labor_hours" value="1" min="0" step="0.5"></div>
         <div><label class="lbl">Number of workers</label><input type="number" id="labor_workers" value="2" min="1"></div>
@@ -266,46 +575,86 @@ footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
     </div>
 
     <div class="btn-row">
-      <button class="btn-secondary" onclick="goStep(1)">← Back</button>
-      <button class="btn-primary" onclick="goStep(3)">See My Price →</button>
+      <button class="btn-outline" onclick="goStep(1)">← Back</button>
+      <button class="btn-dark" onclick="goStep(3)">See My Price →</button>
     </div>
   </div>
 
   <!-- STEP 3 -->
   <div id="step3" class="hidden">
-    <div class="card">
-      <div class="card-title">Quote breakdown</div>
+    <div class="q-card">
+      <div class="q-card-title">Quote breakdown</div>
       <div id="quote-lines"></div>
-      <div class="summary-total"><span>Estimated total</span><span id="total-num" style="color:var(--green)">$0</span></div>
+      <div class="summary-total"><span>Estimated total</span><span id="total-num">$0</span></div>
     </div>
 
     <div class="price-range-box">
-      <span class="label">Suggested price to quote customer</span>
-      <div class="range" id="price-range">$0 – $0</div>
+      <span class="pr-label">Suggested price to quote customer</span>
+      <div class="pr-value" id="price-range">$0 – $0</div>
       <small>Includes 10–20% buffer above your cost estimate</small>
     </div>
 
-    <a href="tel:5072981179" class="cta-call">📞 Call to confirm: (507) 298-1179</a>
+    <a href="tel:5072981179" class="cta-call">📞 Call to confirm &amp; book: (507) 298-1179</a>
 
-    <div class="btn-row" style="margin-top:1rem;">
-      <button class="btn-secondary" onclick="goStep(2)">← Edit quote</button>
-      <button class="btn-primary" onclick="window.location.href='https://woodswastemn.com/#form'">Book This Job →</button>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn-outline" onclick="goStep(2)">← Edit quote</button>
+      <button class="btn-dark" onclick="window.location.href='index.html#form'">Book This Job →</button>
     </div>
   </div>
 
 </div>
 
-<footer>
-  <p>© 2026 Wood's Waste · Same-day junk removal · South Metro Minnesota · <a href="tel:5072981179">(507) 298-1179</a></p>
-  <p style="margin-top:6px;"><a href="https://woodswastemn.com">← Back to main site</a></p>
+<!-- CTA section matching existing site -->
+<section class="cta-section">
+  <div class="cta-content">
+    <h2>Ready to Reclaim Your Space?</h2>
+    <p>Serving Farmington, Apple Valley, Lakeville, Burnsville &amp; the south metro. Same-day service available.</p>
+    <div class="cta-buttons">
+      <a href="tel:5072981179" class="btn btn-secondary btn-large">Call Now</a>
+      <a href="sms:5072981179" class="btn btn-outline btn-large">Text Us</a>
+    </div>
+  </div>
+  <div class="cta-background"></div>
+</section>
+
+<!-- Footer matching existing site -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>Wood's Waste</h4>
+      <p>Local, owner-operated junk removal serving the Twin Cities south metro. We haul furniture, appliances, estate cleanouts, and more — with honest pricing and same-day availability.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p><a href="tel:5072981179">(507) 298-1179</a></p>
+      <p><a href="sms:5072981179">Text Us</a></p>
+    </div>
+    <div class="footer-section">
+      <h4>Service Areas</h4>
+      <p>Proudly serving the south metro Twin Cities and beyond.</p>
+      <a href="index.html#service-area">View All Service Areas →</a>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#service-area">Areas We Serve</a></li>
+        <li><a href="index.html#form">Get Quote</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Wood's Waste. Eco-friendly junk removal serving Farmington, Apple Valley, Lakeville, Burnsville &amp; south metro Minnesota.</p>
+  </div>
 </footer>
 
+<script src="script.js"></script>
 <script>
 let selectedLoad = null;
 let quantities = { mattress:0, boxspring:0, couch:0, tire:0, tv:0, fridge:0, paint:0 };
 let photoBase64 = null;
 let aiCuYards = null;
-
 const feeIds = ['mattress','boxspring','couch','tire','tv','fridge','paint'];
 const itemLabels = { mattress:'Mattress', boxspring:'Box spring', couch:'Couch / sofa', tire:'Tire', tv:'TV / monitor', fridge:'Fridge / AC', paint:'Paint cans' };
 
@@ -315,24 +664,23 @@ function goStep(n) {
   [1,2,3].forEach(i => {
     document.getElementById('step'+i).classList.toggle('hidden', i!==n);
     const ps = document.getElementById('ps'+i);
-    ps.className = 'progress-step' + (i<n ? ' done' : i===n ? ' active' : '');
+    ps.className = 'progress-step' + (i<n?' done':i===n?' active':'');
   });
-  if(n===2) { updateLoadPrices(); updateDumpFeeLabels(); }
+  if(n===2){ updateLoadPrices(); updateDumpLabels(); }
   if(n===3) buildSummary();
-  window.scrollTo({top:0, behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function updateLoadPrices() {
-  ['quarter','half','three','full'].forEach(t => {
-    document.getElementById('lp_'+t).textContent = '$' + v('base_'+t);
-  });
+  ['quarter','half','three','full'].forEach(t =>
+    document.getElementById('lp_'+t).textContent = '$'+v('base_'+t)
+  );
 }
 
-function updateDumpFeeLabels() {
-  const markup = 1 + v('markup')/100;
+function updateDumpLabels() {
+  const mu = 1 + v('markup')/100;
   feeIds.forEach(id => {
-    const fee = v('fee_'+id) * markup;
-    document.getElementById('df_'+id).textContent = '+$' + fee.toFixed(0) + ' ea';
+    document.getElementById('df_'+id).textContent = '+$'+Math.round(v('fee_'+id)*mu)+' ea';
   });
 }
 
@@ -344,7 +692,7 @@ function selectLoad(type) {
 }
 
 function changeQty(item, delta) {
-  quantities[item] = Math.max(0, quantities[item] + delta);
+  quantities[item] = Math.max(0, quantities[item]+delta);
   document.getElementById('q_'+item).textContent = quantities[item];
 }
 
@@ -370,13 +718,13 @@ async function analyzePhoto() {
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
-        messages: [{ role: 'user', content: [
-          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: photoBase64 } },
-          { type: 'text', text: 'You are an expert junk removal estimator. Analyze this image and respond ONLY in this exact format:\nCUBIC_YARDS: [number]\nLOAD_SIZE: [quarter|half|three|full]\nSPECIAL_ITEMS: [comma list or none]\nNOTES: [one brief sentence about the load]' }
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:photoBase64}},
+          {type:'text',text:'You are an expert junk removal estimator. Analyze this image and respond ONLY in this exact format:\nCUBIC_YARDS: [number]\nLOAD_SIZE: [quarter|half|three|full]\nSPECIAL_ITEMS: [comma list or none]\nNOTES: [one brief sentence about the load]'}
         ]}]
       })
     });
@@ -384,49 +732,49 @@ async function analyzePhoto() {
     const text = data.content[0].text;
     const cy = text.match(/CUBIC_YARDS:\s*([\d.]+)/)?.[1];
     const ls = text.match(/LOAD_SIZE:\s*(\w+)/)?.[1];
-    const items = text.match(/SPECIAL_ITEMS:\s*(.+)/)?.[1] || '';
-    const notes = text.match(/NOTES:\s*(.+)/)?.[1] || '';
+    const items = text.match(/SPECIAL_ITEMS:\s*(.+)/)?.[1]||'';
+    const notes = text.match(/NOTES:\s*(.+)/)?.[1]||'';
     aiCuYards = cy ? parseFloat(cy) : null;
     if(ls && ['quarter','half','three','full'].includes(ls)) selectLoad(ls);
     const el = document.getElementById('aiResult');
     el.style.display = 'block';
-    el.innerHTML = '✅ <strong>AI estimate: ' + (aiCuYards||'?') + ' cubic yards</strong> → ' + (ls||'') + ' load recommended' +
-      (items && items.toLowerCase()!=='none' ? '<br>🔍 Special items spotted: ' + items : '') +
-      (notes ? '<br><em>' + notes + '</em>' : '');
-  } catch(e) {
-    document.getElementById('aiResult').style.display = 'block';
-    document.getElementById('aiResult').textContent = 'Could not analyze photo — please select load size manually.';
+    el.innerHTML = '<strong>AI estimate: '+(aiCuYards||'?')+' cubic yards</strong> — '+ls+' load recommended'
+      +(items && items.toLowerCase()!=='none' ? '<br>Special items spotted: '+items : '')
+      +(notes ? '<br><em>'+notes+'</em>' : '');
+  } catch(err) {
+    const el = document.getElementById('aiResult');
+    el.style.display = 'block';
+    el.textContent = 'Could not analyze photo — please select load size manually.';
   }
   document.getElementById('analyzing').style.display = 'none';
   btn.disabled = false; btn.textContent = '✨ Re-analyze photo';
 }
 
 function buildSummary() {
-  const loadPrices = { quarter:v('base_quarter'), half:v('base_half'), three:v('base_three'), full:v('base_full') };
-  const loadLabels = { quarter:'Quarter load', half:'Half load', three:'Three quarter load', full:'Full load' };
-  const markup = 1 + v('markup')/100;
-  const feeMap = { mattress:v('fee_mattress'), boxspring:v('fee_boxspring'), couch:v('fee_couch'), tire:v('fee_tire'), tv:v('fee_tv'), fridge:v('fee_fridge'), paint:v('fee_paint') };
-  let html = '', total = 0;
-  const loadPrice = selectedLoad ? loadPrices[selectedLoad] : 0;
-  total += loadPrice;
-  html += `<div class="summary-line"><span>${selectedLoad ? loadLabels[selectedLoad] : 'No load selected'}</span><span>$${loadPrice}</span></div>`;
+  const loadPrices = {quarter:v('base_quarter'),half:v('base_half'),three:v('base_three'),full:v('base_full')};
+  const loadLabels = {quarter:'Quarter load',half:'Half load',three:'Three quarter load',full:'Full load'};
+  const mu = 1+v('markup')/100;
+  const feeMap = {mattress:v('fee_mattress'),boxspring:v('fee_boxspring'),couch:v('fee_couch'),tire:v('fee_tire'),tv:v('fee_tv'),fridge:v('fee_fridge'),paint:v('fee_paint')};
+  let html='', total=0;
+  const lp = selectedLoad ? loadPrices[selectedLoad] : 0;
+  total += lp;
+  html += `<div class="summary-line"><span>${selectedLoad?loadLabels[selectedLoad]:'No load selected'}</span><span>$${lp}</span></div>`;
   feeIds.forEach(id => {
-    if(quantities[id] > 0) {
-      const fee = Math.round(feeMap[id] * quantities[id] * markup);
+    if(quantities[id]>0){
+      const fee = Math.round(feeMap[id]*quantities[id]*mu);
       total += fee;
       html += `<div class="summary-line"><span>${itemLabels[id]} ×${quantities[id]}</span><span>$${fee}</span></div>`;
     }
   });
-  const laborHrs = v('labor_hours'), laborWorkers = v('labor_workers'), laborRate = v('labor_rate');
-  const labor = Math.round(laborRate * laborHrs * laborWorkers);
-  if(labor > 0) {
-    total += labor;
-    html += `<div class="summary-line"><span>Labor (${laborHrs}h × ${laborWorkers} workers)</span><span>$${labor}</span></div>`;
+  const labor = Math.round(v('labor_rate')*v('labor_hours')*v('labor_workers'));
+  if(labor>0){
+    total+=labor;
+    html+=`<div class="summary-line"><span>Labor (${v('labor_hours')}h × ${v('labor_workers')} workers)</span><span>$${labor}</span></div>`;
   }
-  if(aiCuYards) html += `<div class="summary-line" style="color:var(--muted);font-size:12px;"><span>AI photo estimate</span><span>${aiCuYards.toFixed(1)} cu yds</span></div>`;
+  if(aiCuYards) html+=`<div class="summary-line" style="color:#aaa;font-size:12px;"><span>AI photo estimate</span><span>${aiCuYards.toFixed(1)} cu yds</span></div>`;
   document.getElementById('quote-lines').innerHTML = html;
-  document.getElementById('total-num').textContent = '$' + total;
-  document.getElementById('price-range').textContent = '$' + Math.round(total*1.05).toLocaleString() + ' – $' + Math.round(total*1.20).toLocaleString();
+  document.getElementById('total-num').textContent = '$'+total;
+  document.getElementById('price-range').textContent = '$'+Math.round(total*1.05).toLocaleString()+' – $'+Math.round(total*1.20).toLocaleString();
 }
 </script>
 </body>
