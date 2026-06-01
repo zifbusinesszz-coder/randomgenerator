@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instant Quote | Wood's Waste Junk Removal</title>
+<meta name="description" content="Get an instant junk removal quote from Wood's Waste. Serving Farmington, Apple Valley, Lakeville, Burnsville & south metro Minnesota. Call (507) 298-1179.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #2d6a4f;
+  --green-light: #40916c;
+  --green-pale: #d8f3dc;
+  --dark: #0d1b12;
+  --dark2: #1a2e1f;
+  --text: #1b2d22;
+  --muted: #5a7262;
+  --border: #d4e6d9;
+  --white: #ffffff;
+  --cream: #f7faf8;
+  --accent: #52b788;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 16px; line-height: 1.6; }
+
+/* NAV */
+nav { background: var(--dark); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; }
+.nav-logo { height: 38px; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta { background: var(--green); color: white !important; padding: 8px 18px; border-radius: 6px; }
+
+/* HERO */
+.hero { background: var(--dark2); color: white; padding: 4rem 2rem 3rem; text-align: center; border-bottom: 3px solid var(--green); }
+.hero-tag { display: inline-block; background: var(--green-pale); color: var(--green); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 14px; border-radius: 20px; margin-bottom: 1rem; }
+.hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: 0.03em; line-height: 1; margin-bottom: 0.75rem; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: rgba(255,255,255,0.65); font-size: 15px; max-width: 480px; margin: 0 auto; }
+
+/* MAIN LAYOUT */
+.container { max-width: 760px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+/* STEP PROGRESS */
+.progress { display: flex; gap: 0; margin-bottom: 2.5rem; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.progress-step { flex: 1; padding: 12px 8px; text-align: center; font-size: 13px; font-weight: 500; background: white; color: var(--muted); border-right: 1px solid var(--border); cursor: pointer; transition: all 0.2s; }
+.progress-step:last-child { border-right: none; }
+.progress-step.active { background: var(--green); color: white; }
+.progress-step.done { background: var(--green-pale); color: var(--green); }
+.step-num { display: block; font-size: 11px; font-weight: 600; opacity: 0.7; margin-bottom: 2px; }
+
+/* CARDS */
+.card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.25rem; }
+.card-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
+.card-title svg { color: var(--green); }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 6px; }
+.badge-green { background: var(--green-pale); color: var(--green); }
+.badge-blue { background: #e0f0ff; color: #1a6faa; }
+
+/* FORM ELEMENTS */
+label.lbl { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+input[type=number], input[type=text], select {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text);
+  background: var(--cream); margin-bottom: 14px; transition: border 0.2s;
+}
+input[type=number]:focus, input[type=text]:focus { outline: none; border-color: var(--green); background: white; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+/* LOAD SIZE BUTTONS */
+.load-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 0; }
+.load-btn { border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 10px; cursor: pointer; text-align: center; background: white; transition: all 0.15s; }
+.load-btn:hover { border-color: var(--green-light); background: var(--cream); }
+.load-btn.selected { border: 2px solid var(--green); background: var(--green-pale); }
+.load-icon { font-size: 22px; margin-bottom: 4px; }
+.load-size { font-size: 14px; font-weight: 600; color: var(--text); }
+.load-yards { font-size: 11px; color: var(--muted); margin: 2px 0; }
+.load-price { font-size: 16px; font-weight: 700; color: var(--green); }
+
+/* ITEMS */
+.item-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.item-row:last-child { border-bottom: none; }
+.item-icon { font-size: 18px; width: 28px; text-align: center; }
+.item-name { flex: 1; font-size: 14px; color: var(--text); }
+.item-fee { font-size: 12px; color: var(--muted); margin-right: 8px; }
+.qty-ctrl { display: flex; align-items: center; gap: 8px; }
+.qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.15s; font-weight: 300; }
+.qty-btn:hover { border-color: var(--green); color: var(--green); }
+.qty-num { font-size: 15px; font-weight: 600; min-width: 22px; text-align: center; color: var(--text); }
+
+/* PHOTO UPLOAD */
+.photo-zone { border: 2px dashed var(--border); border-radius: 10px; padding: 2rem 1rem; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 12px; }
+.photo-zone:hover { border-color: var(--green); background: var(--green-pale); }
+.photo-zone svg { color: var(--muted); margin-bottom: 8px; }
+.photo-zone p { font-size: 13px; color: var(--muted); }
+.photo-zone small { font-size: 11px; color: var(--muted); opacity: 0.7; }
+.photo-preview { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; display: none; border: 1px solid var(--border); }
+.ai-result { background: var(--green-pale); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--green); margin-bottom: 12px; display: none; line-height: 1.6; }
+.analyzing { background: #fff8e1; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #7a5c00; display: none; }
+
+/* BUTTONS */
+.btn-primary { background: var(--green); color: white; border: none; border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; font-family: 'DM Sans', sans-serif; transition: background 0.2s; letter-spacing: 0.02em; }
+.btn-primary:hover { background: var(--green-light); }
+.btn-secondary { background: white; color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; padding: 11px 22px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+.btn-secondary:hover { border-color: var(--green); color: var(--green); }
+.btn-row { display: flex; gap: 10px; margin-top: 8px; }
+.btn-row .btn-primary { flex: 1; }
+
+/* SUMMARY */
+.summary-line { display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text); }
+.summary-line:last-child { border-bottom: none; }
+.summary-total { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; padding: 14px 0 4px; color: var(--text); }
+.price-range-box { background: var(--dark2); color: white; border-radius: 12px; padding: 1.5rem; text-align: center; margin: 1rem 0; }
+.price-range-box .label { color: rgba(255,255,255,0.6); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
+.price-range-box .range { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--accent); letter-spacing: 0.03em; line-height: 1; }
+.price-range-box small { font-size: 12px; color: rgba(255,255,255,0.5); display: block; margin-top: 4px; }
+.cta-call { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--green-pale); border-radius: 10px; padding: 1rem; margin-top: 1rem; text-decoration: none; color: var(--green); font-weight: 600; font-size: 15px; border: 1.5px solid var(--green); transition: all 0.2s; }
+.cta-call:hover { background: var(--green); color: white; }
+.divider { font-size: 12px; color: var(--muted); text-align: center; margin: 0.5rem 0; }
+
+/* SECTION HEADER */
+.section-header { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 1.5rem 0 0.75rem; border-top: 1px solid var(--border); padding-top: 1.25rem; }
+.section-header:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+
+/* FOOTER */
+footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 2rem; font-size: 13px; }
+footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 520px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .load-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .hero h1 { font-size: 2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <img src="https://woodswastemn.com/logo.PNG" alt="Wood's Waste" class="nav-logo">
+  <div class="nav-links">
+    <a href="https://woodswastemn.com/#services">Services</a>
+    <a href="https://woodswastemn.com/#about">About</a>
+    <a href="https://woodswastemn.com/#service-area">Areas</a>
+    <a href="tel:5072981179" class="nav-cta">📞 (507) 298-1179</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Instant Pricing Tool</div>
+  <h1>Get Your <span>Free Quote</span><br>In Seconds</h1>
+  <p>No obligation. No surprises. Just an honest estimate for your junk removal job.</p>
+</div>
+
+<div class="container">
+
+  <div class="progress">
+    <div class="progress-step active" id="ps1" onclick="goStep(1)"><span class="step-num">Step 1</span>Your Rates</div>
+    <div class="progress-step" id="ps2" onclick="goStep(2)"><span class="step-num">Step 2</span>Build Quote</div>
+    <div class="progress-step" id="ps3" onclick="goStep(3)"><span class="step-num">Step 3</span>Your Price</div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div id="step1">
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Set your base load prices
+      </div>
+      <div class="grid2">
+        <div><label class="lbl">Quarter load ($)</label><input type="number" id="base_quarter" value="75"></div>
+        <div><label class="lbl">Half load ($)</label><input type="number" id="base_half" value="150"></div>
+        <div><label class="lbl">Three quarter load ($)</label><input type="number" id="base_three" value="225"></div>
+        <div><label class="lbl">Full load ($)</label><input type="number" id="base_full" value="300"></div>
+      </div>
+
+      <p class="section-header">What does your local dump charge you?</p>
+      <div class="grid2">
+        <div><label class="lbl">Mattress (each)</label><input type="number" id="fee_mattress" value="25"></div>
+        <div><label class="lbl">Box spring (each)</label><input type="number" id="fee_boxspring" value="15"></div>
+        <div><label class="lbl">Couch / sofa (each)</label><input type="number" id="fee_couch" value="20"></div>
+        <div><label class="lbl">Tire (each)</label><input type="number" id="fee_tire" value="10"></div>
+        <div><label class="lbl">TV / monitor (each)</label><input type="number" id="fee_tv" value="15"></div>
+        <div><label class="lbl">Fridge / AC (each)</label><input type="number" id="fee_fridge" value="30"></div>
+        <div><label class="lbl">Paint cans (per bag)</label><input type="number" id="fee_paint" value="10"></div>
+        <div><label class="lbl">Your markup on dump fees %</label><input type="number" id="markup" value="50"></div>
+      </div>
+
+      <p class="section-header">Labor</p>
+      <div><label class="lbl">Your labor rate ($ per person / hr)</label><input type="number" id="labor_rate" value="45"></div>
+
+      <button class="btn-primary" onclick="goStep(2)">Save & Build Quote →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" class="hidden">
+    <div class="card">
+      <div class="card-title">Load size</div>
+      <div class="load-grid" id="load-grid">
+        <button class="load-btn" onclick="selectLoad('quarter')" id="lb_quarter">
+          <div class="load-icon">🗑️</div>
+          <div class="load-size">Quarter load</div>
+          <div class="load-yards">~1–2 cu yds</div>
+          <div class="load-price" id="lp_quarter">$75</div>
+        </button>
+        <button class="load-btn" onclick="selectLoad('half')" id="lb_half">
+          <div class="load-icon">📦</div>
+          <div class="load-size">Half load</div>
+          <div class="load-yards">~3–4 cu yds</div>
+          <div class="load-price" id="lp_half">$150</div>
+        </button>
+        <button class="load-btn" onclick="selectLoad('three')" id="lb_three">
+          <div class="load-icon">🚛</div>
+          <div class="load-size">Three quarter</div>
+          <div class="load-yards">~5–6 cu yds</div>
+          <div class="load-price" id="lp_three">$225</div>
+        </button>
+        <button class="load-btn" onclick="selectLoad('full')" id="lb_full">
+          <div class="load-icon">🏗️</div>
+          <div class="load-size">Full load</div>
+          <div class="load-yards">~7–9 cu yds</div>
+          <div class="load-price" id="lp_full">$300</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Special items <span class="badge badge-green">dump fees added</span></div>
+      <div id="items-list">
+        <div class="item-row"><span class="item-icon">🛏️</span><span class="item-name">Mattress</span><span class="item-fee" id="df_mattress"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('mattress',-1)">−</button><span class="qty-num" id="q_mattress">0</span><button class="qty-btn" onclick="changeQty('mattress',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">🛏️</span><span class="item-name">Box spring</span><span class="item-fee" id="df_boxspring"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('boxspring',-1)">−</button><span class="qty-num" id="q_boxspring">0</span><button class="qty-btn" onclick="changeQty('boxspring',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">🛋️</span><span class="item-name">Couch / sofa</span><span class="item-fee" id="df_couch"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('couch',-1)">−</button><span class="qty-num" id="q_couch">0</span><button class="qty-btn" onclick="changeQty('couch',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">⭕</span><span class="item-name">Tire</span><span class="item-fee" id="df_tire"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('tire',-1)">−</button><span class="qty-num" id="q_tire">0</span><button class="qty-btn" onclick="changeQty('tire',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">📺</span><span class="item-name">TV / monitor</span><span class="item-fee" id="df_tv"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('tv',-1)">−</button><span class="qty-num" id="q_tv">0</span><button class="qty-btn" onclick="changeQty('tv',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">❄️</span><span class="item-name">Fridge / AC</span><span class="item-fee" id="df_fridge"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('fridge',-1)">−</button><span class="qty-num" id="q_fridge">0</span><button class="qty-btn" onclick="changeQty('fridge',1)">+</button></div></div>
+        <div class="item-row"><span class="item-icon">🎨</span><span class="item-name">Paint cans (bags)</span><span class="item-fee" id="df_paint"></span><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('paint',-1)">−</button><span class="qty-num" id="q_paint">0</span><button class="qty-btn" onclick="changeQty('paint',1)">+</button></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Photo estimate <span class="badge badge-blue">AI powered</span></div>
+      <div class="photo-zone" onclick="document.getElementById('photoInput').click()">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <p>Tap to upload a photo of the junk</p>
+        <small>AI will estimate cubic yards and suggest a load size</small>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
+      <img id="photoPreview" class="photo-preview">
+      <div class="analyzing" id="analyzing">⏳ Analyzing your photo...</div>
+      <div class="ai-result" id="aiResult"></div>
+      <button class="btn-secondary hidden" id="analyzeBtn" onclick="analyzePhoto()" style="width:100%; margin-top:4px;">✨ Analyze photo with AI</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Labor estimate</div>
+      <div class="grid2">
+        <div><label class="lbl">Estimated hours</label><input type="number" id="labor_hours" value="1" min="0" step="0.5"></div>
+        <div><label class="lbl">Number of workers</label><input type="number" id="labor_workers" value="2" min="1"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+      <button class="btn-primary" onclick="goStep(3)">See My Price →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" class="hidden">
+    <div class="card">
+      <div class="card-title">Quote breakdown</div>
+      <div id="quote-lines"></div>
+      <div class="summary-total"><span>Estimated total</span><span id="total-num" style="color:var(--green)">$0</span></div>
+    </div>
+
+    <div class="price-range-box">
+      <span class="label">Suggested price to quote customer</span>
+      <div class="range" id="price-range">$0 – $0</div>
+      <small>Includes 10–20% buffer above your cost estimate</small>
+    </div>
+
+    <a href="tel:5072981179" class="cta-call">📞 Call to confirm: (507) 298-1179</a>
+
+    <div class="btn-row" style="margin-top:1rem;">
+      <button class="btn-secondary" onclick="goStep(2)">← Edit quote</button>
+      <button class="btn-primary" onclick="window.location.href='https://woodswastemn.com/#form'">Book This Job →</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 Wood's Waste · Same-day junk removal · South Metro Minnesota · <a href="tel:5072981179">(507) 298-1179</a></p>
+  <p style="margin-top:6px;"><a href="https://woodswastemn.com">← Back to main site</a></p>
+</footer>
+
+<script>
+let selectedLoad = null;
+let quantities = { mattress:0, boxspring:0, couch:0, tire:0, tv:0, fridge:0, paint:0 };
+let photoBase64 = null;
+let aiCuYards = null;
+
+const feeIds = ['mattress','boxspring','couch','tire','tv','fridge','paint'];
+const itemLabels = { mattress:'Mattress', boxspring:'Box spring', couch:'Couch / sofa', tire:'Tire', tv:'TV / monitor', fridge:'Fridge / AC', paint:'Paint cans' };
+
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step'+i).classList.toggle('hidden', i!==n);
+    const ps = document.getElementById('ps'+i);
+    ps.className = 'progress-step' + (i<n ? ' done' : i===n ? ' active' : '');
+  });
+  if(n===2) { updateLoadPrices(); updateDumpFeeLabels(); }
+  if(n===3) buildSummary();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateLoadPrices() {
+  ['quarter','half','three','full'].forEach(t => {
+    document.getElementById('lp_'+t).textContent = '$' + v('base_'+t);
+  });
+}
+
+function updateDumpFeeLabels() {
+  const markup = 1 + v('markup')/100;
+  feeIds.forEach(id => {
+    const fee = v('fee_'+id) * markup;
+    document.getElementById('df_'+id).textContent = '+$' + fee.toFixed(0) + ' ea';
+  });
+}
+
+function selectLoad(type) {
+  selectedLoad = type;
+  ['quarter','half','three','full'].forEach(t =>
+    document.getElementById('lb_'+t).classList.toggle('selected', t===type)
+  );
+}
+
+function changeQty(item, delta) {
+  quantities[item] = Math.max(0, quantities[item] + delta);
+  document.getElementById('q_'+item).textContent = quantities[item];
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    photoBase64 = ev.target.result.split(',')[1];
+    const p = document.getElementById('photoPreview');
+    p.src = ev.target.result;
+    p.style.display = 'block';
+    document.getElementById('analyzeBtn').classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function analyzePhoto() {
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true; btn.textContent = 'Analyzing...';
+  document.getElementById('analyzing').style.display = 'block';
+  document.getElementById('aiResult').style.display = 'none';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: photoBase64 } },
+          { type: 'text', text: 'You are an expert junk removal estimator. Analyze this image and respond ONLY in this exact format:\nCUBIC_YARDS: [number]\nLOAD_SIZE: [quarter|half|three|full]\nSPECIAL_ITEMS: [comma list or none]\nNOTES: [one brief sentence about the load]' }
+        ]}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content[0].text;
+    const cy = text.match(/CUBIC_YARDS:\s*([\d.]+)/)?.[1];
+    const ls = text.match(/LOAD_SIZE:\s*(\w+)/)?.[1];
+    const items = text.match(/SPECIAL_ITEMS:\s*(.+)/)?.[1] || '';
+    const notes = text.match(/NOTES:\s*(.+)/)?.[1] || '';
+    aiCuYards = cy ? parseFloat(cy) : null;
+    if(ls && ['quarter','half','three','full'].includes(ls)) selectLoad(ls);
+    const el = document.getElementById('aiResult');
+    el.style.display = 'block';
+    el.innerHTML = '✅ <strong>AI estimate: ' + (aiCuYards||'?') + ' cubic yards</strong> → ' + (ls||'') + ' load recommended' +
+      (items && items.toLowerCase()!=='none' ? '<br>🔍 Special items spotted: ' + items : '') +
+      (notes ? '<br><em>' + notes + '</em>' : '');
+  } catch(e) {
+    document.getElementById('aiResult').style.display = 'block';
+    document.getElementById('aiResult').textContent = 'Could not analyze photo — please select load size manually.';
+  }
+  document.getElementById('analyzing').style.display = 'none';
+  btn.disabled = false; btn.textContent = '✨ Re-analyze photo';
+}
+
+function buildSummary() {
+  const loadPrices = { quarter:v('base_quarter'), half:v('base_half'), three:v('base_three'), full:v('base_full') };
+  const loadLabels = { quarter:'Quarter load', half:'Half load', three:'Three quarter load', full:'Full load' };
+  const markup = 1 + v('markup')/100;
+  const feeMap = { mattress:v('fee_mattress'), boxspring:v('fee_boxspring'), couch:v('fee_couch'), tire:v('fee_tire'), tv:v('fee_tv'), fridge:v('fee_fridge'), paint:v('fee_paint') };
+  let html = '', total = 0;
+  const loadPrice = selectedLoad ? loadPrices[selectedLoad] : 0;
+  total += loadPrice;
+  html += `<div class="summary-line"><span>${selectedLoad ? loadLabels[selectedLoad] : 'No load selected'}</span><span>$${loadPrice}</span></div>`;
+  feeIds.forEach(id => {
+    if(quantities[id] > 0) {
+      const fee = Math.round(feeMap[id] * quantities[id] * markup);
+      total += fee;
+      html += `<div class="summary-line"><span>${itemLabels[id]} ×${quantities[id]}</span><span>$${fee}</span></div>`;
+    }
+  });
+  const laborHrs = v('labor_hours'), laborWorkers = v('labor_workers'), laborRate = v('labor_rate');
+  const labor = Math.round(laborRate * laborHrs * laborWorkers);
+  if(labor > 0) {
+    total += labor;
+    html += `<div class="summary-line"><span>Labor (${laborHrs}h × ${laborWorkers} workers)</span><span>$${labor}</span></div>`;
+  }
+  if(aiCuYards) html += `<div class="summary-line" style="color:var(--muted);font-size:12px;"><span>AI photo estimate</span><span>${aiCuYards.toFixed(1)} cu yds</span></div>`;
+  document.getElementById('quote-lines').innerHTML = html;
+  document.getElementById('total-num').textContent = '$' + total;
+  document.getElementById('price-range').textContent = '$' + Math.round(total*1.05).toLocaleString() + ' – $' + Math.round(total*1.20).toLocaleString();
+}
+</script>
+</body>
+</html>
