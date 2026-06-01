@@ -1716,7 +1716,7 @@ const quotedVals=recent.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('
 
   // ── Chart 3: Over/Under per job (bar, green/red) ──
   const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
-  const diffVals=logged.slice(-15).map(j=>j.actual.charged-(parseFloat(j.price.replace(/[^0-9.]/g,''))||0));
+  const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
   const diffColors=diffVals.map(d=>d>=0?'rgba(29,158,117,0.7)':'rgba(192,57,43,0.7)');
   const ctx3=document.getElementById('chartDiff')?.getContext('2d');
   if(ctx3){
