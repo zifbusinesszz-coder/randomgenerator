@@ -6,8 +6,9 @@
 <title>Quote Tool — Wood's Waste</title>
 <meta name="description" content="Know exactly what to charge before you call the customer back.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
 <style>
 :root {
   --black:#0a0a0a;--white:#ffffff;--off:#f4f4f2;--gray:#777;--border:#e2e2e0;
@@ -22,12 +23,15 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--white);color:var(--black);overflow-x:hidden;}
 
+/* ── ph icons sizing helper ── */
+.ph { display:inline-flex; align-items:center; justify-content:center; }
+
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);}
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.nav-logo img{height:38px;width:auto;display:block;}
-.nav-logo-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;line-height:1.1;}
-.nav-logo-sub{font-size:10px;color:rgba(255,255,255,0.4);font-weight:400;letter-spacing:0.04em;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;background:white;padding:4px 10px;border-radius:6px;}
+.nav-logo img{height:32px;width:auto;display:block;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--black);line-height:1.1;}
+.nav-logo-sub{font-size:10px;color:#888;font-weight:400;letter-spacing:0.04em;}
 .nav-links{display:flex;align-items:center;gap:28px;}
 .nav-links a{font-size:13px;font-weight:500;color:rgba(255,255,255,0.55);text-decoration:none;transition:color .2s;}
 .nav-links a:hover{color:white;}
@@ -50,10 +54,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;d
 .btn-primary:hover{background:#eee;transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.3);}
 .btn-ghost{background:transparent;color:rgba(255,255,255,0.7);padding:13px 24px;border-radius:8px;font-size:14px;font-weight:500;border:1.5px solid rgba(255,255,255,0.15);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s;}
 .btn-ghost:hover{border-color:rgba(255,255,255,0.4);color:white;}
-.hero-proof{display:flex;align-items:center;gap:14px;margin-top:24px;font-size:12px;color:rgba(255,255,255,0.4);}
-.hero-proof-ava{display:flex;}
-.ava{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:#333;color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-left:-8px;}
-.ava:first-child{margin-left:0;}
 .hero-phone{display:flex;justify-content:center;align-items:center;}
 .phone-frame{width:280px;background:#111;border-radius:36px;padding:12px;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,0.06);}
 .phone-notch{width:80px;height:6px;background:#222;border-radius:3px;margin:0 auto 14px;}
@@ -82,7 +82,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;padding:0 40px;d
 .phone-result-breakdown{font-size:9px;color:rgba(255,255,255,.4);margin-top:3px;}
 .phone-result-btn{display:block;width:100%;margin-top:8px;background:var(--green);color:white;border:none;border-radius:6px;padding:8px;font-size:10px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;cursor:pointer;}
 
-/* ── PROMO BANNER (matches woodswastemn.com style) ── */
+/* ── PROMO BANNER ── */
 .promo-banner{position:relative;overflow:hidden;padding:28px 40px;background:#111;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);}
 .promo-banner::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.015) 41px);}
 .promo-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
@@ -123,8 +123,8 @@ section.mid{background:#f4f4f2;}
 /* steps */
 .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
 .step-card{background:white;border:1px solid var(--border);border-radius:14px;padding:28px;}
-.step-num{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;}
-.step-icon{font-size:26px;margin-bottom:12px;display:block;}
+.step-num{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--gray);letter-spacing:.1em;margin-bottom:14px;}
+.step-icon{font-size:26px;margin-bottom:12px;display:flex;align-items:center;}
 .step-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;}
 .step-desc{font-size:13px;color:var(--gray);line-height:1.75;}
 
@@ -137,7 +137,7 @@ section.mid{background:#f4f4f2;}
 .feat-card.pro-feat{border-color:rgba(29,158,117,0.3);background:linear-gradient(135deg,rgba(29,158,117,0.03) 0%,transparent 100%);}
 .feat-card.pro-feat::after{background:var(--green);}
 .feat-card.pro-feat:hover{border-color:var(--green);}
-.feat-icon{font-size:24px;margin-bottom:12px;display:block;}
+.feat-icon{font-size:24px;margin-bottom:12px;display:flex;align-items:center;}
 .feat-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--black);margin-bottom:6px;}
 .feat-desc{font-size:13px;color:var(--gray);line-height:1.75;}
 .pro-badge-inline{display:inline-block;background:var(--green);color:white;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-left:8px;vertical-align:middle;}
@@ -175,7 +175,7 @@ section.mid{background:#f4f4f2;}
 .testimonial-quote{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2rem);color:var(--black);line-height:1.55;margin-bottom:20px;font-weight:700;}
 .testimonial-author{font-size:13px;color:var(--gray);font-weight:500;}
 
-/* CTA bottom — dark like main site */
+/* CTA bottom */
 .cta-bottom{background:#111;text-align:center;position:relative;overflow:hidden;padding:90px 40px;}
 .cta-bottom::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(135deg,transparent,transparent 60px,rgba(255,255,255,.015) 60px,rgba(255,255,255,.015) 61px);}
 .cta-bottom-orb{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(29,158,117,0.12) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
@@ -184,12 +184,12 @@ section.mid{background:#f4f4f2;}
 .cta-bottom .btn-primary{background:white;color:var(--black);position:relative;}
 .cta-bottom .btn-primary:hover{background:#eee;}
 
-/* footer — dark like main site */
+/* footer */
 footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32px 40px;}
 .footer-inner{max-width:1000px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-.footer-logo{display:flex;align-items:center;gap:10px;}
-.footer-logo img{height:32px;width:auto;}
-.footer-logo-text{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white;}
+.footer-logo{display:flex;align-items:center;gap:10px;background:white;padding:6px 12px;border-radius:6px;}
+.footer-logo img{height:28px;width:auto;}
+.footer-logo-text{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--black);}
 .footer-links{display:flex;gap:24px;}
 .footer-links a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
 .footer-links a:hover{color:rgba(255,255,255,.7);}
@@ -201,10 +201,10 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .modal{background:white;border-radius:20px;width:100%;max-width:600px;box-shadow:0 40px 100px rgba(0,0,0,.5);animation:modalIn .25s ease both;margin:auto;}
 @keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
 .modal-header{background:var(--black);padding:24px 28px 20px;border-radius:20px 20px 0 0;position:relative;}
-.modal-header-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.modal-header-logo img{height:32px;width:auto;}
-.modal-header-logo-text{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:white;line-height:1.1;}
-.modal-header-logo-sub{font-size:10px;color:rgba(255,255,255,0.35);}
+.modal-header-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;background:white;padding:6px 12px;border-radius:6px;width:fit-content;}
+.modal-header-logo img{height:28px;width:auto;}
+.modal-header-logo-text{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--black);line-height:1.1;}
+.modal-header-logo-sub{font-size:10px;color:#888;}
 .modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:white;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .modal-close:hover{background:rgba(255,255,255,.2);}
 .modal-plan-badge{display:inline-block;background:rgba(255,255,255,.12);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:4px 10px;border-radius:4px;margin-bottom:10px;}
@@ -250,11 +250,11 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .err-banner{background:var(--red-l);border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:14px;display:none;}
 .err-banner.show{display:block;}
 .twofa-wrap{text-align:center;padding:10px 0;}
-.twofa-icon{font-size:40px;margin-bottom:12px;}
+.twofa-icon{font-size:40px;margin-bottom:12px;display:flex;justify-content:center;}
 .twofa-desc{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
 .twofa-desc strong{color:var(--black);}
 .twofa-code-row{display:flex;justify-content:center;gap:8px;margin-bottom:6px;}
-.twofa-digit{width:44px;height:52px;border:1.5px solid var(--border);border-radius:8px;text-align:center;font-size:22px;font-weight:700;font-family:'Space Mono',monospace;outline:none;transition:border-color .2s;background:white;color:var(--black);}
+.twofa-digit{width:44px;height:52px;border:1.5px solid var(--border);border-radius:8px;text-align:center;font-size:22px;font-weight:700;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;background:white;color:var(--black);}
 .twofa-digit:focus{border-color:var(--black);}
 .twofa-digit.filled{border-color:var(--green);}
 .twofa-resend{font-size:12px;color:var(--gray);margin-top:10px;margin-bottom:20px;}
@@ -273,7 +273,7 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .special-item-row:hover{border-color:#aaa;}
 .special-item-row.active{border-color:var(--black);background:#fafafa;}
 .sitem-left{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--black);font-weight:500;}
-.sitem-icon{font-size:15px;}
+.sitem-icon{font-size:16px;display:flex;align-items:center;color:var(--black);}
 .sitem-fee .price-input-wrap input{width:70px;font-size:12px;padding:5px 6px 5px 18px!important;border-radius:5px;}
 .sitem-toggle{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .15s;}
 .sitem-toggle.on{background:var(--black);border-color:var(--black);color:white;}
@@ -293,26 +293,29 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .success-state p{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:20px;}
 .success-next{background:var(--off);border-radius:10px;padding:16px;text-align:left;margin-bottom:16px;}
 .success-next-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);margin-bottom:8px;}
-.success-next-item{font-size:13px;color:var(--black);padding:5px 0;display:flex;gap:8px;}
+.success-next-item{font-size:13px;color:var(--black);padding:5px 0;display:flex;gap:8px;align-items:flex-start;}
 .sheet-saved-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-l);color:var(--green-dk);font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;margin-bottom:16px;}
 .saving-overlay{display:none;text-align:center;padding:40px 20px;}
 .saving-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.saving-overlay p{font-size:14px;color:var(--gray);}
 
 /* ── CALC PAGE ── */
 #calcPage{display:none;min-height:100vh;background:var(--d-bg);color:var(--d-text);}
 .calc-nav{height:58px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:var(--d-surface);border-bottom:1px solid var(--d-border);position:sticky;top:0;z-index:50;}
 .calc-nav-left{display:flex;align-items:center;gap:12px;}
-.calc-nav-logo-img{height:30px;width:auto;}
+.calc-nav-logo-wrap{background:white;padding:4px 10px;border-radius:6px;display:flex;align-items:center;gap:8px;}
+.calc-nav-logo-img{height:26px;width:auto;}
+.calc-nav-logo-name{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--black);}
 .calc-nav-co{font-size:11px;color:var(--d-muted);}
 .calc-nav-right{display:flex;align-items:center;gap:8px;}
-.calc-icon-btn{font-size:12px;font-weight:600;color:var(--d-muted);background:rgba(255,255,255,.06);border:1px solid var(--d-border);padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;}
+.calc-icon-btn{font-size:12px;font-weight:600;color:var(--d-muted);background:rgba(255,255,255,.06);border:1px solid var(--d-border);padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
 .calc-icon-btn:hover{color:var(--d-text);background:rgba(255,255,255,.1);border-color:var(--d-border2);}
 .calc-icon-btn.logout{color:rgba(255,100,100,.7);}
 .calc-icon-btn.logout:hover{color:#ff6b6b;background:rgba(255,100,100,.08);border-color:rgba(255,100,100,.2);}
 .calc-icon-btn.ai-btn{color:#5DCAA5;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.08);}
 .calc-icon-btn.ai-btn:hover{color:#7DDBBA;background:rgba(29,158,117,.15);border-color:rgba(29,158,117,.5);}
+.calc-icon-btn.home-btn{color:rgba(255,255,255,.6);}
+.calc-icon-btn.home-btn:hover{color:white;}
 .calc-body{max-width:480px;margin:0 auto;padding:24px 20px 80px;}
 .calc-section{margin-bottom:24px;}
 .calc-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--d-faint);margin-bottom:10px;}
@@ -320,7 +323,7 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .calc-load-card{border:1px solid var(--d-border);background:var(--d-card);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;}
 .calc-load-card:hover{border-color:var(--d-border2);background:#222;}
 .calc-load-card.sel{border-color:white;background:rgba(255,255,255,.07);}
-.calc-load-icon{font-size:22px;margin-bottom:6px;}
+.calc-load-icon{font-size:20px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8);}
 .calc-load-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);}
 .calc-load-cost{font-size:11px;color:var(--d-faint);margin-top:2px;}
 .calc-specials-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
@@ -328,7 +331,8 @@ footer{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.08);padding:32p
 .calc-special-tag:hover{border-color:var(--d-border2);}
 .calc-special-tag.sel{border-color:var(--green);background:rgba(29,158,117,.12);}
 .calc-special-left{display:flex;align-items:center;gap:7px;}
-.calc-special-icon{font-size:14px;}
+.calc-special-icon{font-size:16px;color:rgba(255,255,255,.6);display:flex;align-items:center;}
+.calc-special-tag.sel .calc-special-icon{color:#5DCAA5;}
 .calc-special-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);}
 .calc-special-tag.sel .calc-special-name{color:#5DCAA5;}
 .calc-special-fee{font-size:10px;color:var(--d-faint);}
@@ -370,7 +374,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 @keyframes drawerIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
 .ai-header{padding:18px 20px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;}
 .ai-header-left{display:flex;align-items:center;gap:10px;}
-.ai-header-icon{width:32px;height:32px;background:rgba(29,158,117,0.2);border:1px solid rgba(29,158,117,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.ai-header-icon{width:32px;height:32px;background:rgba(29,158,117,0.2);border:1px solid rgba(29,158,117,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#5DCAA5;}
 .ai-header-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:white;}
 .ai-header-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:1px;}
 .ai-header-badge{font-size:9px;font-weight:700;background:var(--green);color:white;padding:2px 8px;border-radius:10px;letter-spacing:.05em;}
@@ -380,16 +384,15 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .ai-markup-label{font-size:11px;color:rgba(255,255,255,.5);}
 .ai-markup-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:white;}
 .ai-markup-note{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
-/* drop zone */
 .ai-dropzone{border:1.5px dashed rgba(255,255,255,.15);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);margin-bottom:16px;}
 .ai-dropzone:hover,.ai-dropzone.dragover{border-color:var(--green);background:rgba(29,158,117,.06);}
-.ai-dropzone-icon{font-size:32px;margin-bottom:10px;}
+.ai-dropzone-icon{font-size:32px;margin-bottom:10px;color:rgba(255,255,255,.4);display:flex;justify-content:center;}
 .ai-dropzone-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px;}
 .ai-dropzone-sub{font-size:11px;color:rgba(255,255,255,.35);}
 .ai-file-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
 .ai-file-item{border:1px solid var(--d-border);background:rgba(255,255,255,.03);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
 .ai-file-thumb{width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;background:#333;}
-.ai-file-thumb-placeholder{width:44px;height:44px;border-radius:6px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-file-thumb-placeholder{width:44px;height:44px;border-radius:6px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;color:rgba(255,255,255,.4);}
 .ai-file-info{flex:1;min-width:0;}
 .ai-file-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ai-file-size{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;}
@@ -400,7 +403,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .ai-file-status.error{color:#ff6b6b;}
 .ai-file-remove{background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;padding:4px;flex-shrink:0;}
 .ai-file-remove:hover{color:rgba(255,255,255,.6);}
-/* per-photo result card */
 .ai-photo-result{border:1px solid rgba(29,158,117,.25);background:rgba(29,158,117,.06);border-radius:10px;padding:12px 14px;margin-top:6px;}
 .ai-photo-result-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
 .ai-photo-result-title{font-size:11px;font-weight:700;color:#5DCAA5;text-transform:uppercase;letter-spacing:.06em;}
@@ -410,7 +412,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .ai-photo-result-row .lbl{color:rgba(255,255,255,.4);}
 .ai-photo-result-row .val{color:rgba(255,255,255,.7);font-weight:600;}
 .ai-photo-result-items{font-size:11px;color:rgba(255,255,255,.45);margin-top:6px;line-height:1.6;}
-/* total */
 .ai-total-card{border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.04);border-radius:12px;padding:16px 18px;margin-bottom:16px;}
 .ai-total-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:6px;}
 .ai-total-price{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:white;letter-spacing:-2px;line-height:1;}
@@ -443,6 +444,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 .s-special-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--d-border);background:rgba(255,255,255,.03);border-radius:7px;padding:7px 10px;gap:8px;}
 .s-special-row.active{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06);}
 .s-sitem-left{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.65);font-weight:500;}
+.s-sitem-icon{font-size:14px;color:rgba(255,255,255,.5);display:flex;align-items:center;}
 .s-sitem-fee .s-input-wrap input{width:60px;font-size:11px;padding:5px 5px 5px 17px;}
 .s-sitem-toggle{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--d-border2);background:rgba(255,255,255,.05);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;transition:all .15s;}
 .s-sitem-toggle.on{background:var(--green);border-color:var(--green);color:white;}
@@ -493,7 +495,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   .calc-load-grid,.calc-specials-grid,.s-specials-grid{grid-template-columns:1fr 1fr;}
   .form-row{grid-template-columns:1fr;}
   .twofa-code-row{gap:6px;}.twofa-digit{width:38px;height:46px;font-size:18px;}
-  .promo-content{flex-direction:column;gap:12px;}
 }
 </style>
 </head>
@@ -531,12 +532,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <a href="#" class="btn-primary" onclick="openModal('starter');return false;">Start free trial →</a>
         <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
       </div>
-      <div class="hero-proof">
-        <div class="hero-proof-ava">
-          <div class="ava">GW</div><div class="ava">JH</div><div class="ava">MR</div>
-        </div>
-        <div style="line-height:1.5;"><strong style="color:white;">Junk removal operators</strong> pricing jobs confidently across the midwest</div>
-      </div>
     </div>
     <div class="hero-phone">
       <div class="phone-frame">
@@ -545,14 +540,14 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <div class="phone-app-bar"><div class="phone-app-name">Quote Tool</div><div class="phone-app-badge">PRO</div></div>
           <div class="phone-job-label">Load size</div>
           <div class="phone-load-grid">
-            <div class="phone-load-card"><div class="phone-load-icon">📦</div><div class="phone-load-name">Min Load</div></div>
-            <div class="phone-load-card sel"><div class="phone-load-icon">🛋️</div><div class="phone-load-name">Half Load</div></div>
+            <div class="phone-load-card"><div class="phone-load-name">Min Load</div></div>
+            <div class="phone-load-card sel"><div class="phone-load-name">Half Load</div></div>
           </div>
           <div class="phone-job-label">Special items</div>
           <div class="phone-specials">
-            <div class="phone-special-tag on">🛏️ Mattress +$40</div>
-            <div class="phone-special-tag on">📺 TV +$25</div>
-            <div class="phone-special-tag">🧊 Fridge</div>
+            <div class="phone-special-tag on">Mattress +$40</div>
+            <div class="phone-special-tag on">TV +$25</div>
+            <div class="phone-special-tag">Fridge</div>
           </div>
           <div class="phone-markup-row">
             <div class="phone-markup-label">Markup</div>
@@ -571,7 +566,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   </div>
 </section>
 
-<!-- PROMO BANNER (matches main site) -->
+<!-- PROMO BANNER -->
 <div class="promo-banner">
   <div class="promo-content">
     <div class="promo-left">
@@ -586,11 +581,11 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 </div>
 
 <div class="strip">
-  <div class="strip-item">📱 <strong>Works on any phone</strong></div>
-  <div class="strip-item">⚡ <strong>Quote in under 60 sec</strong></div>
-  <div class="strip-item">🤖 <strong>AI photo quoting (Pro)</strong></div>
-  <div class="strip-item">📋 <strong>Full job history</strong></div>
-  <div class="strip-item">🔒 <strong>14-day free trial</strong></div>
+  <div class="strip-item"><i class="ph ph-device-mobile" style="font-size:16px;"></i> <strong>Works on any phone</strong></div>
+  <div class="strip-item"><i class="ph ph-lightning" style="font-size:16px;"></i> <strong>Quote in under 60 sec</strong></div>
+  <div class="strip-item"><i class="ph ph-brain" style="font-size:16px;"></i> <strong>AI photo quoting (Pro)</strong></div>
+  <div class="strip-item"><i class="ph ph-clipboard-text" style="font-size:16px;"></i> <strong>Full job history</strong></div>
+  <div class="strip-item"><i class="ph ph-lock" style="font-size:16px;"></i> <strong>14-day free trial</strong></div>
 </div>
 
 <!-- ORIGIN -->
@@ -620,9 +615,9 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
     <p class="section-eyebrow">How it works</p>
     <h2 class="section-title">Sign up once. Price every job.</h2>
     <div class="steps-grid">
-      <div class="step-card"><div class="step-num">01 / 03</div><span class="step-icon">⚙️</span><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market.</div></div>
-      <div class="step-card"><div class="step-num">02 / 03</div><span class="step-icon">📱</span><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone or tablet while you're standing in the driveway.</div></div>
-      <div class="step-card"><div class="step-num">03 / 03</div><span class="step-icon">💰</span><div class="step-title">Quote with confidence</div><div class="step-desc">See your cost, your markup, and your final number. Call back in 30 seconds with a real quote, not a guess.</div></div>
+      <div class="step-card"><div class="step-num">01 / 03</div><div class="step-icon"><i class="ph ph-gear" style="font-size:26px;color:var(--black);"></i></div><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market.</div></div>
+      <div class="step-card"><div class="step-num">02 / 03</div><div class="step-icon"><i class="ph ph-device-mobile" style="font-size:26px;color:var(--black);"></i></div><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone or tablet while you're standing in the driveway.</div></div>
+      <div class="step-card"><div class="step-num">03 / 03</div><div class="step-icon"><i class="ph ph-currency-dollar" style="font-size:26px;color:var(--black);"></i></div><div class="step-title">Quote with confidence</div><div class="step-desc">See your cost, your markup, and your final number. Call back in 30 seconds with a real quote, not a guess.</div></div>
     </div>
   </div>
 </section>
@@ -634,19 +629,19 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
     <h2 class="section-title">Built for how the job actually works.</h2>
     <div class="features-grid">
       <div class="feat-card pro-feat">
-        <span class="feat-icon">📸</span>
+        <div class="feat-icon"><i class="ph ph-camera" style="font-size:24px;color:var(--green);"></i></div>
         <div class="feat-title">AI Photo Quoting <span class="pro-badge-inline">PRO</span></div>
         <div class="feat-desc">Upload photos of the pile — AI identifies load size and special items, then quotes using your exact rates. Price per photo with a combined total.</div>
       </div>
       <div class="feat-card pro-feat">
-        <span class="feat-icon">🧠</span>
+        <div class="feat-icon"><i class="ph ph-brain" style="font-size:24px;color:var(--green);"></i></div>
         <div class="feat-title">Your Rates, AI's Eyes <span class="pro-badge-inline">PRO</span></div>
         <div class="feat-desc">The AI doesn't use generic pricing. It scans the photo and plugs what it sees into your load costs, special item fees, and markup settings.</div>
       </div>
-      <div class="feat-card"><span class="feat-icon">🎚️</span><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you want the job. Slide it down to win a competitive bid.</div></div>
-      <div class="feat-card"><span class="feat-icon">⚙️</span><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote is calculated off your real numbers.</div></div>
-      <div class="feat-card"><span class="feat-icon">📦</span><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds automatically.</div></div>
-      <div class="feat-card"><span class="feat-icon">📋</span><div class="feat-title">Job history log</div><div class="feat-desc">Every quote you save gets logged with price, load size, markup, and timestamp.</div></div>
+      <div class="feat-card"><div class="feat-icon"><i class="ph ph-sliders" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Markup slider up to 500%</div><div class="feat-desc">Slide it up when you want the job. Slide it down to win a competitive bid.</div></div>
+      <div class="feat-card"><div class="feat-icon"><i class="ph ph-gear" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Your costs, locked in</div><div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote is calculated off your real numbers.</div></div>
+      <div class="feat-card"><div class="feat-icon"><i class="ph ph-package" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Special item surcharges</div><div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds automatically.</div></div>
+      <div class="feat-card"><div class="feat-icon"><i class="ph ph-clipboard-text" style="font-size:24px;color:var(--black);"></i></div><div class="feat-title">Job history log</div><div class="feat-desc">Every quote you save gets logged with price, load size, markup, and timestamp.</div></div>
     </div>
   </div>
 </section>
@@ -678,7 +673,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
         <div class="pricing-desc">Everything in Starter plus AI photo quoting — point, snap, price.</div>
         <ul class="pricing-features">
           <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-          <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting 📸</li>
+          <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting</li>
           <li class="pf"><span class="chk chk-green">✓</span> Per-photo breakdown + total</li>
           <li class="pf"><span class="chk chk-green">✓</span> AI uses your own rates</li>
           <li class="pf"><span class="chk chk-green">✓</span> Job notes & customer info</li>
@@ -756,7 +751,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       <!-- STEP 1 -->
       <div id="step1">
         <div class="err-banner" id="step1Err"></div>
-        <div class="modal-trial-box"><span>🔒</span><div><strong>No charge for 14 days.</strong> Card saved securely via Stripe. No charge today — plan activates on day 15. Cancel anytime.</div></div>
+        <div class="modal-trial-box"><i class="ph ph-lock" style="font-size:14px;flex-shrink:0;margin-top:1px;"></i><div><strong>No charge for 14 days.</strong> Card saved securely via Stripe. No charge today — plan activates on day 15. Cancel anytime.</div></div>
         <div class="form-grid">
           <div class="form-row">
             <div class="field" id="f-first"><label>First name</label><input type="text" id="m-first" placeholder="Griffin"/><span class="error-hint">Required</span></div>
@@ -776,7 +771,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
             <label style="font-size:12px;font-weight:600;color:var(--black);display:block;margin-bottom:5px;">Card</label>
             <div class="stripe-card-wrap" id="stripeCardWrap"><div id="cardElement"></div></div>
             <div class="stripe-card-error" id="cardErrors"></div>
-            <div class="stripe-lock-note">🔒 Card info never touches our server — encrypted by Stripe</div>
+            <div class="stripe-lock-note"><i class="ph ph-lock" style="font-size:12px;"></i> Card info never touches our server — encrypted by Stripe</div>
           </div>
           <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — verify your email →</button>
           <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates. Cancel anytime before day 15.</p>
@@ -786,7 +781,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       <div id="step2" style="display:none;">
         <div class="err-banner" id="step2Err"></div>
         <div class="twofa-wrap">
-          <div class="twofa-icon">📬</div>
+          <div class="twofa-icon"><i class="ph ph-envelope" style="font-size:40px;color:var(--black);"></i></div>
           <div class="twofa-desc">We sent a 6-digit code to<br><strong id="twofa-email-display"></strong><br>Enter it below to verify your email.</div>
           <div class="twofa-code-row">
             <input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d0" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
@@ -805,30 +800,30 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       <div id="step3" style="display:none;">
         <div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Set your costs once — every job you price will use these numbers. Update anytime in Settings.</div>
         <div class="pricing-section">
-          <div class="pricing-section-title">🚛 Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(cost to YOU before markup)</span></div>
+          <div class="pricing-section-title"><i class="ph ph-truck" style="font-size:14px;"></i> Your load costs <span style="font-size:11px;font-weight:400;color:var(--gray);margin-left:4px;">(cost to YOU before markup)</span></div>
           <div class="load-row" style="margin-bottom:4px;">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);">Load</div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);text-align:center;">Low</div>
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);text-align:center;">High</div>
           </div>
-          <div class="load-row"><div class="load-row-label"><span>📦</span> Min Load</div><div class="price-input-wrap"><input type="number" id="p-min-low" value="100" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-min-high" value="130" min="0"/></div></div>
-          <div class="load-row"><div class="load-row-label"><span>🛋️</span> Quarter Load</div><div class="price-input-wrap"><input type="number" id="p-qtr-low" value="160" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-qtr-high" value="200" min="0"/></div></div>
-          <div class="load-row"><div class="load-row-label"><span>🏠</span> Half Load</div><div class="price-input-wrap"><input type="number" id="p-half-low" value="230" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-half-high" value="280" min="0"/></div></div>
-          <div class="load-row"><div class="load-row-label"><span>🚛</span> Full Truck</div><div class="price-input-wrap"><input type="number" id="p-full-low" value="350" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-full-high" value="420" min="0"/></div></div>
+          <div class="load-row"><div class="load-row-label"><i class="ph ph-package" style="font-size:14px;"></i> Min Load</div><div class="price-input-wrap"><input type="number" id="p-min-low" value="100" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-min-high" value="130" min="0"/></div></div>
+          <div class="load-row"><div class="load-row-label"><i class="ph ph-couch" style="font-size:14px;"></i> Quarter Load</div><div class="price-input-wrap"><input type="number" id="p-qtr-low" value="160" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-qtr-high" value="200" min="0"/></div></div>
+          <div class="load-row"><div class="load-row-label"><i class="ph ph-house" style="font-size:14px;"></i> Half Load</div><div class="price-input-wrap"><input type="number" id="p-half-low" value="230" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-half-high" value="280" min="0"/></div></div>
+          <div class="load-row"><div class="load-row-label"><i class="ph ph-truck" style="font-size:14px;"></i> Full Truck</div><div class="price-input-wrap"><input type="number" id="p-full-low" value="350" min="0"/></div><div class="price-input-wrap"><input type="number" id="p-full-high" value="420" min="0"/></div></div>
         </div>
         <div class="pricing-section">
-          <div class="pricing-section-title">📦 Special item fees</div>
+          <div class="pricing-section-title"><i class="ph ph-package" style="font-size:14px;"></i> Special item fees</div>
           <div class="special-grid" id="specialGrid"></div>
         </div>
         <div class="pricing-section">
-          <div class="pricing-section-title">🗺️ Drive & labor costs</div>
+          <div class="pricing-section-title"><i class="ph ph-map-pin" style="font-size:14px;"></i> Drive & labor costs</div>
           <div class="extras-grid">
             <div class="extras-card"><div class="extras-card-title">Drive rate</div><div class="extras-rate-row"><div class="price-input-wrap"><input type="number" id="driveRate" value="1.50" min="0" step="0.25" style="width:74px;"/></div><span>per mile</span></div></div>
             <div class="extras-card"><div class="extras-card-title">Labor rate</div><div class="extras-rate-row"><div class="price-input-wrap"><input type="number" id="laborRate" value="35" min="0" style="width:74px;"/></div><span>/hr per person</span></div></div>
           </div>
         </div>
         <div class="pricing-section" style="margin-bottom:0;">
-          <div class="pricing-section-title">🎚️ Default markup</div>
+          <div class="pricing-section-title"><i class="ph ph-sliders" style="font-size:14px;"></i> Default markup</div>
           <div class="markup-signup-card">
             <div class="markup-signup-header"><div class="markup-signup-title">Your default markup %</div><div class="markup-signup-val" id="signupMarkupVal">35%</div></div>
             <input type="range" id="signupMarkup" min="0" max="500" value="35" step="5" style="width:100%;accent-color:var(--black);" oninput="document.getElementById('signupMarkupVal').textContent=this.value+'%'"/>
@@ -852,16 +847,16 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       </div>
       <div class="saving-overlay" id="savingOverlay"><div class="saving-spinner"></div><p id="savingMsg">Setting up your account...</p></div>
       <div class="success-state" id="successState">
-        <div class="success-mark">✓</div>
-        <div class="sheet-saved-badge">✓ Pricing saved to your account</div>
+        <div class="success-mark"><i class="ph ph-check" style="font-size:22px;color:white;"></i></div>
+        <div class="sheet-saved-badge"><i class="ph ph-check" style="font-size:12px;"></i> Pricing saved to your account</div>
         <h3>You're all set.</h3>
         <p>Your costs are saved. Pull up the quote tool on your phone anytime — 30 seconds per job.</p>
         <div class="success-next">
           <div class="success-next-label">Good to know</div>
-          <div class="success-next-item">🎚️ Markup slider starts at your default — change it per job</div>
-          <div class="success-next-item">📋 Every saved quote goes into your job history</div>
-          <div id="aiSuccessItem" style="display:none;" class="success-next-item">📸 AI photo quoting is ready — tap the AI button in your dashboard</div>
-          <div class="success-next-item">📞 Griffin will text to make sure everything looks right</div>
+          <div class="success-next-item"><i class="ph ph-sliders" style="font-size:14px;flex-shrink:0;margin-top:2px;"></i> Markup slider starts at your default — change it per job</div>
+          <div class="success-next-item"><i class="ph ph-clipboard-text" style="font-size:14px;flex-shrink:0;margin-top:2px;"></i> Every saved quote goes into your job history</div>
+          <div id="aiSuccessItem" style="display:none;" class="success-next-item"><i class="ph ph-camera" style="font-size:14px;flex-shrink:0;margin-top:2px;"></i> AI photo quoting is ready — tap the AI button in your dashboard</div>
+          <div class="success-next-item"><i class="ph ph-chat-circle" style="font-size:14px;flex-shrink:0;margin-top:2px;"></i> Griffin will text to make sure everything looks right</div>
         </div>
         <button class="submit-btn green" onclick="openCalc()">Open my quote tool →</button>
         <p style="font-size:13px;color:var(--gray);margin-top:14px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
@@ -874,27 +869,28 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 <div id="calcPage">
   <nav class="calc-nav">
     <div class="calc-nav-left">
-      <img src="logo.PNG" alt="Wood's Waste" class="calc-nav-logo-img"/>
-      <div>
-        <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:900;color:white;">Quote Tool</div>
-        <div class="calc-nav-co" id="calcNavCo">Wood's Waste</div>
+      <div class="calc-nav-logo-wrap">
+        <img src="logo.PNG" alt="Wood's Waste" class="calc-nav-logo-img"/>
+        <span class="calc-nav-logo-name">Wood's Waste</span>
       </div>
+      <div class="calc-nav-co" id="calcNavCo"></div>
     </div>
     <div class="calc-nav-right">
-      <button class="calc-icon-btn ai-btn" id="aiNavBtn" onclick="openAiPanel()" style="display:none;">📸 AI Quote</button>
-      <button class="calc-icon-btn" onclick="openSettings()">⚙ Settings</button>
-      <button class="calc-icon-btn" onclick="openHistory()">History</button>
-      <button class="calc-icon-btn logout" onclick="doLogout()">Log out</button>
+      <button class="calc-icon-btn ai-btn" id="aiNavBtn" onclick="openAiPanel()" style="display:none;"><i class="ph ph-camera" style="font-size:14px;"></i> AI Quote</button>
+      <button class="calc-icon-btn" onclick="openSettings()"><i class="ph ph-gear" style="font-size:14px;"></i> Settings</button>
+      <button class="calc-icon-btn" onclick="openHistory()"><i class="ph ph-clipboard-text" style="font-size:14px;"></i> History</button>
+      <a href="https://woodswastemn.com" class="calc-icon-btn home-btn"><i class="ph ph-house" style="font-size:14px;"></i> Home</a>
+      <button class="calc-icon-btn logout" onclick="doLogout()"><i class="ph ph-sign-out" style="font-size:14px;"></i> Log out</button>
     </div>
   </nav>
   <div class="calc-body">
     <div class="calc-section">
       <div class="calc-section-title">Load size</div>
       <div class="calc-load-grid">
-        <div class="calc-load-card" id="cl-minimum" onclick="selectLoad('minimum')"><div class="calc-load-icon">📦</div><div class="calc-load-name">Min Load</div><div class="calc-load-cost" id="cl-cost-minimum">$100–$130</div></div>
-        <div class="calc-load-card" id="cl-quarter" onclick="selectLoad('quarter')"><div class="calc-load-icon">🛋️</div><div class="calc-load-name">Quarter Load</div><div class="calc-load-cost" id="cl-cost-quarter">$160–$200</div></div>
-        <div class="calc-load-card" id="cl-half" onclick="selectLoad('half')"><div class="calc-load-icon">🏠</div><div class="calc-load-name">Half Load</div><div class="calc-load-cost" id="cl-cost-half">$230–$280</div></div>
-        <div class="calc-load-card" id="cl-full" onclick="selectLoad('full')"><div class="calc-load-icon">🚛</div><div class="calc-load-name">Full Truck</div><div class="calc-load-cost" id="cl-cost-full">$350–$420</div></div>
+        <div class="calc-load-card" id="cl-minimum" onclick="selectLoad('minimum')"><div class="calc-load-icon"><i class="ph ph-package" style="font-size:22px;"></i></div><div class="calc-load-name">Min Load</div><div class="calc-load-cost" id="cl-cost-minimum">$100–$130</div></div>
+        <div class="calc-load-card" id="cl-quarter" onclick="selectLoad('quarter')"><div class="calc-load-icon"><i class="ph ph-couch" style="font-size:22px;"></i></div><div class="calc-load-name">Quarter Load</div><div class="calc-load-cost" id="cl-cost-quarter">$160–$200</div></div>
+        <div class="calc-load-card" id="cl-half" onclick="selectLoad('half')"><div class="calc-load-icon"><i class="ph ph-house" style="font-size:22px;"></i></div><div class="calc-load-name">Half Load</div><div class="calc-load-cost" id="cl-cost-half">$230–$280</div></div>
+        <div class="calc-load-card" id="cl-full" onclick="selectLoad('full')"><div class="calc-load-icon"><i class="ph ph-truck" style="font-size:22px;"></i></div><div class="calc-load-name">Full Truck</div><div class="calc-load-cost" id="cl-cost-full">$350–$420</div></div>
       </div>
     </div>
     <div class="calc-section">
@@ -939,7 +935,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
   <div class="ai-drawer">
     <div class="ai-header">
       <div class="ai-header-left">
-        <div class="ai-header-icon">📸</div>
+        <div class="ai-header-icon"><i class="ph ph-camera" style="font-size:16px;"></i></div>
         <div>
           <div class="ai-header-title">AI Photo Quote</div>
           <div class="ai-header-sub">Upload photos — get a quote using your rates</div>
@@ -951,7 +947,6 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
       </div>
     </div>
     <div class="ai-body">
-      <!-- Markup display -->
       <div class="ai-markup-row">
         <div>
           <div class="ai-markup-label">Current markup</div>
@@ -961,29 +956,25 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
           <div class="ai-markup-val" id="aiMarkupDisplay">35%</div>
         </div>
       </div>
-      <!-- Drop zone -->
       <div class="ai-dropzone" id="aiDropzone"
         onclick="document.getElementById('aiFileInput').click()"
         ondragover="event.preventDefault();this.classList.add('dragover')"
         ondragleave="this.classList.remove('dragover')"
         ondrop="event.preventDefault();this.classList.remove('dragover');handleAiFiles(event.dataTransfer.files)">
-        <div class="ai-dropzone-icon">📷</div>
+        <div class="ai-dropzone-icon"><i class="ph ph-camera" style="font-size:32px;"></i></div>
         <div class="ai-dropzone-title">Drop photos here or tap to upload</div>
         <div class="ai-dropzone-sub">JPG, PNG, HEIC — up to 5 photos at once</div>
       </div>
       <input type="file" id="aiFileInput" multiple accept="image/*,.heic,.heif" style="display:none;" onchange="handleAiFiles(this.files)"/>
-      <!-- File list with per-photo results -->
       <div class="ai-file-list" id="aiFileList"></div>
-      <!-- Grand total -->
       <div id="aiTotalCard" style="display:none;" class="ai-total-card">
         <div class="ai-total-label">Combined quote — all photos</div>
         <div class="ai-total-price" id="aiTotalPrice">—</div>
         <div class="ai-total-sub" id="aiTotalSub"></div>
         <div class="ai-total-rows" id="aiTotalRows"></div>
       </div>
-      <!-- Analyze button -->
       <button class="ai-analyze-btn" id="aiAnalyzeBtn" onclick="analyzePhotos()" disabled>
-        <span id="aiBtnText">📸 Add photos to analyze</span>
+        <span id="aiBtnText"><i class="ph ph-camera" style="font-size:14px;"></i> Add photos to analyze</span>
       </button>
       <button class="ai-save-btn" id="aiSaveBtn" onclick="saveAiJob()" style="display:none;">Save AI quote to history</button>
     </div>
@@ -996,27 +987,27 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
     <div class="settings-header"><div class="settings-title">Settings</div><button class="settings-close" onclick="closeSettings()">✕</button></div>
     <div class="settings-body">
       <div style="margin-bottom:20px;">
-        <div class="settings-section-title" style="margin-bottom:16px;">🚛 Load costs (before markup)</div>
+        <div class="settings-section-title" style="margin-bottom:16px;"><i class="ph ph-truck" style="font-size:13px;"></i> Load costs (before markup)</div>
         <div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:6px;align-items:center;margin-bottom:6px;">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);">Load</div>
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);text-align:center;">Low</div>
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--d-faint);text-align:center;">High</div>
         </div>
-        <div class="settings-load-row"><div class="settings-load-label"><span>📦</span> Min</div><div class="s-input-wrap"><input type="number" id="s-min-low" value="100" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-min-high" value="130" min="0"/></div></div>
-        <div class="settings-load-row"><div class="settings-load-label"><span>🛋️</span> Quarter</div><div class="s-input-wrap"><input type="number" id="s-qtr-low" value="160" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-qtr-high" value="200" min="0"/></div></div>
-        <div class="settings-load-row"><div class="settings-load-label"><span>🏠</span> Half</div><div class="s-input-wrap"><input type="number" id="s-half-low" value="230" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-half-high" value="280" min="0"/></div></div>
-        <div class="settings-load-row"><div class="settings-load-label"><span>🚛</span> Full</div><div class="s-input-wrap"><input type="number" id="s-full-low" value="350" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-full-high" value="420" min="0"/></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><i class="ph ph-package" style="font-size:13px;"></i> Min</div><div class="s-input-wrap"><input type="number" id="s-min-low" value="100" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-min-high" value="130" min="0"/></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><i class="ph ph-couch" style="font-size:13px;"></i> Quarter</div><div class="s-input-wrap"><input type="number" id="s-qtr-low" value="160" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-qtr-high" value="200" min="0"/></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><i class="ph ph-house" style="font-size:13px;"></i> Half</div><div class="s-input-wrap"><input type="number" id="s-half-low" value="230" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-half-high" value="280" min="0"/></div></div>
+        <div class="settings-load-row"><div class="settings-load-label"><i class="ph ph-truck" style="font-size:13px;"></i> Full</div><div class="s-input-wrap"><input type="number" id="s-full-low" value="350" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-full-high" value="420" min="0"/></div></div>
       </div>
-      <div style="margin-bottom:20px;"><div class="settings-section-title">📦 Special item fees</div><div class="s-specials-grid" id="sSpecialsGrid"></div></div>
+      <div style="margin-bottom:20px;"><div class="settings-section-title"><i class="ph ph-package" style="font-size:13px;"></i> Special item fees</div><div class="s-specials-grid" id="sSpecialsGrid"></div></div>
       <div style="margin-bottom:20px;">
-        <div class="settings-section-title">🗺️ Drive & labor</div>
+        <div class="settings-section-title"><i class="ph ph-map-pin" style="font-size:13px;"></i> Drive & labor</div>
         <div class="s-extras-pair">
           <div class="s-extras-card"><div class="s-extras-label">Drive rate</div><div class="s-rate-row"><div class="s-input-wrap"><input type="number" id="s-drive" value="1.50" min="0" step="0.25"/></div><span>per mile</span></div></div>
           <div class="s-extras-card"><div class="s-extras-label">Labor rate</div><div class="s-rate-row"><div class="s-input-wrap"><input type="number" id="s-labor" value="35" min="0"/></div><span>/hr</span></div></div>
         </div>
       </div>
       <div>
-        <div class="settings-section-title">🎚️ Default markup</div>
+        <div class="settings-section-title"><i class="ph ph-sliders" style="font-size:13px;"></i> Default markup</div>
         <div class="markup-settings-card">
           <div class="markup-settings-header"><div class="markup-settings-title">Default markup %</div><div class="markup-settings-val" id="sMarkupVal">35%</div></div>
           <input type="range" class="calc-slider" id="sMarkup" min="0" max="500" value="35" step="5" oninput="document.getElementById('sMarkupVal').textContent=this.value+'%'"/>
@@ -1039,30 +1030,28 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:4px;cu
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════
 const API_URL    = 'https://script.google.com/macros/s/AKfycbwBzmldUPjE4kwvmGFMWYEh0sAOR10Ellz46xN7V5D9sBCFR7o0qCHFIzAtK5du8lL0/exec';
 const STRIPE_PK  = 'pk_test_REPLACE_WITH_YOUR_STRIPE_PUBLISHABLE_KEY';
-// Anthropic API — used for AI photo quoting (Pro only)
-// This is called client-side for the AI feature; restrict by domain in your Anthropic settings
 
 const SPECIAL_ITEMS_CONFIG = [
-  { key:'mattress',  icon:'🛏️', label:'Mattress',     fee:40  },
-  { key:'boxspring', icon:'🛏️', label:'Box Spring',   fee:30  },
-  { key:'fridge',    icon:'🧊', label:'Refrigerator', fee:50  },
-  { key:'washer',    icon:'🫧', label:'Washer/Dryer', fee:45  },
-  { key:'tv',        icon:'📺', label:'TV',           fee:25  },
-  { key:'tire',      icon:'🔘', label:'Tire',         fee:15  },
-  { key:'piano',     icon:'🎹', label:'Piano',        fee:150 },
-  { key:'hottub',    icon:'🛁', label:'Hot Tub',      fee:250 },
-  { key:'ac',        icon:'❄️', label:'A/C Unit',     fee:35  },
-  { key:'paint',     icon:'🪣', label:'Paint Cans',   fee:20  },
+  { key:'mattress',  icon:'bed',        label:'Mattress',     fee:40  },
+  { key:'boxspring', icon:'bed',        label:'Box Spring',   fee:30  },
+  { key:'fridge',    icon:'thermometer-cold', label:'Refrigerator', fee:50  },
+  { key:'washer',    icon:'washing-machine', label:'Washer/Dryer', fee:45  },
+  { key:'tv',        icon:'television-simple', label:'TV',           fee:25  },
+  { key:'tire',      icon:'tire',       label:'Tire',         fee:15  },
+  { key:'piano',     icon:'music-notes', label:'Piano',        fee:150 },
+  { key:'hottub',    icon:'bathtub',    label:'Hot Tub',      fee:250 },
+  { key:'ac',        icon:'wind',       label:'A/C Unit',     fee:35  },
+  { key:'paint',     icon:'paint-bucket', label:'Paint Cans',   fee:20  },
 ];
 
-// ══════════════════════════════════════
-//  STRIPE
-// ══════════════════════════════════════
+function itemIcon(key) {
+  const cfg = SPECIAL_ITEMS_CONFIG.find(x => x.key === key);
+  if (!cfg) return '<i class="ph ph-package" style="font-size:15px;"></i>';
+  return `<i class="ph ph-${cfg.icon}" style="font-size:15px;"></i>`;
+}
+
 let stripe, cardElement, cardComplete = false;
 function initStripe() {
   if (stripe) return;
@@ -1082,9 +1071,6 @@ function initStripe() {
   } catch(e){ console.warn('Stripe:',e.message); }
 }
 
-// ══════════════════════════════════════
-//  PHONE
-// ══════════════════════════════════════
 function onPhoneInput(el) {
   let digits=el.value.replace(/\D/g,'').slice(0,10), fmt='';
   if(digits.length>0) fmt='('+digits.slice(0,3);
@@ -1100,7 +1086,6 @@ function isValidPhone(d) {
   if(d.length!==10) return false;
   if(d[0]==='0'||d[0]==='1') return false;
   if(d[3]==='0'||d[3]==='1') return false;
-  if(/^[2-9]11$/.test(d.slice(0,3))) return false;
   return true;
 }
 function getRawPhone() {
@@ -1108,20 +1093,13 @@ function getRawPhone() {
   return d.length===10?'+1'+d:null;
 }
 
-// ══════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════
 let currentPlan='starter';
 let session={ token:localStorage.getItem('ww_token')||null, companyId:localStorage.getItem('ww_cid')||null, businessName:localStorage.getItem('ww_biz')||"Wood's Waste", plan:localStorage.getItem('ww_plan')||'starter' };
 let specialItemStates={}, selectedLoad=null, selectedSpecials={}, jobHistory=[], activeTab='signup', sSpecialStates={};
 let verificationToken=null, resendTimer=null;
 let userPricing={ loads:{ minimum:{low:100,high:130}, quarter:{low:160,high:200}, half:{low:230,high:280}, full:{low:350,high:420} }, specials:{}, driveRate:1.5, laborRate:35, defaultMarkup:35 };
-// AI state
 let aiFiles=[], aiResults=[], aiAnalyzed=false;
 
-// ══════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════
 (function init(){
   buildSpecialGrid(); buildSettingsSpecialsGrid();
   if(session.token){
@@ -1137,9 +1115,6 @@ let aiFiles=[], aiResults=[], aiAnalyzed=false;
 
 function loadLocalPricing(){ try{ const lp=localStorage.getItem('ww_pricing'); if(lp) applyPricing(JSON.parse(lp)); }catch(e){} }
 
-// ══════════════════════════════════════
-//  API
-// ══════════════════════════════════════
 async function api(payload){
   const fd=new FormData(); fd.append('payload',JSON.stringify(payload));
   const res=await fetch(API_URL,{method:'POST',body:fd});
@@ -1147,9 +1122,6 @@ async function api(payload){
   try{ return JSON.parse(text); } catch(e){ throw new Error('Bad response: '+text.slice(0,120)); }
 }
 
-// ══════════════════════════════════════
-//  MODAL
-// ══════════════════════════════════════
 function openModal(planOrMode){
   if(planOrMode==='login'){ switchTab('login'); }
   else{ currentPlan=planOrMode; document.getElementById('modalPlanBadge').textContent=planOrMode==='pro'?'Pro Plan — $59/mo':'Starter Plan — $29/mo'; switchTab('signup'); }
@@ -1187,9 +1159,6 @@ function goStep(n){
 }
 function updateStepDots(n){ [1,2,3].forEach(i=>{ document.getElementById('dot'+i).className='modal-step-dot'+(i<n?' done':i===n?' active':''); }); }
 
-// ══════════════════════════════════════
-//  STEP 1
-// ══════════════════════════════════════
 async function goStep2(){
   clearFormErrors();
   const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();
@@ -1226,9 +1195,6 @@ async function goStep2(){
   setTimeout(()=>document.getElementById('d0').focus(),200);
 }
 
-// ══════════════════════════════════════
-//  2FA
-// ══════════════════════════════════════
 function clearDigits(){ for(let i=0;i<6;i++){const el=document.getElementById('d'+i);el.value='';el.classList.remove('filled');} }
 function onDigit(el,idx){
   el.value=el.value.replace(/[^0-9]/g,'').slice(-1);
@@ -1254,8 +1220,8 @@ async function resendCode(){
   try{
     const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
     if(res.success){verificationToken=res.verificationToken;clearDigits();document.getElementById('d0').focus();showToast('✓ New code sent');startResendCountdown();}
-    else showToast('⚠ Could not resend: '+(res.error||''),true);
-  }catch(e){showToast('⚠ Network error',true);}
+    else showToast('Could not resend: '+(res.error||''),true);
+  }catch(e){showToast('Network error',true);}
 }
 function startResendCountdown(){
   if(resendTimer) clearInterval(resendTimer);
@@ -1265,16 +1231,13 @@ function startResendCountdown(){
   resendTimer=setInterval(()=>{ sec--; cd.textContent=sec>0?'('+sec+'s)':''; if(sec<=0){clearInterval(resendTimer);link.style.pointerEvents='';link.style.opacity='';cd.textContent='';} },1000);
 }
 
-// ══════════════════════════════════════
-//  STEP 3 / SIGNUP
-// ══════════════════════════════════════
 function buildSpecialGrid(){
   const grid=document.getElementById('specialGrid'); if(!grid) return;
   grid.innerHTML='';
   SPECIAL_ITEMS_CONFIG.forEach(item=>{
     specialItemStates[item.key]={enabled:true,fee:item.fee};
     const row=document.createElement('div'); row.className='special-item-row active'; row.id='srow-'+item.key;
-    row.innerHTML=`<div class="sitem-left"><span class="sitem-icon">${item.icon}</span>${item.label}</div><div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)"/></div></div><div class="sitem-toggle on" id="stoggle-${item.key}" onclick="toggleSpecial('${item.key}')">✓</div>`;
+    row.innerHTML=`<div class="sitem-left"><span class="sitem-icon"><i class="ph ph-${item.icon}" style="font-size:15px;"></i></span>${item.label}</div><div class="sitem-fee"><div class="price-input-wrap"><input type="number" id="sfee-${item.key}" value="${item.fee}" min="0" style="width:68px;font-size:12px;padding:5px 5px 5px 18px;" oninput="updateSpecialFee('${item.key}',this.value)"/></div></div><div class="sitem-toggle on" id="stoggle-${item.key}" onclick="toggleSpecial('${item.key}')">✓</div>`;
     grid.appendChild(row);
   });
 }
@@ -1306,9 +1269,6 @@ function showSuccess(){
   document.getElementById('modalSubtitle').textContent='';
 }
 
-// ══════════════════════════════════════
-//  LOGIN
-// ══════════════════════════════════════
 async function doLogin(){
   const email=v('l-email'),pw=v('l-pw');
   if(!email||!pw){showBanner('loginErr','Enter your email and password.');return;}
@@ -1323,9 +1283,6 @@ async function doLogin(){
   }catch(e){ btn.disabled=false; btn.textContent='Log in to my quote tool →'; showBanner('loginErr','Could not connect: '+e.message); }
 }
 
-// ══════════════════════════════════════
-//  SESSION
-// ══════════════════════════════════════
 function saveSession(token,companyId,businessName,plan){
   session.token=token; session.companyId=companyId;
   session.businessName=businessName||"Wood's Waste";
@@ -1349,9 +1306,6 @@ function applyPricing(p){
   userPricing={ loads:p.loads||userPricing.loads, specials:p.specials||{}, driveRate:Number(p.driveRate)||1.5, laborRate:Number(p.laborRate)||35, defaultMarkup:Number(p.defaultMarkup)||35 };
 }
 
-// ══════════════════════════════════════
-//  OPEN CALC
-// ══════════════════════════════════════
 function openCalc(){ closeModal(); openCalcDirect(); }
 function openCalcDirect(){
   document.getElementById('marketingPage').style.display='none';
@@ -1360,16 +1314,12 @@ function openCalcDirect(){
   initCalc();
 }
 
-// ══════════════════════════════════════
-//  CALCULATOR
-// ══════════════════════════════════════
 function initCalc(){
   document.getElementById('calcNavCo').textContent=session.businessName;
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
-  // Show AI button for Pro users
   const aiBtn=document.getElementById('aiNavBtn');
-  aiBtn.style.display=session.plan==='pro'?'block':'none';
+  aiBtn.style.display=session.plan==='pro'?'inline-flex':'none';
   Object.keys(userPricing.loads).forEach(key=>{
     const l=userPricing.loads[key], el=document.getElementById('cl-cost-'+key);
     if(el) el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');
@@ -1379,12 +1329,12 @@ function initCalc(){
 
 function buildCalcSpecialsGrid(){
   const grid=document.getElementById('calcSpecialsGrid'); grid.innerHTML=''; selectedSpecials={};
-  const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'📦'})):SPECIAL_ITEMS_CONFIG;
+  const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'package'})):SPECIAL_ITEMS_CONFIG;
   items.forEach(item=>{
     selectedSpecials[item.key]=false;
     const tag=document.createElement('div'); tag.className='calc-special-tag'; tag.id='cs-'+item.key;
     tag.onclick=()=>toggleCalcSpecial(item.key);
-    tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon">${item.icon}</span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
+    tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon"><i class="ph ph-${item.icon}" style="font-size:15px;"></i></span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
     grid.appendChild(tag);
   });
 }
@@ -1430,11 +1380,8 @@ function resetCalc(){
   document.getElementById('calcBreakdown').style.display='none';
 }
 
-// ══════════════════════════════════════
-//  SAVE JOB (manual)
-// ══════════════════════════════════════
 async function saveJob(){
-  if(!selectedLoad){showToast('⚠ Select a load size first',true);return;}
+  if(!selectedLoad){showToast('Select a load size first',true);return;}
   const priceText=document.getElementById('calcFinalPrice').textContent;
   if(priceText==='—'||priceText==='Select a load size') return;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
@@ -1452,17 +1399,14 @@ async function saveJob(){
   }
 }
 
-// ══════════════════════════════════════
-//  AI PHOTO QUOTING (Pro only)
-// ══════════════════════════════════════
 function openAiPanel(){
-  if(session.plan!=='pro'){showToast('⚠ AI quoting is a Pro feature',true);return;}
+  if(session.plan!=='pro'){showToast('AI quoting is a Pro feature',true);return;}
   aiFiles=[]; aiResults=[]; aiAnalyzed=false;
   renderAiFileList();
   document.getElementById('aiTotalCard').style.display='none';
   document.getElementById('aiSaveBtn').style.display='none';
   document.getElementById('aiAnalyzeBtn').disabled=true;
-  document.getElementById('aiBtnText').textContent='📸 Add photos to analyze';
+  document.getElementById('aiBtnText').innerHTML='<i class="ph ph-camera" style="font-size:14px;"></i> Add photos to analyze';
   document.getElementById('aiMarkupDisplay').textContent=document.getElementById('calcMarkup').value+'%';
   document.getElementById('aiPanel').classList.add('open');
 }
@@ -1480,7 +1424,7 @@ function handleAiFiles(files){
   renderAiFileList();
   const btn=document.getElementById('aiAnalyzeBtn');
   btn.disabled=aiFiles.length===0;
-  document.getElementById('aiBtnText').textContent=aiFiles.length>0?`📸 Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'📸 Add photos to analyze';
+  document.getElementById('aiBtnText').innerHTML=aiFiles.length>0?`<i class="ph ph-camera" style="font-size:14px;"></i> Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'<i class="ph ph-camera" style="font-size:14px;"></i> Add photos to analyze';
 }
 
 function renderAiFileList(){
@@ -1491,14 +1435,12 @@ function renderAiFileList(){
     const size=f.size<1024*1024?Math.round(f.size/1024)+'KB':(f.size/1024/1024).toFixed(1)+'MB';
     const result=aiResults[idx];
     let statusHtml='<div class="ai-file-status pending">Ready to analyze</div>';
-    if(result&&result.status==='analyzing') statusHtml='<div class="ai-file-status analyzing">⏳ Analyzing...</div>';
+    if(result&&result.status==='analyzing') statusHtml='<div class="ai-file-status analyzing">Analyzing...</div>';
     else if(result&&result.status==='done') statusHtml='<div class="ai-file-status done">✓ $'+result.quoteLow+(result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:'')+'</div>';
-    else if(result&&result.status==='error') statusHtml='<div class="ai-file-status error">⚠ '+result.error+'</div>';
-    item.innerHTML=`<div class="ai-file-thumb-placeholder" id="ai-thumb-${idx}">📷</div><div class="ai-file-info"><div class="ai-file-name">${f.name}</div><div class="ai-file-size">${size}</div>${statusHtml}</div><button class="ai-file-remove" onclick="removeAiFile(${idx})">✕</button>`;
+    else if(result&&result.status==='error') statusHtml='<div class="ai-file-status error">'+result.error+'</div>';
+    item.innerHTML=`<div class="ai-file-thumb-placeholder" id="ai-thumb-${idx}"><i class="ph ph-camera" style="font-size:18px;"></i></div><div class="ai-file-info"><div class="ai-file-name">${f.name}</div><div class="ai-file-size">${size}</div>${statusHtml}</div><button class="ai-file-remove" onclick="removeAiFile(${idx})">✕</button>`;
     list.appendChild(item);
-    // Load thumb
     const reader=new FileReader(); reader.onload=e=>{ const th=document.getElementById('ai-thumb-'+idx); if(th){ th.innerHTML=''; const img=document.createElement('img'); img.className='ai-file-thumb'; img.src=e.target.result; th.appendChild(img); th.style.background='none'; } }; reader.readAsDataURL(f);
-    // Add per-photo result card below if done
     if(result&&result.status==='done'){
       const rc=document.createElement('div'); rc.className='ai-photo-result';
       rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.loadLabel}</span></div><div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.join(', ')+'</div>':''}`;
@@ -1507,7 +1449,7 @@ function renderAiFileList(){
   });
 }
 
-function removeAiFile(idx){ aiFiles.splice(idx,1); aiResults.splice(idx,1); aiAnalyzed=false; document.getElementById('aiTotalCard').style.display='none'; document.getElementById('aiSaveBtn').style.display='none'; renderAiFileList(); const btn=document.getElementById('aiAnalyzeBtn'); btn.disabled=aiFiles.length===0; document.getElementById('aiBtnText').textContent=aiFiles.length>0?`📸 Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'📸 Add photos to analyze'; }
+function removeAiFile(idx){ aiFiles.splice(idx,1); aiResults.splice(idx,1); aiAnalyzed=false; document.getElementById('aiTotalCard').style.display='none'; document.getElementById('aiSaveBtn').style.display='none'; renderAiFileList(); const btn=document.getElementById('aiAnalyzeBtn'); btn.disabled=aiFiles.length===0; document.getElementById('aiBtnText').innerHTML=aiFiles.length>0?`<i class="ph ph-camera" style="font-size:14px;"></i> Analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`:'<i class="ph ph-camera" style="font-size:14px;"></i> Add photos to analyze'; }
 
 async function analyzePhotos(){
   if(aiFiles.length===0) return;
@@ -1519,89 +1461,17 @@ async function analyzePhotos(){
   renderAiFileList();
   const markup=parseInt(document.getElementById('calcMarkup').value);
   const markupFrac=markup/100;
-  // Build pricing context string for the AI
   const loads=userPricing.loads;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
-  const pricingContext=`Your pricing (costs BEFORE markup):
-- Min Load: $${loads.minimum.low}–$${loads.minimum.high}
-- Quarter Load: $${loads.quarter.low}–$${loads.quarter.high}
-- Half Load: $${loads.half.low}–$${loads.half.high}
-- Full Truck: $${loads.full.low}–$${loads.full.high}
-Special item fees: ${Object.entries(specialSrc).map(([k,v])=>`${v.label||k}: $${v.fee}`).join(', ')}
-Markup: ${markup}%`;
+  const pricingContext=`Your pricing (costs BEFORE markup):\n- Min Load: $${loads.minimum.low}–$${loads.minimum.high}\n- Quarter Load: $${loads.quarter.low}–$${loads.quarter.high}\n- Half Load: $${loads.half.low}–$${loads.half.high}\n- Full Truck: $${loads.full.low}–$${loads.full.high}\nSpecial item fees: ${Object.entries(specialSrc).map(([k,v])=>`${v.label||k}: $${v.fee}`).join(', ')}\nMarkup: ${markup}%`;
 
-  // Process each photo
   for(let i=0;i<aiFiles.length;i++){
     try{
       const b64=await readFileBase64(aiFiles[i]);
-      const mediaType=aiFiles[i].type||'image/jpeg';
-const prompt=`You are looking at a real junk removal job. Your job is to protect the operator from underpricing. Every missed item costs them money. Be thorough and aggressive.
+      const prompt=`You are looking at a real junk removal job. Your job is to protect the operator from underpricing.\n\n${pricingContext}\n\nAnalyze the image carefully. Identify the load size and any special items.\n\nSpecial items to look for: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}\n\nLoad sizes:\n- Min Load: 2-3 small items only\n- Quarter Load: 5-8 items, one small room\n- Half Load: full room, multiple furniture pieces (most common)\n- Full Truck: multiple rooms, full garage\n\nWhen in doubt between two sizes, choose the larger one.\n\nRespond ONLY with valid JSON:\n{"loadKey":"minimum|quarter|half|full","loadLabel":"Min Load|Quarter Load|Half Load|Full Truck","specialsFound":["Exact Label"],"reasoning":"2-3 sentences"}`;
 
-${pricingContext}
-
-STEP 1 — SCAN THE ENTIRE IMAGE METHODICALLY:
-Look at every corner, every background item, every partially visible object. Do not skip anything. Items are often stacked, partially hidden, or in the background.
-
-STEP 2 — CHECK FOR EVERY SPECIAL ITEM ONE BY ONE:
-Go through this list and ask yourself "do I see this?" for each one:
-□ Mattress (any size — twin, full, queen, king)
-□ Box Spring (often under a mattress or leaning against a wall)
-□ Refrigerator (full size, mini fridge, or standalone freezer)
-□ Washer or Dryer (front load, top load, standalone)
-□ TV (flatscreen, tube, any size mounted or standing)
-□ Tire (car, truck, with or without rim)
-□ Piano (upright, baby grand, keyboard unit)
-□ Hot Tub (even partially disassembled)
-□ A/C Unit (window unit, portable unit, or central unit)
-□ Paint Cans (any number of cans, full or empty)
-
-There can be multiple of each, if so count that towards the price.
-
-If you see ANY of the above, include them in specialsFound using the EXACT label from this list: ${Object.values(specialSrc).map(v=>v.label||v).join(', ')}
-
-STEP 3 — ESTIMATE LOAD SIZE:
-
-Be aggressive with load sizing. Junk removal always takes more space than it looks.
-- Min Load: literally just 2-3 small items. A single chair, a few boxes. Very rare.
-- Quarter Load: about 5-8 items, one small room worth of small furniture and bags
-- Half Load: a full room, multiple pieces of furniture, lots of bags and boxes — THIS IS THE MOST COMMON
-- Full Truck: multiple rooms, full garage, large estate — when in doubt between half and full, pick full
-
-CRITICAL RULES:
-1. Almost nothing is a Min Load in real life. If you see more than 3-4 items, it's at least a Quarter.
-2. If you see a full garage or multiple rooms, it's a Full Truck.
-3. A cluttered garage like this photo = Full Truck, not Quarter Load.
-4. Always size UP not down. Underpricing costs the operator money.
-5. If the photo shows an entire room or garage, default to Half Load minimum.
-
-STEP 4 — DOUBLE CHECK SPECIAL ITEMS:
-Before responding, ask yourself:
-- Is there ANY screen or monitor visible? → TV
-- Any white appliances? → Could be Washer/Dryer or Refrigerator  
-- Any cylindrical tanks? → Could be propane (not a special item but note it)
-- Any round rubber objects? → Tire
-- Any large rectangular padded items? → Mattress or Box Spring
-- Any window-mounted box units? → A/C Unit
-- Any cans of paint? → Paint Cans
-If you see it, charge for it. Do not leave money on the table.
-
-IMPORTANT: When in doubt between two sizes, always choose the LARGER one. It is better to slightly overestimate than to underprice the job.
-
-Respond ONLY with valid JSON. No markdown. No explanation outside the JSON:
-{
-  "loadKey": "minimum|quarter|half|full",
-  "loadLabel": "Min Load|Quarter Load|Half Load|Full Truck",
-  "specialsFound": ["Exact Label"],
-  "reasoning": "2-3 sentences describing exactly what you see, what special items you identified and why, and why you chose this load size"
-}`;
-
-const response=await api({
-  action:'aiAnalyzePhoto',
-  image:b64,
-  mediaType:aiFiles[i].type||'image/jpeg',
-  prompt:prompt
-});
-    if(!response.success) throw new Error(response.error||'AI error');
+      const response=await api({action:'aiAnalyzePhoto',image:b64,mediaType:aiFiles[i].type||'image/jpeg',prompt:prompt});
+      if(!response.success) throw new Error(response.error||'AI error');
       const text=response.text;
       let parsed; try{ parsed=JSON.parse(text.replace(/```json|```/g,'').trim()); }catch(e){ throw new Error('Could not parse AI response'); }
       const loadKey=parsed.loadKey||'quarter';
@@ -1619,7 +1489,6 @@ const response=await api({
     renderAiFileList();
   }
 
-  // Calculate total
   const doneResults=aiResults.filter(r=>r&&r.status==='done');
   if(doneResults.length>0){
     const totalLow=doneResults.reduce((s,r)=>s+r.quoteLow,0);
@@ -1627,14 +1496,14 @@ const response=await api({
     const totalCard=document.getElementById('aiTotalCard');
     totalCard.style.display='block';
     document.getElementById('aiTotalPrice').textContent='$'+totalLow+(totalLow!==totalHigh?'–$'+totalHigh:'');
-    document.getElementById('aiTotalSub').textContent=doneResults.length+' photo'+( doneResults.length>1?'s':'')+' analyzed · '+markup+'% markup applied';
+    document.getElementById('aiTotalSub').textContent=doneResults.length+' photo'+(doneResults.length>1?'s':'')+' analyzed · '+markup+'% markup applied';
     const rows=document.getElementById('aiTotalRows');
-    rows.innerHTML=doneResults.map((r,i)=>`<div class="ai-breakdown-row" style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:rgba(255,255,255,.4);">Photo ${i+1} — ${r.loadLabel}</span><span style="color:rgba(255,255,255,.7);font-weight:600;">$${r.quoteLow}${r.quoteLow!==r.quoteHigh?'–$'+r.quoteHigh:''}</span></div>`).join('');
+    rows.innerHTML=doneResults.map((r,i)=>`<div style="display:flex;justify-content:space-between;font-size:11px;"><span style="color:rgba(255,255,255,.4);">Photo ${i+1} — ${r.loadLabel}</span><span style="color:rgba(255,255,255,.7);font-weight:600;">$${r.quoteLow}${r.quoteLow!==r.quoteHigh?'–$'+r.quoteHigh:''}</span></div>`).join('');
     document.getElementById('aiSaveBtn').style.display='block';
     aiAnalyzed=true;
   }
   btn.disabled=false;
-  document.getElementById('aiBtnText').textContent=`📸 Re-analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`;
+  document.getElementById('aiBtnText').innerHTML=`<i class="ph ph-camera" style="font-size:14px;"></i> Re-analyze ${aiFiles.length} photo${aiFiles.length>1?'s':''}`;
 }
 
 async function saveAiJob(){
@@ -1654,16 +1523,13 @@ async function saveAiJob(){
 
 function readFileBase64(file){ return new Promise((resolve,reject)=>{ const r=new FileReader(); r.onload=e=>resolve(e.target.result.split(',')[1]); r.onerror=reject; r.readAsDataURL(file); }); }
 
-// ══════════════════════════════════════
-//  SETTINGS
-// ══════════════════════════════════════
 function buildSettingsSpecialsGrid(){
   const grid=document.getElementById('sSpecialsGrid'); if(!grid) return;
   grid.innerHTML='';
   SPECIAL_ITEMS_CONFIG.forEach(item=>{
     sSpecialStates[item.key]={enabled:true,fee:item.fee};
     const row=document.createElement('div'); row.className='s-special-row active'; row.id='ss-'+item.key;
-    row.innerHTML=`<div class="s-sitem-left"><span>${item.icon}</span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>`;
+    row.innerHTML=`<div class="s-sitem-left"><span class="s-sitem-icon"><i class="ph ph-${item.icon}" style="font-size:13px;"></i></span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>`;
     grid.appendChild(row);
   });
 }
@@ -1696,15 +1562,12 @@ async function saveSettings(){
   const specials={};
   SPECIAL_ITEMS_CONFIG.forEach(item=>{ if(sSpecialStates[item.key]?.enabled) specials[item.key]={fee:sSpecialStates[item.key].fee,label:item.label,icon:item.icon}; });
   const newPricing={ loads:{ minimum:{low:nsv('s-min-low'),high:nsv('s-min-high')}, quarter:{low:nsv('s-qtr-low'),high:nsv('s-qtr-high')}, half:{low:nsv('s-half-low'),high:nsv('s-half-high')}, full:{low:nsv('s-full-low'),high:nsv('s-full-high')} }, specials, driveRate:nsv('s-drive'), laborRate:nsv('s-labor'), defaultMarkup:parseInt(document.getElementById('sMarkup').value) };
-  if(session.token){ try{ const res=await api({action:'updatePricing',token:session.token,...newPricing}); if(!res.success) showToast('⚠ Could not save to server',true); }catch(e){showToast('⚠ Could not reach server',true);} }
+  if(session.token){ try{ const res=await api({action:'updatePricing',token:session.token,...newPricing}); if(!res.success) showToast('Could not save to server',true); }catch(e){showToast('Could not reach server',true);} }
   applyPricing(newPricing); localStorage.setItem('ww_pricing',JSON.stringify(newPricing));
   initCalc(); btn.disabled=false; btn.textContent='Save pricing changes';
   closeSettings(); showToast('✓ Pricing updated');
 }
 
-// ══════════════════════════════════════
-//  HISTORY
-// ══════════════════════════════════════
 function loadHistory(){ try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];} renderHistory(); }
 function persistHistory(){ try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){} }
 function clearHistory(){ if(!confirm('Clear all job history?')) return; jobHistory=[]; persistHistory(); renderHistory(); }
@@ -1712,15 +1575,12 @@ function renderHistory(){
   const list=document.getElementById('historyList');
   if(!jobHistory.length){list.innerHTML='<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';return;}
   const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
-  list.innerHTML=jobHistory.map(j=>`<div class="history-item"><div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts}</div></div><div class="history-item-detail">${ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div><div>${j.aiQuote?'<span class="history-item-ai">📸 AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span></div></div>`).join('');
+  list.innerHTML=jobHistory.map(j=>`<div class="history-item"><div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts}</div></div><div class="history-item-detail">${ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div><div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span></div></div>`).join('');
 }
 function openHistory(){ document.getElementById('historyPanel').classList.add('open'); }
 function closeHistory(){ document.getElementById('historyPanel').classList.remove('open'); }
 function closeHistoryOutside(e){ if(e.target===document.getElementById('historyPanel')) closeHistory(); }
 
-// ══════════════════════════════════════
-//  PAGE LOADER / TOAST / UTILS
-// ══════════════════════════════════════
 function showPageLoader(msg){ const d=document.createElement('div'); d.id='pageLoader'; d.style.cssText='position:fixed;inset:0;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;'; d.innerHTML=`<div style="width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:#1D9E75;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:16px;"></div><p style="font-size:14px;color:rgba(255,255,255,.4);font-family:Inter,sans-serif;">${msg||'Loading...'}</p>`; document.body.appendChild(d); }
 function hidePageLoader(){ const el=document.getElementById('pageLoader'); if(el) el.remove(); }
 function showToast(msg,warn){ const t=document.getElementById('toast'); t.textContent=msg; t.style.background=warn?'#b94a4a':'#1D9E75'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
