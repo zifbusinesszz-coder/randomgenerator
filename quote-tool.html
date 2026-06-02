@@ -1509,12 +1509,20 @@ let insightCharts={};
   buildSpecialGrid();buildSettingsSpecialsGrid();
   if(session.token){
     showPageLoader('Logging you back in...');
-    api({action:'getUser',token:session.token}).then(res=>{
-      hidePageLoader();
-      if(res.success){session.businessName=res.businessName;session.companyId=res.companyId;session.plan=res.plan||'starter';applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));}
-      else loadLocalPricing();
-      openCalcDirect();
-    }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
+api({action:'getUser',token:session.token}).then(res=>{
+  hidePageLoader();
+  if(res.success){
+    session.businessName=res.businessName;
+    session.companyId=res.companyId;
+    session.plan=res.plan||'starter';
+    session.cardLast4=res.cardLast4||null; // add this
+    applyPricing(res.pricing);
+    localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
+    checkTrialStatus(res); // ADD THIS LINE
+  }
+  else loadLocalPricing();
+  openCalcDirect();
+}).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
   }
 })();
 
