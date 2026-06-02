@@ -1553,6 +1553,10 @@ function openModal(planOrMode){
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   setTimeout(initStripe,50);
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(initStripe,50);
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
