@@ -1760,8 +1760,8 @@ function openCalcDirect(){
 function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
-  document.getElementById('aiNavBtn').style.display=session.plan==='pro'?'inline-flex':'none';
-  if(session.plan!=='pro'){document.getElementById('aiNavBtn').style.display='none';}
+  document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
+  if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
   document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
   const upgradeBtn=document.getElementById('desktopUpgradeBtn');
   if(upgradeBtn)upgradeBtn.style.display=session.plan==='pro'?'none':'inline-flex';
