@@ -2096,6 +2096,174 @@ function openMobSidebar(){
 }
 function closeMobSidebar(){document.getElementById('mobSidebar').classList.remove('open');}
 function closeMobSidebarOutside(e){if(e.target===document.getElementById('mobSidebar'))closeMobSidebar();}
+/* ══ TRIAL & PAYWALL ══ */
+let paywallSelectedPlan = 'starter';
+let paywallStripe, paywallCardElement, paywallCardComplete = false;
+let usingNewCard = false;
+
+function checkTrialStatus(res) {
+  if (!res.trialEnd && !res.trialStatus) return; // backend didn't send trial info — skip
+  const status = res.trialStatus; // 'active' | 'expiring_soon' | 'expired' | 'payment_failed'
+  const daysLeft = res.trialDaysLeft ?? null;
+
+  if (status === 'expiring_soon' && daysLeft !== null) {
+    const banner = document.getElementById('trialWarningBanner');
+    document.getElementById('trialDaysLeft').textContent = daysLeft === 1 ? '1 day' : daysLeft + ' days';
+    if (daysLeft === 1) {
+      document.getElementById('trialWarningTitle').textContent = 'Trial ends tomorrow';
+      document.getElementById('trialWarningBody').innerHTML = 'Your free trial ends <strong>tomorrow</strong>. After that your access will pause until payment is confirmed.';
+    }
+    if (banner) banner.style.display = 'block';
+  }
+
+  if (status === 'expired' || status === 'payment_failed') {
+    // Block the calc immediately
+    openPaywall(status);
+  }
+}
+
+function openPaywall(reason) {
+  const overlay = document.getElementById('paywallOverlay');
+  if (!overlay) return;
+  if (reason === 'payment_failed') {
+    document.getElementById('paywallTitle').textContent = 'Payment failed';
+    document.getElementById('paywallSubtitle').textContent = 'Your card was declined. Update your card to keep access.';
+  } else if (reason === 'warning') {
+    document.getElementById('paywallTitle').textContent = 'Activate your plan early';
+    document.getElementById('paywallSubtitle').textContent = 'No disruption — lock in your plan before the trial ends.';
+  } else {
+    document.getElementById('paywallTitle').textContent = 'Your trial has ended';
+    document.getElementById('paywallSubtitle').textContent = 'Choose a plan to keep quoting jobs.';
+  }
+  showPaywallPlanStep();
+  // Pre-select current plan
+  selectPaywallPlan(session.plan === 'pro' ? 'pro' : 'starter');
+  overlay.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePaywall() {
+  document.getElementById('paywallOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function selectPaywallPlan(plan) {
+  paywallSelectedPlan = plan;
+  document.querySelectorAll('#paywallOverlay .pricing-card').forEach(c => c.classList.remove('pw-selected'));
+  document.getElementById('pw-' + plan + '-card').classList.add('pw-selected');
+  document.getElementById('paywallSelectedPlanLabel').textContent = plan === 'pro' ? 'Pro ($59/mo)' : 'Starter ($29/mo)';
+  document.getElementById('paywallContinueBtn').style.display = 'block';
+}
+
+function showPaywallPlanStep() {
+  document.getElementById('paywallPlanStep').style.display = 'block';
+  document.getElementById('paywallPaymentStep').style.display = 'none';
+  document.getElementById('paywallSuccessStep').style.display = 'none';
+}
+
+function goPaywallPayment() {
+  document.getElementById('paywallPlanStep').style.display = 'none';
+  document.getElementById('paywallPaymentStep').style.display = 'block';
+  document.getElementById('paywallPaymentPlanLabel').textContent =
+    paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : 'Starter — $29/mo';
+  // Show card on file (last4 if backend sends it, otherwise generic)
+  document.getElementById('paywallCardLast4').textContent =
+    session.cardLast4 ? '•••• •••• •••• ' + session.cardLast4 : 'Card on file';
+  usingNewCard = false;
+  document.getElementById('paywallNewCardWrap').style.display = 'none';
+  initPaywallStripe();
+}
+
+function toggleNewCard() {
+  usingNewCard = !usingNewCard;
+  document.getElementById('paywallNewCardWrap').style.display = usingNewCard ? 'block' : 'none';
+  document.getElementById('paywallCardOnFile').style.opacity = usingNewCard ? '0.4' : '1';
+  document.getElementById('useNewCardToggle').textContent = usingNewCard ? 'Use card on file instead' : 'Use a different card';
+}
+
+function initPaywallStripe() {
+  if (paywallStripe) return;
+  try {
+    paywallStripe = Stripe(STRIPE_PK);
+    const elements = paywallStripe.elements();
+    paywallCardElement = elements.create('card', {
+      style: { base: { fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: '#0d0d0d', '::placeholder': { color: '#c4c4c4' } }, invalid: { color: '#c0392b' } }
+    });
+    paywallCardElement.mount('#paywallCardElement');
+    paywallCardElement.on('change', e => {
+      paywallCardComplete = e.complete;
+      const err = document.getElementById('paywallCardErrors');
+      err.textContent = e.error ? e.error.message : '';
+      document.getElementById('paywallStripeWrap').classList.toggle('error', !!e.error);
+    });
+    paywallCardElement.on('focus', () => document.getElementById('paywallStripeWrap').classList.add('focused'));
+    paywallCardElement.on('blur',  () => document.getElementById('paywallStripeWrap').classList.remove('focused'));
+  } catch(e) { console.warn('Paywall Stripe:', e.message); }
+}
+
+async function submitPaywallPayment() {
+  const btn = document.getElementById('paywallPayBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+  hideBanner('paywallErr');
+
+  let pmId = null;
+
+  if (usingNewCard) {
+    if (!paywallCardComplete) {
+      showBanner('paywallErr', 'Please complete your card details.');
+      btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
+      return;
+    }
+    try {
+      const { paymentMethod, error } = await paywallStripe.createPaymentMethod({
+        type: 'card', card: paywallCardElement,
+      });
+      if (error) throw new Error(error.message);
+      pmId = paymentMethod.id;
+    } catch(e) {
+      showBanner('paywallErr', e.message);
+      btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
+      return;
+    }
+  }
+
+  try {
+    const res = await api({
+      action: 'activateAfterTrial',
+      token: session.token,
+      plan: paywallSelectedPlan,
+      paymentMethodId: pmId, // null = use card on file
+    });
+
+    btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
+
+    if (!res.success) {
+      showBanner('paywallErr', res.error || 'Payment failed. Try a different card or text Griffin at (507) 298-1179.');
+      if (res.requiresNewCard) {
+        usingNewCard = true;
+        document.getElementById('paywallNewCardWrap').style.display = 'block';
+        document.getElementById('paywallCardOnFile').style.opacity = '0.4';
+        document.getElementById('useNewCardToggle').textContent = 'Use card on file instead';
+      }
+      return;
+    }
+
+    // Update local session plan
+    session.plan = paywallSelectedPlan;
+    localStorage.setItem('ww_plan', paywallSelectedPlan);
+
+    // Show success then re-init calc
+    document.getElementById('paywallPaymentStep').style.display = 'none';
+    document.getElementById('paywallSuccessStep').style.display = 'block';
+    initCalc();
+    document.getElementById('trialWarningBanner').style.display = 'none';
+
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
+    showBanner('paywallErr', 'Could not connect: ' + e.message);
+  }
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();}});
 </script>
 </body>
