@@ -1694,7 +1694,7 @@ async function completeSignup(){
   const specials={};
   SPECIAL_ITEMS_CONFIG.forEach(item=>{if(specialItemStates[item.key].enabled)specials[item.key]={fee:specialItemStates[item.key].fee,label:item.label,icon:item.icon};});
   const pricing={loads:{minimum:{low:nv('p-min-low'),high:nv('p-min-high')},quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high')},half:{low:nv('p-half-low'),high:nv('p-half-high')},full:{low:nv('p-full-low'),high:nv('p-full-high')}},specials,driveRate:nv('driveRate'),laborRate:nv('laborRate'),defaultMarkup:parseInt(document.getElementById('signupMarkup').value)};
-  const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:v('m-pw'),plan:currentPlan,trialStart:new Date().toISOString(),paymentMethodId:window._pendingPaymentMethodId||null,verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup};
+  const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||v('m-pw'),plan:currentPlan,trialStart:new Date().toISOString(),paymentMethodId:window._pendingPaymentMethodId||null,verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup};
   try{
     const res=await api(payload);btn.disabled=false;btn.textContent='Save & open my quote tool →';
     if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goStep(2);return;}
