@@ -757,10 +757,11 @@ canvas.insights-chart{width:100%!important;display:block;}
   .twofa-code-row{gap:5px;}.twofa-digit{width:37px;height:44px;font-size:17px;}
   .promo-banner{padding:20px;}
 }
-  #paywallOverlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);}
-    #paywallOverlay .pricing-card{cursor:pointer;transition:all .2s;}
-    #paywallOverlay .pricing-card.pw-selected{box-shadow:0 0 0 2.5px var(--green);}
-    #paywallOverlay .pricing-card.featured.pw-selected{box-shadow:0 0 0 2.5px #5DCAA5;}
+#paywallOverlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);}
+#paywallOverlay.open{display:flex;}
+#paywallOverlay .pricing-card{cursor:pointer;transition:all .2s;}
+#paywallOverlay .pricing-card.pw-selected{box-shadow:0 0 0 2.5px var(--green);}
+#paywallOverlay .pricing-card.featured.pw-selected{box-shadow:0 0 0 2.5px #5DCAA5;}
 </style>
 </head>
 <body>
