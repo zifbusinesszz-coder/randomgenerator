@@ -2025,7 +2025,7 @@ function refreshInsightsBtn(){
   if(btn)btn.style.display=(session.plan==='pro'&&hasActuals)?'inline-flex':'none';
 }
 function openInsights(){
-  if(session.plan!=='pro'){showToast('Insights is a Pro feature',true);return;}
+  if(!isPro()){showToast('Insights is a Pro feature',true);return;}
   renderInsights();document.getElementById('insightsPanel').classList.add('open');
 }
 function closeInsights(){document.getElementById('insightsPanel').classList.remove('open');Object.values(insightCharts).forEach(c=>{try{c.destroy();}catch(e){}});insightCharts={};}
