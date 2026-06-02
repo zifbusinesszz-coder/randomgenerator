@@ -1545,7 +1545,11 @@ async function api(payload){
 
 function openModal(planOrMode){
   if(planOrMode==='login'){switchTab('login');}
-  else{currentPlan=planOrMode;document.getElementById('modalPlanBadge').textContent=planOrMode==='pro'?'Pro Plan — $59/mo':'Starter Plan — $29/mo';switchTab('signup');}
+  else{currentPlan=planOrMode;document.getElementById('modalPlanBadge').textContent=
+  planOrMode==='pro'?'Pro Plan — $59/mo':
+  planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
+  planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
+  'Starter Plan — $29/mo';
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   setTimeout(initStripe,50);
