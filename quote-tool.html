@@ -1509,18 +1509,24 @@ let insightCharts={};
   buildSpecialGrid();buildSettingsSpecialsGrid();
   if(session.token){
     showPageLoader('Logging you back in...');
-api({action:'getUser',token:session.token}).then(res=>{
-  hidePageLoader();
-  if(res.success){
-    session.businessName=res.businessName;
-    session.companyId=res.companyId;
-    session.plan=res.plan||'starter';
-    session.cardLast4=res.cardLast4||null;
-    applyPricing(res.pricing);
-    localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
-    checkTrialStatus(res);
+    api({action:'getUser',token:session.token}).then(res=>{
+      hidePageLoader();
+      if(res.success){
+        session.businessName=res.businessName;
+        session.companyId=res.companyId;
+        session.plan=res.plan||'starter';
+        session.cardLast4=res.cardLast4||null;
+        applyPricing(res.pricing);
+        localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
+        checkTrialStatus(res);
+      }
+      else loadLocalPricing();
+      openCalcDirect();
+    }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
   }
-  else loadLocalPricing();
+})();
+
+function loadLocalPricing(){
   openCalcDirect();
 }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
 
