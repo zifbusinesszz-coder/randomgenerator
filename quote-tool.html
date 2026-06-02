@@ -1515,16 +1515,21 @@ api({action:'getUser',token:session.token}).then(res=>{
     session.businessName=res.businessName;
     session.companyId=res.companyId;
     session.plan=res.plan||'starter';
-    session.cardLast4=res.cardLast4||null; // add this
+    session.cardLast4=res.cardLast4||null;
     applyPricing(res.pricing);
     localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
-    checkTrialStatus(res); // ADD THIS LINE
+    checkTrialStatus(res);
+    // Load this user's job history from server
+    api({action:'getJobs',token:session.token}).then(jobsRes=>{
+      if(jobsRes.success&&jobsRes.jobs.length){
+        localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
+        loadHistory();
+      }
+    }).catch(()=>{});
   }
   else loadLocalPricing();
   openCalcDirect();
 }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
-  }
-})();
 
 function loadLocalPricing(){try{const lp=localStorage.getItem('ww_pricing');if(lp)applyPricing(JSON.parse(lp));}catch(e){}}
 
