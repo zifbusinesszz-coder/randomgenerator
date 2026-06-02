@@ -1763,14 +1763,14 @@ function initCalc(){
   document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
   if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
   document.getElementById('mobAiBtn').style.display=isPro()?'flex':'none';
-  const upgradeBtn=document.getElementById('desktopUpgradeBtn');
-  if(upgradeBtn)upgradeBtn.style.display=session.plan==='pro'?'none':'inline-flex';
+const upgradeBtn=document.getElementById('desktopUpgradeBtn');
+  if(upgradeBtn)upgradeBtn.style.display=isPro()?'none':'inline-flex';
   const mobUpgradeBtn=document.getElementById('mobUpgradeBtn');
-  if(mobUpgradeBtn)mobUpgradeBtn.style.display=session.plan==='pro'?'none':'flex';
+  if(mobUpgradeBtn)mobUpgradeBtn.style.display=isPro()?'none':'flex';
   const mobAiBtn=document.getElementById('mobAiBtn');
-  if(mobAiBtn)mobAiBtn.style.display=session.plan==='pro'?'flex':'none';
+  if(mobAiBtn)mobAiBtn.style.display=isPro()?'flex':'none';
   const mobInsightsBtn=document.getElementById('mobInsightsBtn');
-  if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(session.plan==='pro'&&hasActuals)?'flex':'none';}
+  if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
   Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
   buildCalcSpecialsGrid();loadHistory();recalc();
   const isNew=localStorage.getItem('ww_new_user');
