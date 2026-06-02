@@ -899,12 +899,19 @@ canvas.insights-chart{width:100%!important;display:block;}
 <section class="mid" style="padding:88px 40px;" id="pricing">
   <div class="pricing-inner">
     <p class="section-eyebrow" style="text-align:center;">Pricing</p>
-    <h2 class="section-title" style="text-align:center;max-width:100%;margin-bottom:28px;">Simple, honest pricing.</h2>
+    <h2 class="section-title" style="text-align:center;max-width:100%;margin-bottom:20px;">Simple, honest pricing.</h2>
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px;">
+      <span id="billingLabelMonthly" style="font-size:13px;font-weight:600;color:var(--black);">Monthly</span>
+      <div onclick="toggleBilling()" id="billingToggle" style="width:48px;height:26px;background:var(--green);border-radius:13px;cursor:pointer;position:relative;transition:background .2s;">
+        <div id="billingThumb" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:white;border-radius:50%;transition:transform .2s;"></div>
+      </div>
+      <span id="billingLabelYearly" style="font-size:13px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:9px;margin-left:4px;">Save 2 months</span></span>
+    </div>
     <div class="pricing-cards">
       <div class="pricing-card">
         <div class="pricing-plan">Starter</div>
-        <div class="pricing-price">$29<span>/mo</span></div>
-        <div class="pricing-desc">Manual calculator with everything you need to price jobs confidently.</div>
+        <div class="pricing-price" id="starterPrice">$29<span>/mo</span></div>
+        <div class="pricing-desc" id="starterDesc">Manual calculator with everything you need to price jobs confidently.</div>
         <ul class="pricing-features">
           <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
           <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
@@ -913,13 +920,13 @@ canvas.insights-chart{width:100%!important;display:block;}
           <li class="pf"><span class="chk">✓</span> Job history & tracking</li>
           <li class="pf"><span class="chk">✓</span> 14-day free trial</li>
         </ul>
-        <a href="#" class="btn-plan-dark" onclick="openModal('starter');return false;">Start free trial</a>
+        <a href="#" class="btn-plan-dark" id="starterBtn" onclick="openModal('starter');return false;">Start free trial</a>
       </div>
       <div class="pricing-card featured">
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-plan">Pro</div>
-        <div class="pricing-price">$59<span>/mo</span></div>
-        <div class="pricing-desc">Everything in Starter plus AI photo quoting — point, snap, price.</div>
+        <div class="pricing-price" id="proPrice">$59<span>/mo</span></div>
+        <div class="pricing-desc" id="proDesc">Everything in Starter plus AI photo quoting — point, snap, price.</div>
         <ul class="pricing-features">
           <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
           <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting</li>
@@ -928,10 +935,10 @@ canvas.insights-chart{width:100%!important;display:block;}
           <li class="pf"><span class="chk chk-green">✓</span> Insights dashboard & charts</li>
           <li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
         </ul>
-        <a href="#" class="btn-plan-green" onclick="openModal('pro');return false;">Start free trial</a>
+        <a href="#" class="btn-plan-green" id="proBtn" onclick="openModal('pro');return false;">Start free trial</a>
       </div>
     </div>
-    <p class="pricing-note">14-day free trial on both plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
+    <p class="pricing-note" id="pricingNote">14-day free trial on both plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
   </div>
 </section>
 
