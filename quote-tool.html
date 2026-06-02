@@ -297,6 +297,18 @@ footer{background:#ffffff;border-top:1px solid #e2e2e0;padding:32px 40px;}
 .calc-icon-btn{font-size:12px;font-weight:600;color:#333;background:white;border:1px solid #e2e2e0;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
 .calc-icon-btn:hover{color:#0a0a0a;background:#f4f4f2;border-color:#ccc;}
 .calc-icon-btn.logout{color:rgba(255,100,100,.7);}
+.calc-hamburger{display:none;background:none;border:1px solid #e2e2e0;border-radius:6px;padding:6px 10px;font-size:18px;cursor:pointer;color:#333;align-items:center;justify-content:center;}
+.mob-sidebar{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);}
+.mob-sidebar.open{display:block;}
+.mob-drawer{position:absolute;right:0;top:0;bottom:0;width:240px;background:#ffffff;border-left:1px solid #e2e2e0;display:flex;flex-direction:column;animation:drawerIn .22s ease both;padding:16px;}
+.mob-drawer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #e2e2e0;}
+.mob-drawer-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#0a0a0a;}
+.mob-drawer-close{background:none;border:1px solid #e2e2e0;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#777;}
+.mob-nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:1px solid #e2e2e0;border-radius:8px;background:white;font-size:13px;font-weight:600;color:#333;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:8px;transition:background .15s;}
+.mob-nav-btn:hover{background:#f4f4f2;}
+.mob-nav-btn.ai{color:#1D9E75;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.05);}
+.mob-nav-btn.logout{color:#c0392b;border-color:rgba(192,57,43,.2);background:rgba(192,57,43,.03);}
+.mob-nav-btn.insights{color:#1D9E75;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.05);}
 .calc-icon-btn.logout:hover{color:#ff6b6b;background:rgba(255,100,100,.08);border-color:rgba(255,100,100,.2);}
 .calc-icon-btn.ai-btn{color:#5DCAA5;border-color:rgba(29,158,117,.3);background:rgba(29,158,117,.08);}
 .calc-icon-btn.ai-btn:hover{color:#7DDBBA;background:rgba(29,158,117,.15);border-color:rgba(29,158,117,.5);}
