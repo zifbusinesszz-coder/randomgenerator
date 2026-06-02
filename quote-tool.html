@@ -1448,7 +1448,6 @@ function openCalcDirect(){
   document.getElementById('marketingPage').style.display='none';document.getElementById('calcPage').style.display='block';document.body.style.overflow='';initCalc();
 }
 function initCalc(){
-  document.getElementById('calcNavCo').textContent=session.businessName;
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
   document.getElementById('aiNavBtn').style.display=session.plan==='pro'?'inline-flex':'none';
