@@ -1483,6 +1483,8 @@ function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
   document.getElementById('aiNavBtn').style.display=session.plan==='pro'?'inline-flex':'none';
+  const upgradeBtn=document.getElementById('desktopUpgradeBtn');
+  if(upgradeBtn)upgradeBtn.style.display=session.plan==='pro'?'none':'inline-flex';
   Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
   buildCalcSpecialsGrid();loadHistory();recalc();
   // Show welcome banner for new users
