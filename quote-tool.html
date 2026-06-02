@@ -1719,6 +1719,7 @@ async function doLogin(){
   try{
     const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.textContent='Log in to my quote tool →';
     if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
+    localStorage.removeItem('ww_history'); // ADD THIS LINE
     saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');
     applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
     closeModal();openCalcDirect();
