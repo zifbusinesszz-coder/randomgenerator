@@ -1618,7 +1618,7 @@ async function doResetPassword(){
 
 async function goStep2(){
   clearFormErrors();
-  const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();
+  const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();savedPassword=pw;
   let valid=true;
   if(!first){setErr('f-first',true);valid=false;}
   if(!last){setErr('f-last',true);valid=false;}
