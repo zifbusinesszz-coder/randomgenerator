@@ -1710,7 +1710,10 @@ function refreshInsightsBtn(){
   const btn=document.getElementById('insightsNavBtn');
   if(btn)btn.style.display=(session.plan==='pro'&&hasActuals)?'inline-flex':'none';
 }
-function openInsights(){renderInsights();document.getElementById('insightsPanel').classList.add('open');}
+function openInsights(){
+  if(session.plan!=='pro'){showToast('Insights is a Pro feature',true);return;}
+  renderInsights();document.getElementById('insightsPanel').classList.add('open');
+}
 function closeInsights(){document.getElementById('insightsPanel').classList.remove('open');Object.values(insightCharts).forEach(c=>{try{c.destroy();}catch(e){}});insightCharts={};}
 function closeInsightsOutside(e){if(e.target===document.getElementById('insightsPanel'))closeInsights();}
 
