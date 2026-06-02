@@ -1173,6 +1173,11 @@ canvas.insights-chart{width:100%!important;display:block;}
   </nav>
 
   <div class="calc-body">
+    <div class="trial-warning-banner" id="trialWarningBanner" style="display:none;background:linear-gradient(140deg,rgba(232,160,32,0.15) 0%,rgba(232,160,32,0.06) 100%);border:1px solid rgba(232,160,32,.35);border-radius:var(--r-md);padding:14px 16px;margin-bottom:18px;position:relative;">
+  <div style="font-size:12.5px;font-weight:700;color:var(--gold);margin-bottom:3px;display:flex;align-items:center;gap:5px;"><i class="ph ph-clock" style="font-size:13px;"></i> <span id="trialWarningTitle">Trial ending soon</span></div>
+  <div style="font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.6;" id="trialWarningBody">Your free trial ends in <strong id="trialDaysLeft"></strong>. After that your access will pause until payment is confirmed.</div>
+  <button onclick="openPaywall('warning')" style="margin-top:9px;background:var(--gold);color:#0d0d0d;border:none;border-radius:var(--r-sm);padding:7px 16px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Activate plan now →</button>
+</div>
     <div class="welcome-banner" id="welcomeBanner">
       <button class="welcome-banner-close" onclick="dismissWelcome()">✕</button>
       <div class="welcome-banner-title"><i class="ph ph-hand-waving" style="font-size:13px;color:#5DCAA5;"></i> Welcome to your quote tool</div>
