@@ -1850,7 +1850,7 @@ async function saveJob(){
 
 /* ── AI PHOTO ── */
 function openAiPanel(){
-  if(session.plan!=='pro'){showUpgradePrompt();return;}
+  if(!isPro()){showUpgradePrompt();return;}
   aiFiles=[];aiResults=[];aiAnalyzed=false;renderAiFileList();
   document.getElementById('aiTotalCard').style.display='none';document.getElementById('aiSaveBtn').style.display='none';
   document.getElementById('aiAnalyzeBtn').disabled=true;
