@@ -1529,6 +1529,7 @@ let insightCharts={};
 function loadLocalPricing(){
   openCalcDirect();
 }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
+}
 
 function loadLocalPricing(){try{const lp=localStorage.getItem('ww_pricing');if(lp)applyPricing(JSON.parse(lp));}catch(e){}}
 
