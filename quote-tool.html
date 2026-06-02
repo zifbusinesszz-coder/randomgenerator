@@ -1762,7 +1762,7 @@ function initCalc(){
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
   document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
   if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
-  document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
+  document.getElementById('mobAiBtn').style.display=isPro()?'flex':'none';
   const upgradeBtn=document.getElementById('desktopUpgradeBtn');
   if(upgradeBtn)upgradeBtn.style.display=session.plan==='pro'?'none':'inline-flex';
   const mobUpgradeBtn=document.getElementById('mobUpgradeBtn');
