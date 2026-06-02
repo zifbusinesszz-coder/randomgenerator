@@ -2297,6 +2297,33 @@ async function submitPaywallPayment() {
     showBanner('paywallErr', 'Could not connect: ' + e.message);
   }
 }
+let billingYearly=false;
+function toggleBilling(){
+  billingYearly=!billingYearly;
+  const thumb=document.getElementById('billingThumb');
+  const monthly=document.getElementById('billingLabelMonthly');
+  const yearly=document.getElementById('billingLabelYearly');
+  thumb.style.transform=billingYearly?'translateX(22px)':'translateX(0)';
+  monthly.style.color=billingYearly?'var(--gray)':'var(--black)';
+  yearly.style.color=billingYearly?'var(--black)':'var(--gray)';
+  if(billingYearly){
+    document.getElementById('starterPrice').innerHTML='$290<span>/yr</span>';
+    document.getElementById('starterDesc').innerHTML='Great value — get 2 months free vs monthly. Everything to price jobs confidently.';
+    document.getElementById('proPrice').innerHTML='$590<span>/yr</span>';
+    document.getElementById('proDesc').innerHTML='Best value — 2 months free. AI photo quoting + Insights all year long.';
+    document.getElementById('pricingNote').textContent='Billed once per year. 14-day free trial included. Cancel anytime before day 15.';
+    document.getElementById('starterBtn').onclick=function(){openModal('starter-yearly');return false;};
+    document.getElementById('proBtn').onclick=function(){openModal('pro-yearly');return false;};
+  } else {
+    document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
+    document.getElementById('starterDesc').innerHTML='Manual calculator with everything you need to price jobs confidently.';
+    document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
+    document.getElementById('proDesc').innerHTML='Everything in Starter plus AI photo quoting — point, snap, price.';
+    document.getElementById('pricingNote').textContent='14-day free trial on both plans. Card required — you won\'t be charged until day 15. Cancel anytime.';
+    document.getElementById('starterBtn').onclick=function(){openModal('starter');return false;};
+    document.getElementById('proBtn').onclick=function(){openModal('pro');return false;};
+  }
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();}});
 </script>
 </body>
