@@ -1856,7 +1856,15 @@ function setErr(fid,on){document.getElementById(fid)?.classList.toggle('has-erro
 function clearFormErrors(){['f-first','f-last','f-biz','f-email','f-phone','f-pw'].forEach(id=>setErr(id,false));}
 function showBanner(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),8000);}
 function hideBanner(id){const el=document.getElementById(id);if(el)el.classList.remove('show');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();}});
+function openMobSidebar(){
+  document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
+  const hasActuals=jobHistory.some(j=>j.actual?.charged);
+  document.getElementById('mobInsightsBtn').style.display=(session.plan==='pro'&&hasActuals)?'flex':'none';
+  document.getElementById('mobSidebar').classList.add('open');
+}
+function closeMobSidebar(){document.getElementById('mobSidebar').classList.remove('open');}
+function closeMobSidebarOutside(e){if(e.target===document.getElementById('mobSidebar'))closeMobSidebar();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();}});
 </script>
 </body>
 </html>
