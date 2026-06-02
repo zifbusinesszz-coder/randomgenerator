@@ -1861,6 +1861,7 @@ function openMobSidebar(){
   document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
   const hasActuals=jobHistory.some(j=>j.actual?.charged);
   document.getElementById('mobInsightsBtn').style.display=(session.plan==='pro'&&hasActuals)?'flex':'none';
+  document.getElementById('mobUpgradeBtn').style.display=session.plan==='pro'?'none':'flex';
   document.getElementById('mobSidebar').classList.add('open');
 }
 function closeMobSidebar(){document.getElementById('mobSidebar').classList.remove('open');}
