@@ -1754,6 +1754,7 @@ function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
   document.getElementById('aiNavBtn').style.display=session.plan==='pro'?'inline-flex':'none';
+  document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
   const upgradeBtn=document.getElementById('desktopUpgradeBtn');
   if(upgradeBtn)upgradeBtn.style.display=session.plan==='pro'?'none':'inline-flex';
   const mobUpgradeBtn=document.getElementById('mobUpgradeBtn');
