@@ -1519,13 +1519,6 @@ api({action:'getUser',token:session.token}).then(res=>{
     applyPricing(res.pricing);
     localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
     checkTrialStatus(res);
-    // Load this user's job history from server
-    api({action:'getJobs',token:session.token}).then(jobsRes=>{
-      if(jobsRes.success&&jobsRes.jobs.length){
-        localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
-        loadHistory();
-      }
-    }).catch(()=>{});
   }
   else loadLocalPricing();
   openCalcDirect();
