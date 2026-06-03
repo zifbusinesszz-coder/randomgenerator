@@ -1826,10 +1826,11 @@ function buildCalcSpecialsGrid(){
 items.forEach(item=>{
     selectedSpecials[item.key]=false;
     const tag=document.createElement('div');tag.className='calc-special-tag';tag.id='cs-'+item.key;tag.onclick=()=>toggleCalcSpecial(item.key);
-    tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon"><i class="ph ph-${item.icon}" style="font-size:14px;"></i></span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
+    tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon"><i class="ph ph-${item.icon}" style="font-size:14px;"></i></span><span class="calc-special-name">${item.label}</span></div><div style="display:flex;align-items:center;gap:6px;"><span class="calc-special-fee">+$${item.fee}</span><div class="calc-qty-row" style="margin-top:0;gap:5px;"><button class="calc-qty-btn" style="width:20px;height:20px;font-size:13px;" onclick="event.stopPropagation();changeSpecialQty('${item.key}',-1)">−</button><span class="calc-qty-val" style="font-size:14px;min-width:14px;" id="csqty-${item.key}">0</span><button class="calc-qty-btn" style="width:20px;height:20px;font-size:13px;" onclick="event.stopPropagation();changeSpecialQty('${item.key}',1)">+</button></div></div>`;
     grid.appendChild(tag);
   });
 }
+function changeSpecialQty(key,delta){selectedSpecials[key]=Math.max(0,(selectedSpecials[key]||0)+delta);document.getElementById('csqty-'+key).textContent=selectedSpecials[key];document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]>0);recalc();}
 function selectLoad(key){selectedLoad=key;document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));document.getElementById('cl-'+key).classList.add('sel');recalc();}
 function changeQty(key,delta){
   loadQtys[key]=Math.max(0,( loadQtys[key]||0)+delta);
