@@ -2304,6 +2304,7 @@ function openCrm(jobId){
 }
 function closeCrm(){document.getElementById('crmPanel').classList.remove('open');}
 function closeCrmOutside(e){if(e.target===document.getElementById('crmPanel'))closeCrm();}
+// NEW
 function saveCrm(){
   const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
   job.crm={
@@ -2316,6 +2317,9 @@ function saveCrm(){
     savedAt:new Date().toISOString()
   };
   persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
+  if(session.token){
+    api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+  }
 }
  function deleteJob(jobId){
   if(!confirm('Delete this job from history?'))return;
