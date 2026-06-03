@@ -1897,7 +1897,10 @@ async function saveJob(){
   if(priceText==='—'||priceText==='Select a load size')return;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   const activeSpecials=Object.keys(selectedSpecials).filter(k=>selectedSpecials[k]);
-  const entry={id:Date.now(),price:priceText,load:selectedLoad,specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:parseFloat(document.getElementById('calcMiles').value)||0,hours:parseFloat(document.getElementById('calcHours').value)||0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
+const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+const loadSummary=Object.entries(loadQtys).filter(([k,q])=>q>0).map(([k,q])=>q>1?q+'× '+loadNames[k]:loadNames[k]).join(' + ')||'Unknown';
+const primaryLoad=Object.entries(loadQtys).filter(([k,q])=>q>0).sort((a,b)=>b[1]-a[1])[0]?.[0]||'minimum';
+const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:parseFloat(document.getElementById('calcMiles').value)||0,hours:parseFloat(document.getElementById('calcHours').value)||0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
   jobHistory.unshift(entry);if(jobHistory.length>50)jobHistory=jobHistory.slice(0,50);
   persistHistory();renderHistory();showToast('✓ Job saved to history');
   if(session.token){
