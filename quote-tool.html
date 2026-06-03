@@ -2205,6 +2205,11 @@ function saveCrm(){
   };
   persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
 }
+  function deleteJob(jobId){
+  if(!confirm('Delete this job from history?'))return;
+  jobHistory=jobHistory.filter(j=>j.id!==jobId);
+  persistHistory();renderHistory();showToast('Job deleted');
+}
 function saveActual(){
   const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
   const charged=parseFloat(document.getElementById('actualCharged').value)||null;
