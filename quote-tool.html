@@ -2175,6 +2175,33 @@ function onActualInput(){
   document.getElementById('actualDiffVal').textContent=(diff>=0?'+':'')+'$'+Math.abs(Math.round(diff));
   document.getElementById('actualDiffSub').textContent=diff>=0?'Good — you captured extra value':'You left money on the table';
 }
+function openCrm(jobId){
+  const job=jobHistory.find(j=>j.id===jobId);if(!job)return;crmJobId=jobId;
+  document.getElementById('crmQuotedPrice').textContent=job.price;
+  const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
+  const parts=[ll[job.load]||job.load];if(job.specials&&job.specials.length)parts.push(job.specials.join(', '));if(job.miles)parts.push(job.miles+' mi');
+  document.getElementById('crmQuotedDetail').textContent=parts.join(' · ');
+  document.getElementById('crmName').value=job.crm?.name||'';
+  document.getElementById('crmPhone').value=job.crm?.phone||'';
+  document.getElementById('crmAddress').value=job.crm?.address||'';
+  document.getElementById('crmStatus').value=job.crm?.status||'quoted';
+  document.getElementById('crmNotes').value=job.crm?.notes||'';
+  document.getElementById('crmPanel').classList.add('open');
+}
+function closeCrm(){document.getElementById('crmPanel').classList.remove('open');}
+function closeCrmOutside(e){if(e.target===document.getElementById('crmPanel'))closeCrm();}
+function saveCrm(){
+  const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+  job.crm={
+    name:document.getElementById('crmName').value.trim(),
+    phone:document.getElementById('crmPhone').value.trim(),
+    address:document.getElementById('crmAddress').value.trim(),
+    status:document.getElementById('crmStatus').value,
+    notes:document.getElementById('crmNotes').value.trim(),
+    savedAt:new Date().toISOString()
+  };
+  persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
+}
 function saveActual(){
   const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
   const charged=parseFloat(document.getElementById('actualCharged').value)||null;
