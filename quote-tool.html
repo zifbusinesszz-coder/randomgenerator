@@ -1981,6 +1981,8 @@ function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
   document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
+  const dashBtn=document.querySelector('.calc-icon-btn[onclick="openDashboard()"]');
+  if(dashBtn)dashBtn.style.display=isPro()?'inline-flex':'none';
   if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
   document.getElementById('mobAiBtn').style.display=isPro()?'flex':'none';
 const upgradeBtn=document.getElementById('desktopUpgradeBtn');
