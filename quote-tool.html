@@ -1848,7 +1848,7 @@ function recalc(){
   const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
   const driveRate=userPricing.driveRate||1.5,laborRate=userPricing.laborRate||35;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
-  let specialsCost=0;Object.keys(selectedSpecials).forEach(k=>{if(selectedSpecials[k]&&specialSrc[k])specialsCost+=Number(specialSrc[k].fee)||0;});
+  let specialsCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])specialsCost+=Number(specialSrc[k].fee)*qty||0;});
   const driveCost=Math.round(miles*2*driveRate),laborCost=Math.round(hours*laborRate);
   let loadBaseLow=0,loadBaseHigh=0,loadLabel='';
   const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
