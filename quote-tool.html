@@ -2193,6 +2193,8 @@ function openCrm(jobId){
   document.getElementById('crmAddress').value=job.crm?.address||'';
   document.getElementById('crmStatus').value=job.crm?.status||'quoted';
   document.getElementById('crmNotes').value=job.crm?.notes||'';
+  document.getElementById('crmDateTime').value=job.crm?.dateTime||'';
+  toggleCrmDate();
   document.getElementById('crmPanel').classList.add('open');
 }
 function closeCrm(){document.getElementById('crmPanel').classList.remove('open');}
