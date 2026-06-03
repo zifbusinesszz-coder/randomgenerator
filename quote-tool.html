@@ -1976,7 +1976,8 @@ function resetCalc(){
 }
 
 async function saveJob(){
-  if(!selectedLoad){showToast('Select a load size first',true);return;}
+  const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
+  if(!totalQty){showToast('Select a load size first',true);return;}
   const priceText=document.getElementById('calcFinalPrice').textContent;
   if(priceText==='—'||priceText==='Select a load size')return;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
