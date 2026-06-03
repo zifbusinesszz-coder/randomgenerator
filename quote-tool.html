@@ -1884,7 +1884,7 @@ function resetCalc(){
   selectedLoad=null;
   loadQtys={minimum:0,quarter:0,half:0,full:0};
   ['minimum','quarter','half','full'].forEach(k=>{const el=document.getElementById('qty-'+k);if(el)el.textContent='0';document.getElementById('cl-'+k)?.classList.remove('has-qty');});
-  Object.keys(selectedSpecials).forEach(k=>{selectedSpecials[k]=false;const el=document.getElementById('cs-'+k);if(el)el.classList.remove('sel');});
+  Object.keys(selectedSpecials).forEach(k=>{selectedSpecials[k]=0;const el=document.getElementById('cs-'+k);if(el)el.classList.remove('sel');const qel=document.getElementById('csqty-'+k);if(qel)qel.textContent='0';});
   document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));
   document.getElementById('calcMiles').value='';document.getElementById('calcHours').value='';
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
