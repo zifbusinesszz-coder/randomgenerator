@@ -1830,7 +1830,7 @@ items.forEach(item=>{
     grid.appendChild(tag);
   });
 }
-function selectLoad(key){key){selectedLoad=key;document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));document.getElementById('cl-'+key).classList.add('sel');recalc();}
+function selectLoad(key){selectedLoad=key;document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));document.getElementById('cl-'+key).classList.add('sel');recalc();}
 function changeQty(key,delta){
   loadQtys[key]=Math.max(0,( loadQtys[key]||0)+delta);
   document.getElementById('qty-'+key).textContent=loadQtys[key];
