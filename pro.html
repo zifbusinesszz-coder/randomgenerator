@@ -2236,6 +2236,7 @@ async function saveSettings(){
 }
 
 /* ── HISTORY ── */
+function refreshInsightsBtn(){}
 function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];}renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
 async function clearHistory(){
