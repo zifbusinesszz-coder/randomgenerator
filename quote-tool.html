@@ -1971,7 +1971,7 @@ function saveSession(token,companyId,businessName,plan){
   session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';
   localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);
 }
-function clearSession(){session.token=session.companyId=null;['ww_token','ww_cid','ww_biz','ww_plan'].forEach(k=>localStorage.removeItem(k));}
+function clearSession(){session.token=session.companyId=null;['ww_token','ww_cid','ww_biz','ww_plan','ww_history'].forEach(k=>localStorage.removeItem(k));}
 async function doLogout(){
   if(!confirm('Log out of your quote tool?'))return;
   if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
