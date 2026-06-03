@@ -2231,7 +2231,14 @@ async function saveSettings(){
 /* ── HISTORY ── */
 function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];}renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
-function clearHistory(){if(!confirm('Clear all job history?'))return;jobHistory=[];persistHistory();renderHistory();}
+function clearHistory(){
+  if(!confirm('Clear all job history?'))return;
+  const ids=jobHistory.map(j=>String(j.id));
+  jobHistory=[];persistHistory();renderHistory();
+  if(session.token&&ids.length){
+    api({action:'deleteAllJobs',token:session.token}).catch(()=>{});
+  }
+}
 function renderHistory(){
   const list=document.getElementById('historyList');
   if(!jobHistory.length){list.innerHTML='<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';return;}
