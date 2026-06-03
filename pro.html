@@ -2375,14 +2375,15 @@ function closeCrmOutside(e){if(e.target===document.getElementById('crmPanel'))cl
 // NEW
 function saveCrm(){
   const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
-  job.crm={
+job.crm={
     name:document.getElementById('crmName').value.trim(),
     phone:document.getElementById('crmPhone').value.trim(),
     address:document.getElementById('crmAddress').value.trim(),
     status:document.getElementById('crmStatus').value,
     dateTime:document.getElementById('crmDateTime').value||null,
     notes:document.getElementById('crmNotes').value.trim(),
-    savedAt:new Date().toISOString()
+    savedAt:new Date().toISOString(),
+    reminderSent:false
   };
   persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
 if(session.token){
