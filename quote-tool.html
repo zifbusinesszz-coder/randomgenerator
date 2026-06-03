@@ -2638,6 +2638,7 @@ function openDashboard(){
 }
 
 function closeDashboard(){
+  Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});dashCharts={};
   document.getElementById('dashboardPage').style.display='none';
   document.getElementById('calcPage').style.display='block';
 }
