@@ -1742,7 +1742,7 @@ let actualJobId=null;
 let crmJobId=null;
 let insightCharts={};
 
-(function init(){
+(async function init(){
   buildSpecialGrid();buildSettingsSpecialsGrid();
   if(session.token){
     showPageLoader('Logging you back in...');
