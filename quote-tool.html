@@ -1505,11 +1505,13 @@ function getVisualCue(key){
   
 function isPro(){return session.plan==='pro'||session.plan==='pro-yearly';}
 function initStripe(){
-  if(stripe)return;
   try{
-    stripe=Stripe(STRIPE_PK);
+    if(!stripe)stripe=Stripe(STRIPE_PK);
+    if(cardElement){try{cardElement.destroy();}catch(e){}}
     const elements=stripe.elements();
     cardElement=elements.create('card',{style:{base:{fontFamily:"'DM Sans',sans-serif",fontSize:'13px',color:'#0d0d0d','::placeholder':{color:'#c4c4c4'}},invalid:{color:'#c0392b'}}});
+    cardComplete=false;
+    document.getElementById('cardElement').innerHTML='';
     cardElement.mount('#cardElement');
     cardElement.on('change',e=>{const wrap=document.getElementById('stripeCardWrap'),err=document.getElementById('cardErrors');cardComplete=e.complete;if(e.error){err.textContent=e.error.message;wrap.classList.add('error');wrap.classList.remove('focused');}else{err.textContent='';wrap.classList.remove('error');}});
     cardElement.on('focus',()=>document.getElementById('stripeCardWrap').classList.add('focused'));
