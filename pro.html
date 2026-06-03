@@ -315,15 +315,15 @@ footer{background:var(--white);border-top:1px solid var(--border);padding:28px 4
 .modal-overlay.open{display:flex;}
 .modal{background:white;border-radius:20px;width:100%;max-width:560px;box-shadow:var(--sh-modal);animation:modalIn .22s ease both;margin:auto;overflow:hidden;}
 @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
-.modal-header{background:#0a0a0a;padding:20px 22px 16px;position:relative;}
-.modal-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-header{background:#0a0a0a;position:relative;}
+.modal-header-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:white;border-bottom:1px solid #ebebea;}
 .modal-header-brand{display:flex;align-items:center;gap:8px;}
 .modal-header-brand img{height:22px;width:auto;display:block;}
-.modal-header-brand-divider{width:1px;height:18px;background:rgba(255,255,255,0.15);}
-.modal-header-brand-name{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);letter-spacing:-0.1px;}
-.modal-header-brand-sub{font-size:10px;color:rgba(255,255,255,0.35);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;}
-.modal-close{background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.5);width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
-.modal-close:hover{background:rgba(255,255,255,0.15);color:white;}
+.modal-header-brand-divider{width:1px;height:14px;background:#ddd;}
+.modal-header-brand-sub{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;font-size:13px;font-weight:500;color:#444;}
+.modal-close{background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;}
+.modal-close:hover{background:#e4e4e2;color:#0a0a0a;}
+.modal-header-body{background:#0a0a0a;padding:18px 22px 16px;}
 .modal-plan-badge{display:inline-flex;align-items:center;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:3px 9px;border-radius:6px;margin-bottom:10px;}
 .modal-header h3{font-family:var(--font-display);font-size:22px;font-weight:900;color:white;margin-bottom:2px;letter-spacing:-0.5px;}
 .modal-header p{font-size:12px;color:rgba(255,255,255,0.38);line-height:1.5;}
