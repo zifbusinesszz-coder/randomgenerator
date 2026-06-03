@@ -1986,7 +1986,7 @@ async function analyzePhotos(){
       const response=await api({action:'aiAnalyzePhoto',image:b64,mediaType:aiFiles[i].type||'image/jpeg',prompt});
       if(!response.success)throw new Error(response.error||'AI error');
       let parsed;try{parsed=JSON.parse(response.text.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse AI response');}
-      const loadKey=parsed.loadKey||'quarter',loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter;
+      const loadKey=parsed.loadKey||'quarter',loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter,truckCount=parsed.truckCount||1;
       let specialsCost=0;const specialsApplied=[];
       (parsed.specialsFound||[]).forEach(label=>{const found=Object.entries(specialSrc).find(([k,v])=>(v.label||v)===label);if(found){specialsCost+=Number(found[1].fee)||0;specialsApplied.push(label);}});
       const baseLow=loadCosts.low+specialsCost,baseHigh=loadCosts.high+specialsCost;
