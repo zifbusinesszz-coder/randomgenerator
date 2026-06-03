@@ -602,7 +602,7 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:3px;cu
 /* ─── SETTINGS DRAWER ─── */
 .settings-panel{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);}
 .settings-panel.open{display:block;}
-.settings-drawer{position:absolute;right:0;top:0;bottom:0;width:370px;background:var(--d-surface);border-left:1px solid var(--d-border);display:flex;flex-direction:column;animation:drawerIn .2s ease both;overflow-y:auto;}
+.settings-drawer{position:absolute;right:0;top:0;bottom:0;width:100%;max-width:560px;background:var(--d-surface);border-left:1px solid var(--d-border);display:flex;flex-direction:column;animation:drawerIn .2s ease both;overflow-y:auto;}
 .settings-header{padding:16px 18px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;}
 .settings-title{font-family:var(--font-display);font-size:16px;font-weight:900;color:white;}
 .settings-close{background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:27px;height:27px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
