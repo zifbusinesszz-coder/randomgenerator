@@ -2332,9 +2332,11 @@ function saveCrm(){
     savedAt:new Date().toISOString()
   };
   persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
-  if(session.token){
+if(session.token){
     api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
   }
+}
+
 async function deleteJob(jobId){
   if(!confirm('Delete this job from history?'))return;
   jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
