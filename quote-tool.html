@@ -2142,7 +2142,6 @@ let paywallStripe, paywallCardElement, paywallCardComplete = false;
 let usingNewCard = false;
 
 function checkTrialStatus(res) {
-  openPaywall('expired'); return;
   if (!res.trialEnd && !res.trialStatus) return;
   const status = res.trialStatus; // 'active' | 'expiring_soon' | 'expired' | 'payment_failed'
   const daysLeft = res.trialDaysLeft ?? null;
