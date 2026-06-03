@@ -1907,7 +1907,7 @@ const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys
   persistHistory();renderHistory();showToast('✓ Job saved to history');
   if(session.token){
     const load=userPricing.loads[selectedLoad]||{low:0,high:0};const markup=parseInt(document.getElementById('calcMarkup').value)/100;const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
-    let sCost=0;Object.keys(selectedSpecials).forEach(k=>{if(selectedSpecials[k]&&specialSrc[k])sCost+=Number(specialSrc[k].fee)||0;});
+    let sCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])sCost+=Number(specialSrc[k].fee)*qty||0;});
     const dCost=Math.round(miles*2*(userPricing.driveRate||1.5)),lCost=Math.round(hours*(userPricing.laborRate||35));
     api({action:'saveJob',token:session.token,price:priceText,load:selectedLoad,specials:entry.specials,miles,hours,markup:parseInt(document.getElementById('calcMarkup').value),driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost}).catch(()=>{});
   }
