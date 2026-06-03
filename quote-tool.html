@@ -1387,7 +1387,47 @@ canvas.insights-chart{width:100%!important;display:block;}
   <div class="history-drawer">
     <div class="history-header"><div class="history-title">Job history</div><button class="history-close" onclick="closeHistory()">✕</button></div>
     <div class="history-list" id="historyList"><div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div></div>
-    <div class="history-clear"><button class="history-clear-btn" onclick="clearHistory()">Clear all history</button></div>
+ <div class="history-clear"><button class="history-clear-btn" onclick="clearHistory()">Clear all history</button></div>
+  </div>
+</div>
+
+<!-- CRM DRAWER -->
+<div class="crm-panel" id="crmPanel" onclick="closeCrmOutside(event)">
+  <div class="crm-drawer">
+    <div class="crm-header"><div class="crm-title">Customer Info</div><button class="crm-close" onclick="closeCrm()">✕</button></div>
+    <div class="crm-body">
+      <div class="crm-quoted" id="crmQuotedBox">
+        <div class="crm-quoted-label">Job quote</div>
+        <div class="crm-quoted-price" id="crmQuotedPrice">—</div>
+        <div class="crm-quoted-detail" id="crmQuotedDetail"></div>
+      </div>
+      <div class="crm-field">
+        <label>Customer name</label>
+        <input type="text" class="crm-input" id="crmName" placeholder="Jane Smith"/>
+      </div>
+      <div class="crm-field">
+        <label>Phone number</label>
+        <input type="tel" class="crm-input" id="crmPhone" placeholder="(507) 555-0100"/>
+      </div>
+      <div class="crm-field">
+        <label>Job address</label>
+        <input type="text" class="crm-input" id="crmAddress" placeholder="123 Main St, Farmington MN"/>
+      </div>
+      <div class="crm-field">
+        <label>Status</label>
+        <select class="crm-select" id="crmStatus">
+          <option value="quoted">Quoted</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="crm-field">
+        <label>Notes</label>
+        <textarea class="crm-input crm-notes" id="crmNotes" placeholder="Any details about the job, customer, or location..."></textarea>
+      </div>
+      <button class="crm-save-btn" onclick="saveCrm()">Save customer info</button>
+    </div>
   </div>
 </div>
 
