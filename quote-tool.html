@@ -1824,7 +1824,7 @@ function buildCalcSpecialsGrid(){
   const grid=document.getElementById('calcSpecialsGrid');grid.innerHTML='';selectedSpecials={};
   const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'package'})):SPECIAL_ITEMS_CONFIG;
 items.forEach(item=>{
-    selectedSpecials[item.key]=false;
+    selectedSpecials[item.key]=0;
     const tag=document.createElement('div');tag.className='calc-special-tag';tag.id='cs-'+item.key;tag.onclick=()=>toggleCalcSpecial(item.key);
     tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon"><i class="ph ph-${item.icon}" style="font-size:14px;"></i></span><span class="calc-special-name">${item.label}</span></div><div style="display:flex;align-items:center;gap:6px;"><span class="calc-special-fee">+$${item.fee}</span><div class="calc-qty-row" style="margin-top:0;gap:5px;"><button class="calc-qty-btn" style="width:20px;height:20px;font-size:13px;" onclick="event.stopPropagation();changeSpecialQty('${item.key}',-1)">−</button><span class="calc-qty-val" style="font-size:14px;min-width:14px;" id="csqty-${item.key}">0</span><button class="calc-qty-btn" style="width:20px;height:20px;font-size:13px;" onclick="event.stopPropagation();changeSpecialQty('${item.key}',1)">+</button></div></div>`;
     grid.appendChild(tag);
