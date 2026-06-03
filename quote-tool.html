@@ -1532,6 +1532,7 @@ function onPhoneInput(el){
 function isValidPhone(d){if(d.length!==10)return false;if(d[0]==='0'||d[0]==='1')return false;if(d[3]==='0'||d[3]==='1')return false;return true;}
 function getRawPhone(){const d=document.getElementById('m-phone').value.replace(/\D/g,'');return d.length===10?'+1'+d:null;}
 
+let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
 let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:'starter'};
 let specialItemStates={},selectedLoad=null,selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
