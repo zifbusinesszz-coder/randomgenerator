@@ -2744,7 +2744,9 @@ function renderUpcoming(){
   }).join('');
 }
 
+let dashCharts={};
 function renderDashAnalytics(){
+  Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});dashCharts={};
   const body=document.getElementById('dashAnalytics');
   const logged=jobHistory.filter(j=>j.actual?.charged);
   if(!logged.length){
@@ -2757,12 +2759,44 @@ function renderDashAnalytics(){
   const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
   const totalRevenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
   const avgRevenue=Math.round(totalRevenue/logged.length);
+  const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+  const loadStats={};
+  ['minimum','quarter','half','full'].forEach(k=>{
+    const jobs=logged.filter(j=>j.load===k);if(!jobs.length)return;
+    const d=jobs.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+    loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
+  });
   body.innerHTML=`<div class="dash-stat-grid">
     <div class="dash-stat ${avgDiff>=0?'positive':'negative'}"><div class="dash-stat-label">Avg vs quoted</div><div class="dash-stat-val">${avgDiff>=0?'+':''}$${Math.abs(Math.round(avgDiff))}</div><div class="dash-stat-sub">${logged.length} jobs logged</div></div>
     <div class="dash-stat ${winRate>=50?'positive':'negative'}"><div class="dash-stat-label">Quoted right</div><div class="dash-stat-val">${winRate}%</div><div class="dash-stat-sub">charged ≥ quoted</div></div>
     <div class="dash-stat"><div class="dash-stat-label">Avg job revenue</div><div class="dash-stat-val">$${avgRevenue}</div><div class="dash-stat-sub">actual charged</div></div>
     <div class="dash-stat ${totalLeft<-50?'negative':''}"><div class="dash-stat-label">Left on table</div><div class="dash-stat-val">$${Math.abs(Math.round(totalLeft))}</div><div class="dash-stat-sub">total undercharges</div></div>
-  </div>`;
+  </div>
+  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-line-up" style="font-size:12px;color:#5DCAA5;"></i> Quoted vs. Actual charged</div><div class="chart-canvas-wrap"><canvas id="dashChartQuotedActual" class="insights-chart" height="180"></canvas></div></div>
+  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-bar" style="font-size:12px;color:var(--gold);"></i> Revenue by load size</div><div class="chart-canvas-wrap"><canvas id="dashChartLoadRevenue" class="insights-chart" height="160"></canvas></div></div>
+  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-trend-up" style="font-size:12px;color:#5DCAA5;"></i> Over/Under per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDiff" class="insights-chart" height="140"></canvas></div></div>
+  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-gauge" style="font-size:12px;color:rgba(255,255,255,.35);"></i> Markup distribution</div><div class="chart-canvas-wrap"><canvas id="dashChartMarkup" class="insights-chart" height="140"></canvas></div></div>`;
+  requestAnimationFrame(()=>{
+    const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
+    const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
+    const recent=logged.slice(-15);
+    const labels=recent.map((_,i)=>'Job '+(i+1));
+    const quotedVals=recent.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
+    const actualVals=recent.map(j=>j.actual.charged||0);
+    const ctx1=document.getElementById('dashChartQuotedActual')?.getContext('2d');
+    if(ctx1){dashCharts.quotedActual=new Chart(ctx1,{type:'line',data:{labels,datasets:[{label:'Quoted',data:quotedVals,borderColor:'rgba(255,255,255,0.25)',backgroundColor:'rgba(255,255,255,0.03)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.4)',tension:0.3,fill:false},{label:'Actual',data:actualVals,borderColor:'#1a9e72',backgroundColor:'rgba(26,158,114,0.1)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1a9e72',tension:0.3,fill:true}]},options:{...chartDefaults,plugins:{legend:{display:true,position:'top',labels:{color:'rgba(255,255,255,0.45)',font:{size:9.5,family:'DM Sans'},boxWidth:10,padding:10}}}}});}
+    const lKeys=Object.keys(loadStats);
+    const ctx2=document.getElementById('dashChartLoadRevenue')?.getContext('2d');
+    if(ctx2&&lKeys.length){dashCharts.loadRevenue=new Chart(ctx2,{type:'bar',data:{labels:lKeys.map(k=>loadLabels[k]),datasets:[{data:lKeys.map(k=>loadStats[k].avgCharged),backgroundColor:['rgba(26,158,114,0.45)','rgba(26,158,114,0.55)','rgba(26,158,114,0.7)','rgba(26,158,114,0.88)'],borderColor:'rgba(26,158,114,1)',borderWidth:1,borderRadius:4}]},options:chartDefaults});}
+    const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
+    const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+    const ctx3=document.getElementById('dashChartDiff')?.getContext('2d');
+    if(ctx3){dashCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
+    const markupBuckets={};jobHistory.forEach(j=>{const m=Math.round(j.markup/10)*10;markupBuckets[m]=(markupBuckets[m]||0)+1;});
+    const mbKeys=Object.keys(markupBuckets).sort((a,b)=>a-b);
+    const ctx4=document.getElementById('dashChartMarkup')?.getContext('2d');
+    if(ctx4&&mbKeys.length){dashCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(232,160,32,0.55)',borderColor:'rgba(232,160,32,1)',borderWidth:1,borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
+  });
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();}});
 </script>
