@@ -2323,11 +2323,6 @@ function saveActual(){
 }
 
 /* ── INSIGHTS ── */
-function refreshInsightsBtn(){
-  const hasActuals=jobHistory.some(j=>j.actual?.charged);
-const btn=document.getElementById('insightsNavBtn');
-  if(btn)btn.style.display=(isPro()&&hasActuals)?'inline-flex':'none';
-}
 function openInsights(){
   if(!isPro()){showToast('Insights is a Pro feature',true);return;}
   renderInsights();document.getElementById('insightsPanel').classList.add('open');
