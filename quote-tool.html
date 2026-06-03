@@ -1880,6 +1880,8 @@ function calcTruckYards(){const l=parseFloat(document.getElementById('p-truck-l'
 function calcSTruckYards(){const l=parseFloat(document.getElementById('s-truck-l')?.value)||0;const w=parseFloat(document.getElementById('s-truck-w')?.value)||0;const h=parseFloat(document.getElementById('s-truck-h')?.value)||0;const el=document.getElementById('s-truck-cuyd');if(el)el.textContent=(l&&w&&h)?((l*w*h)/27).toFixed(1)+' cu yd':'—';}
 function resetCalc(){
   selectedLoad=null;
+  loadQtys={minimum:0,quarter:0,half:0,full:0};
+  ['minimum','quarter','half','full'].forEach(k=>{const el=document.getElementById('qty-'+k);if(el)el.textContent='0';document.getElementById('cl-'+k)?.classList.remove('has-qty');});
   Object.keys(selectedSpecials).forEach(k=>{selectedSpecials[k]=false;const el=document.getElementById('cs-'+k);if(el)el.classList.remove('sel');});
   document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));
   document.getElementById('calcMiles').value='';document.getElementById('calcHours').value='';
