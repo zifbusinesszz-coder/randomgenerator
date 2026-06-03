@@ -1616,6 +1616,44 @@ canvas.insights-chart{width:100%!important;display:block;}
   </div>
 </div>
 
+  <!-- ══ DASHBOARD PAGE ══ -->
+<div id="dashboardPage">
+  <nav class="dash-nav">
+    <div class="dash-nav-left">
+      <button class="dash-back-btn" onclick="closeDashboard()">← Calculator</button>
+    </div>
+    <button class="calc-icon-btn logout" onclick="doLogout()"><i class="ph ph-sign-out" style="font-size:13px;"></i> Log out</button>
+  </nav>
+  <div class="dash-body">
+    <div class="dash-grid">
+      <!-- Calendar -->
+      <div class="dash-card">
+        <div class="dash-card-title"><i class="ph ph-calendar" style="font-size:12px;color:#5DCAA5;"></i> Schedule</div>
+        <div class="cal-header">
+          <button class="cal-nav-btn" onclick="changeCalMonth(-1)">‹</button>
+          <div class="cal-month-label" id="calMonthLabel"></div>
+          <button class="cal-nav-btn" onclick="changeCalMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-popup" id="calPopup">
+          <div class="cal-popup-date" id="calPopupDate"></div>
+          <div id="calPopupJobs"></div>
+        </div>
+      </div>
+      <!-- Upcoming -->
+      <div class="dash-card">
+        <div class="dash-card-title"><i class="ph ph-clock" style="font-size:12px;color:var(--gold);"></i> Upcoming jobs</div>
+        <div id="upcomingList"></div>
+      </div>
+    </div>
+    <!-- Analytics -->
+    <div class="dash-card">
+      <div class="dash-card-title"><i class="ph ph-chart-line-up" style="font-size:12px;color:#5DCAA5;"></i> Analytics</div>
+      <div id="dashAnalytics"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
