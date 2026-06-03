@@ -1746,7 +1746,8 @@ let insightCharts={};
   buildSpecialGrid();buildSettingsSpecialsGrid();
   if(session.token){
     showPageLoader('Logging you back in...');
-    api({action:'getUser',token:session.token}).then(res=>{
+    try{
+      const res=await api({action:'getUser',token:session.token});
       hidePageLoader();
       if(res.success){
         session.businessName=res.businessName;
@@ -1765,7 +1766,7 @@ let insightCharts={};
       }
       else loadLocalPricing();
       openCalcDirect();
-    }).catch(()=>{hidePageLoader();loadLocalPricing();openCalcDirect();});
+    }catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();}
   }
 })();
 
