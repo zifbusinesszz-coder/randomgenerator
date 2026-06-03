@@ -1414,14 +1414,18 @@ canvas.insights-chart{width:100%!important;display:block;}
         <label>Job address</label>
         <input type="text" class="crm-input" id="crmAddress" placeholder="123 Main St, Farmington MN"/>
       </div>
-      <div class="crm-field">
+     <div class="crm-field">
         <label>Status</label>
-        <select class="crm-select" id="crmStatus">
+        <select class="crm-select" id="crmStatus" onchange="toggleCrmDate()">
           <option value="quoted">Quoted</option>
           <option value="scheduled">Scheduled</option>
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
         </select>
+      </div>
+      <div class="crm-field" id="crmDateField" style="display:none;">
+        <label>Scheduled date & time</label>
+        <input type="datetime-local" class="crm-input" id="crmDateTime" style="color-scheme:dark;"/>
       </div>
       <div class="crm-field">
         <label>Notes</label>
