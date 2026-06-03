@@ -1989,7 +1989,7 @@ async function analyzePhotos(){
       const loadKey=parsed.loadKey||'quarter',loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter,truckCount=parsed.truckCount||1;
       let specialsCost=0;const specialsApplied=[];
       (parsed.specialsFound||[]).forEach(label=>{const found=Object.entries(specialSrc).find(([k,v])=>(v.label||v)===label);if(found){specialsCost+=Number(found[1].fee)||0;specialsApplied.push(label);}});
-      const baseLow=loadCosts.low+specialsCost,baseHigh=loadCosts.high+specialsCost;
+      const baseLow=(loadCosts.low*truckCount)+specialsCost,baseHigh=(loadCosts.high*truckCount)+specialsCost;
       const quoteLow=Math.round(baseLow*(1+markupFrac)),quoteHigh=Math.round(baseHigh*(1+markupFrac));
       aiResults[i]={status:'done',loadKey,loadLabel:parsed.loadLabel||loadKey,specialsFound:specialsApplied,baseLow,baseHigh,quoteLow,quoteHigh,markupPct:markup,markupAdded:Math.round(((quoteLow+quoteHigh)/2)-((baseLow+baseHigh)/2)),reasoning:parsed.reasoning||'',fillPercent:parsed.fillPercent||null};
     }catch(err){aiResults[i]={status:'error',error:err.message.slice(0,60)};}
