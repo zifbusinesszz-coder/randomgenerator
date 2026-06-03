@@ -2079,7 +2079,7 @@ function resetCalc(){
   document.getElementById('calcFinalPrice').textContent='—';
   document.getElementById('calcBreakdown').style.display='none';
 }
-
+// NEW
 async function saveJob(){
   const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
   if(!totalQty){showToast('Select a load size first',true);return;}
@@ -2087,20 +2087,20 @@ async function saveJob(){
   if(priceText==='—'||priceText==='Select a load size')return;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   const activeSpecials=Object.keys(selectedSpecials).filter(k=>selectedSpecials[k]);
-const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
-const loadSummary=Object.entries(loadQtys).filter(([k,q])=>q>0).map(([k,q])=>q>1?q+'× '+loadNames[k]:loadNames[k]).join(' + ')||'Unknown';
-const primaryLoad=Object.entries(loadQtys).filter(([k,q])=>q>0).sort((a,b)=>b[1]-a[1])[0]?.[0]||'minimum';
-const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:parseFloat(document.getElementById('calcMiles').value)||0,hours:parseFloat(document.getElementById('calcHours').value)||0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
+  const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+  const loadSummary=Object.entries(loadQtys).filter(([k,q])=>q>0).map(([k,q])=>q>1?q+'× '+loadNames[k]:loadNames[k]).join(' + ')||'Unknown';
+  const primaryLoad=Object.entries(loadQtys).filter(([k,q])=>q>0).sort((a,b)=>b[1]-a[1])[0]?.[0]||'minimum';
+  const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:parseFloat(document.getElementById('calcMiles').value)||0,hours:parseFloat(document.getElementById('calcHours').value)||0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
   jobHistory.unshift(entry);if(jobHistory.length>50)jobHistory=jobHistory.slice(0,50);
   persistHistory();renderHistory();showToast('✓ Job saved to history');
   if(session.token){
-    const load=userPricing.loads[selectedLoad]||{low:0,high:0};const markup=parseInt(document.getElementById('calcMarkup').value)/100;const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
+    const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
     let sCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])sCost+=Number(specialSrc[k].fee)*qty||0;});
     const dCost=Math.round(miles*2*(userPricing.driveRate||1.5)),lCost=Math.round(hours*(userPricing.laborRate||35));
-    api({action:'saveJob',token:session.token,price:priceText,load:selectedLoad,specials:entry.specials,miles,hours,markup:parseInt(document.getElementById('calcMarkup').value),driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost}).catch(()=>{});
+    const load=userPricing.loads[primaryLoad]||{low:0,high:0};
+    api({action:'saveJob',token:session.token,jobId:entry.id,price:priceText,load:primaryLoad,specials:entry.specials,miles,hours,markup:entry.markup,driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost,jobData:entry}).catch(()=>{});
   }
 }
-
 /* ── AI PHOTO ── */
 function openAiPanel(){
   if(!isPro()){showUpgradePrompt();return;}
