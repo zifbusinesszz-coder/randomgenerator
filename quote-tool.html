@@ -2626,6 +2626,7 @@ let calCurrentDate=new Date();
 let calSelectedDay=null;
 
 function openDashboard(){
+  if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
   document.getElementById('calcPage').style.display='none';
   document.getElementById('dashboardPage').style.display='block';
   calCurrentDate=new Date();
