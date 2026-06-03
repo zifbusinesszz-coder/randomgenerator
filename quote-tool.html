@@ -1840,20 +1840,31 @@ function toggleCalcSpecial(key){selectedSpecials[key]=!selectedSpecials[key];doc
 function onMarkupSlide(){document.getElementById('calcMarkupPct').textContent=document.getElementById('calcMarkup').value+'%';recalc();}
 
 function recalc(){
-  if(!selectedLoad){document.getElementById('calcFinalPrice').textContent='Select a load size';document.getElementById('calcBreakdown').style.display='none';return;}
-  const load=userPricing.loads[selectedLoad],markup=parseInt(document.getElementById('calcMarkup').value)/100;
+  const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
+  if(!totalQty){document.getElementById('calcFinalPrice').textContent='Select a load size';document.getElementById('calcBreakdown').style.display='none';return;}
+  const markup=parseInt(document.getElementById('calcMarkup').value)/100;
   const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
   const driveRate=userPricing.driveRate||1.5,laborRate=userPricing.laborRate||35;
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   let specialsCost=0;Object.keys(selectedSpecials).forEach(k=>{if(selectedSpecials[k]&&specialSrc[k])specialsCost+=Number(specialSrc[k].fee)||0;});
   const driveCost=Math.round(miles*2*driveRate),laborCost=Math.round(hours*laborRate);
-  const baseLow=load.low+specialsCost+driveCost+laborCost,baseHigh=load.high+specialsCost+driveCost+laborCost;
+  let loadBaseLow=0,loadBaseHigh=0,loadLabel='';
+  const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
+  const loadParts=[];
+  ['minimum','quarter','half','full'].forEach(key=>{
+    const qty=loadQtys[key]||0;if(!qty)return;
+    const l=userPricing.loads[key];
+    loadBaseLow+=l.low*qty;loadBaseHigh+=l.high*qty;
+    loadParts.push(qty>1?qty+'× '+loadNames[key]:loadNames[key]);
+  });
+  loadLabel=loadParts.join(' + ');
+  const baseLow=loadBaseLow+specialsCost+driveCost+laborCost,baseHigh=loadBaseHigh+specialsCost+driveCost+laborCost;
   const quoteLow=Math.round(baseLow*(1+markup)),quoteHigh=Math.round(baseHigh*(1+markup));
   const priceEl=document.getElementById('calcFinalPrice');
   if(quoteLow===quoteHigh){priceEl.textContent='$'+quoteLow.toLocaleString();priceEl.className='calc-result-price';}
   else{priceEl.textContent='$'+quoteLow.toLocaleString()+'–$'+quoteHigh.toLocaleString();priceEl.className='calc-result-price has-range';}
   document.getElementById('calcBreakdown').style.display='flex';
-  document.getElementById('bd-load').textContent='$'+load.low+(load.low!==load.high?'–$'+load.high:'');
+  document.getElementById('bd-load').textContent=loadLabel+' — $'+loadBaseLow+(loadBaseLow!==loadBaseHigh?'–$'+loadBaseHigh:'');
   document.getElementById('bd-specials-row').style.display=specialsCost>0?'flex':'none';
   document.getElementById('bd-specials').textContent='+$'+specialsCost;
   document.getElementById('bd-drive-row').style.display=driveCost>0?'flex':'none';
