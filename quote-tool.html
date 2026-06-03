@@ -2206,6 +2206,7 @@ function saveCrm(){
     phone:document.getElementById('crmPhone').value.trim(),
     address:document.getElementById('crmAddress').value.trim(),
     status:document.getElementById('crmStatus').value,
+    dateTime:document.getElementById('crmDateTime').value||null,
     notes:document.getElementById('crmNotes').value.trim(),
     savedAt:new Date().toISOString()
   };
