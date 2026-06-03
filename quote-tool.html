@@ -2182,6 +2182,10 @@ function onActualInput(){
   document.getElementById('actualDiffVal').textContent=(diff>=0?'+':'')+'$'+Math.abs(Math.round(diff));
   document.getElementById('actualDiffSub').textContent=diff>=0?'Good — you captured extra value':'You left money on the table';
 }
+  function toggleCrmDate(){
+  const status=document.getElementById('crmStatus').value;
+  document.getElementById('crmDateField').style.display=status==='scheduled'?'block':'none';
+}
 function openCrm(jobId){
   const job=jobHistory.find(j=>j.id===jobId);if(!job)return;crmJobId=jobId;
   document.getElementById('crmQuotedPrice').textContent=job.price;
