@@ -2139,7 +2139,7 @@ function renderHistory(){
     const statusBadge=j.crm?.status?`<span class="crm-status-badge ${statusClass[j.crm.status]||'crm-status-quoted'}">${statusLabel[j.crm.status]||j.crm.status}</span>`:'';
     const customerInfo=hasCrm?`<div class="crm-customer-info">${[j.crm.name,j.crm.phone,j.crm.address].filter(Boolean).join(' · ')}</div>`:'';
     return `<div class="history-item">
-      <div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts}</div></div>
+      <div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts||''}</div></div>
       <div class="history-item-detail">${j.loadSummary||ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div>
       <div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span>${statusBadge}${j.actual?.charged?'<span class="history-item-markup" style="background:rgba(26,158,114,.12);color:#5DCAA5;margin-left:4px;">✓ logged</span>':''}</div>
       ${customerInfo}
