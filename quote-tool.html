@@ -2326,6 +2326,7 @@ function saveCrm(){
   jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
   persistHistory();renderHistory();showToast('Job deleted');
 }
+// NEW
 function saveActual(){
   const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
   const charged=parseFloat(document.getElementById('actualCharged').value)||null;
@@ -2333,6 +2334,9 @@ function saveActual(){
   const notes=document.getElementById('actualNotes').value.trim();
   job.actual={charged,hours,notes,loggedAt:new Date().toISOString()};
   persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
+  if(session.token){
+    api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+  }
 }
 
 /* ── INSIGHTS ── */
