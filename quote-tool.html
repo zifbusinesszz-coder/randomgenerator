@@ -2020,7 +2020,7 @@ function buildSettingsSpecialsGrid(){
   SPECIAL_ITEMS_CONFIG.forEach(item=>{
     sSpecialStates[item.key]={enabled:true,fee:item.fee};
     const row=document.createElement('div');row.className='s-special-row active';row.id='ss-'+item.key;
-    row.innerHTML=`<div class="s-sitem-left"><span class="s-sitem-icon"><i class="ph ph-${item.icon}" style="font-size:12px;"></i></span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="s-sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')">✓</div>`;
+    row.innerHTML=`<div class="s-sitem-left"><span class="s-sitem-icon"><i class="ph ph-${item.icon}" style="font-size:12px;"></i></span>${item.label}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div>`;
     grid.appendChild(row);
   });
 }
