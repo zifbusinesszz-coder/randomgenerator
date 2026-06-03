@@ -1829,9 +1829,13 @@ function buildCalcSpecialsGrid(){
     tag.innerHTML=`<div class="calc-special-left"><span class="calc-special-icon"><i class="ph ph-${item.icon}" style="font-size:14px;"></i></span><span class="calc-special-name">${item.label}</span></div><span class="calc-special-fee">+$${item.fee}</span>`;
     grid.appendChild(tag);
   });
-}
-
 function selectLoad(key){selectedLoad=key;document.querySelectorAll('.calc-load-card').forEach(c=>c.classList.remove('sel'));document.getElementById('cl-'+key).classList.add('sel');recalc();}
+function changeQty(key,delta){
+  loadQtys[key]=Math.max(0,( loadQtys[key]||0)+delta);
+  document.getElementById('qty-'+key).textContent=loadQtys[key];
+  document.getElementById('cl-'+key).classList.toggle('has-qty',loadQtys[key]>0);
+  recalc();
+}
 function toggleCalcSpecial(key){selectedSpecials[key]=!selectedSpecials[key];document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]);recalc();}
 function onMarkupSlide(){document.getElementById('calcMarkupPct').textContent=document.getElementById('calcMarkup').value+'%';recalc();}
 
