@@ -2335,13 +2335,13 @@ function saveCrm(){
   if(session.token){
     api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
   }
-}
-function deleteJob(jobId){
+async function deleteJob(jobId){
   if(!confirm('Delete this job from history?'))return;
   jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
   persistHistory();renderHistory();showToast('Job deleted');
   if(session.token){
-    api({action:'deleteJob',token:session.token,jobId:String(jobId)}).catch(()=>{});
+    try{await api({action:'deleteJob',token:session.token,jobId:String(jobId)});}
+    catch(e){showToast('Could not sync delete to server',true);}
   }
 }
 // NEW
