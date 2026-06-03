@@ -2205,9 +2205,9 @@ function saveCrm(){
   };
   persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');
 }
-  function deleteJob(jobId){
+ function deleteJob(jobId){
   if(!confirm('Delete this job from history?'))return;
-  jobHistory=jobHistory.filter(j=>j.id!==jobId);
+  jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
   persistHistory();renderHistory();showToast('Job deleted');
 }
 function saveActual(){
