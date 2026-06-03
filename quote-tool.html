@@ -2288,6 +2288,7 @@ function onActualInput(){
 }
 function openCrm(jobId){
   const job=jobHistory.find(j=>j.id===jobId);if(!job)return;crmJobId=jobId;
+  document.getElementById('crmScheduleLock').style.display=isPro()?'none':'flex';
   document.getElementById('crmQuotedPrice').textContent=job.price;
   const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
   const parts=[ll[job.load]||job.load];if(job.specials&&job.specials.length)parts.push(job.specials.join(', '));if(job.miles)parts.push(job.miles+' mi');
