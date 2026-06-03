@@ -2624,6 +2624,146 @@ function toggleBilling(){
     document.getElementById('proBtn').onclick=function(){openModal('pro');return false;};
   }
 }
+  /* ── DASHBOARD ── */
+let calCurrentDate=new Date();
+let calSelectedDay=null;
+
+function openDashboard(){
+  document.getElementById('calcPage').style.display='none';
+  document.getElementById('dashboardPage').style.display='block';
+  calCurrentDate=new Date();
+  renderCalendar();
+  renderUpcoming();
+  renderDashAnalytics();
+}
+
+function closeDashboard(){
+  document.getElementById('dashboardPage').style.display='none';
+  document.getElementById('calcPage').style.display='block';
+}
+
+function changeCalMonth(dir){
+  calCurrentDate=new Date(calCurrentDate.getFullYear(),calCurrentDate.getMonth()+dir,1);
+  calSelectedDay=null;
+  document.getElementById('calPopup').classList.remove('show');
+  renderCalendar();
+}
+
+function getScheduledJobs(){
+  return jobHistory.filter(j=>j.crm?.status==='scheduled'&&j.crm?.dateTime);
+}
+
+function renderCalendar(){
+  const year=calCurrentDate.getFullYear();
+  const month=calCurrentDate.getMonth();
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonthLabel').textContent=monthNames[month]+' '+year;
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const daysInPrev=new Date(year,month,0).getDate();
+  const today=new Date();
+  const scheduled=getScheduledJobs();
+  const jobsByDay={};
+  scheduled.forEach(j=>{
+    const d=new Date(j.crm.dateTime);
+    if(d.getFullYear()===year&&d.getMonth()===month){
+      const day=d.getDate();
+      if(!jobsByDay[day])jobsByDay[day]=[];
+      jobsByDay[day].push(j);
+    }
+  });
+  const dayLabels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html=dayLabels.map(d=>`<div class="cal-day-label">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++){
+    html+=`<div class="cal-day other-month"><div class="cal-day-num">${daysInPrev-firstDay+i+1}</div></div>`;
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const isToday=today.getDate()===d&&today.getMonth()===month&&today.getFullYear()===year;
+    const isSel=calSelectedDay===d;
+    const hasJobs=jobsByDay[d];
+    html+=`<div class="cal-day${isToday?' today':''}${isSel?' selected':''}" onclick="selectCalDay(${d})">
+      <div class="cal-day-num">${d}</div>
+      ${hasJobs?'<div class="cal-dot"></div>':''}
+    </div>`;
+  }
+  const remaining=(7-((firstDay+daysInMonth)%7))%7;
+  for(let i=1;i<=remaining;i++){
+    html+=`<div class="cal-day other-month"><div class="cal-day-num">${i}</div></div>`;
+  }
+  document.getElementById('calGrid').innerHTML=html;
+}
+
+function selectCalDay(day){
+  const year=calCurrentDate.getFullYear();
+  const month=calCurrentDate.getMonth();
+  const scheduled=getScheduledJobs();
+  const jobs=scheduled.filter(j=>{
+    const d=new Date(j.crm.dateTime);
+    return d.getFullYear()===year&&d.getMonth()===month&&d.getDate()===day;
+  });
+  if(calSelectedDay===day){
+    calSelectedDay=null;
+    document.getElementById('calPopup').classList.remove('show');
+    renderCalendar();
+    return;
+  }
+  calSelectedDay=day;
+  renderCalendar();
+  if(!jobs.length){document.getElementById('calPopup').classList.remove('show');return;}
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calPopupDate').textContent=monthNames[month]+' '+day+', '+year;
+  document.getElementById('calPopupJobs').innerHTML=jobs.map(j=>{
+    const d=new Date(j.crm.dateTime);
+    const time=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return `<div class="cal-popup-job">
+      <div class="cal-popup-time">${time} — ${j.crm.name||'Customer'}</div>
+      <div class="cal-popup-detail">${j.crm.address||'No address'}<br>${j.price}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('calPopup').classList.add('show');
+}
+
+function renderUpcoming(){
+  const now=new Date();
+  const scheduled=getScheduledJobs()
+    .filter(j=>new Date(j.crm.dateTime)>=now)
+    .sort((a,b)=>new Date(a.crm.dateTime)-new Date(b.crm.dateTime))
+    .slice(0,10);
+  const list=document.getElementById('upcomingList');
+  if(!scheduled.length){list.innerHTML='<div class="upcoming-empty">No upcoming scheduled jobs.<br>Add a customer and set status to Scheduled.</div>';return;}
+  list.innerHTML=scheduled.map(j=>{
+    const d=new Date(j.crm.dateTime);
+    const dateStr=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    const timeStr=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return `<div class="upcoming-item">
+      <div class="upcoming-date">${dateStr} · ${timeStr}</div>
+      <div class="upcoming-name">${j.crm.name||'Customer'}</div>
+      <div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
+      <div class="upcoming-price">${j.price}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDashAnalytics(){
+  const body=document.getElementById('dashAnalytics');
+  const logged=jobHistory.filter(j=>j.actual?.charged);
+  if(!logged.length){
+    body.innerHTML='<div class="upcoming-empty">No logged job outcomes yet.<br>Save a quote, then tap "How\'d it go?" to track your numbers.</div>';
+    return;
+  }
+  const diffs=logged.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+  const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
+  const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
+  const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
+  const totalRevenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
+  const avgRevenue=Math.round(totalRevenue/logged.length);
+  body.innerHTML=`<div class="dash-stat-grid">
+    <div class="dash-stat ${avgDiff>=0?'positive':'negative'}"><div class="dash-stat-label">Avg vs quoted</div><div class="dash-stat-val">${avgDiff>=0?'+':''}$${Math.abs(Math.round(avgDiff))}</div><div class="dash-stat-sub">${logged.length} jobs logged</div></div>
+    <div class="dash-stat ${winRate>=50?'positive':'negative'}"><div class="dash-stat-label">Quoted right</div><div class="dash-stat-val">${winRate}%</div><div class="dash-stat-sub">charged ≥ quoted</div></div>
+    <div class="dash-stat"><div class="dash-stat-label">Avg job revenue</div><div class="dash-stat-val">$${avgRevenue}</div><div class="dash-stat-sub">actual charged</div></div>
+    <div class="dash-stat ${totalLeft<-50?'negative':''}"><div class="dash-stat-label">Left on table</div><div class="dash-stat-val">$${Math.abs(Math.round(totalLeft))}</div><div class="dash-stat-sub">total undercharges</div></div>
+  </div>`;
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();}});
 </script>
 </body>
