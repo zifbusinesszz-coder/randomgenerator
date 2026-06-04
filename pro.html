@@ -2830,7 +2830,7 @@ function renderUpcoming(){
       <div class="upcoming-date">${dateStr} · ${timeStr}</div>
       <div class="upcoming-name">${j.crm.name||'Customer'}</div>
       <div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
-      <div class="upcoming-price">${j.price}</div>
+      <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
     </div>`;
   }).join('');
 }
