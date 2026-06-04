@@ -1892,7 +1892,7 @@ function switchTab(tab){
   activeTab=tab;const isSig=tab==='signup';
   document.getElementById('tabSignup').classList.toggle('active',isSig);
   document.getElementById('tabLogin').classList.toggle('active',!isSig);
-  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);}
   else document.getElementById('loginForm').style.display='block';
   document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
@@ -1901,7 +1901,7 @@ function switchTab(tab){
   document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':'Log in to your quote tool';
 }
 function goStep(n){
-  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
   if(n===1)document.getElementById('step1').style.display='block';
   if(n===2)document.getElementById('step2').style.display='block';
   if(n===3)document.getElementById('step3').style.display='block';
