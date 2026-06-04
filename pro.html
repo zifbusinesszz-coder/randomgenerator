@@ -1847,14 +1847,42 @@ async function api(payload){
 }
 
 function openModal(planOrMode){
+  if(planOrMode==='pick'){
+    document.getElementById('modalTabs').style.display='flex';
+    document.getElementById('modalStepDots').style.display='none';
+    document.getElementById('modalPlanBadge').style.display='none';
+    document.getElementById('modalTitle').textContent='Choose your plan';
+    document.getElementById('modalSubtitle').textContent='Both plans include a 14-day free trial.';
+    ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    document.getElementById('stepPick').style.display='block';
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+    return;
+  }
   if(planOrMode==='login'){switchTab('login');}
-  else{currentPlan=planOrMode;document.getElementById('modalPlanBadge').textContent=
-  planOrMode==='pro'?'Pro Plan — $59/mo':
-  planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
-  planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
-  'Starter Plan — $29/mo';}
+  else{
+    currentPlan=planOrMode;
+    document.getElementById('modalPlanBadge').textContent=
+      planOrMode==='pro'?'Pro Plan — $59/mo':
+      planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
+      planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
+      'Starter Plan — $29/mo';
+  }
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  setTimeout(initStripe,50);
+}
+
+function pickPlan(plan){
+  currentPlan=plan;
+  document.getElementById('modalPlanBadge').textContent=plan==='pro'?'Pro Plan — $59/mo':'Starter Plan — $29/mo';
+  document.getElementById('modalPlanBadge').style.display='inline-block';
+  document.getElementById('modalTitle').textContent='Start your free trial';
+  document.getElementById('modalSubtitle').textContent='14 days free. Card required — charged only after trial ends.';
+  document.getElementById('modalStepDots').style.display='flex';
+  document.getElementById('stepPick').style.display='none';
+  document.getElementById('step1').style.display='block';
+  updateStepDots(1);
   setTimeout(initStripe,50);
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);}
