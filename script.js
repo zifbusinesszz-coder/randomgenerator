@@ -318,3 +318,76 @@ function renderInsights() {
   }
   body.innerHTML = html;
 }
+// ── Date / Time picker ───────────────────────────────────────
+(function() {
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzGbctgjm5ekt7CFSVRzCHDxff_6X88b6mjY3yyb5gHXzTcGD5ZTtSWOYrP8-I4-IkQVw/exec';
+  var ALL_TIMES = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+  var TIME_LABELS = {
+    '08:00':'8:00 AM','09:00':'9:00 AM','10:00':'10:00 AM','11:00':'11:00 AM',
+    '12:00':'12:00 PM','13:00':'1:00 PM','14:00':'2:00 PM','15:00':'3:00 PM',
+    '16:00':'4:00 PM','17:00':'5:00 PM'
+  };
+
+  var dateEl = document.getElementById('bDate');
+  var timeEl = document.getElementById('bTime');
+
+  // Populate next 14 days (skip Sundays if you want — remove the check to include all)
+  var today = new Date();
+  for (var i = 1; i <= 14; i++) {
+    var d = new Date(today);
+    d.setDate(today.getDate() + i);
+    var yyyy = d.getFullYear();
+    var mm   = String(d.getMonth() + 1).padStart(2, '0');
+    var dd   = String(d.getDate()).padStart(2, '0');
+    var val  = yyyy + '-' + mm + '-' + dd;
+    var label = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+    var opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = label;
+    dateEl.appendChild(opt);
+  }
+
+  // On date change, fetch booked slots and populate times
+  dateEl.addEventListener('change', function() {
+    var date = dateEl.value;
+    if (!date) return;
+
+    timeEl.disabled = true;
+    timeEl.style.background = '#f5f5f5';
+    timeEl.style.cursor = 'not-allowed';
+    timeEl.innerHTML = '<option value="">Loading...</option>';
+
+    fetch(GAS_URL + '?date=' + date)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var booked = data.booked || [];
+        timeEl.innerHTML = '<option value="">Select a time...</option>';
+        ALL_TIMES.forEach(function(t) {
+          var opt = document.createElement('option');
+          opt.value = t;
+          if (booked.includes(t)) {
+            opt.textContent = TIME_LABELS[t] + ' — Unavailable';
+            opt.disabled = true;
+          } else {
+            opt.textContent = TIME_LABELS[t];
+          }
+          timeEl.appendChild(opt);
+        });
+        timeEl.disabled = false;
+        timeEl.style.background = '#fff';
+        timeEl.style.cursor = 'pointer';
+      })
+      .catch(function() {
+        // If GAS fetch fails, just show all times
+        timeEl.innerHTML = '<option value="">Select a time...</option>';
+        ALL_TIMES.forEach(function(t) {
+          var opt = document.createElement('option');
+          opt.value = t; opt.textContent = TIME_LABELS[t];
+          timeEl.appendChild(opt);
+        });
+        timeEl.disabled = false;
+        timeEl.style.background = '#fff';
+        timeEl.style.cursor = 'pointer';
+      });
+  });
+})();
