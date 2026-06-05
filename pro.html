@@ -1656,6 +1656,10 @@ canvas.insights-chart{width:100%!important;display:block;}
           <strong style="color:var(--black);">Card on file will be charged today.</strong> If it fails, enter a new card below.
         </div>
         <div style="margin-bottom:13px;">
+        <div id="paywallPrButtonWrap" style="display:none;margin-bottom:14px;">
+            <div id="paywallPrButtonElement"></div>
+            <div style="display:flex;align-items:center;gap:8px;margin:10px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:#bbb;white-space:nowrap;">or pay by card</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
+          </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
             <label style="font-size:11.5px;font-weight:600;color:var(--black);">Card on file</label>
             <button onclick="toggleNewCard()" id="useNewCardToggle" style="background:none;border:none;font-size:11.5px;color:var(--green);font-weight:600;cursor:pointer;font-family:var(--font-sans);">Use a different card</button>
