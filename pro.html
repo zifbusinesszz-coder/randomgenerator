@@ -1813,6 +1813,7 @@ let insightCharts={};
 (async function init(){
   buildSpecialGrid();buildSettingsSpecialsGrid();
   if(session.token){
+    document.getElementById('marketingPage').style.display='none';
     showPageLoader('Logging you back in...');
     try{
       const res=await api({action:'getUser',token:session.token});
