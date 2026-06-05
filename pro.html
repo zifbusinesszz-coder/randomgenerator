@@ -1812,9 +1812,9 @@ let insightCharts={};
 
 (async function init(){
   buildSpecialGrid();buildSettingsSpecialsGrid();
-  if(session.token){
-    document.getElementById('marketingPage').style.display='none';
+if(session.token){
     showPageLoader('Logging you back in...');
+    document.getElementById('marketingPage').style.display='none';
     try{
       const res=await api({action:'getUser',token:session.token});
       hidePageLoader();
