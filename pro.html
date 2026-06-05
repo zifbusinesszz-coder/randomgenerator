@@ -1861,7 +1861,7 @@ function openModal(planOrMode){
     document.body.style.overflow='hidden';
     return;
   }
-  if(planOrMode==='login'){switchTab('login');}
+if(planOrMode==='login'){switchTab('login');}
   else{
     currentPlan=planOrMode;
     document.getElementById('modalPlanBadge').textContent=
@@ -1869,6 +1869,14 @@ function openModal(planOrMode){
       planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
       planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
       'Starter Plan — $29/mo';
+    document.getElementById('modalPlanBadge').style.display='inline-block';
+    document.getElementById('modalStepDots').style.display='flex';
+    document.getElementById('modalTabs').style.display='flex';
+    ['stepPick','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+    document.getElementById('step1').style.display='block';
+    updateStepDots(1);
+    document.getElementById('modalTitle').textContent='Start your free trial';
+    document.getElementById('modalSubtitle').textContent='14 days free. Card required — charged only after trial ends.';
   }
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
