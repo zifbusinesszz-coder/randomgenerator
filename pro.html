@@ -2687,7 +2687,7 @@ async function confirmUpgrade() {
   }
 }
 function openMobSidebar(){
-  document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
+  document.getElementById('mobAiBtn').style.display='flex';
   const hasActuals=jobHistory.some(j=>j.actual?.charged);
   document.getElementById('mobUpgradeBtn').style.display=isPro()?'none':'flex';
   document.getElementById('mobSidebar').classList.add('open');
