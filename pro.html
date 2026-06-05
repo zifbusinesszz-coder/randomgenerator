@@ -2153,7 +2153,7 @@ function openCalcDirect(){
 function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
-  document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
+  document.getElementById('aiNavBtn').style.display='inline-flex';
   const dashBtn=document.querySelector('.calc-icon-btn[onclick="openDashboard()"]');
   if(dashBtn)dashBtn.style.display=isPro()?'inline-flex':'none';
   if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
