@@ -1817,7 +1817,6 @@ if(session.token){
     document.getElementById('marketingPage').style.display='none';
     try{
       const res=await api({action:'getUser',token:session.token});
-      hidePageLoader();
       if(res.success){
         session.businessName=res.businessName;
         session.companyId=res.companyId;
@@ -1835,6 +1834,7 @@ if(session.token){
       }
       else loadLocalPricing();
       openCalcDirect();
+      hidePageLoader();
     }catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();}
   }
 })();
