@@ -2703,23 +2703,22 @@ function toggleNewCard() {
 }
 
 function initPaywallStripe() {
-  if (paywallStripe) return;
-  try {
-    paywallStripe = Stripe(STRIPE_PK);
-    const elements = paywallStripe.elements();
-    paywallCardElement = elements.create('card', {
-      style: { base: { fontFamily: "'DM Sans',sans-serif", fontSize: '13px', color: '#0d0d0d', '::placeholder': { color: '#c4c4c4' } }, invalid: { color: '#c0392b' } }
-    });
+  if(paywallStripe)return;
+  try{
+    paywallStripe=Stripe(STRIPE_PK);
+    const elements=paywallStripe.elements();
+    paywallCardElement=elements.create('card',{style:{base:{fontFamily:"'DM Sans',sans-serif",fontSize:'13px',color:'#0d0d0d','::placeholder':{color:'#c4c4c4'}},invalid:{color:'#c0392b'}}});
     paywallCardElement.mount('#paywallCardElement');
-    paywallCardElement.on('change', e => {
-      paywallCardComplete = e.complete;
-      const err = document.getElementById('paywallCardErrors');
-      err.textContent = e.error ? e.error.message : '';
-      document.getElementById('paywallStripeWrap').classList.toggle('error', !!e.error);
-    });
-    paywallCardElement.on('focus', () => document.getElementById('paywallStripeWrap').classList.add('focused'));
-    paywallCardElement.on('blur',  () => document.getElementById('paywallStripeWrap').classList.remove('focused'));
-  } catch(e) { console.warn('Paywall Stripe:', e.message); }
+    paywallCardElement.on('change',e=>{paywallCardComplete=e.complete;const err=document.getElementById('paywallCardErrors');err.textContent=e.error?e.error.message:'';document.getElementById('paywallStripeWrap').classList.toggle('error',!!e.error);});
+    paywallCardElement.on('focus',()=>document.getElementById('paywallStripeWrap').classList.add('focused'));
+    paywallCardElement.on('blur',()=>document.getElementById('paywallStripeWrap').classList.remove('focused'));
+    const amount=paywallSelectedPlan==='pro'?5900:2900;
+    const planLabel=paywallSelectedPlan==='pro'?'Pro — $59/mo':'Starter — $29/mo';
+    const pr=paywallStripe.paymentRequest({country:'US',currency:'usd',total:{label:"Wood's Waste "+planLabel,amount},requestPayerName:true,requestPayerEmail:true});
+    const prButton=elements.create('paymentRequestButton',{paymentRequest:pr,style:{paymentRequestButton:{type:'default',theme:'dark',height:'44px'}}});
+    pr.canMakePayment().then(result=>{const wrap=document.getElementById('paywallPrButtonWrap');if(result&&result.applePay){wrap.style.display='block';prButton.mount('#paywallPrButtonElement');}else{wrap.style.display='none';}});
+    pr.on('paymentmethod',async(ev)=>{usingNewCard=false;window._paywallPMId=ev.paymentMethod.id;ev.complete('success');await submitPaywallPayment(ev.paymentMethod.id);});
+  }catch(e){console.warn('Paywall Stripe:',e.message);}
 }
 
 async function submitPaywallPayment() {
