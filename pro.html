@@ -2657,9 +2657,17 @@ function closeUpgradeModal() {
 }
 
 async function confirmUpgrade() {
-  const btn = document.getElementById('upgradeConfirmBtn');
-  btn.disabled = true;
-  btn.textContent = 'Upgrading...';
+  const mobBtn  = document.getElementById('mobUpgradeBtn');
+  const deskBtn = document.getElementById('desktopUpgradeBtn');
+
+  // Loading state on whichever button is visible
+  if (mobBtn)  { mobBtn.disabled  = true; mobBtn.innerHTML  = '<i class="ph ph-spinner" style="font-size:15px;"></i> Upgrading...'; }
+  if (deskBtn) { deskBtn.disabled = true; deskBtn.innerHTML = '<i class="ph ph-spinner" style="font-size:13px;"></i> Upgrading...'; }
+
+  // Also update confirm button inside the modal
+  const confirmBtn = document.getElementById('upgradeConfirmBtn');
+  if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.textContent = 'Upgrading...'; }
+
   try {
     const res = await api({ action: 'upgradePlan', token: session.token, newPlan: 'pro' });
     if (res.success) {
@@ -2667,16 +2675,18 @@ async function confirmUpgrade() {
       localStorage.setItem('ww_plan', 'pro');
       initCalc();
       closeUpgradeModal();
+      closeMobSidebar();
       showToast('✓ Upgraded to Pro!');
     } else {
-      btn.disabled = false;
-      btn.textContent = 'Upgrade to Pro — $59/mo';
       showToast(res.error || 'Upgrade failed — text Griffin at (507) 298-1179', true);
     }
-  } catch (e) {
-    btn.disabled = false;
-    btn.textContent = 'Upgrade to Pro — $59/mo';
+  } catch(e) {
     showToast('Could not connect — try again', true);
+  } finally {
+    // Always reset all buttons
+    if (mobBtn)  { mobBtn.disabled  = false; mobBtn.innerHTML  = '<i class="ph ph-arrow-circle-up" style="font-size:15px;"></i> Upgrade to Pro'; }
+    if (deskBtn) { deskBtn.disabled = false; deskBtn.innerHTML = '<i class="ph ph-arrow-circle-up" style="font-size:13px;"></i> Upgrade to Pro'; }
+    if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Upgrade to Pro — $59/mo'; }
   }
 }
 function openMobSidebar(){
