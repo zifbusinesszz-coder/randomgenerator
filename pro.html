@@ -3129,15 +3129,31 @@ function planMyDay(){
     showToast("No jobs with addresses scheduled today", true);
     return;
   }
-
-  if(todayJobs.length === 1){
-    window.open('https://maps.google.com/?q=' + encodeURIComponent(todayJobs[0].crm.address), '_blank');
-    return;
+if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const origin=pos.coords.latitude+','+pos.coords.longitude;
+      if(todayJobs.length === 1){
+        window.open('https://maps.google.com/?saddr='+origin+'&daddr='+encodeURIComponent(todayJobs[0].crm.address), '_blank');
+        return;
+      }
+      const addresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
+      window.open('https://www.google.com/maps/dir/'+origin+'/'+addresses.join('/'), '_blank');
+    },()=>{
+      if(todayJobs.length === 1){
+        window.open('https://maps.google.com/?q=' + encodeURIComponent(todayJobs[0].crm.address), '_blank');
+        return;
+      }
+      const addresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
+      window.open('https://www.google.com/maps/dir/' + addresses.join('/'), '_blank');
+    });
+  } else {
+    if(todayJobs.length === 1){
+      window.open('https://maps.google.com/?q=' + encodeURIComponent(todayJobs[0].crm.address), '_blank');
+      return;
+    }
+    const addresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
+    window.open('https://www.google.com/maps/dir/' + addresses.join('/'), '_blank');
   }
-
-  const addresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
-  const url = 'https://www.google.com/maps/dir/' + addresses.join('/');
-  window.open(url, '_blank');
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal();}});
 </script>
