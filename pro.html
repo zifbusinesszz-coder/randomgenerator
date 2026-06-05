@@ -3013,6 +3013,14 @@ function selectCalDay(day){
 function renderUpcoming(){
   const now = new Date();
 
+  if(!isPro()){
+    const list = document.getElementById('upcomingList');
+    list.innerHTML='<div class="upcoming-empty">Scheduling & directions are Pro features.<br><br><button onclick="showUpgradePrompt()" style="background:var(--green);color:white;border:none;border-radius:var(--r-sm);padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Upgrade to Pro →</button></div>';
+    const planBtn = document.getElementById('planMyDayBtn');
+    if(planBtn) planBtn.style.display = 'none';
+    return;
+  }
+
   const todayWithAddress = getScheduledJobs().filter(j => {
     const d = new Date(j.crm.dateTime);
     return d.toDateString() === now.toDateString() && j.crm.address;
