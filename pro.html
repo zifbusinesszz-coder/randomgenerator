@@ -1747,6 +1747,43 @@ canvas.insights-chart{width:100%!important;display:block;}
   </footer>
 </div>
 
+  <!-- UPGRADE MODAL -->
+<div id="upgradeModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:white;border-radius:20px;width:100%;max-width:400px;overflow:hidden;box-shadow:var(--sh-modal);animation:modalIn .22s ease both;">
+    <div style="background:#0a0a0a;padding:22px 22px 18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <img src="logo.PNG" alt="Wood's Waste" style="height:22px;width:auto;">
+          <div style="width:1px;height:14px;background:rgba(255,255,255,.2);"></div>
+          <span style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);">Pro</span>
+        </div>
+        <button onclick="closeUpgradeModal()" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(26,158,114,.15);border:1px solid rgba(26,158,114,.3);border-radius:6px;padding:3px 9px;margin-bottom:10px;">
+        <i class="ph ph-arrow-circle-up" style="font-size:11px;color:#5DCAA5;"></i>
+        <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5DCAA5;">Upgrade to Pro</span>
+      </div>
+      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;margin-bottom:5px;">Unlock everything.</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;">AI photo quoting, full CRM with scheduling, dashboard & insights — all for $59/mo. Your card on file will be charged today.</div>
+    </div>
+    <div style="padding:18px 22px;">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-camera" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> AI photo quoting — point, snap, price</div>
+        <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-address-book" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Full CRM with scheduling & job status</div>
+        <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-squares-four" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Dashboard with calendar & upcoming jobs</div>
+        <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-chart-line-up" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Quoted vs. actual profit tracking</div>
+      </div>
+      <div style="background:var(--off);border-radius:var(--r-md);padding:11px 13px;margin-bottom:16px;font-size:11.5px;color:var(--gray);display:flex;gap:7px;align-items:flex-start;">
+        <i class="ph ph-credit-card" style="font-size:13px;flex-shrink:0;margin-top:1px;color:var(--black);"></i>
+        <div>Your card on file will be charged <strong style="color:var(--black);">$59 today</strong> and monthly after that. Cancel anytime.</div>
+      </div>
+      <button id="upgradeConfirmBtn" onclick="confirmUpgrade()" style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background .18s;margin-bottom:8px;">Upgrade to Pro — $59/mo</button>
+      <button onclick="closeUpgradeModal()" style="width:100%;padding:10px;background:none;border:1.5px solid var(--border);color:var(--gray);border-radius:var(--r-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);">Maybe later</button>
+      <p style="font-size:10.5px;color:#bbb;text-align:center;margin-top:9px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
