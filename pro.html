@@ -2471,17 +2471,23 @@ function sendReceipt(){
   const phone=job.crm?.phone||'';
   const address=job.crm?.address||'';
   const charged=job.actual?.charged?'$'+job.actual.charged:'';
-  const lines=[
-    session.businessName+' — Job Receipt',
+const lines=[
+    '🧾 '+session.businessName,
+    '─────────────────',
     '',
-    'Customer: '+name,
-    address?'Address: '+address:'',
-    job.ts?'Date: '+job.ts:'',
-    job.loadSummary?'Work done: '+job.loadSummary:'',
-    job.specials?.length?'Special items: '+job.specials.join(', '):'',
-    charged?'Amount charged: '+charged:'',
+    '👤 '+name,
+    address?'📍 '+address:'',
+    job.ts?'📅 '+job.ts:'',
     '',
-    'Thank you for choosing '+session.businessName+'!',
+    '🚛 What we removed:',
+    job.loadSummary?'   '+job.loadSummary:'',
+    job.specials?.length?'   '+job.specials.join(', '):'',
+    '',
+    charged?'💵 Total charged: '+charged:'',
+    '',
+    '─────────────────',
+    'Thanks for choosing '+session.businessName+'!',
+    'Questions? Call/text (507) 298-1179',
   ].filter(Boolean).join('\n');
   if(phone){
     window.open('sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(lines));
