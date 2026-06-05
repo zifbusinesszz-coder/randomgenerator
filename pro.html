@@ -3134,8 +3134,8 @@ const tab = window.open('', '_blank');
   const homeAddress=userPricing.homeAddress||'';
   const addresses=todayJobs.map(j=>encodeURIComponent(j.crm.address));
   const buildUrl=(origin)=>{
-    if(todayJobs.length===1) return 'https://maps.google.com/?saddr='+origin+'&daddr='+encodeURIComponent(todayJobs[0].crm.address);
-    return 'https://www.google.com/maps/dir/'+origin+'/'+addresses.join('/');
+    if(todayJobs.length===1) return 'https://maps.google.com/?saddr='+origin+'&daddr='+encodeURIComponent(todayJobs[0].crm.address)+'&waypoints='+encodeURIComponent(homeAddress);
+    return 'https://www.google.com/maps/dir/'+origin+'/'+addresses.join('/')+'/'+(homeAddress?encodeURIComponent(homeAddress):'');
   };
   if(homeAddress){
     tab.location.href=buildUrl(encodeURIComponent(homeAddress));
