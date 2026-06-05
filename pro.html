@@ -3086,6 +3086,28 @@ function renderDashAnalytics(){
     if(ctx4&&mbKeys.length){dashCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(232,160,32,0.55)',borderColor:'rgba(232,160,32,1)',borderWidth:1,borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
   });
 }
+  function getSingleDirections(encodedAddress){
+  window.open('https://maps.google.com/?q=' + encodedAddress, '_blank');
+}
+
+function planMyDay(){
+  const now = new Date();
+  const todayJobs = getScheduledJobs()
+    .filter(j => {
+      const d = new Date(j.crm.dateTime);
+      return d.toDateString() === now.toDateString() && j.crm.address;
+    })
+    .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime));
+
+  if(!todayJobs.length){
+    showToast('No jobs with addresses today', true);
+    return;
+  }
+
+  const addresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
+  const url = 'https://www.google.com/maps/dir/' + addresses.join('/');
+  window.open(url, '_blank');
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal();}});
 </script>
 </body>
