@@ -2641,14 +2641,43 @@ function setErr(fid,on){document.getElementById(fid)?.classList.toggle('has-erro
 function clearFormErrors(){['f-first','f-last','f-biz','f-email','f-phone','f-pw'].forEach(id=>setErr(id,false));}
 function showBanner(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),8000);}
 function hideBanner(id){const el=document.getElementById(id);if(el)el.classList.remove('show');}
-function showUpgradePrompt(){
-  if(!confirm('Upgrade to Pro for $59/mo?\n\nYour card on file will be charged. You\'ll get AI photo quoting and the Insights dashboard immediately.'))return;
-  const btn=document.getElementById('mobUpgradeBtn');
-  btn.innerHTML='<i class="ph ph-spinner" style="font-size:15px;"></i> Upgrading...';btn.disabled=true;
-  api({action:'upgradePlan',token:session.token,newPlan:'pro'}).then(res=>{
-    if(res.success){session.plan='pro';localStorage.setItem('ww_plan','pro');initCalc();closeMobSidebar();showToast('✓ Upgraded to Pro!');}
-    else{btn.innerHTML='<i class="ph ph-arrow-circle-up" style="font-size:15px;"></i> Upgrade to Pro';btn.disabled=false;showToast(res.error||'Upgrade failed — text Griffin at (507) 298-1179',true);}
-  }).catch(()=>{btn.innerHTML='<i class="ph ph-arrow-circle-up" style="font-size:15px;"></i> Upgrade to Pro';btn.disabled=false;showToast('Could not connect — try again',true);});
+function showUpgradePrompt() {
+  const modal = document.getElementById('upgradeModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeUpgradeModal() {
+  document.getElementById('upgradeModal').style.display = 'none';
+  document.body.style.overflow = '';
+  // Reset button in case it was mid-loading
+  const btn = document.getElementById('upgradeConfirmBtn');
+  btn.disabled = false;
+  btn.textContent = 'Upgrade to Pro — $59/mo';
+}
+
+async function confirmUpgrade() {
+  const btn = document.getElementById('upgradeConfirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Upgrading...';
+  try {
+    const res = await api({ action: 'upgradePlan', token: session.token, newPlan: 'pro' });
+    if (res.success) {
+      session.plan = 'pro';
+      localStorage.setItem('ww_plan', 'pro');
+      initCalc();
+      closeUpgradeModal();
+      showToast('✓ Upgraded to Pro!');
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Upgrade to Pro — $59/mo';
+      showToast(res.error || 'Upgrade failed — text Griffin at (507) 298-1179', true);
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Upgrade to Pro — $59/mo';
+    showToast('Could not connect — try again', true);
+  }
 }
 function openMobSidebar(){
   document.getElementById('mobAiBtn').style.display=session.plan==='pro'?'flex':'none';
