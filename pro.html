@@ -2399,7 +2399,8 @@ function toggleSSpecial(key){sSpecialStates[key].enabled=!sSpecialStates[key].en
 function openSettings(){
   const l=userPricing.loads;
   ['s-min-low','s-min-high','s-qtr-low','s-qtr-high','s-half-low','s-half-high','s-full-low','s-full-high'].forEach((id,i)=>{const keys=[['minimum','low'],['minimum','high'],['quarter','low'],['quarter','high'],['half','low'],['half','high'],['full','low'],['full','high']];document.getElementById(id).value=l[keys[i][0]][keys[i][1]];});
-  document.getElementById('s-drive').value=userPricing.driveRate;document.getElementById('s-labor').value=userPricing.laborRate;document.getElementById('s-truck-l').value=userPricing.truck?.length||'';document.getElementById('s-truck-w').value=userPricing.truck?.width||'';document.getElementById('s-truck-h').value=userPricing.truck?.height||'';calcSTruckYards();
+  document.getElementById('s-home-address').value=userPricing.homeAddress||'';
+document.getElementById('s-drive').value=userPricing.driveRate;document.getElementById('s-labor').value=userPricing.laborRate;document.getElementById('s-truck-l').value=userPricing.truck?.length||'';document.getElementById('s-truck-w').value=userPricing.truck?.width||'';document.getElementById('s-truck-h').value=userPricing.truck?.height||'';calcSTruckYards();
   document.getElementById('sMarkup').value=userPricing.defaultMarkup;document.getElementById('sMarkupVal').textContent=userPricing.defaultMarkup+'%';
   SPECIAL_ITEMS_CONFIG.forEach(item=>{
     const saved=userPricing.specials[item.key],enabled=saved!=null,fee=saved?saved.fee:item.fee;
