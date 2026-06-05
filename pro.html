@@ -2387,6 +2387,8 @@ function openActual(jobId){
   document.getElementById('actualQuotedDetail').textContent=parts.join(' · ');
   document.getElementById('actualCharged').value='';document.getElementById('actualHours').value=job.hours||'';
   document.getElementById('actualNotes').value=job.actual?.notes||'';document.getElementById('actualDiff').style.display='none';
+  const receiptBtn=document.getElementById('sendReceiptBtn');
+  if(receiptBtn)receiptBtn.style.display=(job.crm?.phone||job.crm?.email)?'block':'none';
   document.getElementById('actualPanel').classList.add('open');
 }
 function closeActual(){document.getElementById('actualPanel').classList.remove('open');}
