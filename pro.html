@@ -2330,7 +2330,7 @@ function closeSettings(){document.getElementById('settingsPanel').classList.remo
 function closeSettingsOutside(e){if(e.target===document.getElementById('settingsPanel'))closeSettings();}
 async function saveSettings(){
   const btn=document.getElementById('settingsSaveBtn');btn.disabled=true;btn.textContent='Saving...';
-  const specials={};SPECIAL_ITEMS_CONFIG.forEach(item=>{if(sSpecialStates[item.key]?.enabled)specials[item.key]={fee:sSpecialStates[item.key].fee,label:item.label,icon:item.icon};});
+  const specials={};SPECIAL_ITEMS_CONFIG.forEach(item=>{specials[item.key]={fee:sSpecialStates[item.key]?.fee??item.fee,label:item.label,icon:item.icon};});
   const newPricing={loads:{minimum:{low:nsv('s-min-low'),high:nsv('s-min-high')},quarter:{low:nsv('s-qtr-low'),high:nsv('s-qtr-high')},half:{low:nsv('s-half-low'),high:nsv('s-half-high')},full:{low:nsv('s-full-low'),high:nsv('s-full-high')}},specials,driveRate:nsv('s-drive'),laborRate:nsv('s-labor'),defaultMarkup:parseInt(document.getElementById('sMarkup').value),truck:{length:parseFloat(document.getElementById('s-truck-l')?.value)||0,width:parseFloat(document.getElementById('s-truck-w')?.value)||0,height:parseFloat(document.getElementById('s-truck-h')?.value)||0}};
   if(session.token){try{const res=await api({action:'updatePricing',token:session.token,...newPricing});if(!res.success)showToast('Could not save to server',true);}catch(e){showToast('Could not reach server',true);}}
   applyPricing(newPricing);localStorage.setItem('ww_pricing',JSON.stringify(newPricing));
