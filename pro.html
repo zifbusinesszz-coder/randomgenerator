@@ -3117,7 +3117,12 @@ function planMyDay(){
     .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime));
 
   if(!todayJobs.length){
-    showToast('No jobs with addresses today', true);
+    showToast("No jobs with addresses scheduled today", true);
+    return;
+  }
+
+  if(todayJobs.length === 1){
+    window.open('https://maps.google.com/?q=' + encodeURIComponent(todayJobs[0].crm.address), '_blank');
     return;
   }
 
