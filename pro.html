@@ -2465,6 +2465,29 @@ function saveActual(){
     api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
   }
 }
+function sendReceipt(){
+  const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
+  const name=job.crm?.name||'Customer';
+  const phone=job.crm?.phone||'';
+  const address=job.crm?.address||'';
+  const charged=job.actual?.charged?'$'+job.actual.charged:'';
+  const lines=[
+    session.businessName+' — Job Receipt',
+    '',
+    'Customer: '+name,
+    address?'Address: '+address:'',
+    job.ts?'Date: '+job.ts:'',
+    job.loadSummary?'Work done: '+job.loadSummary:'',
+    job.specials?.length?'Special items: '+job.specials.join(', '):'',
+    charged?'Amount charged: '+charged:'',
+    '',
+    'Thank you for choosing '+session.businessName+'!',
+  ].filter(Boolean).join('\n');
+  if(phone){
+    window.open('sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(lines));
+  }
+  showToast('✓ Receipt opened — tap send');
+}
 
 /* ── INSIGHTS ── */
 function openInsights(){
