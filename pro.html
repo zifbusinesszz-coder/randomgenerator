@@ -1825,7 +1825,7 @@ let insightCharts={};
         localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
         checkTrialStatus(res);
         try{
-          const jobsRes=await api({action:'getJobs',token:res.token});
+          const jobsRes=await api({action:'getJobs',token:session.token});
           if(jobsRes.success&&jobsRes.jobs.length){
             localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
           }
