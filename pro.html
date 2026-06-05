@@ -2725,15 +2725,15 @@ function initPaywallStripe() {
   }catch(e){console.warn('Paywall Stripe:',e.message);}
 }
 
-async function submitPaywallPayment() {
+async function submitPaywallPayment(preAuthorizedPMId=null) {
   const btn = document.getElementById('paywallPayBtn');
   btn.disabled = true;
   btn.textContent = 'Processing...';
   hideBanner('paywallErr');
 
-  let pmId = null;
+  let pmId = preAuthorizedPMId || null;
 
-  if (usingNewCard) {
+  if (!preAuthorizedPMId && usingNewCard) {
     if (!paywallCardComplete) {
       showBanner('paywallErr', 'Please complete your card details.');
       btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
