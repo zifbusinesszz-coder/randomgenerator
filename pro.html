@@ -3028,10 +3028,10 @@ function renderUpcoming(){
   const planBtn = document.getElementById('planMyDayBtn');
   if(planBtn) planBtn.style.display = todayWithAddress.length > 1 ? 'block' : 'none';
 
-  const scheduled = getScheduledJobs()
+const scheduled = getScheduledJobs()
     .filter(j => new Date(j.crm.dateTime) >= now)
     .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime))
-    .slice(0,10);
+    .slice(0,20);
 
   const list = document.getElementById('upcomingList');
   if(!scheduled.length){list.innerHTML='<div class="upcoming-empty">No upcoming scheduled jobs.<br>Add a customer and set status to Scheduled.</div>';return;}
