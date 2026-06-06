@@ -2175,7 +2175,9 @@ function applyPricing(p){if(!p)return;userPricing={homeAddress:p.homeAddress||''
 
 function openCalc(){closeModal();openCalcDirect();}
 function openCalcDirect(){
-  document.getElementById('marketingPage').style.display='none';document.getElementById('calcPage').style.display='block';document.body.style.overflow='';initCalc();
+  document.getElementById('marketingPage').style.display='none';document.getElementById('calcPage').style.display='block';document.body.style.overflow='';
+  startLocationWatch();
+  initCalc();
 }
 function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
