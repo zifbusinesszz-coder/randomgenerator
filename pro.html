@@ -1875,6 +1875,7 @@ function getRawPhone(){const d=document.getElementById('m-phone').value.replace(
 
 let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
+let userLocation = null;
 let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter'};
 let specialItemStates={},selectedLoad=null,loadQtys={minimum:0,quarter:0,half:0,full:0},selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
 let verificationToken=null,resetToken=null,resendTimer=null,savedPassword=null;
