@@ -3129,21 +3129,26 @@ function planMyDay(){
 
   if(!todayJobs.length){ showToast("No jobs with addresses scheduled today", true); return; }
 
-const tab = window.open('', '_blank');
-  const homeAddress=userPricing.homeAddress||'';
-  const addresses=todayJobs.map(j=>encodeURIComponent(j.crm.address));
-  const buildUrl=(origin)=>{
-    if(todayJobs.length===1) return 'https://www.google.com/maps/dir/'+origin+'/'+encodeURIComponent(todayJobs[0].crm.address)+'/'+(homeAddress?encodeURIComponent(homeAddress):'');
-    return 'https://www.google.com/maps/dir/'+origin+'/'+addresses.join('/')+'/'+(homeAddress?encodeURIComponent(homeAddress):'');
+  const tab = window.open('', '_blank');
+  const homeAddress = userPricing.homeAddress || '';
+  const jobAddresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
+  const destination = homeAddress ? encodeURIComponent(homeAddress) : jobAddresses[jobAddresses.length - 1];
+
+  const buildUrl = (origin) => {
+    const stops = jobAddresses.join('/');
+    return 'https://www.google.com/maps/dir/' + origin + '/' + stops + '/' + destination;
   };
-  if(homeAddress){
-    tab.location.href=buildUrl(encodeURIComponent(homeAddress));
-  } else if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      const origin=pos.coords.latitude+','+pos.coords.longitude;
-      tab.location.href=buildUrl(origin);
-    },()=>{ tab.location.href=buildUrl(''); });
-  } else { tab.location.href=buildUrl(''); }
+
+if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos => {
+      const origin = pos.coords.latitude + ',' + pos.coords.longitude;
+      tab.location.href = buildUrl(origin);
+    }, () => {
+      tab.location.href = buildUrl(homeAddress ? encodeURIComponent(homeAddress) : '');
+    });
+  } else {
+    tab.location.href = buildUrl(homeAddress ? encodeURIComponent(homeAddress) : '');
+  }
 }
 document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
 document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
