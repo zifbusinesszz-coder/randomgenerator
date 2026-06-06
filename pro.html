@@ -2226,11 +2226,10 @@ function openCalcDirect(){
 function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
   document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
-  document.getElementById('aiNavBtn').style.display='inline-flex';
   const dashBtn=document.querySelector('.calc-icon-btn[onclick="openDashboard()"]');
   if(dashBtn)dashBtn.style.display=isPro()?'inline-flex':'none';
-  if(!isPro()){document.getElementById('aiNavBtn').style.display='none';}
-  document.getElementById('mobAiBtn').style.display='flex';
+  document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
+  document.getElementById('mobAiBtn').style.display=isPro()?'flex':'none';
 const upgradeBtn=document.getElementById('desktopUpgradeBtn');
   if(upgradeBtn)upgradeBtn.style.display=isPro()?'none':'inline-flex';
   const mobUpgradeBtn=document.getElementById('mobUpgradeBtn');
