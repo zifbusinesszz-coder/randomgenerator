@@ -1793,21 +1793,21 @@ canvas.insights-chart{width:100%!important;display:block;}
   <!-- UPGRADE MODAL -->
 <div id="upgradeModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;border-radius:20px;width:100%;max-width:400px;overflow:hidden;box-shadow:var(--sh-modal);animation:modalIn .22s ease both;">
-    <div style="background:#0a0a0a;padding:22px 22px 18px;">
+<div style="background:white;padding:22px 22px 18px;border-bottom:1px solid var(--border);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <img src="logo.PNG" alt="Wood's Waste" style="height:22px;width:auto;">
-          <div style="width:1px;height:14px;background:rgba(255,255,255,.2);"></div>
-          <span style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);">Pro</span>
+          <div style="width:1px;height:14px;background:var(--border-strong);"></div>
+          <span style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:13px;font-weight:600;color:var(--black);">Pro</span>
         </div>
-        <button onclick="closeUpgradeModal()" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        <button onclick="closeUpgradeModal()" style="background:var(--off);border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
       </div>
-      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(26,158,114,.15);border:1px solid rgba(26,158,114,.3);border-radius:6px;padding:3px 9px;margin-bottom:10px;">
-        <i class="ph ph-arrow-circle-up" style="font-size:11px;color:#5DCAA5;"></i>
-        <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5DCAA5;">Upgrade to Pro</span>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:var(--green-l);border:1px solid rgba(26,158,114,.3);border-radius:6px;padding:3px 9px;margin-bottom:10px;">
+        <i class="ph ph-arrow-circle-up" style="font-size:11px;color:var(--green);"></i>
+        <span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);">Upgrade to Pro</span>
       </div>
-      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;margin-bottom:5px;">Unlock everything.</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6;">AI photo quoting, full CRM with scheduling, dashboard & insights — all for $59/mo. Your card on file will be charged today.</div>
+      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:5px;">Unlock everything.</div>
+      <div style="font-size:12px;color:var(--gray);line-height:1.6;">Full CRM with scheduling, dashboard & insights, quoted vs. actual tracking — all for $59/mo.</div>
     </div>
     <div style="padding:18px 22px;">
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
