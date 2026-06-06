@@ -3266,7 +3266,7 @@ document.addEventListener('touchend', function(e) {
   if (now - (document._lastTouch || 0) < 300) e.preventDefault();
   document._lastTouch = now;
 }, { passive: false });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal(); closeDumpPopup();}});
 </script>
 </body>
 </html>
