@@ -3159,23 +3159,14 @@ function planMyDay(){
       parts.map(p => encodeURIComponent(p)).join('/');
   };
 
-if(navigator.geolocation){
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      tab.location.href = buildUrl(pos.coords.latitude + ',' + pos.coords.longitude);
-    },
-    () => {
-      // GPS denied or failed — fall back to home address or just waypoints
-      tab.location.href = homeAddress
-        ? buildUrl(homeAddress)
-        : 'https://www.google.com/maps/dir/' + waypoints.map(p => encodeURIComponent(p)).join('/');
-    },
-    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-  );
+// Use watchPosition coords if available (already running in background)
+if(userLocation){
+  tab.location.href = buildUrl(userLocation.lat + ',' + userLocation.lng);
+} else if(homeAddress){
+  tab.location.href = buildUrl(homeAddress);
 } else {
-  tab.location.href = homeAddress
-    ? buildUrl(homeAddress)
-    : 'https://www.google.com/maps/dir/' + waypoints.map(p => encodeURIComponent(p)).join('/');
+  tab.location.href = 'https://www.google.com/maps/dir/' + 
+    waypoints.map(p => encodeURIComponent(p)).join('/');
 }
 }
 document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
