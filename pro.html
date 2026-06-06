@@ -3123,31 +3123,38 @@ function planMyDay(){
   const todayJobs = getScheduledJobs()
     .filter(j => {
       const d = new Date(j.crm.dateTime);
-      return d.toDateString() === now.toDateString() && j.crm.address;
+      return d >= now && j.crm?.address?.trim();
     })
     .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime));
 
-  if(!todayJobs.length){ showToast("No jobs with addresses scheduled today", true); return; }
+  if(!todayJobs.length){
+    showToast("No upcoming jobs with addresses", true);
+    return;
+  }
 
   const tab = window.open('', '_blank');
-  const homeAddress = userPricing.homeAddress || '';
-  const jobAddresses = todayJobs.map(j => encodeURIComponent(j.crm.address));
-  const destination = homeAddress ? encodeURIComponent(homeAddress) : jobAddresses[jobAddresses.length - 1];
+  const homeAddress = (userPricing.homeAddress || '').trim();
+  const waypoints = todayJobs.map(j => j.crm.address.trim());
+  const destination = homeAddress || waypoints[waypoints.length - 1];
 
-  const buildUrl = (origin) => {
-    const stops = jobAddresses.join('/');
-    return 'https://www.google.com/maps/dir/' + origin + '/' + stops + '/' + destination;
+  const buildUrl = (originStr) => {
+    const parts = [originStr, ...waypoints, destination];
+    return 'https://www.google.com/maps/dir/' + 
+      parts.map(p => encodeURIComponent(p)).join('/');
   };
 
-if(navigator.geolocation){
+  if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos => {
-      const origin = pos.coords.latitude + ',' + pos.coords.longitude;
-      tab.location.href = buildUrl(origin);
+      tab.location.href = buildUrl(pos.coords.latitude + ',' + pos.coords.longitude);
     }, () => {
-      tab.location.href = buildUrl(homeAddress ? encodeURIComponent(homeAddress) : '');
+      tab.location.href = homeAddress
+        ? buildUrl(homeAddress)
+        : 'https://www.google.com/maps/dir/' + waypoints.map(p => encodeURIComponent(p)).join('/');
     });
   } else {
-    tab.location.href = buildUrl(homeAddress ? encodeURIComponent(homeAddress) : '');
+    tab.location.href = homeAddress
+      ? buildUrl(homeAddress)
+      : 'https://www.google.com/maps/dir/' + waypoints.map(p => encodeURIComponent(p)).join('/');
   }
 }
 document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
