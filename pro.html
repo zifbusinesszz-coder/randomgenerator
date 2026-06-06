@@ -1821,6 +1821,31 @@ canvas.insights-chart{width:100%!important;display:block;}
   </div>
 </div>
 
+    <!-- DUMP RUN POPUP -->
+<div id="dumpPopup" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--d-surface);border:1px solid var(--d-border);border-radius:var(--r-xl);width:100%;max-width:360px;overflow:hidden;animation:modalIn .22s ease both;">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--d-border);">
+      <div style="font-family:var(--font-display);font-size:17px;font-weight:900;color:white;margin-bottom:3px;">Dump run today?</div>
+      <div style="font-size:12px;color:var(--d-muted);">We'll add it to your route at the right stop.</div>
+    </div>
+    <div style="padding:18px 20px;">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--d-faint);display:block;margin-bottom:7px;">Dump location</label>
+        <input type="text" id="dumpAddress" placeholder="123 Landfill Rd, Farmington MN" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:8px 11px;font-size:13px;color:white;font-family:var(--font-sans);outline:none;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(255,255,255,.28)'" onblur="this.style.borderColor='var(--d-border)'"/>
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--d-faint);display:block;margin-bottom:7px;">After which job?</label>
+        <select id="dumpAfterJob" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:8px 11px;font-size:13px;color:white;font-family:var(--font-sans);outline:none;cursor:pointer;">
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+        <button onclick="closeDumpPopup()" style="padding:11px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.55);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Skip dump</button>
+        <button onclick="confirmDumpAndRoute()" style="padding:11px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Add to route →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
