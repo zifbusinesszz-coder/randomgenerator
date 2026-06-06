@@ -3027,12 +3027,12 @@ function renderUpcoming(){
     return;
   }
 
-  const todayWithAddress = getScheduledJobs().filter(j => {
-    const d = new Date(j.crm.dateTime);
-    return d.toDateString() === now.toDateString() && j.crm.address;
-  });
-  const planBtn = document.getElementById('planMyDayBtn');
-  if(planBtn) planBtn.style.display = todayWithAddress.length > 1 ? 'block' : 'none';
+const upcomingWithAddress = getScheduledJobs().filter(j => {
+  const d = new Date(j.crm.dateTime);
+  return d >= now && j.crm?.address?.trim();
+});
+const planBtn = document.getElementById('planMyDayBtn');
+if(planBtn) planBtn.style.display = upcomingWithAddress.length >= 1 ? 'block' : 'none';
 
 const scheduled = getScheduledJobs()
     .filter(j => new Date(j.crm.dateTime) >= now)
