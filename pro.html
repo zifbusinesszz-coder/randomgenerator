@@ -3126,13 +3126,13 @@ function startLocationWatch(){
   );
 }
 function getSingleDirections(encodedAddress){
-  const tab=window.open('', '_blank');
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      const origin=pos.coords.latitude+','+pos.coords.longitude;
-      tab.location.href='https://maps.google.com/?saddr='+origin+'&daddr='+encodedAddress;
-    },()=>{ tab.location.href='https://maps.google.com/?q='+encodedAddress; });
-  } else { tab.location.href='https://maps.google.com/?q='+encodedAddress; }
+  const tab = window.open('', '_blank');
+  if(userLocation){
+    tab.location.href = 'https://maps.google.com/?saddr=' +
+      userLocation.lat + ',' + userLocation.lng + '&daddr=' + encodedAddress;
+  } else {
+    tab.location.href = 'https://maps.google.com/?q=' + encodedAddress;
+  }
 }
 function planMyDay(){
   const now = new Date();
