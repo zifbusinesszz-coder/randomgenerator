@@ -3188,26 +3188,71 @@ function planMyDay(){
     return;
   }
 
-  const tab = window.open('', '_blank');
+  // Store jobs for use after popup
+  window._planMyDayJobs = todayJobs;
+
+  // Populate the dump after which job dropdown
+  const select = document.getElementById('dumpAfterJob');
+  select.innerHTML = todayJobs.map((j,i) => {
+    const d = new Date(j.crm.dateTime);
+    const time = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    const name = j.crm.name || 'Customer ' + (i+1);
+    return `<option value="${i}">${time} — ${name}</option>`;
+  }).join('');
+
+  // Add "at the end" option
+  select.innerHTML += `<option value="${todayJobs.length}">After last job</option>`;
+  select.value = todayJobs.length; // default to end
+
+  // Pre-fill dump address from settings
+  const dumpInput = document.getElementById('dumpAddress');
+  dumpInput.value = userPricing.dumpAddress || '';
+
+  // Show popup
+  const popup = document.getElementById('dumpPopup');
+  popup.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDumpPopup(){
+  document.getElementById('dumpPopup').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function confirmDumpAndRoute(){
+  const todayJobs = window._planMyDayJobs || [];
+  const dumpAddress = document.getElementById('dumpAddress').value.trim();
+  const afterIndex = parseInt(document.getElementById('dumpAfterJob').value);
+  closeDumpPopup();
+  launchRoute(todayJobs, dumpAddress, afterIndex);
+}
+
+function launchRoute(todayJobs, dumpAddress, dumpAfterIndex){
   const homeAddress = (userPricing.homeAddress || '').trim();
   const waypoints = todayJobs.map(j => j.crm.address.trim());
+
+  // Insert dump address at the right position
+  if(dumpAddress){
+    waypoints.splice(dumpAfterIndex, 0, dumpAddress);
+  }
+
   const destination = homeAddress || waypoints[waypoints.length - 1];
 
   const buildUrl = (originStr) => {
     const parts = [originStr, ...waypoints, destination];
-    return 'https://www.google.com/maps/dir/' + 
+    return 'https://www.google.com/maps/dir/' +
       parts.map(p => encodeURIComponent(p)).join('/');
   };
 
-// Use watchPosition coords if available (already running in background)
-if(userLocation){
-  tab.location.href = buildUrl(userLocation.lat + ',' + userLocation.lng);
-} else if(homeAddress){
-  tab.location.href = buildUrl(homeAddress);
-} else {
-  tab.location.href = 'https://www.google.com/maps/dir/' + 
-    waypoints.map(p => encodeURIComponent(p)).join('/');
-}
+  const tab = window.open('', '_blank');
+  if(userLocation){
+    tab.location.href = buildUrl(userLocation.lat + ',' + userLocation.lng);
+  } else if(homeAddress){
+    tab.location.href = buildUrl(homeAddress);
+  } else {
+    tab.location.href = 'https://www.google.com/maps/dir/' +
+      waypoints.map(p => encodeURIComponent(p)).join('/');
+  }
 }
 document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
 document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
