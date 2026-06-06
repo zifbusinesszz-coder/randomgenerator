@@ -3146,6 +3146,14 @@ const tab = window.open('', '_blank');
     },()=>{ tab.location.href=buildUrl(''); });
   } else { tab.location.href=buildUrl(''); }
 }
+<script>
+document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+document.addEventListener('gestureend', function(e) { e.preventDefault(); });
+document.addEventListener('touchmove', function(e) {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+</script>
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal();}});
 </script>
 </body>
