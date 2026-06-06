@@ -3110,6 +3110,19 @@ function renderDashAnalytics(){
     if(ctx4&&mbKeys.length){dashCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(232,160,32,0.55)',borderColor:'rgba(232,160,32,1)',borderWidth:1,borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
   });
 }
+function startLocationWatch(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.watchPosition(
+    pos => {
+      userLocation = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      };
+    },
+    err => { userLocation = null; },
+    { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 }
+  );
+}
 function getSingleDirections(encodedAddress){
   const tab=window.open('', '_blank');
   if(navigator.geolocation){
