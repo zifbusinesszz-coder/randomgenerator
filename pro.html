@@ -3152,6 +3152,12 @@ document.addEventListener('gestureend', function(e) { e.preventDefault(); });
 document.addEventListener('touchmove', function(e) {
   if (e.touches.length > 1) e.preventDefault();
 }, { passive: false });
+document.addEventListener('dblclick', function(e) { e.preventDefault(); }, { passive: false });
+document.addEventListener('touchend', function(e) {
+  const now = Date.now();
+  if (now - (document._lastTouch || 0) < 300) e.preventDefault();
+  document._lastTouch = now;
+}, { passive: false });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal();}});
 </script>
 </body>
