@@ -2840,11 +2840,10 @@ function goPaywallPayment() {
   document.getElementById('paywallPaymentStep').style.display = 'block';
   document.getElementById('paywallPaymentPlanLabel').textContent =
     paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : 'Starter — $29/mo';
-  // Show card on file (last4 if backend sends it, otherwise generic)
-  document.getElementById('paywallCardLast4').textContent =
-    session.cardLast4 ? '•••• •••• •••• ' + session.cardLast4 : 'Card on file';
-  usingNewCard = false;
-  document.getElementById('paywallNewCardWrap').style.display = 'none';
+  usingNewCard = true;
+  document.getElementById('paywallNewCardWrap').style.display = 'block';
+  document.getElementById('paywallCardOnFile').style.display = 'none';
+  document.getElementById('useNewCardToggle').style.display = 'none';
   initPaywallStripe();
 }
 
