@@ -1648,32 +1648,45 @@ canvas.insights-chart{width:100%!important;display:block;}
     <div class="modal-body">
       <div class="err-banner" id="paywallErr"></div>
 
-      <!-- Plan picker -->
+     <!-- Plan picker -->
       <div id="paywallPlanStep">
+        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+          <span id="pwBillingMonthly" style="font-size:12.5px;font-weight:600;color:var(--black);">Monthly</span>
+          <div onclick="togglePaywallBilling()" id="pwBillingToggle" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+            <div id="pwBillingThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .2s;"></div>
+          </div>
+          <span id="pwBillingYearly" style="font-size:12.5px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;margin-left:3px;">Save 2 months</span></span>
+        </div>
         <div class="pricing-cards" style="margin-bottom:16px;">
-          <div class="pricing-card" id="pw-starter-card" onclick="selectPaywallPlan('starter')" style="cursor:pointer;border-color:var(--black);">
+          <div class="pricing-card" id="pw-starter-card" onclick="selectPaywallPlan('starter')" style="cursor:pointer;">
             <div class="pricing-plan">Starter</div>
-            <div class="pricing-price">$29<span>/mo</span></div>
+            <div class="pricing-price" id="pw-starter-price">$29<span>/mo</span></div>
+            <div class="pricing-desc" id="pw-starter-desc">Manual calculator with everything you need to price jobs confidently.</div>
             <ul class="pricing-features">
               <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
-              <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
+              <li class="pf"><span class="chk">✓</span> AI Photo Quoting</li>
               <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
-              <li class="pf"><span class="chk">✓</span> Markup slider (0–500%)</li>
-              <li class="pf"><span class="chk">✓</span> Trailer dimension calculator</li>
-              <li class="pf"><span class="chk">✓</span> Multi-load & multi-item quoting</li>
+              <li class="pf"><span class="chk">✓</span> Send receipts via text</li>
               <li class="pf"><span class="chk">✓</span> Job history & tracking</li>
+              <li class="pf"><span class="chk">✓</span> Basic CRM — name, phone & address per job</li>
+              <li class="pf"><span class="chk">✓</span> Trailer dimension calculator</li>
+              <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
             </ul>
           </div>
           <div class="pricing-card featured" id="pw-pro-card" onclick="selectPaywallPlan('pro')" style="cursor:pointer;">
             <div class="pricing-badge">Most Popular</div>
             <div class="pricing-plan">Pro</div>
-            <div class="pricing-price">$59<span>/mo</span></div>
+            <div class="pricing-price" id="pw-pro-price">$59<span>/mo</span></div>
+            <div class="pricing-desc" id="pw-pro-desc">Everything in Starter plus advanced CRM & Analytics.</div>
             <ul class="pricing-features">
               <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-              <li class="pf"><span class="chk chk-green">✓</span> AI photo quoting</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Per-photo breakdown + total</li>
               <li class="pf"><span class="chk chk-green">✓</span> AI uses your exact trailer dimensions</li>
-              <li class="pf"><span class="chk chk-green">✓</span> Insights dashboard & profit tracking</li>
-              <li class="pf"><span class="chk chk-green">✓</span> Priority support</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Advanced CRM — scheduling, job status & notes</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Dashboard with calendar, scheduling & upcoming jobs</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Plan My Day — optimized route with dump stop included</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual profit tracking</li>
+              <li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
             </ul>
           </div>
         </div>
