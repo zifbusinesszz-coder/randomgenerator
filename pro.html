@@ -2083,7 +2083,9 @@ async function doResetPassword(){
 
 async function goStep2(){
   clearFormErrors();
-  const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();savedPassword=pw;
+  const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();
+  if(pw) savedPassword=pw;
+  if(!savedPassword){showBanner('step1Err','Something went wrong — please re-enter your password.');return;}
   let valid=true;
   if(!first){setErr('f-first',true);valid=false;}
   if(!last){setErr('f-last',true);valid=false;}
