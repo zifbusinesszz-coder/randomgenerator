@@ -2797,7 +2797,7 @@ function openPaywall(reason) {
   showPaywallPlanStep();
   // Pre-select current plan
   selectPaywallPlan(session.plan === 'pro' ? 'pro' : 'starter');
-  overlay.style.display = 'flex';
+  overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
