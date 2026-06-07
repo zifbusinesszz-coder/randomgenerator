@@ -1633,12 +1633,13 @@ canvas.insights-chart{width:100%!important;display:block;}
 <div class="modal-overlay" id="paywallOverlay" style="align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;">
   <div class="modal" style="max-width:560px;">
 <div class="modal-header" style="background:white;">
-      <div class="modal-header-top" style="background:white;border-bottom:1px solid var(--border);">
+     <div class="modal-header-top" style="background:white;border-bottom:1px solid var(--border);">
         <div class="modal-header-brand">
           <img src="logo.PNG" alt="Wood's Waste">
           <div class="modal-header-brand-divider"></div>
           <div class="modal-header-brand-sub">Pro</div>
         </div>
+        <button id="paywallCloseBtn" onclick="closePaywall()" style="display:none;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;">✕</button>
       </div>
       <div class="modal-header-body" style="background:white;padding:18px 22px 16px;">
         <h3 id="paywallTitle" style="color:var(--black);">Your trial has ended</h3>
