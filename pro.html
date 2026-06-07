@@ -2844,6 +2844,9 @@ function openPaywall(reason) {
   } else if (reason === 'warning') {
     document.getElementById('paywallTitle').textContent = 'Activate your plan early';
     document.getElementById('paywallSubtitle').textContent = 'No disruption — lock in your plan before the trial ends.';
+} else if (reason === 'upgrade') {
+    document.getElementById('paywallTitle').textContent = 'Upgrade to Pro';
+    document.getElementById('paywallSubtitle').textContent = 'Unlock the full CRM, dashboard, insights, and more.';
   } else {
     document.getElementById('paywallTitle').textContent = 'Your trial has ended';
     document.getElementById('paywallSubtitle').textContent = 'Choose a plan to keep quoting jobs.';
