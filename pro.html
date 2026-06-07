@@ -2786,6 +2786,37 @@ let paywallSelectedPlan = 'starter';
 let paywallStripe, paywallCardElement, paywallCardComplete = false;
 let usingNewCard = false;
 
+  let paywallBillingYearly = false;
+function togglePaywallBilling() {
+  paywallBillingYearly = !paywallBillingYearly;
+  document.getElementById('pwBillingThumb').style.transform = paywallBillingYearly ? 'translateX(20px)' : 'translateX(0)';
+  document.getElementById('pwBillingMonthly').style.color = paywallBillingYearly ? 'var(--gray)' : 'var(--black)';
+  document.getElementById('pwBillingYearly').style.color = paywallBillingYearly ? 'var(--black)' : 'var(--gray)';
+  if (paywallBillingYearly) {
+    document.getElementById('pw-starter-price').innerHTML = '$290<span>/yr</span>';
+    document.getElementById('pw-starter-desc').textContent = 'Great value — 2 months free vs monthly. Everything to price jobs confidently.';
+    document.getElementById('pw-pro-price').innerHTML = '$590<span>/yr</span>';
+    document.getElementById('pw-pro-desc').textContent = 'Best value — 2 months free. Full CRM, dashboard & insights all year.';
+  } else {
+    document.getElementById('pw-starter-price').innerHTML = '$29<span>/mo</span>';
+    document.getElementById('pw-starter-desc').textContent = 'Manual calculator with everything you need to price jobs confidently.';
+    document.getElementById('pw-pro-price').innerHTML = '$59<span>/mo</span>';
+    document.getElementById('pw-pro-desc').textContent = 'Everything in Starter plus advanced CRM & Analytics.';
+  }
+  // Update selected plan label and price ID if one is already selected
+  if (paywallSelectedPlan) {
+    const isYearly = paywallBillingYearly;
+    const planKey = paywallSelectedPlan === 'pro'
+      ? (isYearly ? 'pro-yearly' : 'pro')
+      : (isYearly ? 'starter-yearly' : 'starter');
+    const label = paywallSelectedPlan === 'pro'
+      ? (isYearly ? 'Pro ($590/yr)' : 'Pro ($59/mo)')
+      : (isYearly ? 'Starter ($290/yr)' : 'Starter ($29/mo)');
+    document.getElementById('paywallSelectedPlanLabel').textContent = label;
+    paywallSelectedPlan = planKey;
+  }
+}
+
 function checkTrialStatus(res) {
   if (!res.trialEnd && !res.trialStatus) return;
   const status = res.trialStatus; // 'active' | 'expiring_soon' | 'expired' | 'payment_failed'
