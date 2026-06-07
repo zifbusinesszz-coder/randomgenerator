@@ -2836,10 +2836,6 @@ function goPaywallPayment() {
   document.getElementById('paywallPaymentPlanLabel').textContent =
     paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : 'Starter — $29/mo';
   usingNewCard = true;
-  document.getElementById('paywallNewCardWrap').style.display = 'block';
-  document.getElementById('paywallCardOnFile').style.display = 'none';
-  document.getElementById('useNewCardToggle').style.display = 'none';
-  document.getElementById('paywallCardOnFileSection').style.display = 'none';
   initPaywallStripe();
 }
 
