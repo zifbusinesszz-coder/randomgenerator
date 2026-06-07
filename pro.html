@@ -2007,7 +2007,6 @@ function pickPlan(plan){
   document.getElementById('stepPick').style.display='none';
   document.getElementById('step1').style.display='block';
   updateStepDots(1);
-  setTimeout(initStripe,50);
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
