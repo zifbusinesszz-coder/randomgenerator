@@ -1174,18 +1174,8 @@ canvas.insights-chart{width:100%!important;display:block;}
           <div class="field" id="f-email"><label>Email — we'll send a verification code</label><input type="email" id="m-email" placeholder="you@yourbusiness.com"/><span class="error-hint">Valid email required</span></div>
           <div class="field" id="f-phone"><label>Phone number</label><input type="tel" id="m-phone" placeholder="(507) 555-0100" oninput="onPhoneInput(this)" maxlength="14"/><span class="error-hint" id="phone-err">Enter a valid US/CA phone number</span></div>
           <div class="field" id="f-pw"><label>Password</label><input type="password" id="m-pw" placeholder="Min 8 characters"/><span class="error-hint">Min 8 characters</span></div>
-          <div id="prButtonWrap" style="display:none;margin-bottom:10px;">
-            <div id="prButtonElement"></div>
-            <div style="display:flex;align-items:center;gap:8px;margin:10px 0;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:#bbb;white-space:nowrap;">or pay by card</span><div style="flex:1;height:1px;background:var(--border);"></div></div>
-          </div>
-    <div>
-    <div class="stripe-lock-note" style="margin-bottom:7px;"><i class="ph ph-lock" style="font-size:11px;"></i> Card info never touches our server — encrypted by Stripe</div>
-    <label style="font-size:11.5px;font-weight:600;color:var(--black);display:block;margin-bottom:4px;">Card</label>
-    <div class="stripe-card-wrap" id="stripeCardWrap"><div id="cardElement"></div></div>
-    <div class="stripe-card-error" id="cardErrors"></div>
-    </div>
           <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — verify your email →</button>
-          <p class="fine-print">By continuing you agree to our terms. After 14 days your plan activates. Cancel anytime before day 15.</p>
+          <p class="fine-print">By continuing you agree to our terms. No card required to start.</p>
         </div>
       </div>
 
