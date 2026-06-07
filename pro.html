@@ -2087,15 +2087,10 @@ async function goStep2(){
   if(!email||!email.includes('@')){setErr('f-email',true);valid=false;}
   if(!phone){setErr('f-phone',true);document.getElementById('phone-err').textContent='Enter a valid 10-digit US/CA phone number';valid=false;}
   if(!pw||pw.length<8){setErr('f-pw',true);valid=false;}
-  if(!cardComplete){document.getElementById('cardErrors').textContent='Please complete your card information.';document.getElementById('stripeCardWrap').classList.add('error');valid=false;}
   if(!valid){showBanner('step1Err','Please fill in all required fields above.');return;}
   hideBanner('step1Err');
-  const btn=document.getElementById('step1Btn');btn.disabled=true;btn.textContent='Tokenizing card...';
+  const btn=document.getElementById('step1Btn');btn.disabled=true;btn.textContent='Sending verification code...';
   let pmId=null;
-  if(stripe&&cardElement){
-    try{const{paymentMethod,error}=await stripe.createPaymentMethod({type:'card',card:cardElement,billing_details:{name:first+' '+last,email,phone}});if(error){document.getElementById('cardErrors').textContent=error.message;document.getElementById('stripeCardWrap').classList.add('error');btn.disabled=false;btn.textContent='Continue — verify your email →';return;}pmId=paymentMethod.id;}catch(e){console.warn('Stripe skip:',e.message);}
-  }
-  btn.textContent='Sending verification code...';
   try{
     const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
     if(!res.success){showBanner('step1Err',res.error||'Could not send verification email.');btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
