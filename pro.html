@@ -2838,21 +2838,25 @@ function checkTrialStatus(res) {
 function openPaywall(reason) {
   const overlay = document.getElementById('paywallOverlay');
   if (!overlay) return;
+  const closeBtn = document.getElementById('paywallCloseBtn');
   if (reason === 'payment_failed') {
     document.getElementById('paywallTitle').textContent = 'Payment failed';
     document.getElementById('paywallSubtitle').textContent = 'Your card was declined. Update your card to keep access.';
+    if (closeBtn) closeBtn.style.display = 'none';
   } else if (reason === 'warning') {
     document.getElementById('paywallTitle').textContent = 'Activate your plan early';
     document.getElementById('paywallSubtitle').textContent = 'No disruption — lock in your plan before the trial ends.';
-} else if (reason === 'upgrade') {
+    if (closeBtn) closeBtn.style.display = 'none';
+  } else if (reason === 'upgrade') {
     document.getElementById('paywallTitle').textContent = 'Upgrade to Pro';
     document.getElementById('paywallSubtitle').textContent = 'Unlock the full CRM, dashboard, insights, and more.';
+    if (closeBtn) closeBtn.style.display = 'flex';
   } else {
     document.getElementById('paywallTitle').textContent = 'Your trial has ended';
     document.getElementById('paywallSubtitle').textContent = 'Choose a plan to keep quoting jobs.';
+    if (closeBtn) closeBtn.style.display = 'none';
   }
   showPaywallPlanStep();
-  // Pre-select current plan
   selectPaywallPlan(session.plan === 'pro' ? 'pro' : 'starter');
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
