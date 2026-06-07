@@ -2726,11 +2726,8 @@ function clearFormErrors(){['f-first','f-last','f-biz','f-email','f-phone','f-pw
 function showBanner(id,msg){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),8000);}
 function hideBanner(id){const el=document.getElementById(id);if(el)el.classList.remove('show');}
 function showUpgradePrompt() {
-  const modal = document.getElementById('upgradeModal');
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  openPaywall('upgrade');
 }
-
 function closeUpgradeModal() {
   document.getElementById('upgradeModal').style.display = 'none';
   document.body.style.overflow = '';
