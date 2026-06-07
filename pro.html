@@ -2190,7 +2190,9 @@ async function doLogin(){
         localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
       }
     }catch(e){}
-    closeModal();openCalcDirect();
+    closeModal();
+try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
+openCalcDirect();
   }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
 
