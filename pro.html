@@ -2846,7 +2846,7 @@ function toggleNewCard() {
 }
 
 function initPaywallStripe() {
-  if(paywallStripe)return;
+  if(paywallStripe&&paywallCardElement)return;
   try{
     paywallStripe=Stripe(STRIPE_PK);
     const elements=paywallStripe.elements();
