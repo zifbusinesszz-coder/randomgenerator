@@ -2240,6 +2240,7 @@ const upgradeBtn=document.getElementById('desktopUpgradeBtn');
   const isNew=localStorage.getItem('ww_new_user');
   const banner=document.getElementById('welcomeBanner');
   if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
+checkTrialStatus({trialStatus:'expired', trialDaysLeft:0});
 }
 function dismissWelcome(){const banner=document.getElementById('welcomeBanner');if(banner)banner.classList.remove('show');}
 
