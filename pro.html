@@ -2807,7 +2807,8 @@ function openPaywall(reason) {
 }
 
 function closePaywall() {
-  document.getElementById('paywallOverlay').style.display = 'none';
+  const overlay = document.getElementById('paywallOverlay');
+  overlay.classList.remove('open');
   document.body.style.overflow = '';
 }
 
