@@ -2865,10 +2865,18 @@ function closePaywall() {
 }
 
 function selectPaywallPlan(plan) {
-  paywallSelectedPlan = plan;
+  // Normalize to base plan for card highlighting
+  const basePlan = plan.replace('-yearly', '');
+  const isYearly = paywallBillingYearly;
+  paywallSelectedPlan = basePlan === 'pro'
+    ? (isYearly ? 'pro-yearly' : 'pro')
+    : (isYearly ? 'starter-yearly' : 'starter');
   document.querySelectorAll('#paywallOverlay .pricing-card').forEach(c => c.classList.remove('pw-selected'));
-  document.getElementById('pw-' + plan + '-card').classList.add('pw-selected');
-  document.getElementById('paywallSelectedPlanLabel').textContent = plan === 'pro' ? 'Pro ($59/mo)' : 'Starter ($29/mo)';
+  document.getElementById('pw-' + basePlan + '-card').classList.add('pw-selected');
+  const label = basePlan === 'pro'
+    ? (isYearly ? 'Pro ($590/yr)' : 'Pro ($59/mo)')
+    : (isYearly ? 'Starter ($290/yr)' : 'Starter ($29/mo)');
+  document.getElementById('paywallSelectedPlanLabel').textContent = label;
   document.getElementById('paywallContinueBtn').style.display = 'block';
 }
 function showPaywallPlanStep() {
