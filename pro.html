@@ -2209,9 +2209,16 @@ function applyPricing(p){if(!p)return;userPricing={homeAddress:p.homeAddress||''
 
 function openCalc(){closeModal();openCalcDirect();}
 function openCalcDirect(){
-  document.getElementById('marketingPage').style.display='none';document.getElementById('calcPage').style.display='block';document.body.style.overflow='';
+  document.getElementById('marketingPage').style.display='none';
+  document.getElementById('calcPage').style.display='block';
+  document.body.style.overflow='';
   startLocationWatch();
   initCalc();
+  if(session.token){
+    api({action:'getUser',token:session.token}).then(res=>{
+      if(res.success) checkTrialStatus(res);
+    }).catch(()=>{});
+  }
 }
 function initCalc(){
   document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
