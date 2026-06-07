@@ -2819,11 +2819,13 @@ function selectPaywallPlan(plan) {
   document.getElementById('paywallSelectedPlanLabel').textContent = plan === 'pro' ? 'Pro ($59/mo)' : 'Starter ($29/mo)';
   document.getElementById('paywallContinueBtn').style.display = 'block';
 }
-
 function showPaywallPlanStep() {
   document.getElementById('paywallPlanStep').style.display = 'block';
   document.getElementById('paywallPaymentStep').style.display = 'none';
   document.getElementById('paywallSuccessStep').style.display = 'none';
+  paywallStripe = null;
+  paywallCardElement = null;
+  paywallCardComplete = false;
 }
 
 function goPaywallPayment() {
