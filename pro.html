@@ -3333,6 +3333,7 @@ document.addEventListener('touchend', function(e) {
   document._lastTouch = now;
 }, { passive: false });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm(); closeUpgradeModal(); closeDumpPopup();}});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
 </script>
 </body>
 </html>
