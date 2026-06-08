@@ -1,7 +1,7 @@
 {
   "name": "Wood's Waste",
   "short_name": "Wood's Waste",
-  "start_url": "/",
+  "start_url": "/pro",
   "display": "standalone",
   "background_color": "#0b0b0b",
   "theme_color": "#1a9e72",
