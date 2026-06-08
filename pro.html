@@ -938,6 +938,37 @@ canvas.insights-chart{width:100%!important;display:block;}
   </div>
 </section>
 
+      <div id="iosInstallBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:white;border-top:1px solid #e4e4e2;padding:18px 20px 28px;box-shadow:0 -8px 30px rgba(0,0,0,0.12);">
+  <button onclick="document.getElementById('iosInstallBanner').style.display='none'" style="position:absolute;top:12px;right:14px;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;">✕</button>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+    <img src="icon.png" style="width:48px;height:48px;border-radius:10px;">
+    <div>
+      <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:700;color:#0d0d0d;">Wood's Waste Pro</div>
+      <div style="font-family:-apple-system,sans-serif;font-size:12px;color:#6b6b6b;">Add to your home screen</div>
+    </div>
+  </div>
+  <div style="font-family:-apple-system,sans-serif;font-size:13px;color:#444;line-height:1.7;margin-bottom:14px;">
+    1. Tap the <strong>Share button</strong> <span style="font-size:16px;">⬆️</span> at the bottom of your screen<br>
+    2. Scroll down and tap <strong>"Add to Home Screen"</strong><br>
+    3. Tap <strong>Add</strong> — done!
+  </div>
+  <div style="background:#f5f5f3;border-radius:8px;padding:10px 13px;font-family:-apple-system,sans-serif;font-size:11.5px;color:#6b6b6b;">
+    Works like a real app — no App Store needed.
+  </div>
+</div>
+<script>
+  const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+  const dismissed = localStorage.getItem('installBannerDismissed');
+  if(isIos && !isInStandaloneMode && !dismissed){
+    document.getElementById('iosInstallBanner').style.display='block';
+    document.getElementById('iosInstallBanner').querySelector('button').onclick = function(){
+      document.getElementById('iosInstallBanner').style.display='none';
+      localStorage.setItem('installBannerDismissed','1');
+    };
+  }
+</script>
+
 <div class="promo-banner">
   <div class="promo-content">
     <div class="promo-left">
