@@ -2324,17 +2324,18 @@ function recalc(){
   const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
   let specialsCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])specialsCost+=Number(specialSrc[k].fee)*qty||0;});
   const driveCost=Math.round(miles*2*driveRate),laborCost=Math.round(hours*laborRate);
-  let loadBaseLow=0,loadBaseHigh=0,loadLabel='';
+ let loadBaseLow=0,loadBaseHigh=0,loadLabel='',totalDumpCost=0;
   const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
   const loadParts=[];
   ['minimum','quarter','half','full'].forEach(key=>{
     const qty=loadQtys[key]||0;if(!qty)return;
     const l=userPricing.loads[key];
     loadBaseLow+=l.low*qty;loadBaseHigh+=l.high*qty;
+    totalDumpCost+=(l.dump||0)*qty;
     loadParts.push(qty>1?qty+'× '+loadNames[key]:loadNames[key]);
   });
   loadLabel=loadParts.join(' + ');
-  const baseLow=loadBaseLow+specialsCost+driveCost+laborCost,baseHigh=loadBaseHigh+specialsCost+driveCost+laborCost;
+  const baseLow=loadBaseLow+specialsCost+driveCost+laborCost+totalDumpCost,baseHigh=loadBaseHigh+specialsCost+driveCost+laborCost+totalDumpCost;
   const quoteLow=Math.round(baseLow*(1+markup)),quoteHigh=Math.round(baseHigh*(1+markup));
   const priceEl=document.getElementById('calcFinalPrice');
   if(quoteLow===quoteHigh){priceEl.textContent='$'+quoteLow.toLocaleString();priceEl.className='calc-result-price';}
