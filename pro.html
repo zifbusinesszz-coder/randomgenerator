@@ -3383,29 +3383,21 @@ launchRoute(todayJobs, dumpAddress, afterIndex);
 function launchRoute(todayJobs, dumpAddress, dumpAfterIndex){
 const homeAddress = (userPricing.homeAddress || '').trim();
 const waypoints = todayJobs.map(j => j.crm.address.trim());
-
-// Insert dump address at the right position
-if(dumpAddress){
-waypoints.splice(dumpAfterIndex, 0, dumpAddress);
-}
-
+if(dumpAddress) waypoints.splice(dumpAfterIndex, 0, dumpAddress);
 const destination = homeAddress || waypoints[waypoints.length - 1];
-
 const buildUrl = (originStr) => {
 const parts = [originStr, ...waypoints, destination];
-return 'https://www.google.com/maps/dir/' +
-parts.map(p => encodeURIComponent(p)).join('/');
+return 'https://www.google.com/maps/dir/' + parts.map(p => encodeURIComponent(p)).join('/');
 };
-
-const tab = window.open('', '_blank');
+let url;
 if(userLocation){
-tab.location.href = buildUrl(userLocation.lat + ',' + userLocation.lng);
+url = buildUrl(userLocation.lat + ',' + userLocation.lng);
 } else if(homeAddress){
-tab.location.href = buildUrl(homeAddress);
+url = buildUrl(homeAddress);
 } else {
-tab.location.href = 'https://www.google.com/maps/dir/' +
-waypoints.map(p => encodeURIComponent(p)).join('/');
+url = 'https://www.google.com/maps/dir/' + waypoints.map(p => encodeURIComponent(p)).join('/');
 }
+window.location.href = url;
 }
 document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
 document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
