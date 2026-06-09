@@ -3319,10 +3319,12 @@ err => { userLocation = null; },
 }
 function getSingleDirections(address){
 const tab = window.open('', '_blank');
+if(!tab){showToast('Allow popups to open directions',true);return;}
+const dest = encodeURIComponent(address);
 if(userLocation){
-tab.location.href = 'https://maps.google.com/?saddr=' + userLocation.lat + ',' + userLocation.lng + '&daddr=' + encodeURIComponent(address);
+tab.location.href = 'https://maps.google.com/?saddr=' + userLocation.lat + ',' + userLocation.lng + '&daddr=' + dest;
 } else {
-tab.location.href = 'https://maps.google.com/?q=' + encodeURIComponent(address);
+tab.location.href = 'https://maps.google.com/?q=' + dest;
 }
 }
 function planMyDay(){
