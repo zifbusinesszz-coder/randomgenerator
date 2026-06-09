@@ -2267,6 +2267,10 @@ function saveSession(token,companyId,businessName,plan){
 }
 function clearSession(){session.token=session.companyId=null;['ww_token','ww_cid','ww_biz','ww_plan'].forEach(k=>localStorage.removeItem(k));}
 async function doLogout(){
+  if(document.getElementById('paywallOverlay').classList.contains('open')){
+    if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
+    clearSession();document.getElementById('calcPage').style.display='none';document.getElementById('dashboardPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();closePaywall();return;
+  }
   if(!confirm('Log out of your quote tool?'))return;
   if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
   clearSession();document.getElementById('calcPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();
