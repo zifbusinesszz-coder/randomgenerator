@@ -2891,9 +2891,10 @@ function togglePaywallBilling() {
     paywallSelectedPlan = planKey;
   }
 }
-
 function checkTrialStatus(res) {
   if (!res.trialEnd && !res.trialStatus) return;
+  const isNewUser = localStorage.getItem('ww_new_user');
+  if (isNewUser) return;
   const status = res.trialStatus; // 'active' | 'expiring_soon' | 'expired' | 'payment_failed'
   const daysLeft = res.trialDaysLeft ?? null;
 
