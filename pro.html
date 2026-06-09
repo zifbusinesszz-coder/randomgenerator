@@ -2095,6 +2095,7 @@ function goStep(n){
   if(n===1)document.getElementById('step1').style.display='block';
   if(n===2)document.getElementById('step2').style.display='block';
   if(n===3)document.getElementById('step3').style.display='block';
+  document.getElementById('modalTabs').style.display=n===1?'flex':'none';
   updateStepDots(n);
   const titles=['Start your free trial','Verify your email','Set your costs & markup'];
   const subs=['14 days free. Card required — charged only after trial ends.','','Takes 2 minutes. Change any of this anytime.'];
