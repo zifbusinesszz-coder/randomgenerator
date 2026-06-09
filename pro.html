@@ -2042,7 +2042,12 @@ function openModal(planOrMode){
     document.body.style.overflow='hidden';
     return;
   }
-if(planOrMode==='login'){switchTab('login');}
+if(planOrMode==='login'){
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  switchTab('login');
+  return;
+}
   else{
     currentPlan=planOrMode;
     document.getElementById('modalPlanBadge').textContent=
