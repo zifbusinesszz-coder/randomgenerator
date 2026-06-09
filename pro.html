@@ -2492,6 +2492,10 @@ function toggleSSpecial(key){sSpecialStates[key].enabled=!sSpecialStates[key].en
 function openSettings(){
   const l=userPricing.loads;
   ['s-min-low','s-min-high','s-qtr-low','s-qtr-high','s-half-low','s-half-high','s-full-low','s-full-high'].forEach((id,i)=>{const keys=[['minimum','low'],['minimum','high'],['quarter','low'],['quarter','high'],['half','low'],['half','high'],['full','low'],['full','high']];document.getElementById(id).value=l[keys[i][0]][keys[i][1]];});
+document.getElementById('s-dump-min').value=l.minimum?.dump||0;
+document.getElementById('s-dump-qtr').value=l.quarter?.dump||0;
+document.getElementById('s-dump-half').value=l.half?.dump||0;
+document.getElementById('s-dump-full').value=l.full?.dump||0;
  document.getElementById('s-home-address').value=userPricing.homeAddress||'';
   const addrLock=document.getElementById('settingsAddressLock');if(addrLock)addrLock.style.display=isPro()?'none':'flex';
 document.getElementById('s-dump-address').value=userPricing.dumpAddress||'';
