@@ -3261,6 +3261,8 @@ const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
 const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
 const totalRevenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
 const avgRevenue=Math.round(totalRevenue/logged.length);
+const totalDumpFees=logged.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=userPricing.loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
+const totalProfit=Math.round(totalRevenue-totalDumpFees);
 const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
 const loadStats={};
 ['minimum','quarter','half','full'].forEach(k=>{
