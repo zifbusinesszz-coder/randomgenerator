@@ -2088,8 +2088,8 @@ function switchTab(tab){
   document.getElementById('tabSignup').classList.toggle('active',isSig);
   document.getElementById('tabLogin').classList.toggle('active',!isSig);
   ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
-  if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);}
-  else document.getElementById('loginForm').style.display='block';
+ if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);document.getElementById('modalHeader').style.background='#0a0a0a';document.getElementById('modalHeader').querySelector('.modal-header-body').style.background='#0a0a0a';}
+  else{document.getElementById('loginForm').style.display='block';document.getElementById('modalHeader').style.background='white';document.getElementById('modalHeader').querySelector('.modal-header-body').style.background='white';}
   document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
   document.getElementById('modalPlanBadge').style.display=isSig?'inline-block':'none';
   document.getElementById('modalTitle').textContent=isSig?'Start your free trial':'Welcome back';
