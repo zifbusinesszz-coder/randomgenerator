@@ -2379,6 +2379,8 @@ document.getElementById('calcBreakdown').style.display='flex';
 document.getElementById('bd-load').textContent=loadLabel+' — $'+loadBaseLow+(loadBaseLow!==loadBaseHigh?'–$'+loadBaseHigh:'');
 document.getElementById('bd-specials-row').style.display=specialsCost>0?'flex':'none';
 document.getElementById('bd-specials').textContent='+$'+specialsCost;
+document.getElementById('bd-dump-row').style.display=totalDumpCost>0?'flex':'none';
+document.getElementById('bd-dump').textContent='+$'+totalDumpCost;
 document.getElementById('bd-drive-row').style.display=driveCost>0?'flex':'none';
 document.getElementById('bd-drive').textContent='+$'+driveCost+' ('+miles+' mi × 2 × $'+driveRate+')';
 document.getElementById('bd-labor-row').style.display=laborCost>0?'flex':'none';
