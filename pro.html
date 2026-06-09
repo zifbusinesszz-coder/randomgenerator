@@ -3241,7 +3241,7 @@ return `<div class="upcoming-item">
      <div class="upcoming-name">${j.crm.name||'Customer'}</div>
      <div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
      <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
-     ${j.crm.address?`<button onclick="getSingleDirections('${j.crm.address.replace(/'/g,"\\'")}')" style="margin-top:7px;width:100%;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Get directions</button>`:''}
+     ${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${j.crm.address.replace(/"/g,'&quot;')}" style="margin-top:7px;width:100%;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Get directions</button>`:''}
    </div>`;
 }).join('');
 }
