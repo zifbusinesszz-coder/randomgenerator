@@ -3317,13 +3317,12 @@ err => { userLocation = null; },
 { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 }
 );
 }
-function getSingleDirections(encodedAddress){
+function getSingleDirections(address){
 const tab = window.open('', '_blank');
 if(userLocation){
-tab.location.href = 'https://maps.google.com/?saddr=' +
-userLocation.lat + ',' + userLocation.lng + '&daddr=' + encodedAddress;
+tab.location.href = 'https://maps.google.com/?saddr=' + userLocation.lat + ',' + userLocation.lng + '&daddr=' + encodeURIComponent(address);
 } else {
-tab.location.href = 'https://maps.google.com/?q=' + encodedAddress;
+tab.location.href = 'https://maps.google.com/?q=' + encodeURIComponent(address);
 }
 }
 function planMyDay(){
