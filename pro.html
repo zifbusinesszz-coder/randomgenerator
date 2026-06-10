@@ -2387,7 +2387,7 @@ function dismissWelcome(){const banner=document.getElementById('welcomeBanner');
 
 function buildCalcSpecialsGrid(){
 const grid=document.getElementById('calcSpecialsGrid');grid.innerHTML='';selectedSpecials={};
-const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'package'})):SPECIAL_ITEMS_CONFIG;
+const items=Object.keys(userPricing.specials).length>0?Object.entries(userPricing.specials).map(([k,vv])=>({key:k,...vv,icon:vv.icon||SPECIAL_ITEMS_CONFIG.find(x=>x.key===k)?.icon||'package'})):SPECIAL_ITEMS_CONFIG;
 items.forEach(item=>{
 selectedSpecials[item.key]=0;
 const tag=document.createElement('div');tag.className='calc-special-tag';tag.id='cs-'+item.key;tag.onclick=()=>toggleCalcSpecial(item.key);
