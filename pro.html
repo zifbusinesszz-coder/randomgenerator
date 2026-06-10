@@ -1140,11 +1140,12 @@ localStorage.setItem('installBannerDismissed','1');
 </section>
 
 <section class="light" style="padding:88px 40px;">
-<div class="testimonial-inner">
+<div class="testimonial-inner" itemscope itemtype="https://schema.org/Review">
 <p class="section-eyebrow" style="text-align:center;">From the field</p>
-<div class="stars">★★★★★</div>
-<div class="testimonial-quote">"I used to throw out a number and hope. Now I actually know what I'm making on every job before I say a word to the customer."</div>
-<div class="testimonial-author"><strong>Griffin W.</strong> · Wood's Waste, Farmington MN · built it for himself first</div>
+<div class="stars" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+<meta itemprop="ratingValue" content="5"><meta itemprop="bestRating" content="5">★★★★★</div>
+<div class="testimonial-quote" itemprop="reviewBody">"I used to throw out a number and hope. Now I actually know what I'm making on every job before I say a word to the customer."</div>
+<div class="testimonial-author" itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Griffin W.</strong> · Wood's Waste, Farmington MN · built it for himself first</div>
 </div>
 </section>
 
