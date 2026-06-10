@@ -1566,7 +1566,12 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="settings-load-row" style="grid-template-columns:112px 1fr 1fr 72px;"><div class="settings-load-label"><i class="ph ph-couch" style="font-size:12px;"></i> Quarter</div><div class="s-input-wrap"><input type="number" id="s-qtr-low" value="160" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-qtr-high" value="200" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-dump-qtr" value="0" min="0"/></div></div>
 <div class="settings-load-row" style="grid-template-columns:112px 1fr 1fr 72px;"><div class="settings-load-label"><i class="ph ph-house" style="font-size:12px;"></i> Half</div><div class="s-input-wrap"><input type="number" id="s-half-low" value="230" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-half-high" value="280" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-dump-half" value="0" min="0"/></div></div>
 <div class="settings-load-row" style="grid-template-columns:112px 1fr 1fr 72px;"><div class="settings-load-label"><i class="ph ph-truck" style="font-size:12px;"></i> Full</div><div class="s-input-wrap"><input type="number" id="s-full-low" value="350" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-full-high" value="420" min="0"/></div><div class="s-input-wrap"><input type="number" id="s-dump-full" value="0" min="0"/></div></div>
-<div style="margin-bottom:18px;"><div class="settings-section-title"><i class="ph ph-package" style="font-size:12px;"></i> Special item fees</div><div class="s-specials-grid" id="sSpecialsGrid"></div></div>
+<div style="margin-bottom:18px;">
+<div class="settings-section-title"><i class="ph ph-package" style="font-size:12px;"></i> Special item fees</div>
+<div class="s-specials-grid" id="sSpecialsGrid"></div>
+<div id="sCustomItemsContainer" style="margin-top:5px;"></div>
+<button class="custom-item-add-btn" onclick="openIconPicker()"><i class="ph ph-plus-circle" style="font-size:14px;"></i> Add custom item</button>
+</div>
 <div style="margin-top:11px;border-top:1px solid var(--d-border);padding-top:11px;margin-bottom:13px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--d-faint);margin-bottom:7px;">Truck size (optional)</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;align-items:end;">
