@@ -2010,7 +2010,7 @@ paint:'PAINT CANS — cylindrical metal cans with a wire bail handle on top, 1-5
 demo:'DEMOLITION DEBRIS — broken drywall sheets (white/gray flat panels, often in large pieces or crumbles), concrete chunks or rubble, ceramic tile pieces, lumber with nails, plywood scraps, insulation batts (pink/yellow fluffy material). Usually a messy mixed pile of construction materials.',
 hazmat:'HAZARDOUS MATERIALS — look for: chemical drums or jugs with warning labels, fluorescent tube lights (long thin glass tubes), car or truck batteries (black rectangular boxes with terminals), bags of asbestos tile or wrapped insulation, paint thinner/solvent cans, propane tanks. ANY item with a hazard label counts.'
 };
-return cues[key]||'look carefully for this item in the photo — charge the fee if there is any reasonable chance it is present';
+return cues[key]||`look carefully for any "${v.label}" in the photo — if you can see one or reasonably suspect one is present based on the context, include it. Err on the side of flagging it.`;
 }
 
 function isPro(){return session.plan==='pro'||session.plan==='pro-yearly';}
