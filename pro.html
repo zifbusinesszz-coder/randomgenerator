@@ -1086,6 +1086,12 @@ localStorage.setItem('installBannerDismissed','1');
 <p>So we built a calculator we could pull up on our phones in real time. Then we added AI — point your phone at the pile, and it estimates load size, spots the mattress and the fridge, and quotes using your own rates.</p>
 <p>Other operators started asking about it. So now we're making it available.</p>
 </div>
+<style>
+.stat-dark { transition: transform .2s, box-shadow .2s; cursor: default; }
+.stat-dark:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,.45); }
+.stat-dark:hover .stat-dark-bar { width: 100%; }
+.stat-dark-bar { height: 2px; background: linear-gradient(90deg, var(--green), transparent); position: absolute; top: 0; left: 0; width: 40%; transition: width .4s ease; }
+</style>
 <div class="origin-stat-stack">
 
 <div class="stat-dark" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
