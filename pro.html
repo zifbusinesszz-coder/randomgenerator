@@ -2613,6 +2613,102 @@ initCalc();btn.disabled=false;btn.textContent='Save pricing changes';closeSettin
 
 /* ── HISTORY ── */
 function refreshInsightsBtn(){}
+
+const CUSTOM_ICON_OPTIONS = [
+{icon:'barbell',         label:'Weights'},
+{icon:'bicycle',         label:'Bicycle'},
+{icon:'car',             label:'Vehicle'},
+{icon:'couch',           label:'Sofa'},
+{icon:'desk',            label:'Desk'},
+{icon:'door',            label:'Door'},
+{icon:'fan',             label:'Fan'},
+{icon:'file-cabinet',    label:'Cabinet'},
+{icon:'flower',          label:'Plant'},
+{icon:'fork-knife',      label:'Appliance'},
+{icon:'garage',          label:'Garage'},
+{icon:'lamp',            label:'Lamp'},
+{icon:'monitor',         label:'Monitor'},
+{icon:'package',         label:'Boxes'},
+{icon:'printer',         label:'Printer'},
+{icon:'rug',             label:'Rug'},
+{icon:'shower',          label:'Fixture'},
+{icon:'sofa',            label:'Chair'},
+{icon:'steps',           label:'Stairs'},
+{icon:'table',           label:'Table'},
+{icon:'toilet',          label:'Toilet'},
+{icon:'toolbox',         label:'Tools'},
+{icon:'trash',           label:'Debris'},
+{icon:'tree',            label:'Yard'},
+{icon:'truck',           label:'Large'},
+];
+
+let iconPickerSelected = 'package';
+
+function openIconPicker() {
+iconPickerSelected = 'package';
+document.getElementById('customItemName').value = '';
+document.getElementById('customItemFee').value = '';
+buildIconPickerGrid();
+document.getElementById('iconPickerOverlay').classList.add('open');
+}
+
+function closeIconPicker() {
+document.getElementById('iconPickerOverlay').classList.remove('open');
+}
+
+function buildIconPickerGrid() {
+const grid = document.getElementById('iconPickerGrid');
+grid.innerHTML = CUSTOM_ICON_OPTIONS.map(opt => `
+<div class="icon-picker-item ${opt.icon === iconPickerSelected ? 'selected' : ''}" onclick="selectPickerIcon('${opt.icon}')">
+<div class="icon-picker-item-icon"><i class="ph ph-${opt.icon}" style="font-size:18px;"></i></div>
+<div class="icon-picker-item-label">${opt.label}</div>
+</div>
+`).join('');
+}
+
+function selectPickerIcon(icon) {
+iconPickerSelected = icon;
+buildIconPickerGrid();
+}
+
+function saveCustomItem() {
+const name = document.getElementById('customItemName').value.trim();
+const fee = parseFloat(document.getElementById('customItemFee').value) || 0;
+if (!name) { document.getElementById('customItemName').focus(); return; }
+if (!fee) { document.getElementById('customItemFee').focus(); return; }
+const key = 'custom_' + Date.now();
+sSpecialStates[key] = { enabled: true, fee, label: name, icon: iconPickerSelected, custom: true };
+userPricing.specials[key] = { fee, label: name, icon: iconPickerSelected, custom: true };
+closeIconPicker();
+rebuildSettingsCustomItems();
+showToast('✓ ' + name + ' added');
+}
+
+function deleteCustomItem(key) {
+delete sSpecialStates[key];
+delete userPricing.specials[key];
+rebuildSettingsCustomItems();
+}
+
+function rebuildSettingsCustomItems() {
+const container = document.getElementById('sCustomItemsContainer');
+if (!container) return;
+container.innerHTML = '';
+Object.entries(sSpecialStates).forEach(([key, item]) => {
+if (!item.custom) return;
+const row = document.createElement('div');
+row.className = 'custom-item-row active';
+row.innerHTML = `
+<div class="s-sitem-left" style="font-size:10.5px;color:rgba(255,255,255,.6);font-weight:500;display:flex;align-items:center;gap:5px;">
+<i class="ph ph-${item.icon}" style="font-size:13px;color:rgba(255,255,255,.42);"></i>${item.label}
+</div>
+<div style="display:flex;align-items:center;gap:7px;">
+<div class="s-input-wrap"><input type="number" value="${item.fee}" min="0" style="width:58px;font-size:10.5px;padding:4px 4px 4px 15px;" oninput="sSpecialStates['${key}'].fee=Number(this.value)||0"/></div>
+<button onclick="deleteCustomItem('${key}')" style="background:none;border:none;color:rgba(255,80,80,.45);font-size:13px;cursor:pointer;padding:2px 4px;line-height:1;" title="Remove">✕</button>
+</div>`;
+container.appendChild(row);
+});
+}
 function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];}renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
 async function clearHistory(){
