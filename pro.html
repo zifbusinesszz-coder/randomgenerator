@@ -2602,6 +2602,7 @@ const row=document.getElementById('ss-'+item.key);if(row)row.classList.toggle('a
 const t=document.getElementById('sstoggle-'+item.key);if(t){t.classList.toggle('on',enabled);t.textContent=enabled?'✓':'+';}
 const fi=document.getElementById('ssfee-'+item.key);if(fi)fi.value=fee;
 });
+rebuildSettingsCustomItems();
 document.getElementById('settingsPanel').classList.add('open');
 }
 function closeSettings(){document.getElementById('settingsPanel').classList.remove('open');}
