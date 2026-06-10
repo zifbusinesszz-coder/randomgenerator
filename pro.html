@@ -1944,10 +1944,21 @@ const SPECIAL_ITEMS_CONFIG = [
 ];
 
 function getVisualCue(key){
-const cues={mattress:'flat rectangular padded surface, usually white/gray/striped, often leaning or lying flat',boxspring:'flat rectangular grid frame, looks like a mattress but with visible coil/grid structure underneath',fridge:'large white or stainless steel box with one or two doors, taller than wide',washer:'white or gray cylindrical or boxy appliance, front-load has round door, top-load has flat lid',tv:'flat black screen, thin profile, may have stand or be face-down',tire:'black rubber ring, may be on a rim or bare, often stacked',piano:'large wooden keyboard instrument, upright has vertical strings, grand is horizontal with lid',hottub:'large molded plastic or acrylic tub, usually square or oval, 5-8 feet across',ac:'metal/plastic box unit, window units are rectangular with vents, central units are outdoor metal boxes',paint:'cylindrical metal cans, often stacked or grouped, may show paint drips on exterior',
-demo:'broken drywall, concrete chunks, lumber scraps, tile debris, or construction waste piles',
-hazmat:'chemicals, oil drums, asbestos tiles, fluorescent tubes, batteries, or biohazard bags'};
-return cues[key]||'look carefully for this item';
+const cues={
+mattress:'MATTRESS — thick padded rectangular slab, 6-14 inches deep, usually white/gray/striped/floral fabric, often rolled, bagged in plastic, leaning against a wall, or lying flat. Twin/full/queen/king all count. Look for the quilted or tufted surface texture. A bagged mattress in plastic is still a mattress.',
+boxspring:'BOX SPRING — flat rectangular frame, same footprint as a mattress but only 6-9 inches thick, fabric-covered bottom with visible wooden or metal grid structure if turned over. Often paired with a mattress. Thinner and flatter than a mattress.',
+fridge:'REFRIGERATOR — large boxy appliance, taller than wide, white/black/stainless steel, one or two doors on the front, usually 5-6 feet tall. May be laying on its side during removal. Mini-fridges are smaller but still count. Look for the door handle and hinge lines.',
+washer:'WASHER OR DRYER — white or gray boxy appliance roughly cube-shaped, 3-4 feet tall. Front-load washer has a round porthole door. Top-load washer has a flat lid on top. Dryers look nearly identical to washers. Charge per unit — a washer AND dryer is two fees.',
+tv:'TELEVISION — flat panel screen, black, very thin profile (2-4 inches deep), may be face-down or face-up. Old CRT TVs are large, boxy, and deep (12+ inches). Flat screens range from small (24 inch) to very large (75+ inch). Look for the black screen face and thin bezel.',
+tire:'TIRE — black rubber ring, round, 2-3 feet diameter for car tires, larger for truck/tractor. May be mounted on a metal rim/wheel or bare rubber only. Often stacked. Even a single tire buried in a pile counts.',
+piano:'PIANO — large wooden keyboard instrument. Upright piano: rectangular box 4-5 feet tall with keyboard on front and vertical wooden cabinet. Grand piano: horizontal wing-shaped body on three legs with a lid that opens. Both are extremely heavy. Even a small upright counts for the full fee.',
+hottub:'HOT TUB OR SPA — large molded plastic or acrylic basin, usually square or octagonal, 5-8 feet across and 2-3 feet deep, often with jets visible on the interior walls. May have a wooden or synthetic cabinet surround. Often found on decks or patios.',
+ac:'AIR CONDITIONER — window AC: rectangular white/beige box with vents on the front and back, 18-24 inches wide. Central/outdoor AC unit: large metal box on a concrete pad, usually 2-3 feet square with a fan grill on top. Portable AC: upright cylinder on wheels. All types count.',
+paint:'PAINT CANS — cylindrical metal cans with a wire bail handle on top, 1-5 gallon sizes. Often grouped together, may show dried paint around the rim or drips on the side. Plastic buckets with paint labels also count. Count the cans — if there are 10+ that is a larger hazmat situation.',
+demo:'DEMOLITION DEBRIS — broken drywall sheets (white/gray flat panels, often in large pieces or crumbles), concrete chunks or rubble, ceramic tile pieces, lumber with nails, plywood scraps, insulation batts (pink/yellow fluffy material). Usually a messy mixed pile of construction materials.',
+hazmat:'HAZARDOUS MATERIALS — look for: chemical drums or jugs with warning labels, fluorescent tube lights (long thin glass tubes), car or truck batteries (black rectangular boxes with terminals), bags of asbestos tile or wrapped insulation, paint thinner/solvent cans, propane tanks. ANY item with a hazard label counts.'
+};
+return cues[key]||'look carefully for this item in the photo — charge the fee if there is any reasonable chance it is present';
 }
 
 function isPro(){return session.plan==='pro'||session.plan==='pro-yearly';}
