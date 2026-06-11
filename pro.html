@@ -2074,6 +2074,20 @@ localStorage.setItem('installBannerDismissed','1');
 
 <div class="toast" id="toast"></div>
 
+<div class="logout-overlay" id="logoutOverlay" onclick="closeLogoutModal(event)">
+  <div class="logout-modal">
+    <div class="logout-modal-body">
+      <div class="logout-icon"><i class="ph ph-sign-out"></i></div>
+      <div class="logout-title">Log out?</div>
+      <div class="logout-sub">You'll need to log back in to access your quote tool and job history.</div>
+      <div class="logout-btn-row">
+        <button class="logout-cancel" onclick="closeLogoutOverlay()">Stay in</button>
+        <button class="logout-confirm" onclick="confirmLogout()">Log out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ICON PICKER MODAL -->
 <div class="icon-picker-overlay" id="iconPickerOverlay">
 <div class="icon-picker-modal">
