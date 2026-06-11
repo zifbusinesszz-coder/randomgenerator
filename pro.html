@@ -2471,14 +2471,29 @@ session.token=token;session.companyId=companyId;session.businessName=businessNam
 localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);
 }
 function clearSession(){session.token=session.companyId=null;['ww_token','ww_cid','ww_biz','ww_plan'].forEach(k=>localStorage.removeItem(k));}
-async function doLogout(){
+function doLogout(){
 if(document.getElementById('paywallOverlay').classList.contains('open')){
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
 clearSession();document.getElementById('calcPage').style.display='none';document.getElementById('dashboardPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();closePaywall();return;
 }
-if(!confirm('Log out of your quote tool?'))return;
+closeMobSidebar();
+document.getElementById('logoutOverlay').classList.add('open');
+document.body.style.overflow='hidden';
+}
+function closeLogoutOverlay(){
+document.getElementById('logoutOverlay').classList.remove('open');
+document.body.style.overflow='';
+}
+function closeLogoutModal(e){if(e.target===document.getElementById('logoutOverlay'))closeLogoutOverlay();}
+async function confirmLogout(){
+closeLogoutOverlay();
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
-clearSession();document.getElementById('calcPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();
+clearSession();
+document.getElementById('calcPage').style.display='none';
+document.getElementById('dashboardPage').style.display='none';
+document.getElementById('marketingPage').style.display='block';
+document.body.style.overflow='';
+resetCalc();
 }
 function applyPricing(p){if(!p)return;userPricing={homeAddress:p.homeAddress||'',dumpAddress:p.dumpAddress||'',loads:p.loads||userPricing.loads,specials:p.specials||{},driveRate:Number(p.driveRate)||1.5,laborRate:Number(p.laborRate)||35,defaultMarkup:Number(p.defaultMarkup)||35,truck:p.truck||{length:0,width:0,height:0}};}
 
