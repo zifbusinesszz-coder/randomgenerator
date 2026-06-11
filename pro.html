@@ -2721,7 +2721,7 @@ const doneResults=aiResults.filter(r=>r&&r.status==='done');if(!doneResults.leng
 const totalLow=doneResults.reduce((s,r)=>s+r.quoteLow,0),totalHigh=doneResults.reduce((s,r)=>s+r.quoteHigh,0);
 const priceText='$'+totalLow+(totalLow!==totalHigh?'–$'+totalHigh:'');
 const entry={id:Date.now(),price:priceText,load:'ai-multi',specials:[...new Set(doneResults.flatMap(r=>r.specialsFound))],miles:0,hours:0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:true,photoCount:doneResults.length};
-jobHistory.unshift(entry);if(jobHistory.length>50)jobHistory=jobHistory.slice(0,50);
+jobHistory.unshift(entry);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
 persistHistory();renderHistory();showToast('✓ AI quote saved to history');closeAiPanel();
 }
 function readFileBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(e.target.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});}
