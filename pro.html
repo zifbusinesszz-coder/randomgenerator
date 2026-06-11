@@ -2903,7 +2903,19 @@ return `<div class="history-item">
    </div>`;
 }).join('');
 }
-function openHistory(){document.getElementById('historyPanel').classList.add('open');}
+async function openHistory(){
+document.getElementById('historyPanel').classList.add('open');
+if(session.token && jobHistory.length>=48){
+try{
+const res=await api({action:'getJobs',token:session.token});
+if(res.success&&res.jobs.length>jobHistory.length){
+jobHistory=res.jobs;
+persistHistory();
+renderHistory();
+}
+}catch(e){}
+}
+}
 function closeHistory(){document.getElementById('historyPanel').classList.remove('open');}
 function closeHistoryOutside(e){if(e.target===document.getElementById('historyPanel'))closeHistory();}
 
