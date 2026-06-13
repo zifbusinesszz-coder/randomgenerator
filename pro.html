@@ -3758,6 +3758,10 @@ if(!job)return;
 const charged=parseFloat(document.getElementById('after-charged-'+jobId)?.value)||null;
 const notes=document.getElementById('after-notes-'+jobId)?.value?.trim()||'';
 const hours=parseFloat((elapsed/3600).toFixed(2));
+const beforeSnap=(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl}));
+const afterSnap=(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl}));
+delete jobBeforePhotos[jobId];
+delete jobAfterPhotos[jobId];
 job.crm.status='completed';
 job.actual={
 charged,
@@ -3765,12 +3769,10 @@ hours,
 notes,
 durationSeconds:elapsed,
 durationFormatted:formatElapsed(elapsed),
-beforePhotos:(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl.length>150000?p.dataUrl.slice(0,150000)+'..truncated':p.dataUrl})),
-afterPhotos:(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl.length>150000?p.dataUrl.slice(0,150000)+'..truncated':p.dataUrl})),
+beforePhotos:beforeSnap,
+afterPhotos:afterSnap,
 loggedAt:new Date().toISOString()
 };
-delete jobBeforePhotos[jobId];
-delete jobAfterPhotos[jobId];
 persistHistory();
 const panel=document.getElementById('afterPhotoPanel');
 if(panel)panel.remove();
