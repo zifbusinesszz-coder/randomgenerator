@@ -3023,7 +3023,7 @@ const charged=parseFloat(document.getElementById('actualCharged').value)||null;
 const hours=parseFloat(document.getElementById('actualHours').value)||null;
 const notes=document.getElementById('actualNotes').value.trim();
 job.actual={charged,hours,notes,loggedAt:new Date().toISOString()};
-persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
+persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();if(wasDashOpen){renderCompletedJobs();renderDashAnalytics();}
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
 }
