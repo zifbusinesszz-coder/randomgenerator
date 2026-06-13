@@ -3831,6 +3831,7 @@ if(!container)return;
 const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted).slice(0,20);
 if(!completed.length){container.style.display='none';return;}
 container.style.display='block';
+if(window.AOS)setTimeout(()=>AOS.refresh(),50);
 const list=document.getElementById('completedJobsList');
 if(!list)return;
 list.innerHTML=completed.map(j=>`
