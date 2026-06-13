@@ -328,7 +328,7 @@ padding:2px 6px;border-radius:9px;margin-left:7px;vertical-align:middle;
 
 /* ─── PRICING ─── */
 .pricing-inner{max-width:700px;margin:0 auto;}
-.pricing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.pricing-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}.pricing-cards.two-col{grid-template-columns:1fr 1fr;}
 .pricing-card{
 background:white;border:1.5px solid var(--border);border-radius:var(--r-xl);
 padding:28px 24px;position:relative;transition:all .22s;box-shadow:var(--sh-card);
@@ -890,7 +890,7 @@ canvas.insights-chart{width:100%!important;display:block;}
 nav{padding:0 18px;}.nav-links{display:none;}
 .hero{grid-template-columns:1fr;padding:88px 20px 56px;gap:36px;}.hero-phone{display:none;}
 section{padding:56px 20px;}
-.origin-grid,.steps-grid,.features-grid,.pricing-cards{grid-template-columns:1fr;}
+.origin-grid,.steps-grid,.features-grid,.pricing-cards,.pricing-cards.two-col{grid-template-columns:1fr;}
 .strip{padding:16px 18px;gap:0;flex-direction:column;align-items:flex-start;}
 .strip-item{border-left:none!important;padding:7px 0;}
 .footer-inner{flex-direction:column;align-items:flex-start;}
@@ -973,6 +973,33 @@ section{padding:56px 20px;}
 .dash-stat{animation:dashIn .5s cubic-bezier(.2,.7,.3,1) both;}
 .dash-stat:nth-child(2){animation-delay:.05s}.dash-stat:nth-child(3){animation-delay:.1s}.dash-stat:nth-child(4){animation-delay:.15s}.dash-stat:nth-child(5){animation-delay:.2s}.dash-stat:nth-child(6){animation-delay:.25s}
 .upcoming-item{animation:dashIn .45s ease both;}
+/* ── Member disabled screen ── */
+#memberDisabledScreen{display:none;position:fixed;inset:0;z-index:800;background:rgba(10,10,10,.97);align-items:center;justify-content:center;padding:24px;}
+#memberDisabledScreen.open{display:flex;}
+.member-disabled-card{background:#1a1a1a;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:36px 28px;max-width:360px;text-align:center;}
+.member-disabled-icon{width:52px;height:52px;border-radius:50%;background:rgba(255,96,96,.15);border:1px solid rgba(255,96,96,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:22px;}
+.member-disabled-title{font-family:var(--font-display);font-size:20px;font-weight:900;color:white;margin-bottom:8px;}
+.member-disabled-sub{font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:24px;}
+/* ── Team tab panel ── */
+#teamPanel{display:none;position:fixed;inset:0;z-index:200;background:var(--d-bg);overflow-y:auto;}
+#teamPanel.open{display:block;}
+.team-panel-nav{height:56px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.04);border-bottom:1px solid var(--d-border);position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);}
+.team-panel-body{max-width:600px;margin:0 auto;padding:28px 18px 60px;}
+.team-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.32);margin-bottom:12px;}
+.team-member-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);border:1px solid var(--d-border);border-radius:var(--r-md);padding:12px 14px;margin-bottom:8px;}
+.team-member-avatar{width:34px;height:34px;border-radius:50%;background:rgba(26,158,114,.2);border:1px solid rgba(26,158,114,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#5DCAA5;flex-shrink:0;}
+.team-member-info{flex:1;min-width:0;}
+.team-member-name{font-size:13px;font-weight:600;color:white;}
+.team-member-email{font-size:11.5px;color:rgba(255,255,255,.38);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.team-member-pending{font-size:11px;color:var(--gold);font-weight:600;}
+.team-seat-empty{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.02);border:1px dashed rgba(255,255,255,.1);border-radius:var(--r-md);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.team-seat-empty:hover{border-color:rgba(26,158,114,.4);}
+.team-assign-row{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:7px;}
+.team-assign-label{flex:1;font-size:12px;color:rgba(255,255,255,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.team-assign-select{background:rgba(255,255,255,.06);border:1px solid var(--d-border);border-radius:6px;padding:4px 8px;font-size:11.5px;color:white;font-family:var(--font-sans);cursor:pointer;outline:none;}
+.team-assign-select option{background:#1a1a1a;color:white;}
+/* ── Paywall 3-up ── */
+#paywallPlanStep .pricing-cards{grid-template-columns:1fr;}
 </style>
 </head>
 <body>
@@ -1240,8 +1267,23 @@ localStorage.setItem('installBannerDismissed','1');
 </ul>
 <a href="#" class="btn-plan-green" id="proBtn" onclick="openModal('pro');return false;">Start free trial</a>
 </div>
+<div class="pricing-card" style="border-color:rgba(93,202,165,.3);">
+<div class="pricing-plan" style="color:#5DCAA5;">Team</div>
+<div class="pricing-price" id="teamPrice">$149<span>/mo</span></div>
+<div class="pricing-desc" id="teamDesc">Full Pro for your whole crew — 1 owner + 2 members, shared job history.</div>
+<ul class="pricing-features">
+<li class="pf"><span class="chk chk-green">✓</span> Everything in Pro</li>
+<li class="pf"><span class="chk chk-green">✓</span> 3 user seats (1 owner + 2 members)</li>
+<li class="pf"><span class="chk chk-green">✓</span> Shared job history across the team</li>
+<li class="pf"><span class="chk chk-green">✓</span> Owner assigns jobs to members</li>
+<li class="pf"><span class="chk chk-green">✓</span> Invite members by email from your dashboard</li>
+<li class="pf"><span class="chk chk-green">✓</span> Owner-only team management tab</li>
+<li class="pf"><span class="chk chk-green">✓</span> 14-day free trial</li>
+</ul>
+<a href="#" class="btn-plan-dark" id="teamBtn" onclick="openModal('team');return false;">Start free trial</a>
 </div>
-<p class="pricing-note" id="pricingNote">14-day free trial on both plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
+</div>
+<p class="pricing-note" id="pricingNote">14-day free trial on all plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
 </div>
 </section>
 
@@ -1290,6 +1332,7 @@ localStorage.setItem('installBannerDismissed','1');
 <h2>Stop guessing on price.</h2>
 <p>14-day free trial. No charge until it's working for you.</p>
 <a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free →</a>
+<p style="font-size:13px;color:rgba(255,255,255,.45);margin-top:14px;">Got an invite from a team owner? <a href="#" onclick="openModal('join-team');return false;" style="color:rgba(255,255,255,.7);font-weight:600;text-decoration:underline;">Join a team →</a></p>
 </div>
 </section>
 <footer>
@@ -1329,6 +1372,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="modal-tabs" id="modalTabs">
 <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Create account</button>
 <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log in</button>
+<button class="modal-tab" id="tabJoinTeam" onclick="switchTab('join-team')">Join team</button>
 </div>
 <div class="modal-steps" id="modalStepDots">
 <div class="modal-step-dot active" id="dot1"></div>
@@ -1540,6 +1584,30 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 </div>
 </div>
+</div>
+
+<!-- JOIN TEAM FORM (inside modal body) -->
+<div id="joinTeamForm" style="display:none;">
+<div class="err-banner" id="joinTeamErr"></div>
+<p style="font-size:12.5px;color:var(--gray);line-height:1.7;margin:0 0 16px;">Your team owner sent you an invite. Enter your invite token (from the email), choose a password, and you're in.</p>
+<div class="form-group">
+<label class="form-label">Invite token</label>
+<input class="form-input" type="text" id="jt-token" placeholder="Paste invite token from email" autocomplete="off"/>
+</div>
+<div class="form-group">
+<label class="form-label">Your name</label>
+<input class="form-input" type="text" id="jt-name" placeholder="First Last"/>
+</div>
+<div class="form-group">
+<label class="form-label">Your email (must match invite)</label>
+<input class="form-input" type="email" id="jt-email" placeholder="you@example.com" autocomplete="email"/>
+</div>
+<div class="form-group">
+<label class="form-label">Create a password</label>
+<input class="form-input" type="password" id="jt-pw" placeholder="8+ characters" autocomplete="new-password"/>
+</div>
+<button class="submit-btn green" id="joinTeamBtn" onclick="submitJoinTeam()">Join team →</button>
+<p class="fine-print" style="margin-top:10px;">Already have an account? <a href="#" onclick="switchTab('login');return false;" style="color:var(--black);font-weight:600;">Log in →</a></p>
 </div>
 
 <!-- ══ CALC PAGE ══ -->
@@ -1910,13 +1978,20 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-desc" id="pw-pro-desc">Everything in Starter plus advanced CRM & Analytics.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-<li class="pf"><span class="chk chk-green">✓</span> Per-photo breakdown + total</li>
-<li class="pf"><span class="chk chk-green">✓</span> AI uses your exact trailer dimensions</li>
-<li class="pf"><span class="chk chk-green">✓</span> Advanced CRM — scheduling, job status & notes</li>
-<li class="pf"><span class="chk chk-green">✓</span> Dashboard with calendar, scheduling & upcoming jobs</li>
-<li class="pf"><span class="chk chk-green">✓</span> Plan My Day — optimized route with dump stop included</li>
-<li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual profit tracking</li>
-<li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
+<li class="pf"><span class="chk chk-green">✓</span> Advanced CRM, dashboard & scheduling</li>
+<li class="pf"><span class="chk chk-green">✓</span> Plan My Day with dump stop</li>
+<li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual tracking</li>
+<li class="pf"><span class="chk chk-green">✓</span> Analytics & insights</li>
+</ul>
+</div>
+<div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan('team')" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
+<div class="pricing-plan" style="color:#5DCAA5;">Team</div>
+<div class="pricing-price" id="pw-team-price">$149<span>/mo</span></div>
+<div class="pricing-desc" id="pw-team-desc">Everything in Pro for up to 3 operators on one subscription.</div>
+<ul class="pricing-features">
+<li class="pf"><span class="chk chk-green">✓</span> Everything in Pro</li>
+<li class="pf"><span class="chk chk-green">✓</span> 3 seats — 1 owner + 2 members</li>
+<li class="pf"><span class="chk chk-green">✓</span> Shared job history & assignments</li>
 </ul>
 </div>
 </div>
@@ -1972,7 +2047,10 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="width:1px;height:20px;background:var(--border-strong);flex-shrink:0;"></div>
 <div style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;font-size:15px;font-weight:600;color:var(--black);letter-spacing:-0.2px;flex-shrink:0;">Pro</div>
 </a>
+<div style="display:flex;align-items:center;gap:8px;">
+<button id="teamNavBtn" onclick="openTeamPanel()" style="display:none;background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.28);color:#5DCAA5;border-radius:var(--r-sm);padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-users" style="font-size:12px;"></i> Team</button>
 <button class="calc-icon-btn logout" onclick="doLogout()"><i class="ph ph-sign-out" style="font-size:13px;"></i> Log out</button>
+</div>
 </nav>
 <div class="dash-body">
 <div class="dash-grid">
@@ -2027,6 +2105,36 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div style="font-size:11px;color:#bbb;margin-top:12px;">© 2026 Wood's Waste · Farmington, MN</div>
 </footer>
+
+<!-- MEMBER DISABLED SCREEN -->
+<div id="memberDisabledScreen">
+<div class="member-disabled-card">
+<div class="member-disabled-icon">🔒</div>
+<div class="member-disabled-title">Access Paused</div>
+<div class="member-disabled-sub">Your team subscription has ended. Contact your team owner to reactivate — your job history is safe and will be here when you're back.</div>
+<button onclick="doLogout()" style="width:100%;padding:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:rgba(255,255,255,.6);cursor:pointer;font-family:var(--font-sans);">Log out</button>
+</div>
+</div>
+
+<!-- TEAM PANEL -->
+<div id="teamPanel">
+<div class="team-panel-nav">
+<button onclick="closeTeamPanel()" style="background:none;border:1px solid var(--d-border);border-radius:var(--r-sm);padding:6px 14px;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.55);cursor:pointer;font-family:var(--font-sans);">← Dashboard</button>
+<div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:white;position:absolute;left:50%;transform:translateX(-50%);">Team</div>
+<div style="min-width:80px;"></div>
+</div>
+<div class="team-panel-body">
+<div style="margin-bottom:28px;">
+<div class="team-section-title">Team members</div>
+<div id="teamMembersList"></div>
+</div>
+<div id="teamAssignSection" style="display:none;">
+<div class="team-section-title" style="margin-bottom:10px;">Assign jobs</div>
+<div style="font-size:12px;color:rgba(255,255,255,.38);margin-bottom:12px;">Pick who sees each upcoming scheduled job.</div>
+<div id="teamAssignList"></div>
+</div>
+</div>
+</div>
 
 <!-- UPGRADE MODAL -->
 <div id="upgradeModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
@@ -2168,7 +2276,7 @@ hazmat:'HAZARDOUS MATERIALS — look for: chemical drums or jugs with warning la
 return cues[key]||`look carefully for any "${v.label}" in the photo — if you can see one or reasonably suspect one is present based on the context, include it. Err on the side of flagging it.`;
 }
 
-function isPro(){return session.plan==='pro'||session.plan==='pro-yearly';}
+function isTeamOwner(){return (session.plan==='team'||session.plan==='team-yearly')&&session.role==='owner';}
 function initStripe(){
 try{
 if(!stripe)stripe=Stripe(STRIPE_PK);
@@ -2198,7 +2306,7 @@ function getRawPhone(){const d=document.getElementById('m-phone').value.replace(
 let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
 let userLocation = null;
-let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter'};
+let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null};
 let specialItemStates={},selectedLoad=null,loadQtys={minimum:0,quarter:0,half:0,full:0},selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
 let verificationToken=null,resetToken=null,resendTimer=null,savedPassword=null;
 let userPricing={loads:{minimum:{low:100,high:130},quarter:{low:160,high:200},half:{low:230,high:280},full:{low:350,high:420}},specials:{},driveRate:1.5,laborRate:35,defaultMarkup:35,truck:{length:0,width:0,height:0}};
@@ -2241,7 +2349,11 @@ if(res.success){
 session.businessName=res.businessName;
 session.companyId=res.companyId;
 session.plan=res.plan||'starter';
+session.role=res.role||session.role||'owner';
+session.ownerId=res.ownerId||session.ownerId||null;
 session.cardLast4=res.cardLast4||null;
+localStorage.setItem('ww_role',session.role);
+if(session.ownerId)localStorage.setItem('ww_owner_id',session.ownerId);
 applyPricing(res.pricing);
 localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
 checkTrialStatus(res);
@@ -2282,12 +2394,19 @@ document.body.style.overflow='hidden';
 return;
 }
 if(planOrMode==='login'){switchTab('login');}
-else{
+else if(planOrMode==='join-team'||planOrMode==='join-team-invite'){
+document.getElementById('modalTabs').style.display='flex';
+document.getElementById('modalStepDots').style.display='none';
+document.getElementById('modalPlanBadge').style.display='none';
+switchTab('join-team');
+}else{
 currentPlan=planOrMode;
 document.getElementById('modalPlanBadge').textContent=
 planOrMode==='pro'?'Pro Plan — $59/mo':
 planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
 planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
+planOrMode==='team'?'Team Plan — $149/mo':
+planOrMode==='team-yearly'?'Team Plan — $1,490/yr':
 'Starter Plan — $29/mo';
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalStepDots').style.display='flex';
@@ -2318,16 +2437,18 @@ function closeModal(){document.getElementById('modalOverlay').classList.remove('
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
 function switchTab(tab){
-activeTab=tab;const isSig=tab==='signup';
+activeTab=tab;const isSig=tab==='signup';const isJoin=tab==='join-team';
 document.getElementById('tabSignup').classList.toggle('active',isSig);
-document.getElementById('tabLogin').classList.toggle('active',!isSig);
-['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+document.getElementById('tabLogin').classList.toggle('active',tab==='login');
+const jtTab=document.getElementById('tabJoinTeam');if(jtTab)jtTab.classList.toggle('active',isJoin);
+['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick','joinTeamForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);}
+else if(isJoin){document.getElementById('joinTeamForm').style.display='block';}
 else document.getElementById('loginForm').style.display='block';
 document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
 document.getElementById('modalPlanBadge').style.display=isSig?'inline-block':'none';
-document.getElementById('modalTitle').textContent=isSig?'Start your free trial':'Welcome back';
-document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':'Log in to your quote tool';
+document.getElementById('modalTitle').textContent=isSig?'Start your free trial':isJoin?'Join your team':'Welcome back';
+document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':isJoin?'Set a password and get access to your team\'s quote tool.':'Log in to your quote tool';
 }
 function goStep(n){
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
@@ -2382,7 +2503,7 @@ try{
 const res=await api({action:'resetPassword',resetToken,code,newPassword:newPw});
 btn.disabled=false;btn.textContent='Set new password →';
 if(!res.success){showBanner('resetErr',res.error||'Incorrect code or code expired.');return;}
-if(res.token){saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing||{}));closeModal();openCalcDirect();}
+if(res.token){saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing||{}));closeModal();openCalcDirect();}
 else{switchTab('login');document.getElementById('loginSuccess').textContent='Password reset! Log in with your new password.';document.getElementById('loginSuccess').classList.add('show');}
 }catch(e){btn.disabled=false;btn.textContent='Set new password →';showBanner('resetErr','Could not connect: '+e.message);}
 }
@@ -2467,7 +2588,7 @@ if(!payload.password||payload.password.length<8){showBanner('step2Err','Session 
 try{
 const res=await api(payload);btn.disabled=false;btn.textContent='Save & open my quote tool →';
 if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goStep(2);return;}
-saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan);
+saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan,res.role||'owner',res.ownerId||null);
 applyPricing(pricing);localStorage.setItem('ww_pricing',JSON.stringify(pricing));
 localStorage.setItem('ww_new_user','1');
 if(currentPlan==='pro')document.getElementById('aiSuccessItem').style.display='flex';
@@ -2489,7 +2610,7 @@ const btn=document.getElementById('loginBtn');btn.disabled=true;btn.textContent=
 try{
 const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.textContent='Log in to my quote tool →';
 if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
-saveSession(res.token,res.companyId,res.businessName,res.plan||'starter');
+saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
 applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
 // Load this user's job history from server
 localStorage.removeItem('ww_history');
@@ -2505,11 +2626,12 @@ openCalcDirect();
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
 
-function saveSession(token,companyId,businessName,plan){
-session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';
-localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);
+function saveSession(token,companyId,businessName,plan,role,ownerId){
+session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';session.role=role||'owner';session.ownerId=ownerId||null;
+localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);localStorage.setItem('ww_role',session.role);if(ownerId)localStorage.setItem('ww_owner_id',ownerId);else localStorage.removeItem('ww_owner_id');
 }
-function clearSession(){session.token=session.companyId=null;['ww_token','ww_cid','ww_biz','ww_plan'].forEach(k=>localStorage.removeItem(k));}
+function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id'].forEach(k=>localStorage.removeItem(k));}
+function isPro(){return ['pro','pro-yearly','team','team-yearly'].includes(session.plan);}
 function doLogout(){
 if(document.getElementById('paywallOverlay').classList.contains('open')){
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
@@ -3293,21 +3415,21 @@ document.getElementById('pw-starter-price').innerHTML = '$290<span>/yr</span>';
 document.getElementById('pw-starter-desc').textContent = 'Great value — 2 months free vs monthly. Everything to price jobs confidently.';
 document.getElementById('pw-pro-price').innerHTML = '$590<span>/yr</span>';
 document.getElementById('pw-pro-desc').textContent = 'Best value — 2 months free. Full CRM, dashboard & insights all year.';
+document.getElementById('pw-team-price').innerHTML = '$1,490<span>/yr</span>';
+document.getElementById('pw-team-desc').textContent = 'Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 } else {
 document.getElementById('pw-starter-price').innerHTML = '$29<span>/mo</span>';
 document.getElementById('pw-starter-desc').textContent = 'Manual calculator with everything you need to price jobs confidently.';
 document.getElementById('pw-pro-price').innerHTML = '$59<span>/mo</span>';
 document.getElementById('pw-pro-desc').textContent = 'Everything in Starter plus advanced CRM & Analytics.';
+document.getElementById('pw-team-price').innerHTML = '$149<span>/mo</span>';
+document.getElementById('pw-team-desc').textContent = 'Everything in Pro for up to 3 operators on one subscription.';
 }
-// Update selected plan label and price ID if one is already selected
 if (paywallSelectedPlan) {
 const isYearly = paywallBillingYearly;
-const planKey = paywallSelectedPlan === 'pro'
-? (isYearly ? 'pro-yearly' : 'pro')
-: (isYearly ? 'starter-yearly' : 'starter');
-const label = paywallSelectedPlan === 'pro'
-? (isYearly ? 'Pro ($590/yr)' : 'Pro ($59/mo)')
-: (isYearly ? 'Starter ($290/yr)' : 'Starter ($29/mo)');
+const base = paywallSelectedPlan.replace('-yearly','');
+const planKey = base === 'pro' ? (isYearly?'pro-yearly':'pro') : base === 'team' ? (isYearly?'team-yearly':'team') : (isYearly?'starter-yearly':'starter');
+const label   = base === 'pro' ? (isYearly?'Pro ($590/yr)':'Pro ($59/mo)') : base === 'team' ? (isYearly?'Team ($1,490/yr)':'Team ($149/mo)') : (isYearly?'Starter ($290/yr)':'Starter ($29/mo)');
 document.getElementById('paywallSelectedPlanLabel').textContent = label;
 paywallSelectedPlan = planKey;
 }
@@ -3331,8 +3453,11 @@ if (banner) banner.style.display = 'block';
 }
 
 if (status === 'expired' || status === 'payment_failed') {
-// Block the calc immediately
+if (session.role === 'member') {
+showMemberDisabledScreen();
+} else {
 openPaywall(status);
+}
 }
 }
 
@@ -3373,14 +3498,11 @@ function selectPaywallPlan(plan) {
 // Normalize to base plan for card highlighting
 const basePlan = plan.replace('-yearly', '');
 const isYearly = paywallBillingYearly;
-paywallSelectedPlan = basePlan === 'pro'
-? (isYearly ? 'pro-yearly' : 'pro')
-: (isYearly ? 'starter-yearly' : 'starter');
+paywallSelectedPlan = basePlan === 'pro' ? (isYearly?'pro-yearly':'pro') : basePlan === 'team' ? (isYearly?'team-yearly':'team') : (isYearly?'starter-yearly':'starter');
 document.querySelectorAll('#paywallOverlay .pricing-card').forEach(c => c.classList.remove('pw-selected'));
-document.getElementById('pw-' + basePlan + '-card').classList.add('pw-selected');
-const label = basePlan === 'pro'
-? (isYearly ? 'Pro ($590/yr)' : 'Pro ($59/mo)')
-: (isYearly ? 'Starter ($290/yr)' : 'Starter ($29/mo)');
+const cardEl = document.getElementById('pw-' + basePlan + '-card');
+if (cardEl) cardEl.classList.add('pw-selected');
+const label = basePlan === 'pro' ? (isYearly?'Pro ($590/yr)':'Pro ($59/mo)') : basePlan === 'team' ? (isYearly?'Team ($1,490/yr)':'Team ($149/mo)') : (isYearly?'Starter ($290/yr)':'Starter ($29/mo)');
 document.getElementById('paywallSelectedPlanLabel').textContent = label;
 document.getElementById('paywallContinueBtn').style.display = 'block';
 }
@@ -3397,7 +3519,7 @@ function goPaywallPayment() {
 document.getElementById('paywallPlanStep').style.display = 'none';
 document.getElementById('paywallPaymentStep').style.display = 'block';
 document.getElementById('paywallPaymentPlanLabel').textContent =
-paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : 'Starter — $29/mo';
+paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : paywallSelectedPlan === 'pro-yearly' ? 'Pro — $590/yr' : paywallSelectedPlan === 'team' ? 'Team — $149/mo' : paywallSelectedPlan === 'team-yearly' ? 'Team — $1,490/yr' : paywallSelectedPlan === 'starter-yearly' ? 'Starter — $290/yr' : 'Starter — $29/mo';
 usingNewCard = true;
 initPaywallStripe();
 }
@@ -3505,27 +3627,171 @@ document.getElementById('starterPrice').innerHTML='$290<span>/yr</span>';
 document.getElementById('starterDesc').innerHTML='Great value — get 2 months free vs monthly. Everything to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$590<span>/yr</span>';
 document.getElementById('proDesc').innerHTML='Best value — 2 months free. AI photo quoting + Insights all year long.';
+document.getElementById('teamPrice').innerHTML='$1,490<span>/yr</span>';
+document.getElementById('teamDesc').innerHTML='Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 document.getElementById('pricingNote').textContent='Billed once per year. 14-day free trial included. Cancel anytime before day 15.';
 document.getElementById('starterBtn').onclick=function(){openModal('starter-yearly');return false;};
 document.getElementById('proBtn').onclick=function(){openModal('pro-yearly');return false;};
+document.getElementById('teamBtn').onclick=function(){openModal('team-yearly');return false;};
 } else {
 document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
 document.getElementById('starterDesc').innerHTML='Manual calculator with everything you need to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
 document.getElementById('proDesc').innerHTML='Everything in Starter plus AI photo quoting — point, snap, price.';
-document.getElementById('pricingNote').textContent='14-day free trial on both plans. Card required — you won\'t be charged until day 15. Cancel anytime.';
+document.getElementById('teamPrice').innerHTML='$149<span>/mo</span>';
+document.getElementById('teamDesc').innerHTML='Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
+document.getElementById('pricingNote').textContent='14-day free trial on all plans. Card required — you won\'t be charged until day 15. Cancel anytime.';
 document.getElementById('starterBtn').onclick=function(){openModal('starter');return false;};
 document.getElementById('proBtn').onclick=function(){openModal('pro');return false;};
+document.getElementById('teamBtn').onclick=function(){openModal('team');return false;};
 }
 }
 /* ── DASHBOARD ── */
 let calCurrentDate=new Date();
 let calSelectedDay=null;
 
+/* ── MEMBER DISABLED ── */
+function showMemberDisabledScreen(){
+document.getElementById('memberDisabledScreen').classList.add('open');
+document.body.style.overflow='hidden';
+}
+
+/* ── TEAM PANEL ── */
+let teamData={members:[],pending:[],maxSeats:2};
+
+function openTeamPanel(){
+document.getElementById('teamPanel').classList.add('open');
+document.body.style.overflow='hidden';
+loadTeamData();
+}
+function closeTeamPanel(){
+document.getElementById('teamPanel').classList.remove('open');
+document.body.style.overflow='';
+}
+async function loadTeamData(){
+try{
+const res=await api({action:'getTeam',token:session.token});
+if(res.success){teamData=res;renderTeamPanel();}
+}catch(e){showToast('Could not load team',true);}
+}
+function renderTeamPanel(){
+const listEl=document.getElementById('teamMembersList');
+const rows=[];
+// Active members
+(teamData.members||[]).forEach(m=>{
+const initials=(m.name||m.email||'?')[0].toUpperCase();
+rows.push(`<div class="team-member-row">
+<div class="team-member-avatar">${initials}</div>
+<div class="team-member-info"><div class="team-member-name">${m.name||'Member'}</div><div class="team-member-email">${m.email}</div></div>
+<button onclick="confirmRemoveMember('${m.companyId}','${(m.name||m.email).replace(/'/g,"\\'")}') " style="background:none;border:1px solid rgba(255,96,96,.3);color:rgba(255,96,96,.7);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Remove</button>
+</div>`);
+});
+// Pending invites
+(teamData.pending||[]).forEach(p=>{
+rows.push(`<div class="team-member-row">
+<div class="team-member-avatar" style="background:rgba(255,180,0,.15);border-color:rgba(255,180,0,.3);color:var(--gold);">?</div>
+<div class="team-member-info"><div class="team-member-name">${p.email}</div><div class="team-member-pending">Invite pending</div></div>
+</div>`);
+});
+// Empty seats
+const usedSeats=(teamData.members||[]).length+(teamData.pending||[]).length;
+for(let i=usedSeats;i<(teamData.maxSeats||2);i++){
+rows.push(`<div class="team-seat-empty" onclick="showInviteForm()">
+<div class="team-member-avatar" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.25);font-size:18px;">+</div>
+<div style="font-size:12.5px;color:rgba(255,255,255,.35);">Empty seat — tap to invite</div>
+</div>`);
+}
+listEl.innerHTML=rows.join('');
+// Assign section
+const assignEl=document.getElementById('teamAssignSection');
+const assignList=document.getElementById('teamAssignList');
+if((teamData.members||[]).length>0){
+assignEl.style.display='block';
+renderAssignList(assignList);
+}else{
+assignEl.style.display='none';
+}
+}
+function renderAssignList(el){
+const scheduled=jobHistory.filter(j=>j.crm&&j.crm.status==='scheduled');
+if(!scheduled.length){el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,.3);padding:8px 0;">No scheduled jobs yet.</div>';return;}
+const memberOptions=(teamData.members||[]).map(m=>`<option value="${m.companyId}">${m.name||m.email}</option>`).join('');
+el.innerHTML=scheduled.map(j=>{
+const label=j.crm.name||(j.load+' load')||'Job';
+const current=Array.isArray(j.assignedTo)&&j.assignedTo.length?j.assignedTo[0]:'';
+return `<div class="team-assign-row">
+<div class="team-assign-label">${label}</div>
+<select class="team-assign-select" onchange="assignJobTo('${j.id}',this.value)">
+<option value="">Owner only</option>
+${memberOptions}
+<option value="all">Both members</option>
+</select>
+</div>`;
+}).join('');
+}
+function showInviteForm(){
+const email=prompt('Enter the email address to invite:');
+if(!email||!email.includes('@'))return;
+doInviteMember(email);
+}
+async function doInviteMember(email){
+try{
+const res=await api({action:'inviteMember',token:session.token,memberEmail:email});
+if(res.success){showToast('✓ Invite sent to '+email);loadTeamData();}
+else showToast(res.error||'Could not send invite',true);
+}catch(e){showToast('Network error',true);}
+}
+async function confirmRemoveMember(memberId,name){
+if(!confirm('Remove '+name+' from your team? They will lose access immediately.'))return;
+try{
+const res=await api({action:'removeMember',token:session.token,memberCompanyId:memberId});
+if(res.success){showToast('✓ '+name+' removed');loadTeamData();}
+else showToast(res.error||'Could not remove member',true);
+}catch(e){showToast('Network error',true);}
+}
+async function assignJobTo(jobId,assignedTo){
+const payload=assignedTo==='all'?(teamData.members||[]).map(m=>m.companyId):assignedTo?[assignedTo]:null;
+try{
+const res=await api({action:'assignJob',token:session.token,jobId:jobId,assignedTo:payload});
+if(res.success){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+if(job)job.assignedTo=payload;
+showToast('✓ Job assigned');
+}
+}catch(e){}
+}
+
+/* ── JOIN TEAM ── */
+async function submitJoinTeam(){
+const token=document.getElementById('jt-token').value.trim();
+const name=document.getElementById('jt-name').value.trim();
+const email=document.getElementById('jt-email').value.trim();
+const pw=document.getElementById('jt-pw').value;
+const errEl=document.getElementById('joinTeamErr');
+errEl.textContent='';errEl.classList.remove('show');
+if(!token){errEl.textContent='Paste your invite token.';errEl.classList.add('show');return;}
+if(!name){errEl.textContent='Enter your name.';errEl.classList.add('show');return;}
+if(!email){errEl.textContent='Enter your email.';errEl.classList.add('show');return;}
+if(!pw||pw.length<8){errEl.textContent='Password must be at least 8 characters.';errEl.classList.add('show');return;}
+const btn=document.getElementById('joinTeamBtn');
+btn.disabled=true;btn.textContent='Joining…';
+try{
+const res=await api({action:'acceptInvite',inviteToken:token,memberName:name,email:email,password:pw});
+if(res.success&&res.token){
+saveSession(res.token,res.companyId,res.businessName,res.plan||'team','member',res.ownerId||null);
+applyPricing({});closeModal();openCalcDirect();
+}else{errEl.textContent=res.error||'Could not join team.';errEl.classList.add('show');}
+}catch(e){errEl.textContent='Network error.';errEl.classList.add('show');}
+btn.disabled=false;btn.textContent='Join team →';
+}
+
 function openDashboard(){
 if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='block';
+// Show Team button only for team owners
+const teamBtn=document.getElementById('teamNavBtn');
+if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
 calCurrentDate=new Date();
 renderCalendar();
 renderUpcoming();
@@ -4059,6 +4325,20 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.s
 window.addEventListener('load',()=>{
 if(window.AOS){AOS.init({duration:600,easing:'ease-out-cubic',once:false,offset:30});}
 else{document.querySelectorAll('[data-aos]').forEach(el=>el.removeAttribute('data-aos'));}
+// Handle invite link: ?invite=TOKEN&email=...
+try{
+const params=new URLSearchParams(window.location.search);
+const inviteToken=params.get('invite');
+const inviteEmail=params.get('email');
+if(inviteToken&&!session.token){
+openModal('join-team-invite');
+switchTab('join-team');
+const tokenEl=document.getElementById('jt-token');
+const emailEl=document.getElementById('jt-email');
+if(tokenEl)tokenEl.value=inviteToken;
+if(emailEl&&inviteEmail)emailEl.value=decodeURIComponent(inviteEmail);
+}
+}catch(e){}
 });
 </script>
 </body>
