@@ -3504,6 +3504,7 @@ renderCalendar();
 renderUpcoming();
 renderCompletedJobs();
 renderDashAnalytics();
+if(window.AOS)setTimeout(()=>AOS.refreshHard(),60);
 }
 
 function closeDashboard(){
