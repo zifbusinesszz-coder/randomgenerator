@@ -4025,6 +4025,10 @@ document._lastTouch = now;
 }, { passive: false });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();}});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
+window.addEventListener('load',()=>{
+if(window.AOS){AOS.init({duration:600,easing:'ease-out-cubic',once:false,offset:30});}
+else{document.querySelectorAll('[data-aos]').forEach(el=>el.removeAttribute('data-aos'));}
+});
 </script>
 <div class="toast" id="toast" style="z-index:9999;position:fixed;"></div>
 </body>
