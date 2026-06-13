@@ -1383,25 +1383,53 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div class="modal-body">
 <div id="stepPick">
-<div style="font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6;">Choose the plan that fits. Both include a 14-day free trial — no charge until activation.</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:6px;">
-<div onclick="pickPlan('starter')" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:20px 16px;cursor:pointer;transition:all .18s;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
-<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:7px;">Starter</div>
-<div style="font-family:var(--font-num);font-size:28px;font-weight:700;color:var(--black);letter-spacing:-1px;margin-bottom:10px;">$29<span style="font-family:var(--font-sans);font-size:12px;font-weight:400;opacity:.5;">/mo</span></div>
-<div style="font-size:11.5px;color:var(--gray);line-height:1.65;margin-bottom:14px;">Quote calculator, AI photo quoting, job history, basic CRM, special item surcharges.</div>
-<div style="background:var(--black);color:white;border-radius:var(--r-sm);padding:9px;font-size:12px;font-weight:600;text-align:center;">Start free trial →</div>
+<div style="font-size:12.5px;color:var(--gray);margin-bottom:14px;line-height:1.6;">Choose the plan that fits. All plans include a 14-day free trial — no charge until activation.</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;">
+<span id="spBillingMonthly" style="font-size:12.5px;font-weight:600;color:var(--black);">Monthly</span>
+<div onclick="toggleSignupBilling()" id="spBillingToggle" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+<div id="spBillingThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .2s;"></div>
 </div>
-<div onclick="pickPlan('pro')" style="border:1.5px solid var(--green);border-radius:var(--r-lg);padding:20px 16px;cursor:pointer;transition:all .18s;background:linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%);" onmouseover="this.style.background='rgba(26,158,114,0.08)'" onmouseout="this.style.background='linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%)'">
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+<span id="spBillingYearly" style="font-size:12.5px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;margin-left:3px;">Save 2 months</span></span>
+</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-bottom:6px;">
+<div onclick="pickPlan('starter')" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
+<div style="flex:1;min-width:0;">
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:3px;">Starter</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote calculator, job history, AI photo quoting, special item surcharges.</div>
+</div>
+<div style="text-align:right;flex-shrink:0;">
+<div id="sp-starter-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$29<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
+<div style="margin-top:6px;background:var(--black);color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
+</div>
+</div>
+<div onclick="pickPlan('pro')" style="border:1.5px solid var(--green);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;background:linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%);" onmouseover="this.style.borderColor='var(--green)';this.style.background='rgba(26,158,114,0.08)'" onmouseout="this.style.borderColor='var(--green)';this.style.background='linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%)'">
+<div style="flex:1;min-width:0;">
+<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Pro</div>
 <div style="font-size:8.5px;font-weight:700;background:var(--green);color:white;padding:2px 7px;border-radius:9px;">Most Popular</div>
 </div>
-<div style="font-family:var(--font-num);font-size:28px;font-weight:700;color:var(--black);letter-spacing:-1px;margin-bottom:10px;">$59<span style="font-family:var(--font-sans);font-size:12px;font-weight:400;opacity:.5;">/mo</span></div>
-<div style="font-size:11.5px;color:var(--gray);line-height:1.65;margin-bottom:14px;">Everything in Starter plus full CRM, dashboard & insights.</div>
-<div style="background:var(--green);color:white;border-radius:var(--r-sm);padding:9px;font-size:12px;font-weight:600;text-align:center;">Start free trial →</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Everything in Starter plus full CRM, dashboard &amp; insights.</div>
+</div>
+<div style="text-align:right;flex-shrink:0;">
+<div id="sp-pro-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$59<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
+<div style="margin-top:6px;background:var(--green);color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
 </div>
 </div>
-<p style="font-size:10.5px;color:#bbb;text-align:center;margin-top:10px;">14-day free trial · No charge until activation · Cancel anytime</p>
+<div onclick="pickPlan('team')" style="border:1.5px solid #5b6af0;border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;background:linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%);" onmouseover="this.style.background='rgba(91,106,240,0.08)'" onmouseout="this.style.background='linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%)'">
+<div style="flex:1;min-width:0;">
+<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Team</div>
+<div style="font-size:8.5px;font-weight:700;background:#5b6af0;color:white;padding:2px 7px;border-radius:9px;">1 Owner + 2 Members</div>
+</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Everything in Pro. Assign jobs, manage crew, shared quote tool.</div>
+</div>
+<div style="text-align:right;flex-shrink:0;">
+<div id="sp-team-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
+<div style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
+</div>
+</div>
+</div>
+<p style="font-size:10.5px;color:#bbb;text-align:center;margin-top:8px;">14-day free trial · No charge until activation · Cancel anytime</p>
 </div>
 <div id="step1">
 <div class="err-banner" id="step1Err"></div>
@@ -1584,25 +1612,14 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div id="joinTeamForm" style="display:none;">
 <div class="err-banner" id="joinTeamErr"></div>
-<p style="font-size:12.5px;color:var(--gray);line-height:1.7;margin:0 0 16px;">Your team owner sent you an invite. Enter your invite token (from the email), choose a password, and you're in.</p>
-<div class="form-group">
-<label class="form-label">Invite token</label>
-<input class="form-input" type="text" id="jt-token" placeholder="Paste invite token from email" autocomplete="off"/>
+<div class="form-grid">
+<div class="field"><label>Invite token</label><input type="text" id="jt-token" placeholder="Paste invite token from email" autocomplete="off"/></div>
+<div class="field"><label>Your name</label><input type="text" id="jt-name" placeholder="First Last"/></div>
+<div class="field"><label>Your email (must match invite)</label><input type="email" id="jt-email" placeholder="you@yourbusiness.com" autocomplete="email"/></div>
+<div class="field"><label>Create a password</label><input type="password" id="jt-pw" placeholder="Min 8 characters" autocomplete="new-password"/></div>
+<button class="submit-btn" id="joinTeamBtn" onclick="submitJoinTeam()">Join team →</button>
+<p class="fine-print">Already have an account? <a href="#" onclick="switchTab('login');return false;" style="color:var(--black);font-weight:600;">Log in →</a></p>
 </div>
-<div class="form-group">
-<label class="form-label">Your name</label>
-<input class="form-input" type="text" id="jt-name" placeholder="First Last"/>
-</div>
-<div class="form-group">
-<label class="form-label">Your email (must match invite)</label>
-<input class="form-input" type="email" id="jt-email" placeholder="you@example.com" autocomplete="email"/>
-</div>
-<div class="form-group">
-<label class="form-label">Create a password</label>
-<input class="form-input" type="password" id="jt-pw" placeholder="8+ characters" autocomplete="new-password"/>
-</div>
-<button class="submit-btn green" id="joinTeamBtn" onclick="submitJoinTeam()">Join team →</button>
-<p class="fine-print" style="margin-top:10px;">Already have an account? <a href="#" onclick="switchTab('login');return false;" style="color:var(--black);font-weight:600;">Log in →</a></p>
 </div>
 </div>
 </div>
@@ -2384,7 +2401,7 @@ document.getElementById('modalTabs').style.display='flex';
 document.getElementById('modalStepDots').style.display='none';
 document.getElementById('modalPlanBadge').style.display='none';
 document.getElementById('modalTitle').textContent='Choose your plan';
-document.getElementById('modalSubtitle').textContent='Both plans include a 14-day free trial.';
+document.getElementById('modalSubtitle').textContent='All plans include a 14-day free trial — no charge until activation.';
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('stepPick').style.display='block';
 document.getElementById('modalOverlay').classList.add('open');
@@ -2421,8 +2438,11 @@ setTimeout(initStripe,50);
 }
 
 function pickPlan(plan){
-currentPlan=plan;
-document.getElementById('modalPlanBadge').textContent=plan==='pro'?'Pro Plan — $59/mo':'Starter Plan — $29/mo';
+const yr=signupBillingYearly;
+const planKey=plan==='pro'?(yr?'pro-yearly':'pro'):plan==='team'?(yr?'team-yearly':'team'):(yr?'starter-yearly':'starter');
+currentPlan=planKey;
+const badgeText=planKey==='pro-yearly'?'Pro Plan — $590/yr':planKey==='pro'?'Pro Plan — $59/mo':planKey==='team-yearly'?'Team Plan — $1,490/yr':planKey==='team'?'Team Plan — $149/mo':planKey==='starter-yearly'?'Starter Plan — $290/yr':'Starter Plan — $29/mo';
+document.getElementById('modalPlanBadge').textContent=badgeText;
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalTitle').textContent='Start your free trial';
 document.getElementById('modalSubtitle').textContent='14 days free. Card required — charged only after trial ends.';
@@ -2430,6 +2450,7 @@ document.getElementById('modalStepDots').style.display='flex';
 document.getElementById('stepPick').style.display='none';
 document.getElementById('step1').style.display='block';
 updateStepDots(1);
+setTimeout(initStripe,50);
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
@@ -2440,13 +2461,13 @@ document.getElementById('tabSignup').classList.toggle('active',isSig);
 document.getElementById('tabLogin').classList.toggle('active',tab==='login');
 const jtTab=document.getElementById('tabJoinTeam');if(jtTab)jtTab.classList.toggle('active',isJoin);
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick','joinTeamForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
-if(isSig){document.getElementById('step1').style.display='block';updateStepDots(1);setTimeout(initStripe,50);}
+if(isSig){document.getElementById('stepPick').style.display='block';}
 else if(isJoin){document.getElementById('joinTeamForm').style.display='block';}
 else document.getElementById('loginForm').style.display='block';
-document.getElementById('modalStepDots').style.display=isSig?'flex':'none';
-document.getElementById('modalPlanBadge').style.display=isSig?'inline-block':'none';
-document.getElementById('modalTitle').textContent=isSig?'Start your free trial':isJoin?'Join your team':'Welcome back';
-document.getElementById('modalSubtitle').textContent=isSig?'14 days free. Card required — charged only after trial ends.':isJoin?'Set a password and get access to your team\'s quote tool.':'Log in to your quote tool';
+document.getElementById('modalStepDots').style.display='none';
+document.getElementById('modalPlanBadge').style.display='none';
+document.getElementById('modalTitle').textContent=isSig?'Choose your plan':isJoin?'Join your team':'Welcome back';
+document.getElementById('modalSubtitle').textContent=isSig?'All plans include a 14-day free trial — no charge until activation.':isJoin?'Set a password and get access to your team\'s quote tool.':'Log in to your quote tool';
 }
 function goStep(n){
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
@@ -3402,6 +3423,23 @@ let paywallSelectedPlan = 'starter';
 let paywallStripe, paywallCardElement, paywallCardComplete = false;
 let usingNewCard = false;
 
+let signupBillingYearly = false;
+function toggleSignupBilling() {
+signupBillingYearly = !signupBillingYearly;
+document.getElementById('spBillingThumb').style.transform = signupBillingYearly ? 'translateX(20px)' : 'translateX(0)';
+document.getElementById('spBillingMonthly').style.color = signupBillingYearly ? 'var(--gray)' : 'var(--black)';
+document.getElementById('spBillingYearly').style.color = signupBillingYearly ? 'var(--black)' : 'var(--gray)';
+if (signupBillingYearly) {
+document.getElementById('sp-starter-price').innerHTML = '$290<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
+document.getElementById('sp-pro-price').innerHTML = '$590<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
+document.getElementById('sp-team-price').innerHTML = '$1,490<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
+} else {
+document.getElementById('sp-starter-price').innerHTML = '$29<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
+document.getElementById('sp-pro-price').innerHTML = '$59<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
+document.getElementById('sp-team-price').innerHTML = '$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
+}
+}
+
 let paywallBillingYearly = false;
 function togglePaywallBilling() {
 paywallBillingYearly = !paywallBillingYearly;
@@ -3464,24 +3502,43 @@ const overlay = document.getElementById('paywallOverlay');
 if (!overlay) return;
 const closeBtn = document.getElementById('paywallCloseBtn');
 if (reason === 'payment_failed') {
+document.getElementById('pw-starter-card').style.display = 'block';
+document.getElementById('pw-pro-card').style.display = 'block';
+document.getElementById('pw-team-card').style.display = 'block';
 document.getElementById('paywallTitle').textContent = 'Payment failed';
 document.getElementById('paywallSubtitle').textContent = 'Your card was declined. Update your card to keep access.';
 if (closeBtn) closeBtn.style.display = 'none';
 } else if (reason === 'warning') {
+document.getElementById('pw-starter-card').style.display = 'block';
+document.getElementById('pw-pro-card').style.display = 'block';
+document.getElementById('pw-team-card').style.display = 'block';
 document.getElementById('paywallTitle').textContent = 'Activate your plan early';
 document.getElementById('paywallSubtitle').textContent = 'No disruption — lock in your plan before the trial ends.';
 if (closeBtn) closeBtn.style.display = 'none';
 } else if (reason === 'upgrade') {
-document.getElementById('paywallTitle').textContent = 'Upgrade to Pro';
+const onPro = session.plan === 'pro' || session.plan === 'pro-yearly';
+document.getElementById('pw-starter-card').style.display = 'none';
+document.getElementById('pw-pro-card').style.display = onPro ? 'none' : 'block';
+document.getElementById('pw-team-card').style.display = 'block';
+if (onPro) {
+document.getElementById('paywallTitle').textContent = 'Upgrade to Team';
+document.getElementById('paywallSubtitle').textContent = 'Add crew seats and shared job management.';
+} else {
+document.getElementById('paywallTitle').textContent = 'Upgrade your plan';
 document.getElementById('paywallSubtitle').textContent = 'Unlock the full CRM, dashboard, insights, and more.';
+}
 if (closeBtn) closeBtn.style.display = 'flex';
 } else {
+document.getElementById('pw-starter-card').style.display = 'block';
+document.getElementById('pw-pro-card').style.display = 'block';
+document.getElementById('pw-team-card').style.display = 'block';
 document.getElementById('paywallTitle').textContent = 'Your trial has ended';
 document.getElementById('paywallSubtitle').textContent = 'Choose a plan to keep quoting jobs.';
 if (closeBtn) closeBtn.style.display = 'none';
 }
 showPaywallPlanStep();
-selectPaywallPlan(session.plan === 'pro' ? 'pro' : 'starter');
+const onPro = session.plan === 'pro' || session.plan === 'pro-yearly';
+selectPaywallPlan(reason === 'upgrade' ? (onPro ? 'team' : 'pro') : (onPro ? 'pro' : 'starter'));
 overlay.classList.add('open');
 document.body.style.overflow = 'hidden';
 }
