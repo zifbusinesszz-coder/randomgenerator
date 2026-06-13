@@ -2208,6 +2208,28 @@ let crmJobId=null;
 let insightCharts={};
 let activeTimers={};
 
+function saveTimerState(){
+const data={};
+Object.keys(activeTimers).forEach(jid=>{data[jid]=activeTimers[jid].startMs;});
+localStorage.setItem('ww_activeTimers',JSON.stringify(data));
+}
+
+function restoreTimers(){
+try{
+const data=JSON.parse(localStorage.getItem('ww_activeTimers')||'{}');
+Object.keys(data).forEach(jid=>{
+if(activeTimers[jid])return;
+activeTimers[jid]={startMs:data[jid],elapsed:Math.floor((Date.now()-data[jid])/1000),beforePhotos:[],interval:null};
+const t=activeTimers[jid];
+t.interval=setInterval(()=>{
+t.elapsed=Math.floor((Date.now()-t.startMs)/1000);
+const el=document.getElementById('timer-display-'+jid);
+if(el)el.textContent=formatElapsed(t.elapsed);
+},1000);
+});
+}catch(e){}
+}
+
 (async function init(){
 buildSpecialGrid();buildSettingsSpecialsGrid();
 if(session.token){
@@ -2549,7 +2571,7 @@ if(mobAiBtn)mobAiBtn.style.display=isPro()?'flex':'none';
 const mobInsightsBtn=document.getElementById('mobInsightsBtn');
 if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
-buildCalcSpecialsGrid();loadHistory();recalc();
+buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
@@ -3714,6 +3736,7 @@ t.elapsed=Math.floor((Date.now()-t.startMs)/1000);
 const el=document.getElementById('timer-display-'+jobId);
 if(el)el.textContent=formatElapsed(t.elapsed);
 },1000);
+saveTimerState();
 renderUpcoming();
 showToast('✓ Job timer started');
 }
@@ -3725,6 +3748,7 @@ if(t.interval)clearInterval(t.interval);
 const elapsed=t.elapsed;
 const beforePhotos=t.beforePhotos||[];
 delete activeTimers[jobId];
+saveTimerState();
 openAfterPhotoPanel(jobId, elapsed, beforePhotos);
 }
 
