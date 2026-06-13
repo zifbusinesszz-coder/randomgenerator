@@ -4014,5 +4014,6 @@ document._lastTouch = now;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();}});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
 </script>
+<div class="toast" id="toast" style="z-index:9999;position:fixed;"></div>
 </body>
 </html>
