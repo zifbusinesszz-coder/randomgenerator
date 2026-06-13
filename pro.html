@@ -3000,7 +3000,7 @@ notes:document.getElementById('crmNotes').value.trim(),
 savedAt:new Date().toISOString(),
 reminderSent:false
 };
-persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');if(wasDashOpen){renderCompletedJobs();renderUpcoming();renderCalendar();}
+persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');if(wasDashOpen){renderCalendar();renderUpcoming();renderCompletedJobs();}
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
 }
