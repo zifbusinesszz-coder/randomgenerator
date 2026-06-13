@@ -3399,17 +3399,20 @@ const timeLogged=logged.filter(j=>j.actual?.hours&&j.hours);
 if(timeLogged.length>=2){const avgOver=timeLogged.map(j=>j.actual.hours-j.hours).reduce((a,b)=>a+b,0)/timeLogged.length;if(avgOver>0.4)alerts.push(`Jobs are taking <strong>${avgOver.toFixed(1)} hours longer</strong> on average than you quote. Your labor cost may be underestimated.`);}
 let html='';
 if(alerts.length){html+=`<div class="insights-alert"><div class="insights-alert-label">⚡ Heads up</div>${alerts.map(a=>`<div class="insights-alert-text">${a}</div>`).join('<br>')}</div>`;}
+const totalSec=logged.reduce((s,j)=>s+(j.actual?.durationSeconds||0),0);
+const totalTimeStr=totalSec>0?(Math.floor(totalSec/3600)+'h '+(Math.floor((totalSec%3600)/60))+'m'):'—';
 html+=`<div class="insights-stat-grid">
    <div class="insights-stat ${avgDiff>=0?'positive':'negative'}"><div class="insights-stat-label">Avg vs quoted</div><div class="insights-stat-val">${avgDiff>=0?'+':''}$${Math.abs(Math.round(avgDiff))}</div><div class="insights-stat-sub">${logged.length} jobs logged</div></div>
    <div class="insights-stat ${winRate>=50?'positive':'negative'}"><div class="insights-stat-label">Quoted right</div><div class="insights-stat-val">${winRate}%</div><div class="insights-stat-sub">charged ≥ quoted</div></div>
    <div class="insights-stat"><div class="insights-stat-label">Avg job revenue</div><div class="insights-stat-val">$${avgRevenue}</div><div class="insights-stat-sub">actual charged</div></div>
    <div class="insights-stat ${totalLeft<-50?'negative':''}"><div class="insights-stat-label">Left on table</div><div class="insights-stat-val">$${Math.abs(Math.round(totalLeft))}</div><div class="insights-stat-sub">total undercharges</div></div>
+   <div class="insights-stat"><div class="insights-stat-label">Total time on jobs</div><div class="insights-stat-val">${totalTimeStr}</div><div class="insights-stat-sub">timer-logged jobs</div></div>
  </div>`;
 html+=`
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-line-up" style="font-size:12px;color:#5DCAA5;"></i> Quoted vs. Actual charged</div><div class="chart-canvas-wrap"><canvas id="chartQuotedActual" class="insights-chart" height="180"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-bar" style="font-size:12px;color:var(--gold);"></i> Revenue by load size</div><div class="chart-canvas-wrap"><canvas id="chartLoadRevenue" class="insights-chart" height="160"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-trend-up" style="font-size:12px;color:#5DCAA5;"></i> Over/Under per job</div><div class="chart-canvas-wrap"><canvas id="chartDiff" class="insights-chart" height="140"></canvas></div></div>
- <div class="chart-card"><div class="chart-card-title"><i class="ph ph-gauge" style="font-size:12px;color:rgba(255,255,255,.35);"></i> Markup distribution</div><div class="chart-canvas-wrap"><canvas id="chartMarkup" class="insights-chart" height="140"></canvas></div></div>`;
+ <div class="chart-card"><div class="chart-card-title"><i class="ph ph-lightning" style="font-size:12px;color:var(--gold);"></i> Efficiency — $/min per job</div><div class="chart-canvas-wrap"><canvas id="chartDollarPerMin" class="insights-chart" height="140"></canvas></div></div>`;
 if(Object.keys(loadStats).length){
 html+=`<div class="insights-section-title" style="margin-top:4px;">By load size</div>`;
 Object.entries(loadStats).forEach(([k,s])=>{
@@ -3437,10 +3440,17 @@ const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
 const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const ctx3=document.getElementById('chartDiff')?.getContext('2d');
 if(ctx3){insightCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
-const markupBuckets={};jobHistory.forEach(j=>{const m=Math.round(j.markup/10)*10;markupBuckets[m]=(markupBuckets[m]||0)+1;});
-const mbKeys=Object.keys(markupBuckets).sort((a,b)=>a-b);
-const ctx4=document.getElementById('chartMarkup')?.getContext('2d');
-if(ctx4&&mbKeys.length){insightCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(232,160,32,0.55)',borderColor:'rgba(232,160,32,1)',borderWidth:1,borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
+const timedJobs=logged.filter(j=>j.actual?.durationSeconds>0&&j.actual?.charged>0).slice(-15);
+const ctx4=document.getElementById('chartDollarPerMin')?.getContext('2d');
+if(ctx4&&timedJobs.length>=2){
+const dpmLabels=timedJobs.map((_,i)=>'J'+(i+1));
+const dpmVals=timedJobs.map(j=>parseFloat((j.actual.charged/(j.actual.durationSeconds/60)).toFixed(2)));
+const avgDpm=dpmVals.reduce((a,b)=>a+b,0)/dpmVals.length;
+insightCharts.dollarPerMin=new Chart(ctx4,{type:'line',data:{labels:dpmLabels,datasets:[{data:dpmVals,borderColor:'rgba(232,160,32,1)',backgroundColor:'rgba(232,160,32,0.08)',borderWidth:2,pointRadius:4,pointBackgroundColor:dpmVals.map(v=>v>=avgDpm?'rgba(26,158,114,1)':'rgba(192,57,43,0.8)'),tension:0.3,fill:true},{label:'Avg',data:dpmVals.map(()=>avgDpm),borderColor:'rgba(255,255,255,0.18)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{...chartDefaults,plugins:{legend:{display:false}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+v+'/m'}}}}});
+}else if(ctx4){
+ctx4.canvas.style.display='none';
+ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding:28px 0;font-size:12px;color:rgba(255,255,255,.25);">Log 2+ timed jobs to see efficiency trend.</div>');
+}
 }
 
 /* ── UTILS ── */
@@ -4453,6 +4463,8 @@ const jobs=logged.filter(j=>j.load===k);if(!jobs.length)return;
 const d=jobs.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
 });
+const totalSecDash=logged.reduce((s,j)=>s+(j.actual?.durationSeconds||0),0);
+const totalTimeStrDash=totalSecDash>0?(Math.floor(totalSecDash/3600)+'h '+(Math.floor((totalSecDash%3600)/60))+'m'):'—';
 body.innerHTML=`<div class="dash-stat-grid">
    <div class="dash-stat ${avgDiff>=0?'positive':'negative'}"><div class="dash-stat-label">Avg vs quoted</div><div class="dash-stat-val">${avgDiff>=0?'+':''}$${Math.abs(Math.round(avgDiff))}</div><div class="dash-stat-sub">${logged.length} jobs logged</div></div>
    <div class="dash-stat ${winRate>=50?'positive':'negative'}"><div class="dash-stat-label">Quoted right</div><div class="dash-stat-val">${winRate}%</div><div class="dash-stat-sub">charged ≥ quoted</div></div>
@@ -4460,11 +4472,12 @@ body.innerHTML=`<div class="dash-stat-grid">
    <div class="dash-stat ${totalLeft<-50?'negative':''}"><div class="dash-stat-label">Left on table</div><div class="dash-stat-val">$${Math.abs(Math.round(totalLeft))}</div><div class="dash-stat-sub">total undercharges</div></div>
    <div class="dash-stat negative"><div class="dash-stat-label">Total dump fees</div><div class="dash-stat-val">$${totalDumpFees}</div><div class="dash-stat-sub">estimated disposal cost</div></div>
    <div class="dash-stat ${totalProfit>=0?'positive':'negative'}"><div class="dash-stat-label">Est. total profit</div><div class="dash-stat-val">$${totalProfit.toLocaleString()}</div><div class="dash-stat-sub">revenue minus dump fees</div></div>
+   <div class="dash-stat"><div class="dash-stat-label">Total time on jobs</div><div class="dash-stat-val">${totalTimeStrDash}</div><div class="dash-stat-sub">timer-logged jobs</div></div>
  </div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-line-up" style="font-size:12px;color:#5DCAA5;"></i> Quoted vs. Actual charged</div><div class="chart-canvas-wrap"><canvas id="dashChartQuotedActual" class="insights-chart" height="180"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-bar" style="font-size:12px;color:var(--gold);"></i> Revenue by load size</div><div class="chart-canvas-wrap"><canvas id="dashChartLoadRevenue" class="insights-chart" height="160"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-trend-up" style="font-size:12px;color:#5DCAA5;"></i> Over/Under per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDiff" class="insights-chart" height="140"></canvas></div></div>
- <div class="chart-card"><div class="chart-card-title"><i class="ph ph-gauge" style="font-size:12px;color:rgba(255,255,255,.35);"></i> Markup distribution</div><div class="chart-canvas-wrap"><canvas id="dashChartMarkup" class="insights-chart" height="140"></canvas></div></div>`;
+ <div class="chart-card"><div class="chart-card-title"><i class="ph ph-lightning" style="font-size:12px;color:var(--gold);"></i> Efficiency — $/min per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDollarPerMin" class="insights-chart" height="140"></canvas></div></div>`;
 requestAnimationFrame(()=>{
 const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
 const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
@@ -4481,10 +4494,17 @@ const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
 const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const ctx3=document.getElementById('dashChartDiff')?.getContext('2d');
 if(ctx3){dashCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
-const markupBuckets={};jobHistory.forEach(j=>{const m=Math.round(j.markup/10)*10;markupBuckets[m]=(markupBuckets[m]||0)+1;});
-const mbKeys=Object.keys(markupBuckets).sort((a,b)=>a-b);
-const ctx4=document.getElementById('dashChartMarkup')?.getContext('2d');
-if(ctx4&&mbKeys.length){dashCharts.markup=new Chart(ctx4,{type:'bar',data:{labels:mbKeys.map(k=>k+'%'),datasets:[{data:mbKeys.map(k=>markupBuckets[k]),backgroundColor:'rgba(232,160,32,0.55)',borderColor:'rgba(232,160,32,1)',borderWidth:1,borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>v+' jobs',stepSize:1}}}}});}
+const timedJobsDash=logged.filter(j=>j.actual?.durationSeconds>0&&j.actual?.charged>0).slice(-15);
+const ctx4=document.getElementById('dashChartDollarPerMin')?.getContext('2d');
+if(ctx4&&timedJobsDash.length>=2){
+const dpmLabelsDash=timedJobsDash.map((_,i)=>'J'+(i+1));
+const dpmValsDash=timedJobsDash.map(j=>parseFloat((j.actual.charged/(j.actual.durationSeconds/60)).toFixed(2)));
+const avgDpmDash=dpmValsDash.reduce((a,b)=>a+b,0)/dpmValsDash.length;
+dashCharts.dollarPerMin=new Chart(ctx4,{type:'line',data:{labels:dpmLabelsDash,datasets:[{data:dpmValsDash,borderColor:'rgba(232,160,32,1)',backgroundColor:'rgba(232,160,32,0.08)',borderWidth:2,pointRadius:4,pointBackgroundColor:dpmValsDash.map(v=>v>=avgDpmDash?'rgba(26,158,114,1)':'rgba(192,57,43,0.8)'),tension:0.3,fill:true},{data:dpmValsDash.map(()=>avgDpmDash),borderColor:'rgba(255,255,255,0.18)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{...chartDefaults,plugins:{legend:{display:false}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+v+'/m'}}}}});
+}else if(ctx4){
+ctx4.canvas.style.display='none';
+ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding:28px 0;font-size:12px;color:rgba(255,255,255,.25);">Log 2+ timed jobs to see efficiency trend.</div>');
+}
 });
 }
 function startLocationWatch(){
