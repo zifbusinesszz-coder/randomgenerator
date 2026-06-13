@@ -4046,15 +4046,16 @@ if(planBtn) planBtn.style.display = 'none';
 return;
 }
 
+const buffer = 60 * 60 * 1000; // 1-hour grace window after scheduled time
 const upcomingWithAddress = getScheduledJobs().filter(j => {
 const d = new Date(j.crm.dateTime);
-return d >= now && j.crm?.address?.trim();
+return (d.getTime() + buffer) >= now && j.crm?.address?.trim();
 });
 const planBtn = document.getElementById('planMyDayBtn');
 if(planBtn) planBtn.style.display = upcomingWithAddress.length >= 1 ? 'block' : 'none';
 
 let scheduled = getScheduledJobs()
-.filter(j => new Date(j.crm.dateTime) >= now)
+.filter(j => (new Date(j.crm.dateTime).getTime() + buffer) >= now)
 .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime))
 .slice(0,20);
 
