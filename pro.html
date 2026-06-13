@@ -3027,6 +3027,7 @@ persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved'
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
 }
+}
 function sendReceiptForJob(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
 const name=job.crm?.name||'Customer';
