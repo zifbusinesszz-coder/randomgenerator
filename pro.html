@@ -3745,8 +3745,8 @@ hours,
 notes,
 durationSeconds:elapsed,
 durationFormatted:formatElapsed(elapsed),
-beforePhotos:(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl})),
-afterPhotos:(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl})),
+beforePhotos:(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl.length>150000?p.dataUrl.slice(0,150000)+'..truncated':p.dataUrl})),
+afterPhotos:(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl.length>150000?p.dataUrl.slice(0,150000)+'..truncated':p.dataUrl})),
 loggedAt:new Date().toISOString()
 };
 delete jobBeforePhotos[jobId];
