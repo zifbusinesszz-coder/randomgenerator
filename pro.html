@@ -3811,6 +3811,10 @@ ${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="fo
 ${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map(p=>`<img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
 </div>`:''}
 ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.38);border-top:1px solid rgba(255,255,255,.06);padding-top:7px;">${j.actual.notes}</div>`:''}
+<div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+<button onclick="openActual(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-pencil" style="font-size:12px;"></i> Edit outcome</button>
+<button onclick="openCrm(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-user" style="font-size:12px;"></i> Customer info</button>
+</div>
 </div>`).join('');
 }
 
