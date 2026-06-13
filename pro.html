@@ -3554,18 +3554,235 @@ const scheduled = getScheduledJobs()
 
 const list = document.getElementById('upcomingList');
 if(!scheduled.length){list.innerHTML='<div class="upcoming-empty">No upcoming scheduled jobs.<br>Add a customer and set status to Scheduled.</div>';return;}
+
 list.innerHTML = scheduled.map(j => {
 const d = new Date(j.crm.dateTime);
 const dateStr = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-return `<div class="upcoming-item">
-     <div class="upcoming-date">${dateStr} · ${timeStr}</div>
-     <div class="upcoming-name">${j.crm.name||'Customer'}</div>
-     <div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
-     <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
-     ${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${j.crm.address.replace(/"/g,'&quot;')}" style="margin-top:7px;width:100%;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Get directions</button>`:''}
-   </div>`;
+const isRunning = !!activeTimers[j.id];
+const timerDisplay = isRunning ? formatElapsed(activeTimers[j.id].elapsed||0) : '0:00:00';
+return `<div class="upcoming-item" id="upcoming-card-${j.id}">
+<div class="upcoming-date">${dateStr} · ${timeStr}</div>
+<div class="upcoming-name">${j.crm.name||'Customer'}</div>
+<div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
+<div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
+${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${j.crm.address.replace(/"/g,'&quot;')}" style="margin-top:7px;width:100%;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Get directions</button>`:''}
+<div id="timer-block-${j.id}" style="margin-top:10px;border:1px solid ${isRunning?'rgba(26,158,114,.45)':'var(--d-border)'};border-radius:var(--r-md);padding:11px 13px;background:${isRunning?'rgba(26,158,114,.07)':'rgba(255,255,255,.02)'};transition:all .2s;">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${isRunning?'#5DCAA5':'rgba(255,255,255,.32)'};">${isRunning?'Job in progress':'Job timer'}</div>
+<div id="timer-display-${j.id}" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:white;letter-spacing:-0.5px;">${timerDisplay}</div>
+</div>
+${!isRunning?`
+<input type="file" id="before-input-${j.id}" accept="image/*" capture="environment" multiple style="display:none;" onchange="handleBeforePhotos(${j.id}, this.files)"/>
+<div id="before-photos-preview-${j.id}" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px;"></div>
+<div id="before-photos-label-${j.id}" style="font-size:9.5px;color:rgba(255,255,255,.3);margin-bottom:7px;">No before photos yet — tap below to add</div>
+<button onclick="document.getElementById('before-input-${j.id}').click()" style="width:100%;padding:7px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.2);border-radius:var(--r-sm);color:rgba(255,255,255,.45);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-sans);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-camera" style="font-size:13px;"></i> Add before photos</button>
+<button onclick="startJobTimer(${j.id})" style="width:100%;padding:9px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-play" style="font-size:13px;"></i> Start job</button>
+`:`
+<div style="font-size:9.5px;color:rgba(255,255,255,.35);margin-bottom:8px;" id="before-count-running-${j.id}">${(activeTimers[j.id].beforePhotos||[]).length} before photo${(activeTimers[j.id].beforePhotos||[]).length!==1?'s':''} saved</div>
+<button onclick="finishJobTimer(${j.id})" style="width:100%;padding:9px;background:#c0392b;color:white;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-stop" style="font-size:13px;"></i> Finish job</button>
+`}
+</div>
+</div>`;
 }).join('');
+
+if(isRunning){
+Object.keys(activeTimers).forEach(jid=>{
+const t=activeTimers[jid];
+if(t.interval)clearInterval(t.interval);
+t.interval=setInterval(()=>{
+t.elapsed=Math.floor((Date.now()-t.startMs)/1000);
+const el=document.getElementById('timer-display-'+jid);
+if(el)el.textContent=formatElapsed(t.elapsed);
+},1000);
+});
+}
+
+renderCompletedJobs();
+}
+
+function formatElapsed(seconds){
+const h=Math.floor(seconds/3600);
+const m=Math.floor((seconds%3600)/60);
+const s=seconds%60;
+return h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+
+const jobBeforePhotos={};
+
+function handleBeforePhotos(jobId, files){
+if(!jobBeforePhotos[jobId])jobBeforePhotos[jobId]=[];
+Array.from(files).forEach(f=>{
+const reader=new FileReader();
+reader.onload=e=>{
+jobBeforePhotos[jobId].push({name:f.name,dataUrl:e.target.result});
+const preview=document.getElementById('before-photos-preview-'+jobId);
+const label=document.getElementById('before-photos-label-'+jobId);
+if(preview){
+const img=document.createElement('img');
+img.src=e.target.result;
+img.style.cssText='width:52px;height:52px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.12);';
+preview.appendChild(img);
+}
+if(label)label.textContent=jobBeforePhotos[jobId].length+' before photo'+(jobBeforePhotos[jobId].length!==1?'s':'')+ ' ready';
+};
+reader.readAsDataURL(f);
+});
+}
+
+function startJobTimer(jobId){
+if(activeTimers[jobId])return;
+activeTimers[jobId]={
+startMs:Date.now(),
+elapsed:0,
+beforePhotos:jobBeforePhotos[jobId]||[],
+interval:null
+};
+const t=activeTimers[jobId];
+t.interval=setInterval(()=>{
+t.elapsed=Math.floor((Date.now()-t.startMs)/1000);
+const el=document.getElementById('timer-display-'+jobId);
+if(el)el.textContent=formatElapsed(t.elapsed);
+},1000);
+renderUpcoming();
+showToast('✓ Job timer started');
+}
+
+function finishJobTimer(jobId){
+const t=activeTimers[jobId];
+if(!t)return;
+if(t.interval)clearInterval(t.interval);
+const elapsed=t.elapsed;
+const beforePhotos=t.beforePhotos||[];
+delete activeTimers[jobId];
+openAfterPhotoPanel(jobId, elapsed, beforePhotos);
+}
+
+function openAfterPhotoPanel(jobId, elapsed, beforePhotos){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+const hours=(elapsed/3600).toFixed(2);
+const existingPanel=document.getElementById('afterPhotoPanel');
+if(existingPanel)existingPanel.remove();
+
+const panel=document.createElement('div');
+panel.id='afterPhotoPanel';
+panel.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;';
+panel.innerHTML=`
+<div style="background:var(--d-surface);border-radius:18px 18px 0 0;border:1px solid var(--d-border);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;animation:modalIn .22s ease both;">
+<div style="padding:16px 18px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;">
+<div style="font-family:var(--font-display);font-size:16px;font-weight:900;color:white;">Job complete <span style="font-size:12px;font-weight:500;color:#5DCAA5;margin-left:6px;">${formatElapsed(elapsed)}</span></div>
+<button onclick="document.getElementById('afterPhotoPanel').remove();renderUpcoming();" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:27px;height:27px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+</div>
+<div style="padding:18px;">
+<div style="background:rgba(26,158,114,.08);border:1px solid rgba(26,158,114,.22);border-radius:var(--r-md);padding:12px 14px;margin-bottom:18px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+<div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:3px;">Duration</div><div style="font-family:var(--font-num);font-size:18px;font-weight:700;color:white;">${formatElapsed(elapsed)}</div></div>
+<div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:3px;">Hours</div><div style="font-family:var(--font-num);font-size:18px;font-weight:700;color:white;">${hours}</div></div>
+<div><div style="font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:3px;">Before photos</div><div style="font-family:var(--font-num);font-size:18px;font-weight:700;color:white;">${beforePhotos.length}</div></div>
+</div>
+${beforePhotos.length?`
+<div style="margin-bottom:18px;">
+<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:8px;">Before photos</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;">${beforePhotos.map(p=>`<img src="${p.dataUrl}" style="width:68px;height:68px;object-fit:cover;border-radius:7px;border:1px solid rgba(255,255,255,.12);"/>`).join('')}</div>
+</div>`:''}
+<div style="margin-bottom:18px;">
+<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:8px;">After photos <span style="font-weight:400;color:rgba(255,255,255,.22);text-transform:none;letter-spacing:0;font-size:9px;">— optional but recommended</span></div>
+<input type="file" id="after-input-${jobId}" accept="image/*" capture="environment" multiple style="display:none;" onchange="handleAfterPhotos(${jobId}, this.files)"/>
+<div id="after-photos-preview-${jobId}" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px;"></div>
+<div id="after-photos-label-${jobId}" style="font-size:9.5px;color:rgba(255,255,255,.3);margin-bottom:8px;">No after photos yet</div>
+<button onclick="document.getElementById('after-input-${jobId}').click()" style="width:100%;padding:9px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.22);border-radius:var(--r-sm);color:rgba(255,255,255,.55);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px;"><i class="ph ph-camera" style="font-size:14px;"></i> Add after photos</button>
+</div>
+<div style="margin-bottom:18px;">
+<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:7px;">What did you charge?</div>
+<div style="position:relative;"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.28);font-size:13px;">$</span><input type="number" id="after-charged-${jobId}" placeholder="0" style="width:100%;padding:9px 9px 9px 22px;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:14px;font-weight:600;color:white;font-family:var(--font-sans);outline:none;" oninput="this.style.borderColor=this.value?'rgba(26,158,114,.45)':'var(--d-border)'"/></div>
+</div>
+<div style="margin-bottom:22px;">
+<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:7px;">Job notes (optional)</div>
+<textarea id="after-notes-${jobId}" placeholder="Any surprises, extra items, customer feedback..." style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:9px 11px;font-size:12px;color:white;font-family:var(--font-sans);outline:none;resize:none;height:68px;line-height:1.6;box-sizing:border-box;"></textarea>
+</div>
+<button onclick="saveCompletedJob(${jobId}, ${elapsed})" style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:7px;"><i class="ph ph-check-circle" style="font-size:15px;"></i> Save & mark complete</button>
+</div>
+</div>`;
+document.body.appendChild(panel);
+}
+
+const jobAfterPhotos={};
+function handleAfterPhotos(jobId, files){
+if(!jobAfterPhotos[jobId])jobAfterPhotos[jobId]=[];
+Array.from(files).forEach(f=>{
+const reader=new FileReader();
+reader.onload=e=>{
+jobAfterPhotos[jobId].push({name:f.name,dataUrl:e.target.result});
+const preview=document.getElementById('after-photos-preview-'+jobId);
+const label=document.getElementById('after-photos-label-'+jobId);
+if(preview){
+const img=document.createElement('img');
+img.src=e.target.result;
+img.style.cssText='width:68px;height:68px;object-fit:cover;border-radius:7px;border:1px solid rgba(255,255,255,.12);';
+preview.appendChild(img);
+}
+if(label)label.textContent=jobAfterPhotos[jobId].length+' after photo'+(jobAfterPhotos[jobId].length!==1?'s':'')+' added';
+};
+reader.readAsDataURL(f);
+});
+}
+
+function saveCompletedJob(jobId, elapsed){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+if(!job)return;
+const charged=parseFloat(document.getElementById('after-charged-'+jobId)?.value)||null;
+const notes=document.getElementById('after-notes-'+jobId)?.value?.trim()||'';
+const hours=parseFloat((elapsed/3600).toFixed(2));
+job.crm.status='completed';
+job.actual={
+charged,
+hours,
+notes,
+durationSeconds:elapsed,
+durationFormatted:formatElapsed(elapsed),
+beforePhotos:(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl})),
+afterPhotos:(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl})),
+loggedAt:new Date().toISOString()
+};
+delete jobBeforePhotos[jobId];
+delete jobAfterPhotos[jobId];
+persistHistory();
+const panel=document.getElementById('afterPhotoPanel');
+if(panel)panel.remove();
+renderUpcoming();
+renderCompletedJobs();
+showToast('✓ Job marked complete');
+if(session.token){
+api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+}
+}
+
+function renderCompletedJobs(){
+const container=document.getElementById('completedJobsSection');
+if(!container)return;
+const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted).slice(0,20);
+if(!completed.length){container.style.display='none';return;}
+container.style.display='block';
+const list=document.getElementById('completedJobsList');
+if(!list)return;
+list.innerHTML=completed.map(j=>`
+<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
+<div>
+<div style="font-size:13px;font-weight:700;color:white;">${j.crm?.name||'Customer'}</div>
+<div style="font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1px;">${j.crm?.address||''}</div>
+</div>
+<div style="text-align:right;">
+<div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#5DCAA5;">${j.actual?.charged?'$'+j.actual.charged:j.price}</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-top:1px;">${j.actual?.durationFormatted||''}</div>
+</div>
+</div>
+${(j.actual?.beforePhotos?.length||j.actual?.afterPhotos?.length)?`
+<div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;">
+${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">Before (${j.actual.beforePhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.beforePhotos.map(p=>`<img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map(p=>`<img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+</div>`:''}
+${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.38);border-top:1px solid rgba(255,255,255,.06);padding-top:7px;">${j.actual.notes}</div>`:''}
+</div>`).join('');
 }
 
 let dashCharts={};
