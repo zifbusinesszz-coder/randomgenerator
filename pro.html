@@ -2989,7 +2989,7 @@ document.getElementById('crmPanel').classList.add('open');
 function closeCrm(){document.getElementById('crmPanel').classList.remove('open');}
 function closeCrmOutside(e){if(e.target===document.getElementById('crmPanel'))closeCrm();}
 // NEW
-function saveCrm(){
+function saveCrm(){const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
 job.crm={
 name:document.getElementById('crmName').value.trim(),
