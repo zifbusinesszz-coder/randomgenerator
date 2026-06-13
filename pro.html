@@ -3928,19 +3928,21 @@ ${dateStr?`<div style="font-size:11px;color:rgba(255,255,255,.3);white-space:now
 </div>`;
 }).join('');
 }
-async function toggleMemberAssign(jobId,memberId){
+function toggleMemberAssign(jobId,memberId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));
-const cur=Array.isArray(job&&job.assignedTo)?[...job.assignedTo]:[];
+if(!job)return;
+const cur=Array.isArray(job.assignedTo)?[...job.assignedTo]:[];
 const idx=cur.indexOf(memberId);
 if(idx>=0)cur.splice(idx,1);else cur.push(memberId);
-await assignJobTo(jobId,cur.length?cur:null);
+assignJobTo(jobId,cur.length?cur:null);
 }
-async function toggleAllAssign(jobId){
+function toggleAllAssign(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));
+if(!job)return;
 const members=teamData.members||[];
-const cur=Array.isArray(job&&job.assignedTo)?job.assignedTo:[];
+const cur=Array.isArray(job.assignedTo)?job.assignedTo:[];
 const allSel=members.length>0&&members.every(m=>cur.includes(m.companyId));
-await assignJobTo(jobId,allSel?null:members.map(m=>m.companyId));
+assignJobTo(jobId,allSel?null:members.map(m=>m.companyId));
 }
 function showInviteForm(){
 const email=prompt('Enter the email address to invite:');
@@ -3968,14 +3970,23 @@ if(!assignedTo)payload=null;
 else if(assignedTo==='all')payload=(teamData.members||[]).map(m=>m.companyId);
 else if(Array.isArray(assignedTo))payload=assignedTo.length?assignedTo:null;
 else payload=[assignedTo];
-try{
-const res=await api({action:'assignJob',token:session.token,jobId:jobId,assignedTo:payload});
-if(res.success){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));
+const prevVal=job?job.assignedTo:undefined;
+// Optimistic update — feels instant
 if(job)job.assignedTo=payload;
 renderAssignList(document.getElementById('teamAssignList'));
+try{
+const res=await api({action:'assignJob',token:session.token,jobId:jobId,assignedTo:payload});
+if(!res.success){
+if(job)job.assignedTo=prevVal;
+renderAssignList(document.getElementById('teamAssignList'));
+showToast('Could not assign job',true);
 }
-}catch(e){showToast('Could not assign job',true);}
+}catch(e){
+if(job)job.assignedTo=prevVal;
+renderAssignList(document.getElementById('teamAssignList'));
+showToast('Could not assign job',true);
+}
 }
 
 /* ── JOIN TEAM ── */
