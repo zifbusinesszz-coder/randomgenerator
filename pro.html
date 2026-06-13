@@ -3027,7 +3027,34 @@ persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved'
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
 }
+function sendReceiptForJob(jobId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
+const name=job.crm?.name||'Customer';
+const phone=job.crm?.phone||'';
+const address=job.crm?.address||'';
+const charged=job.actual?.charged?'$'+job.actual.charged:'';
+const lines=[
+'🧾 '+session.businessName,
+'─────────────────',
+'',
+'👤 '+name,
+address?'📍 '+address:'',
+job.ts?'📅 '+job.ts:'',
+'',
+'🚛 What we removed:',
+job.loadSummary?'   '+job.loadSummary:'',
+job.specials?.length?'   '+job.specials.join(', '):'',
+'',
+charged?'💵 Total charged: '+charged:'',
+'',
+'─────────────────',
+'Thanks for choosing '+session.businessName+'!',
+'Questions? Call/text (507) 298-1179',
+].filter(Boolean).join('\n');
+if(phone){window.open('sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(lines));}
+showToast('✓ Receipt opened — tap send');
 }
+
 function sendReceipt(){
 const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
 const name=job.crm?.name||'Customer';
