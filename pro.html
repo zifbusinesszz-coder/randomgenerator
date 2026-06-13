@@ -4081,9 +4081,9 @@ if(existingPanel)existingPanel.remove();
 
 const panel=document.createElement('div');
 panel.id='afterPhotoPanel';
-panel.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;';
+panel.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
 panel.innerHTML=`
-<div style="background:var(--d-surface);border-radius:18px 18px 0 0;border:1px solid var(--d-border);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;animation:modalIn .22s ease both;">
+<div style="background:var(--d-surface);border-radius:18px;border:1px solid var(--d-border);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:modalIn .22s ease both;">
 <div style="padding:16px 18px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;">
 <div style="font-family:var(--font-display);font-size:16px;font-weight:900;color:white;">Job complete <span style="font-size:12px;font-weight:500;color:#5DCAA5;margin-left:6px;">${formatElapsed(elapsed)}</span></div>
 <button onclick="document.getElementById('afterPhotoPanel').remove();renderUpcoming();" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:27px;height:27px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
