@@ -4279,17 +4279,8 @@ api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.
 }
 }
 
-function renderCompletedJobs(){
-const container=document.getElementById('completedJobsSection');
-if(!container)return;
-const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted).slice(0,20);
-if(!completed.length){container.style.display='none';return;}
-container.style.display='block';
-if(window.AOS)setTimeout(()=>AOS.refresh(),50);
-const list=document.getElementById('completedJobsList');
-if(!list)return;
-list.innerHTML=completed.map(j=>`
-<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
+function buildCompletedJobCard(j){
+return `<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
 <div>
 <div style="font-size:13px;font-weight:700;color:white;">${j.crm?.name||'Customer'}</div>
@@ -4311,7 +4302,41 @@ ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,25
 <button onclick="openCrm(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-user" style="font-size:12px;"></i> Customer info</button>
 ${j.crm?.phone?`<button onclick="sendReceiptForJob(${j.id})" style="grid-column:1/-1;padding:7px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.25);color:#5DCAA5;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:12px;"></i> Send receipt</button>`:''}
 </div>
-</div>`).join('');
+</div>`;
+}
+function renderCompletedJobs(){
+const container=document.getElementById('completedJobsSection');
+if(!container)return;
+const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted).slice(0,50);
+if(!completed.length){container.style.display='none';return;}
+container.style.display='block';
+if(window.AOS)setTimeout(()=>AOS.refresh(),50);
+const list=document.getElementById('completedJobsList');
+if(!list)return;
+const recent=completed.slice(0,2);
+const older=completed.slice(2);
+const olderId='completedOlderJobs';
+const btnId='completedOlderBtn';
+const isOpen=document.getElementById(olderId)?.style.display==='block';
+let html=recent.map(buildCompletedJobCard).join('');
+if(older.length){
+html+=`<button id="${btnId}" onclick="toggleOlderCompleted()" style="width:100%;margin-top:2px;padding:9px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.42);border-radius:var(--r-sm);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;">
+<i class="ph ph-caret-down" id="completedOlderCaret" style="font-size:13px;transition:transform .2s;${isOpen?'transform:rotate(180deg)':''}"></i> ${isOpen?'Hide':'Show'} ${older.length} older job${older.length>1?'s':''}
+</button>
+<div id="${olderId}" style="display:${isOpen?'block':'none'};margin-top:7px;">${older.map(buildCompletedJobCard).join('')}</div>`;
+}
+list.innerHTML=html;
+}
+function toggleOlderCompleted(){
+const panel=document.getElementById('completedOlderJobs');
+const btn=document.getElementById('completedOlderBtn');
+const caret=document.getElementById('completedOlderCaret');
+if(!panel)return;
+const open=panel.style.display==='block';
+panel.style.display=open?'none':'block';
+caret.style.transform=open?'':'rotate(180deg)';
+const count=document.getElementById('completedJobsList').querySelectorAll('#completedOlderJobs > div').length;
+btn.innerHTML=`<i class="ph ph-caret-down" id="completedOlderCaret" style="font-size:13px;transition:transform .2s;${open?'':'transform:rotate(180deg)'}"></i> ${open?'Show':'Hide'} ${count} older job${count>1?'s':''}`;
 }
 
 let dashCharts={};
