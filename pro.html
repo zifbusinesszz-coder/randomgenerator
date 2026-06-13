@@ -928,8 +928,9 @@ section{padding:56px 20px;}
 .dash-body{max-width:1000px;margin:0 auto;padding:22px 18px 80px;position:relative;z-index:1;}
 .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;align-items:start;}
 @media(max-width:768px){.dash-grid{grid-template-columns:1fr;}}
-.dash-card{background:var(--d-card);border:1px solid var(--d-border);border-radius:var(--r-lg);padding:18px;overflow:hidden;}
-.dash-card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--d-faint);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.dash-card{position:relative;background:linear-gradient(165deg,rgba(255,255,255,0.035) 0%,rgba(255,255,255,0.015) 100%);border:1px solid var(--d-border);border-radius:var(--r-xl);padding:20px;overflow:hidden;box-shadow:0 4px 22px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.04);transition:transform .3s cubic-bezier(.2,.7,.3,1),box-shadow .3s ease,border-color .3s ease;}
+.dash-card:hover{transform:translateY(-3px);border-color:rgba(26,158,114,0.28);box-shadow:0 14px 40px rgba(0,0,0,0.4),0 0 0 1px rgba(26,158,114,0.1),inset 0 1px 0 rgba(255,255,255,0.05);}
+.dash-card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,0.55);margin-bottom:16px;display:flex;align-items:center;gap:7px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
 /* Calendar */
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .cal-month-label{font-family:var(--font-display);font-size:16px;font-weight:900;color:white;}
