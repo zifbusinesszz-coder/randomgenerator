@@ -3806,8 +3806,8 @@ loggedAt:new Date().toISOString()
 persistHistory();
 const panel=document.getElementById('afterPhotoPanel');
 if(panel)panel.remove();
-renderUpcoming();
 renderCompletedJobs();
+renderUpcoming();
 showToast('✓ Job marked complete');
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
