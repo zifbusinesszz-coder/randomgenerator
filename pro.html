@@ -1026,8 +1026,8 @@ section{padding:56px 20px;}
 <div class="hero">
 <div class="hero-left">
 <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
-<h1>Junk removal pricing — know what to charge <span class="highlight">before</span> you call back.</h1>
-<p class="hero-sub">You're on a job, the phone rings, customer wants a price. Punch in the load size, drive, and special items — get a number that actually covers your costs and hits your margin.</p>
+<h1>Quote, schedule, and run every job — all from your phone.</h1>
+<p class="hero-sub">Wood's Waste Pro is the complete business tool for junk removal operators. Price any job in 60 seconds, save customer info, schedule your day, track before &amp; after photos, and see exactly what you made — every job, every load.</p>
 <div class="hero-actions">
 <a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
 <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
@@ -1041,28 +1041,32 @@ section{padding:56px 20px;}
 <div class="phone-frame">
 <div class="phone-notch"></div>
 <div class="phone-screen">
-<div class="phone-app-bar"><div class="phone-app-name">Quote Tool</div><div class="phone-app-badge">LIVE</div></div>
-<div class="phone-job-label">Load size</div>
+<div class="phone-app-bar"><div class="phone-app-name">Wood's Waste Pro</div><div class="phone-app-badge">3 today</div></div>
+<!-- Job cards -->
+<div style="background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.35);border-radius:8px;padding:8px 10px;margin-bottom:5px;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#5DCAA5;">● In Progress</div>
+<div style="font-family:var(--font-num);font-size:12px;font-weight:700;color:white;">0:42:17</div>
+</div>
+<div style="font-size:11px;font-weight:700;color:white;">Smith Residence</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.45);">Half Load + Mattress · $485</div>
+</div>
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.35);margin-bottom:3px;">◷ 11:30am Scheduled</div>
+<div style="font-size:11px;font-weight:700;color:white;">Johnson Garage</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.45);">Full Truck · $680</div>
+</div>
+<!-- Quote tool -->
+<div class="phone-job-label">Quick quote</div>
 <div class="phone-load-grid">
-<div class="phone-load-card"><div class="phone-load-name">Min Load</div></div>
-<div class="phone-load-card sel"><div class="phone-load-name">Half Load</div></div>
+<div class="phone-load-card"><div class="phone-load-name">Half Load</div></div>
+<div class="phone-load-card sel"><div class="phone-load-name">Full Truck</div></div>
 </div>
-<div class="phone-job-label">Special items</div>
-<div class="phone-specials">
-<div class="phone-special-tag on">Mattress +$40</div>
-<div class="phone-special-tag on">TV +$25</div>
-<div class="phone-special-tag">Fridge</div>
-</div>
-<div class="phone-markup-row">
-<div class="phone-markup-label">Markup</div>
-<div class="phone-markup-track"><div class="phone-markup-fill"></div><div class="phone-markup-thumb"></div></div>
-<div class="phone-markup-val">35%</div>
-</div>
-<div class="phone-result">
+<div class="phone-result" style="margin-top:6px;">
 <div class="phone-result-label">Quote the customer</div>
-<div class="phone-result-price">$554</div>
-<div class="phone-result-breakdown">Cost $410 · 35% markup · 18 mi drive</div>
-<div class="phone-result-btn">Save to job history →</div>
+<div class="phone-result-price">$680</div>
+<div class="phone-result-breakdown">Cost $504 · 35% markup · 14 mi</div>
+<div class="phone-result-btn">Save &amp; schedule →</div>
 </div>
 </div>
 </div>
@@ -1115,11 +1119,11 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 
 <div class="strip">
-<div class="strip-item"><i class="ph ph-device-mobile" style="font-size:15px;"></i> <strong>Works on any phone</strong></div>
-<div class="strip-item"><i class="ph ph-lightning" style="font-size:15px;"></i> <strong>Quote in under 60 sec</strong></div>
+<div class="strip-item"><i class="ph ph-lightning" style="font-size:15px;"></i> <strong>Quote in 60 seconds</strong></div>
+<div class="strip-item"><i class="ph ph-calendar-check" style="font-size:15px;"></i> <strong>CRM &amp; scheduling</strong></div>
 <div class="strip-item"><i class="ph ph-brain" style="font-size:15px;"></i> <strong>AI photo quoting</strong></div>
-<div class="strip-item"><i class="ph ph-clipboard-text" style="font-size:15px;"></i> <strong>Full job history</strong></div>
-<div class="strip-item"><i class="ph ph-lock" style="font-size:15px;"></i> <strong>14-day free trial</strong></div>
+<div class="strip-item"><i class="ph ph-chart-line-up" style="font-size:15px;"></i> <strong>Profit analytics</strong></div>
+<div class="strip-item"><i class="ph ph-users" style="font-size:15px;"></i> <strong>Team management</strong></div>
 </div>
 
 <section class="light" style="padding:88px 40px;" id="origin">
@@ -1174,11 +1178,12 @@ localStorage.setItem('installBannerDismissed','1');
 <section class="mid" style="padding:88px 40px;" id="how">
 <div class="section-inner">
 <p class="section-eyebrow">How it works</p>
-<h2 class="section-title">Sign up once. Price every job.</h2>
-<div class="steps-grid">
-<div class="step-card"><div class="step-num">01 / 03</div><div class="step-icon"><i class="ph ph-gear"></i></div><div class="step-title">Enter your costs</div><div class="step-desc">Set your load rates, special item fees, drive rate per mile, and labor cost. Your numbers, your market.</div></div>
-<div class="step-card"><div class="step-num">02 / 03</div><div class="step-icon"><i class="ph ph-device-mobile"></i></div><div class="step-title">Pull it up on your phone</div><div class="step-desc">No app to install. Open your dashboard on any phone or tablet while you're standing in the driveway.</div></div>
-<div class="step-card"><div class="step-num">03 / 03</div><div class="step-icon"><i class="ph ph-currency-dollar"></i></div><div class="step-title">Quote with confidence</div><div class="step-desc">See your cost, your markup, and your final number. Call back in 30 seconds with a real quote, not a guess.</div></div>
+<h2 class="section-title">One tool. The whole day.</h2>
+<div class="steps-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+<div class="step-card"><div class="step-num">01 / 04</div><div class="step-icon"><i class="ph ph-currency-dollar"></i></div><div class="step-title">Quote on the spot</div><div class="step-desc">Pick load size, toggle special items, slide markup — get a real price in under 60 seconds while the customer is still on the phone.</div></div>
+<div class="step-card"><div class="step-num">02 / 04</div><div class="step-icon"><i class="ph ph-calendar-plus"></i></div><div class="step-title">Save &amp; schedule</div><div class="step-desc">Add the customer's name, address, and phone. Set a date and time. The job appears on your calendar and upcoming list immediately.</div></div>
+<div class="step-card"><div class="step-num">03 / 04</div><div class="step-icon"><i class="ph ph-timer"></i></div><div class="step-title">Run the job</div><div class="step-desc">Start the built-in timer when you arrive. Snap before &amp; after photos. Get turn-by-turn directions. Mark it done when you're finished.</div></div>
+<div class="step-card"><div class="step-num">04 / 04</div><div class="step-icon"><i class="ph ph-chart-bar"></i></div><div class="step-title">Know your numbers</div><div class="step-desc">Log what you actually charged. See quoted vs. actual, profit by load size, and revenue trends over time — so you always know where you stand.</div></div>
 </div>
 </div>
 </section>
@@ -1186,37 +1191,53 @@ localStorage.setItem('installBannerDismissed','1');
 <section class="light" style="padding:88px 40px;" id="features">
 <div class="section-inner">
 <p class="section-eyebrow">Features</p>
-<h2 class="section-title">Built for how the job actually works.</h2>
+<h2 class="section-title">Everything you need to run the business, not just the job.</h2>
 <div class="features-grid">
 <div class="feat-card pro-feat">
+<div class="feat-icon"><i class="ph ph-calendar-check" style="color:var(--green);"></i></div>
+<div class="feat-title">Scheduling &amp; Calendar <span class="pro-badge-inline">PRO</span></div>
+<div class="feat-desc">Schedule every job with a date, time, and address. See your full week on a calendar. Upcoming jobs surface automatically so you always know what's next.</div>
+</div>
+<div class="feat-card pro-feat">
 <div class="feat-icon"><i class="ph ph-address-book" style="color:var(--green);"></i></div>
-<div class="feat-title">Full CRM with analytics <span class="pro-badge-inline">PRO</span></div>
-<div class="feat-desc">Track every customer, schedule jobs on a calendar, log what you actually charged, and see profit trends over time — quoted vs. actual, revenue by load size, and where you're leaving money.</div>
+<div class="feat-title">Customer CRM <span class="pro-badge-inline">PRO</span></div>
+<div class="feat-desc">Every job has a customer record — name, phone, address, status, notes, and job history. Pull up any customer in seconds. No spreadsheet, no sticky notes.</div>
 </div>
 <div class="feat-card pro-feat">
 <div class="feat-icon"><i class="ph ph-chart-line-up" style="color:var(--green);"></i></div>
-<div class="feat-title">Insights Dashboard <span class="pro-badge-inline">PRO</span></div>
-<div class="feat-desc">See quoted vs actual, profit trends, load performance, and markup history — charts that show where you're leaving money.</div>
+<div class="feat-title">Profit Analytics <span class="pro-badge-inline">PRO</span></div>
+<div class="feat-desc">Quoted vs. actual, revenue by load size, win rate, and margin trends — charts that tell you where you're leaving money and which jobs make you the most.</div>
+</div>
+<div class="feat-card pro-feat">
+<div class="feat-icon"><i class="ph ph-navigation-arrow" style="color:var(--green);"></i></div>
+<div class="feat-title">Plan My Day <span class="pro-badge-inline">PRO</span></div>
+<div class="feat-desc">One tap builds an optimized route through all your scheduled jobs — with your dump stop built in. Open directly in Google Maps or Apple Maps.</div>
 </div>
 <div class="feat-card">
 <div class="feat-icon"><i class="ph ph-camera" style="color:var(--green);"></i></div>
 <div class="feat-title">AI Photo Quoting</div>
-<div class="feat-desc">Upload photos of the pile — AI identifies load size and special items, then quotes using your exact rates.</div>
+<div class="feat-desc">Point your phone at the pile. AI identifies load size and special items, then prices it using your exact rates. Takes about 10 seconds.</div>
 </div>
 <div class="feat-card">
-<div class="feat-icon"><i class="ph ph-gear"></i></div>
-<div class="feat-title">Your costs, locked in</div>
-<div class="feat-desc">Set your load rates, dump fees, labor rate, and drive cost once. Every quote is calculated off your real numbers.</div>
+<div class="feat-icon"><i class="ph ph-timer" style="color:var(--green);"></i></div>
+<div class="feat-title">Job Timer &amp; Photo Docs</div>
+<div class="feat-desc">Start a timer when you pull up. Snap before &amp; after photos tied to the job. Log duration and what you actually charged when it's done.</div>
 </div>
 <div class="feat-card">
-<div class="feat-icon"><i class="ph ph-package"></i></div>
+<div class="feat-icon"><i class="ph ph-currency-dollar" style="color:var(--green);"></i></div>
+<div class="feat-title">Cost-based quoting</div>
+<div class="feat-desc">Set your dump fees, drive rate, labor cost, and load rates once. Every quote reflects your real numbers — not a guess from memory.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon"><i class="ph ph-package" style="color:var(--green);"></i></div>
 <div class="feat-title">Special item surcharges</div>
-<div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds automatically.</div>
+<div class="feat-desc">Mattresses, fridges, tires, pianos, hot tubs — toggle on whatever applies and the fee adds to the quote automatically.</div>
 </div>
-<div class="feat-card">
-<div class="feat-icon"><i class="ph ph-clock-countdown"></i></div>
-<div class="feat-title">Job history & tracking</div>
-<div class="feat-desc">Every saved quote goes into your history. Log what you actually charged after the job to track your real numbers over time.</div>
+<div class="feat-card" style="border-color:rgba(93,202,165,.25);">
+<div class="feat-icon"><i class="ph ph-users" style="color:#5DCAA5;"></i></div>
+<div class="feat-title">Team management <span class="pro-badge-inline" style="background:rgba(93,202,165,.15);color:#5DCAA5;">TEAM</span></div>
+<div class="feat-desc">Invite crew members by email. Assign specific jobs to specific people. Members get notified and see only their assigned jobs — owner keeps full visibility.</div>
+</div>
 </div>
 </div>
 </section>
@@ -1295,7 +1316,7 @@ localStorage.setItem('installBannerDismissed','1');
 <p class="section-eyebrow" style="text-align:center;">From the field</p>
 <div class="stars" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
 <meta itemprop="ratingValue" content="5"><meta itemprop="bestRating" content="5">★★★★★</div>
-<div class="testimonial-quote" itemprop="reviewBody">"I used to throw out a number and hope. Now I actually know what I'm making on every job before I say a word to the customer."</div>
+<div class="testimonial-quote" itemprop="reviewBody">"We used to run the whole day from memory — who was next, what we quoted, whether we made money. Now it's all in one place. Quote the job, schedule it, show up, log the outcome. Done."</div>
 <div class="testimonial-author" itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Griffin W.</strong> · Wood's Waste, Farmington MN · built it for himself first</div>
 </div>
 </section>
@@ -1306,24 +1327,32 @@ localStorage.setItem('installBannerDismissed','1');
 <h2 class="section-title">Common questions</h2>
 <div style="display:flex;flex-direction:column;gap:28px;">
 <div>
+<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">Is this just a pricing calculator or a full business tool?</h3>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">It's both, and that's the point. Starter gives you the quote calculator, AI photo quoting, special item fees, and basic job history. Pro adds a full customer CRM, job scheduling with a calendar, route planning, before &amp; after photo documentation, job timers, and profit analytics. Team adds crew management on top of all that.</p>
+</div>
+<div>
+<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">How does scheduling work?</h3>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">After you quote a job, add the customer's name, phone, address, and a date/time. The job shows up on your calendar and your upcoming jobs list. On the day of the job, tap it to start the timer, get directions, and log the outcome when you're done.</p>
+</div>
+<div>
 <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">How do junk removal operators price jobs?</h3>
-<p style="font-size:14px;color:var(--gray);line-height:1.8;">Most operators price by load size — minimum load, quarter, half, or full truck — then add special item fees for things like mattresses, fridges, and tires, plus a markup over their actual cost. Wood's Waste Pro automates this using your exact dump fees, drive rate, and labor cost so every quote is based on real numbers.</p>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">Most operators price by load size — minimum, quarter, half, or full truck — then add special item fees for things like mattresses, fridges, and tires, plus a markup over their actual cost. Wood's Waste Pro automates this using your exact dump fees, drive rate, and labor cost so every quote is based on real numbers.</p>
 </div>
 <div>
-<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">What should I charge for a full truck of junk?</h3>
-<p style="font-size:14px;color:var(--gray);line-height:1.8;">A full truck typically runs $350–$700+ depending on your market, local dump fees, and drive distance. The right number depends on your actual costs — not a competitor's price. Wood's Waste Pro calculates your floor price and adds your markup so you never accidentally underprice a job.</p>
-</div>
-<div>
-<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">Is there an app for junk removal pricing?</h3>
-<p style="font-size:14px;color:var(--gray);line-height:1.8;">Wood's Waste Pro works on any phone browser — no App Store download needed. Add it to your home screen for one-tap access while you're standing in a customer's driveway. It also works on desktop and tablet.</p>
+<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">Is there an app to download?</h3>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">No App Store needed. Wood's Waste Pro works in any phone browser. On iPhone, add it to your home screen for one-tap access that works like a real app. On Android, tap "Add to home screen" from Chrome. It works on desktop and tablet too.</p>
 </div>
 <div>
 <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">How does the AI photo quoting work?</h3>
-<p style="font-size:14px;color:var(--gray);line-height:1.8;">Upload a photo of the pile before or during the job. The AI estimates load size, identifies special items like mattresses and refrigerators, and generates a quote using your saved rates and current markup. It takes about 10 seconds per photo.</p>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">Upload a photo of the pile. The AI estimates load size, identifies special items like mattresses and refrigerators, and generates a quote using your saved rates. It takes about 10 seconds. You can edit the result before saving.</p>
 </div>
 <div>
 <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">Can I track what I actually charged vs. what I quoted?</h3>
-<p style="font-size:14px;color:var(--gray);line-height:1.8;">Yes — after each job, log what you actually charged. Wood's Waste Pro compares that to your quote and shows you over time whether you're pricing consistently, leaving money on the table, or winning competitive bids. The Insights dashboard breaks this down by load size.</p>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">Yes. After each job, log what you actually charged and how long it took. The Insights dashboard breaks this down by load size — so you can see where you're consistently undercharging, which jobs are most profitable, and how your revenue trends over time.</p>
+</div>
+<div>
+<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--black);margin-bottom:8px;">How does the Team plan work?</h3>
+<p style="font-size:14px;color:var(--gray);line-height:1.8;">The owner invites crew members by email. Members join with their own login and see the jobs assigned to them. The owner assigns jobs from the dashboard — members get an email notification and their job list updates when they log in. 3-seat plan supports 1 owner + 2 members. 10-seat plan supports 1 owner + up to 9 members.</p>
 </div>
 </div>
 </div>
@@ -1332,9 +1361,9 @@ localStorage.setItem('installBannerDismissed','1');
 <section class="cta-bottom">
 <div class="cta-bottom-orb"></div>
 <div style="position:relative;z-index:1;">
-<h2>Stop guessing on price.</h2>
-<p>14-day free trial. No charge until it's working for you.</p>
-<a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free →</a>
+<h2>Run a tighter business — starting today.</h2>
+<p>Quote faster. Schedule smarter. Know your numbers. 14-day free trial, no charge until it's working for you.</p>
+<a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
 <p style="font-size:13px;color:rgba(255,255,255,.45);margin-top:14px;">Got an invite from a team owner? <a href="#" onclick="openModal('join-team');return false;" style="color:rgba(255,255,255,.7);font-weight:600;text-decoration:underline;">Join a team →</a></p>
 </div>
 </section>
