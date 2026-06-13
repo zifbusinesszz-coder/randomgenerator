@@ -3017,7 +3017,7 @@ catch(e){showToast('Could not sync delete to server',true);}
 }
 }
 // NEW
-function saveActual(){
+function saveActual(){const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
 const charged=parseFloat(document.getElementById('actualCharged').value)||null;
 const hours=parseFloat(document.getElementById('actualHours').value)||null;
