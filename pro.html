@@ -1269,11 +1269,14 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div class="pricing-card" style="border-color:rgba(93,202,165,.3);">
 <div class="pricing-plan" style="color:#5DCAA5;">Team</div>
+<div style="display:inline-flex;align-items:center;background:rgba(0,0,0,.06);border-radius:20px;padding:3px;gap:2px;margin-bottom:10px;">
+<button id="mkt-team3-btn" onclick="setTeamSize(false)" style="border:none;border-radius:17px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:var(--black);color:white;transition:all .15s;">3 seats</button>
+<button id="mkt-team10-btn" onclick="setTeamSize(true)" style="border:none;border-radius:17px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(0,0,0,.4);transition:all .15s;">10 seats</button>
+</div>
 <div class="pricing-price" id="teamPrice">$149<span>/mo</span></div>
 <div class="pricing-desc" id="teamDesc">Full Pro for your whole crew — 1 owner + 2 members, shared job history.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Pro</li>
-<li class="pf"><span class="chk chk-green">✓</span> 3 user seats (1 owner + 2 members)</li>
 <li class="pf"><span class="chk chk-green">✓</span> Shared job history across the team</li>
 <li class="pf"><span class="chk chk-green">✓</span> Owner assigns jobs to members</li>
 <li class="pf"><span class="chk chk-green">✓</span> Invite members by email from your dashboard</li>
@@ -1415,17 +1418,23 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="margin-top:6px;background:var(--green);color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
 </div>
 </div>
-<div onclick="pickPlan('team')" style="border:1.5px solid #5b6af0;border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;background:linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%);" onmouseover="this.style.background='rgba(91,106,240,0.08)'" onmouseout="this.style.background='linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%)'">
+<div style="border:1.5px solid #5b6af0;border-radius:var(--r-lg);padding:14px 16px;background:linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%);">
+<div style="display:flex;align-items:center;gap:14px;">
 <div style="flex:1;min-width:0;">
-<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
+<div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Team</div>
-<div style="font-size:8.5px;font-weight:700;background:#5b6af0;color:white;padding:2px 7px;border-radius:9px;">1 Owner + 2 Members</div>
+<div style="display:inline-flex;align-items:center;background:rgba(0,0,0,.07);border-radius:16px;padding:2px;gap:2px;">
+<button id="sp-team3-btn" onclick="setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:var(--black);color:white;transition:all .15s;">3</button>
+<button id="sp-team10-btn" onclick="setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(0,0,0,.4);transition:all .15s;">10</button>
+</div>
+<div style="font-size:8.5px;color:var(--gray);">seats</div>
 </div>
 <div style="font-size:11px;color:var(--gray);line-height:1.5;">Everything in Pro. Assign jobs, manage crew, shared quote tool.</div>
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-team-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
-<div style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
+<div onclick="pickPlan('team')" style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;cursor:pointer;">Select →</div>
+</div>
 </div>
 </div>
 </div>
@@ -1999,8 +2008,14 @@ localStorage.setItem('installBannerDismissed','1');
 <li class="pf"><span class="chk chk-green">✓</span> Analytics & insights</li>
 </ul>
 </div>
-<div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan('team')" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
-<div class="pricing-plan" style="color:#5DCAA5;">Team</div>
+<div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan(teamSizeIs10?'team10':'team')" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+<div class="pricing-plan" style="color:#5DCAA5;margin:0;">Team</div>
+<div style="display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border-radius:16px;padding:2px;gap:2px;">
+<button id="pw-team3-btn" onclick="event.stopPropagation();setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:white;color:black;transition:all .15s;">3</button>
+<button id="pw-team10-btn" onclick="event.stopPropagation();setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(255,255,255,.4);transition:all .15s;">10</button>
+</div>
+</div>
 <div class="pricing-price" id="pw-team-price">$149<span>/mo</span></div>
 <div class="pricing-desc" id="pw-team-desc">Everything in Pro for up to 3 operators on one subscription.</div>
 <ul class="pricing-features">
@@ -2291,7 +2306,7 @@ hazmat:'HAZARDOUS MATERIALS — look for: chemical drums or jugs with warning la
 return cues[key]||`look carefully for any "${v.label}" in the photo — if you can see one or reasonably suspect one is present based on the context, include it. Err on the side of flagging it.`;
 }
 
-function isTeamOwner(){return (session.plan==='team'||session.plan==='team-yearly')&&session.role==='owner';}
+function isTeamOwner(){return ['team','team-yearly','team10','team10-yearly'].includes(session.plan)&&session.role==='owner';}
 function initStripe(){
 try{
 if(!stripe)stripe=Stripe(STRIPE_PK);
@@ -2422,6 +2437,8 @@ planOrMode==='pro-yearly'?'Pro Plan — $590/yr':
 planOrMode==='starter-yearly'?'Starter Plan — $290/yr':
 planOrMode==='team'?'Team Plan — $149/mo':
 planOrMode==='team-yearly'?'Team Plan — $1,490/yr':
+planOrMode==='team10'?'Team Plan — $299/mo':
+planOrMode==='team10-yearly'?'Team Plan — $2,999/yr':
 'Starter Plan — $29/mo';
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalStepDots').style.display='flex';
@@ -2439,9 +2456,10 @@ setTimeout(initStripe,50);
 
 function pickPlan(plan){
 const yr=signupBillingYearly;
-const planKey=plan==='pro'?(yr?'pro-yearly':'pro'):plan==='team'?(yr?'team-yearly':'team'):(yr?'starter-yearly':'starter');
+const base=(plan==='team'&&teamSizeIs10)?'team10':plan;
+const planKey=base==='pro'?(yr?'pro-yearly':'pro'):base==='team10'?(yr?'team10-yearly':'team10'):base==='team'?(yr?'team-yearly':'team'):(yr?'starter-yearly':'starter');
 currentPlan=planKey;
-const badgeText=planKey==='pro-yearly'?'Pro Plan — $590/yr':planKey==='pro'?'Pro Plan — $59/mo':planKey==='team-yearly'?'Team Plan — $1,490/yr':planKey==='team'?'Team Plan — $149/mo':planKey==='starter-yearly'?'Starter Plan — $290/yr':'Starter Plan — $29/mo';
+const badgeText=planKey==='pro-yearly'?'Pro Plan — $590/yr':planKey==='pro'?'Pro Plan — $59/mo':planKey==='team10-yearly'?'Team Plan — $2,999/yr':planKey==='team10'?'Team Plan — $299/mo':planKey==='team-yearly'?'Team Plan — $1,490/yr':planKey==='team'?'Team Plan — $149/mo':planKey==='starter-yearly'?'Starter Plan — $290/yr':'Starter Plan — $29/mo';
 document.getElementById('modalPlanBadge').textContent=badgeText;
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalTitle').textContent='Start your free trial';
@@ -2650,7 +2668,7 @@ session.token=token;session.companyId=companyId;session.businessName=businessNam
 localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);localStorage.setItem('ww_role',session.role);if(ownerId)localStorage.setItem('ww_owner_id',ownerId);else localStorage.removeItem('ww_owner_id');
 }
 function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id'].forEach(k=>localStorage.removeItem(k));}
-function isPro(){return ['pro','pro-yearly','team','team-yearly'].includes(session.plan);}
+function isPro(){return ['pro','pro-yearly','team','team-yearly','team10','team10-yearly'].includes(session.plan);}
 function doLogout(){
 if(document.getElementById('paywallOverlay').classList.contains('open')){
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
@@ -2712,7 +2730,7 @@ if(mobAiBtn)mobAiBtn.style.display=isPro()?'flex':'none';
 const mobInsightsBtn=document.getElementById('mobInsightsBtn');
 if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
-buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();
+buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
@@ -3423,6 +3441,36 @@ let paywallSelectedPlan = 'starter';
 let paywallStripe, paywallCardElement, paywallCardComplete = false;
 let usingNewCard = false;
 
+let teamSizeIs10 = false;
+function setTeamSize(is10) {
+teamSizeIs10 = is10;
+// Update seat toggle pill styles across all 3 locations
+['mkt','sp','pw'].forEach(function(p){
+const b3=document.getElementById(p+'-team3-btn'),b10=document.getElementById(p+'-team10-btn');
+if(b3){b3.style.background=!is10?'var(--black)':'transparent';b3.style.color=!is10?'white':'rgba(0,0,0,.4)';}
+if(b10){b10.style.background=is10?'var(--black)':'transparent';b10.style.color=is10?'white':'rgba(0,0,0,.4)';}
+// paywall uses white-ish
+const pb3=document.getElementById(p+'-team3-btn'),pb10=document.getElementById(p+'-team10-btn');
+});
+// Re-run each context's billing toggle to update prices with new size
+const _t3m='$149',_t3y='$1,490',_t10m='$299',_t10y='$2,999';
+// Marketing
+const mktEl=document.getElementById('teamPrice');
+if(mktEl)mktEl.innerHTML=(is10?(billingYearly?_t10y:_t10m):(billingYearly?_t3y:_t3m))+'<span>'+(billingYearly?'/yr':'/mo')+'</span>';
+const mktDesc=document.getElementById('teamDesc');
+if(mktDesc)mktDesc.textContent=is10?(billingYearly?'Best value for a large crew — 2 months free. Up to 10 operators all year.':'Full Pro for up to 10 operators — 1 owner + 9 members.'):(billingYearly?'Best value for a crew — 2 months free. Full Pro for 3 operators all year.':'Full Pro for your whole crew — 1 owner + 2 members, shared job history.');
+const mktBtn=document.getElementById('teamBtn');
+if(mktBtn)mktBtn.onclick=function(){openModal(is10?(billingYearly?'team10-yearly':'team10'):(billingYearly?'team-yearly':'team'));return false;};
+// stepPick
+const spEl=document.getElementById('sp-team-price');
+if(spEl)spEl.innerHTML=(is10?(signupBillingYearly?_t10y:_t10m):(signupBillingYearly?_t3y:_t3m))+'<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">'+(signupBillingYearly?'/yr':'/mo')+'</span>';
+// Paywall
+const pwEl=document.getElementById('pw-team-price');
+if(pwEl)pwEl.innerHTML=(is10?(paywallBillingYearly?_t10y:_t10m):(paywallBillingYearly?_t3y:_t3m))+'<span>'+(paywallBillingYearly?'/yr':'/mo')+'</span>';
+const pwDesc=document.getElementById('pw-team-desc');
+if(pwDesc)pwDesc.textContent=is10?'Everything in Pro for up to 10 operators on one subscription.':'Everything in Pro for up to 3 operators on one subscription.';
+}
+
 let signupBillingYearly = false;
 function toggleSignupBilling() {
 signupBillingYearly = !signupBillingYearly;
@@ -3432,11 +3480,11 @@ document.getElementById('spBillingYearly').style.color = signupBillingYearly ? '
 if (signupBillingYearly) {
 document.getElementById('sp-starter-price').innerHTML = '$290<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
 document.getElementById('sp-pro-price').innerHTML = '$590<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
-document.getElementById('sp-team-price').innerHTML = '$1,490<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
+document.getElementById('sp-team-price').innerHTML = (teamSizeIs10?'$2,999':'$1,490')+'<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/yr</span>';
 } else {
 document.getElementById('sp-starter-price').innerHTML = '$29<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
 document.getElementById('sp-pro-price').innerHTML = '$59<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
-document.getElementById('sp-team-price').innerHTML = '$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
+document.getElementById('sp-team-price').innerHTML = (teamSizeIs10?'$299':'$149')+'<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span>';
 }
 }
 
@@ -3451,14 +3499,14 @@ document.getElementById('pw-starter-price').innerHTML = '$290<span>/yr</span>';
 document.getElementById('pw-starter-desc').textContent = 'Great value — 2 months free vs monthly. Everything to price jobs confidently.';
 document.getElementById('pw-pro-price').innerHTML = '$590<span>/yr</span>';
 document.getElementById('pw-pro-desc').textContent = 'Best value — 2 months free. Full CRM, dashboard & insights all year.';
-document.getElementById('pw-team-price').innerHTML = '$1,490<span>/yr</span>';
+document.getElementById('pw-team-price').innerHTML = (teamSizeIs10?'$2,999':'$1,490')+'<span>/yr</span>';
 document.getElementById('pw-team-desc').textContent = 'Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 } else {
 document.getElementById('pw-starter-price').innerHTML = '$29<span>/mo</span>';
 document.getElementById('pw-starter-desc').textContent = 'Manual calculator with everything you need to price jobs confidently.';
 document.getElementById('pw-pro-price').innerHTML = '$59<span>/mo</span>';
 document.getElementById('pw-pro-desc').textContent = 'Everything in Starter plus advanced CRM & Analytics.';
-document.getElementById('pw-team-price').innerHTML = '$149<span>/mo</span>';
+document.getElementById('pw-team-price').innerHTML = (teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
 document.getElementById('pw-team-desc').textContent = 'Everything in Pro for up to 3 operators on one subscription.';
 }
 if (paywallSelectedPlan) {
@@ -3553,11 +3601,13 @@ function selectPaywallPlan(plan) {
 // Normalize to base plan for card highlighting
 const basePlan = plan.replace('-yearly', '');
 const isYearly = paywallBillingYearly;
-paywallSelectedPlan = basePlan === 'pro' ? (isYearly?'pro-yearly':'pro') : basePlan === 'team' ? (isYearly?'team-yearly':'team') : (isYearly?'starter-yearly':'starter');
+const normBase = (basePlan === 'team10') ? 'team10' : basePlan;
+paywallSelectedPlan = normBase === 'pro' ? (isYearly?'pro-yearly':'pro') : normBase === 'team10' ? (isYearly?'team10-yearly':'team10') : normBase === 'team' ? (isYearly?'team-yearly':'team') : (isYearly?'starter-yearly':'starter');
 document.querySelectorAll('#paywallOverlay .pricing-card').forEach(c => c.classList.remove('pw-selected'));
-const cardEl = document.getElementById('pw-' + basePlan + '-card');
+const cardKey = (normBase === 'team10') ? 'team' : normBase;
+const cardEl = document.getElementById('pw-' + cardKey + '-card');
 if (cardEl) cardEl.classList.add('pw-selected');
-const label = basePlan === 'pro' ? (isYearly?'Pro ($590/yr)':'Pro ($59/mo)') : basePlan === 'team' ? (isYearly?'Team ($1,490/yr)':'Team ($149/mo)') : (isYearly?'Starter ($290/yr)':'Starter ($29/mo)');
+const label = normBase === 'pro' ? (isYearly?'Pro ($590/yr)':'Pro ($59/mo)') : normBase === 'team10' ? (isYearly?'Team 10 ($2,999/yr)':'Team 10 ($299/mo)') : normBase === 'team' ? (isYearly?'Team ($1,490/yr)':'Team ($149/mo)') : (isYearly?'Starter ($290/yr)':'Starter ($29/mo)');
 document.getElementById('paywallSelectedPlanLabel').textContent = label;
 document.getElementById('paywallContinueBtn').style.display = 'block';
 }
@@ -3574,7 +3624,7 @@ function goPaywallPayment() {
 document.getElementById('paywallPlanStep').style.display = 'none';
 document.getElementById('paywallPaymentStep').style.display = 'block';
 document.getElementById('paywallPaymentPlanLabel').textContent =
-paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : paywallSelectedPlan === 'pro-yearly' ? 'Pro — $590/yr' : paywallSelectedPlan === 'team' ? 'Team — $149/mo' : paywallSelectedPlan === 'team-yearly' ? 'Team — $1,490/yr' : paywallSelectedPlan === 'starter-yearly' ? 'Starter — $290/yr' : 'Starter — $29/mo';
+paywallSelectedPlan === 'pro' ? 'Pro — $59/mo' : paywallSelectedPlan === 'pro-yearly' ? 'Pro — $590/yr' : paywallSelectedPlan === 'team' ? 'Team — $149/mo' : paywallSelectedPlan === 'team-yearly' ? 'Team — $1,490/yr' : paywallSelectedPlan === 'team10' ? 'Team (10 seats) — $299/mo' : paywallSelectedPlan === 'team10-yearly' ? 'Team (10 seats) — $2,999/yr' : paywallSelectedPlan === 'starter-yearly' ? 'Starter — $290/yr' : 'Starter — $29/mo';
 usingNewCard = true;
 initPaywallStripe();
 }
@@ -3682,8 +3732,8 @@ document.getElementById('starterPrice').innerHTML='$290<span>/yr</span>';
 document.getElementById('starterDesc').innerHTML='Great value — get 2 months free vs monthly. Everything to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$590<span>/yr</span>';
 document.getElementById('proDesc').innerHTML='Best value — 2 months free. AI photo quoting + Insights all year long.';
-document.getElementById('teamPrice').innerHTML='$1,490<span>/yr</span>';
-document.getElementById('teamDesc').innerHTML='Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
+document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$2,999':'$1,490')+'<span>/yr</span>';
+document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Best value for a large crew — 2 months free. Up to 10 operators all year.':'Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 document.getElementById('pricingNote').textContent='Billed once per year. 14-day free trial included. Cancel anytime before day 15.';
 document.getElementById('starterBtn').onclick=function(){openModal('starter-yearly');return false;};
 document.getElementById('proBtn').onclick=function(){openModal('pro-yearly');return false;};
@@ -3693,8 +3743,8 @@ document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
 document.getElementById('starterDesc').innerHTML='Manual calculator with everything you need to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
 document.getElementById('proDesc').innerHTML='Everything in Starter plus AI photo quoting — point, snap, price.';
-document.getElementById('teamPrice').innerHTML='$149<span>/mo</span>';
-document.getElementById('teamDesc').innerHTML='Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
+document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
+document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Full Pro for up to 10 operators — 1 owner + 9 members.':'Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
 document.getElementById('pricingNote').textContent='14-day free trial on all plans. Card required — you won\'t be charged until day 15. Cancel anytime.';
 document.getElementById('starterBtn').onclick=function(){openModal('starter');return false;};
 document.getElementById('proBtn').onclick=function(){openModal('pro');return false;};
@@ -3770,19 +3820,49 @@ assignEl.style.display='none';
 function renderAssignList(el){
 const scheduled=jobHistory.filter(j=>j.crm&&j.crm.status==='scheduled');
 if(!scheduled.length){el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,.3);padding:8px 0;">No scheduled jobs yet.</div>';return;}
-const memberOptions=(teamData.members||[]).map(m=>`<option value="${m.companyId}">${m.name||m.email}</option>`).join('');
+const members=teamData.members||[];
 el.innerHTML=scheduled.map(j=>{
-const label=j.crm.name||(j.load+' load')||'Job';
-const current=Array.isArray(j.assignedTo)&&j.assignedTo.length?j.assignedTo[0]:'';
-return `<div class="team-assign-row">
-<div class="team-assign-label">${label}</div>
-<select class="team-assign-select" onchange="assignJobTo('${j.id}',this.value)">
-<option value="">Owner only</option>
-${memberOptions}
-<option value="all">Both members</option>
-</select>
+const label=(j.crm&&j.crm.name)||(j.load?j.load+' load':'Job');
+const dateStr=(j.crm&&j.crm.date)||'';
+const assigned=Array.isArray(j.assignedTo)?j.assignedTo:[];
+const allSel=members.length>0&&members.every(m=>assigned.includes(m.companyId));
+const chips=members.map(m=>{
+const sel=assigned.includes(m.companyId);
+const init=(m.name||m.email||'?')[0].toUpperCase();
+const firstName=(m.name||m.email||'').split(' ')[0];
+return `<div onclick="toggleMemberAssign('${j.id}','${m.companyId}')" style="display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:10px 12px;border-radius:12px;border:1.5px solid ${sel?'rgba(93,202,165,.45)':'rgba(255,255,255,.1)'};background:${sel?'rgba(93,202,165,.1)':'rgba(255,255,255,.03)'};transition:all .15s;min-width:64px;text-align:center;">
+<div style="width:34px;height:34px;border-radius:50%;background:${sel?'rgba(93,202,165,.25)':'rgba(255,255,255,.08)'};display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:${sel?'#5DCAA5':'rgba(255,255,255,.4)'};">${init}</div>
+<div style="font-size:10.5px;font-weight:600;color:${sel?'#5DCAA5':'rgba(255,255,255,.4)'};">${firstName}</div>
+<div style="font-size:9px;color:${sel?'#5DCAA5':'transparent'};">✓ assigned</div>
 </div>`;
 }).join('');
+const allChip=`<div onclick="toggleAllAssign('${j.id}')" style="display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:10px 12px;border-radius:12px;border:1.5px solid ${allSel?'rgba(93,202,165,.45)':'rgba(255,255,255,.1)'};background:${allSel?'rgba(93,202,165,.1)':'rgba(255,255,255,.03)'};transition:all .15s;min-width:64px;text-align:center;">
+<div style="width:34px;height:34px;border-radius:50%;background:${allSel?'rgba(93,202,165,.25)':'rgba(255,255,255,.08)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${allSel?'#5DCAA5':'rgba(255,255,255,.4)'};">All</div>
+<div style="font-size:10.5px;font-weight:600;color:${allSel?'#5DCAA5':'rgba(255,255,255,.4)'};">Everyone</div>
+<div style="font-size:9px;color:${allSel?'#5DCAA5':'transparent'};">✓ assigned</div>
+</div>`;
+return `<div style="background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:14px;padding:14px 16px;margin-bottom:10px;">
+<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
+<div style="font-size:13px;font-weight:700;color:white;line-height:1.3;">${label}</div>
+${dateStr?`<div style="font-size:11px;color:rgba(255,255,255,.3);white-space:nowrap;margin-left:10px;">${dateStr}</div>`:''}
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;">${chips}${allChip}</div>
+</div>`;
+}).join('');
+}
+async function toggleMemberAssign(jobId,memberId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+const cur=Array.isArray(job&&job.assignedTo)?[...job.assignedTo]:[];
+const idx=cur.indexOf(memberId);
+if(idx>=0)cur.splice(idx,1);else cur.push(memberId);
+await assignJobTo(jobId,cur.length?cur:null);
+}
+async function toggleAllAssign(jobId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+const members=teamData.members||[];
+const cur=Array.isArray(job&&job.assignedTo)?job.assignedTo:[];
+const allSel=members.length>0&&members.every(m=>cur.includes(m.companyId));
+await assignJobTo(jobId,allSel?null:members.map(m=>m.companyId));
 }
 function showInviteForm(){
 const email=prompt('Enter the email address to invite:');
@@ -3805,15 +3885,19 @@ else showToast(res.error||'Could not remove member',true);
 }catch(e){showToast('Network error',true);}
 }
 async function assignJobTo(jobId,assignedTo){
-const payload=assignedTo==='all'?(teamData.members||[]).map(m=>m.companyId):assignedTo?[assignedTo]:null;
+let payload;
+if(!assignedTo)payload=null;
+else if(assignedTo==='all')payload=(teamData.members||[]).map(m=>m.companyId);
+else if(Array.isArray(assignedTo))payload=assignedTo.length?assignedTo:null;
+else payload=[assignedTo];
 try{
 const res=await api({action:'assignJob',token:session.token,jobId:jobId,assignedTo:payload});
 if(res.success){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));
 if(job)job.assignedTo=payload;
-showToast('✓ Job assigned');
+renderAssignList(document.getElementById('teamAssignList'));
 }
-}catch(e){}
+}catch(e){showToast('Could not assign job',true);}
 }
 
 /* ── JOIN TEAM ── */
@@ -3942,6 +4026,15 @@ return `<div class="cal-popup-job">
 document.getElementById('calPopup').classList.add('show');
 }
 
+function checkMemberAssignments(){
+if(session.role!=='member')return;
+const assigned=jobHistory.filter(j=>Array.isArray(j.assignedTo)&&j.assignedTo.includes(session.companyId)&&j.crm&&j.crm.status==='scheduled');
+if(!assigned.length)return;
+const names=assigned.slice(0,2).map(j=>(j.crm&&j.crm.name)||'job');
+const msg=assigned.length===1?`Assigned to you: ${names[0]}`:`${assigned.length} jobs assigned to you`;
+showToast('📋 '+msg);
+}
+
 function renderUpcoming(){
 const now = new Date();
 
@@ -3960,21 +4053,32 @@ return d >= now && j.crm?.address?.trim();
 const planBtn = document.getElementById('planMyDayBtn');
 if(planBtn) planBtn.style.display = upcomingWithAddress.length >= 1 ? 'block' : 'none';
 
-const scheduled = getScheduledJobs()
+let scheduled = getScheduledJobs()
 .filter(j => new Date(j.crm.dateTime) >= now)
 .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime))
 .slice(0,20);
+
+// For members: sort assigned jobs to top
+if(session.role==='member'){
+scheduled = [
+...scheduled.filter(j=>Array.isArray(j.assignedTo)&&j.assignedTo.includes(session.companyId)),
+...scheduled.filter(j=>!Array.isArray(j.assignedTo)||!j.assignedTo.includes(session.companyId))
+];
+}
 
 const list = document.getElementById('upcomingList');
 if(!scheduled.length){list.innerHTML='<div class="upcoming-empty">No upcoming scheduled jobs.<br>Add a customer and set status to Scheduled.</div>';return;}
 
 list.innerHTML = scheduled.map(j => {
+const isMemberAssigned=session.role==='member'&&Array.isArray(j.assignedTo)&&j.assignedTo.includes(session.companyId);
+const isUnassignedForMember=session.role==='member'&&(!Array.isArray(j.assignedTo)||!j.assignedTo.includes(session.companyId));
 const d = new Date(j.crm.dateTime);
 const dateStr = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 const timeStr = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 const isRunning = !!activeTimers[j.id];
 const timerDisplay = isRunning ? formatElapsed(activeTimers[j.id].elapsed||0) : '0:00:00';
-return `<div class="upcoming-item" id="upcoming-card-${j.id}">
+return `<div class="upcoming-item" id="upcoming-card-${j.id}" style="${isUnassignedForMember?'opacity:.45;pointer-events:none;':''}">
+${isMemberAssigned?`<div style="display:inline-flex;align-items:center;gap:5px;background:rgba(93,202,165,.15);border:1px solid rgba(93,202,165,.35);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:#5DCAA5;margin-bottom:8px;"><i class="ph ph-user-check" style="font-size:11px;"></i> Assigned to you</div>`:''}
 <div class="upcoming-date">${dateStr} · ${timeStr}</div>
 <div class="upcoming-name">${j.crm.name||'Customer'}</div>
 <div class="upcoming-detail">${j.crm.address||''}${j.crm.phone?' · '+j.crm.phone:''}</div>
