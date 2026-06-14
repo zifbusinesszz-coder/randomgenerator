@@ -3886,7 +3886,7 @@ document.getElementById('useNewCardToggle').textContent = 'Use card on file inst
 return;
 }
 
-// Update local session plan
+// Update local session plan optimistically
 session.plan = paywallSelectedPlan;
 localStorage.setItem('ww_plan', paywallSelectedPlan);
 
@@ -3895,6 +3895,21 @@ document.getElementById('paywallPaymentStep').style.display = 'none';
 document.getElementById('paywallSuccessStep').style.display = 'block';
 initCalc();
 document.getElementById('trialWarningBanner').style.display = 'none';
+
+// Re-verify with server that Stripe actually activated the subscription
+setTimeout(async()=>{
+try{
+const verify=await api({action:'getUser',token:session.token});
+if(verify.success){
+session.plan=verify.plan||session.plan;
+localStorage.setItem('ww_plan',session.plan);
+if(verify.trialStatus==='expired'||verify.trialStatus==='payment_failed'){
+document.getElementById('paywallSuccessStep').style.display='none';
+showBanner('paywallErr','Payment processed but subscription activation is pending. If this persists text Griffin at (507) 298-1179.');
+}
+}
+}catch(e){}
+},3000);
 
 } catch(e) {
 btn.disabled = false; btn.textContent = 'Activate plan — charge card now →';
