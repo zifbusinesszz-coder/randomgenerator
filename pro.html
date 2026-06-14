@@ -2526,7 +2526,18 @@ async function api(payload){
 const fd=new FormData();fd.append('payload',JSON.stringify(payload));
 const res=await fetch(API_URL,{method:'POST',body:fd});
 const text=await res.text();
-try{return JSON.parse(text);}catch(e){throw new Error('Bad response: '+text.slice(0,120));}
+let data;
+try{data=JSON.parse(text);}catch(e){throw new Error('Bad response: '+text.slice(0,120));}
+if(data&&!data.success&&payload.action!=='login'&&session.token&&(data.error==='Session expired.'||data.error==='User not found.')){
+clearSession();
+localStorage.removeItem('ww_history');
+document.getElementById('calcPage').style.display='none';
+document.getElementById('dashboardPage').style.display='none';
+document.getElementById('marketingPage').style.display='block';
+document.body.style.overflow='';
+showToast('Your session has ended. Please log back in.');
+}
+return data;
 }
 
 function openModal(planOrMode){
