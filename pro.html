@@ -933,7 +933,7 @@ section{padding:56px 20px;}
 .dash-card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,0.55);margin-bottom:16px;display:flex;align-items:center;gap:7px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
 /* Calendar */
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.cal-month-label{font-family:var(--font-display);font-size:16px;font-weight:900;color:white;}
+.cal-month-label{font-family:var(--font-sans);font-size:16px;font-weight:700;color:white;}
 .cal-nav-btn{background:rgba(255,255,255,.06);border:1px solid var(--d-border);color:rgba(255,255,255,.55);width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:var(--font-sans);}
 .cal-nav-btn:hover{background:rgba(255,255,255,.12);color:white;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
@@ -1945,13 +1945,20 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="crm-quoted-price" id="crmQuotedPrice">—</div>
 <div class="crm-quoted-detail" id="crmQuotedDetail"></div>
 </div>
+<div id="crmRepeatBanner" style="display:none;align-items:center;gap:9px;background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.22);border-radius:var(--r-sm);padding:10px 13px;margin-bottom:14px;">
+<i class="ph ph-arrows-clockwise" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
+<div>
+<div style="font-size:12px;font-weight:700;color:#5DCAA5;">Returning customer</div>
+<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;" id="crmRepeatSub"></div>
+</div>
+</div>
 <div class="crm-field">
 <label>Customer name</label>
-<input type="text" class="crm-input" id="crmName" placeholder="Jane Smith"/>
+<input type="text" class="crm-input" id="crmName" placeholder="Jane Smith" oninput="checkRepeatCustomer(crmJobId,this.value,document.getElementById('crmPhone').value)"/>
 </div>
 <div class="crm-field">
 <label>Phone number</label>
-<input type="tel" class="crm-input" id="crmPhone" placeholder="(507) 555-0100"/>
+<input type="tel" class="crm-input" id="crmPhone" placeholder="(507) 555-0100" oninput="checkRepeatCustomer(crmJobId,document.getElementById('crmName').value,this.value)"/>
 </div>
 <div class="crm-field">
 <label>Job address</label>
@@ -3254,10 +3261,35 @@ document.getElementById('crmStatus').value=job.crm?.status||'quoted';
 document.getElementById('crmNotes').value=job.crm?.notes||'';
 document.getElementById('crmDateTime').value=job.crm?.dateTime||'';
 toggleCrmDate();
+checkRepeatCustomer(jobId, job.crm?.name||'', job.crm?.phone||'');
 document.getElementById('crmPanel').classList.add('open');
 }
 function closeCrm(){document.getElementById('crmPanel').classList.remove('open');}
 function closeCrmOutside(e){if(e.target===document.getElementById('crmPanel'))closeCrm();}
+function checkRepeatCustomer(currentJobId,name,phone){
+const banner=document.getElementById('crmRepeatBanner');
+const normPhone=(phone||'').replace(/\D/g,'');
+const normName=(name||'').trim().toLowerCase();
+if(!normPhone&&!normName){banner.style.display='none';return;}
+const matches=jobHistory.filter(j=>{
+if(String(j.id)===String(currentJobId))return false;
+if(!j.crm)return false;
+const jPhone=(j.crm.phone||'').replace(/\D/g,'');
+const jName=(j.crm.name||'').trim().toLowerCase();
+if(normPhone.length>=10&&jPhone.length>=10&&normPhone===jPhone)return true;
+if(normName.length>=2&&jName&&jName===normName)return true;
+return false;
+});
+if(matches.length===0){banner.style.display='none';return;}
+const total=matches.reduce((sum,j)=>{
+if(j.actual?.charged)return sum+j.actual.charged;
+const parts=j.price.replace(/[^0-9]/g,' ').trim().split(/\s+/).map(Number).filter(Boolean);
+return sum+(parts.length>=2?(parts[0]+parts[1])/2:parts[0]||0);
+},0);
+const word=matches.length===1?'job':'jobs';
+document.getElementById('crmRepeatSub').textContent=`${matches.length} prior ${word} · $${Math.round(total).toLocaleString()} total`;
+banner.style.display='flex';
+}
 // NEW
 function saveCrm(){const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
