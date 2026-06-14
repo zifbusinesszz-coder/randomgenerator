@@ -3704,9 +3704,9 @@ paywallSelectedPlan = planKey;
 
 function checkTrialStatus(res) {
 if (!res.trialEnd && !res.trialStatus) return;
-  const isNewUser = localStorage.getItem('ww_new_user');
-  if (isNewUser) return;
-const status = res.trialStatus; // 'active' | 'expiring_soon' | 'expired' | 'payment_failed'
+const isNewUser = localStorage.getItem('ww_new_user');
+if (isNewUser) return;
+const status = res.trialStatus;
 const daysLeft = res.trialDaysLeft ?? null;
 
 if (status === 'expiring_soon' && daysLeft !== null) {
@@ -3716,6 +3716,19 @@ if (daysLeft === 1) {
 document.getElementById('trialWarningTitle').textContent = 'Trial ends tomorrow';
 document.getElementById('trialWarningBody').innerHTML = 'Your free trial ends <strong>tomorrow</strong>. After that your access will pause until payment is confirmed.';
 }
+if (banner) banner.style.display = 'block';
+}
+
+if (status === 'payment_failed_grace') {
+const banner = document.getElementById('trialWarningBanner');
+const graceMsg = daysLeft === 0
+? 'Access pauses today if payment isn\'t resolved.'
+: `You have <strong>${daysLeft === 1 ? '1 day' : daysLeft + ' days'}</strong> before access pauses.`;
+banner.style.background = 'linear-gradient(140deg,rgba(255,80,80,0.13) 0%,rgba(255,80,80,0.05) 100%)';
+banner.style.borderColor = 'rgba(255,80,80,.35)';
+document.getElementById('trialWarningTitle').style.color = '#ff6060';
+document.getElementById('trialWarningTitle').innerHTML = '<i class="ph ph-warning" style="font-size:13px;"></i> Payment failed';
+document.getElementById('trialWarningBody').innerHTML = `We couldn't charge your card. <a href="#" onclick="openPaywall('payment_failed_grace');return false;" style="color:#5DCAA5;font-weight:600;">Update your card →</a> ${graceMsg}`;
 if (banner) banner.style.display = 'block';
 }
 
@@ -3732,13 +3745,15 @@ function openPaywall(reason) {
 const overlay = document.getElementById('paywallOverlay');
 if (!overlay) return;
 const closeBtn = document.getElementById('paywallCloseBtn');
-if (reason === 'payment_failed') {
+if (reason === 'payment_failed' || reason === 'payment_failed_grace') {
 document.getElementById('pw-starter-card').style.display = 'block';
 document.getElementById('pw-pro-card').style.display = 'block';
 document.getElementById('pw-team-card').style.display = 'block';
 document.getElementById('paywallTitle').textContent = 'Payment failed';
-document.getElementById('paywallSubtitle').textContent = 'Your card was declined. Update your card to keep access.';
-if (closeBtn) closeBtn.style.display = 'none';
+document.getElementById('paywallSubtitle').textContent = reason === 'payment_failed_grace'
+? 'We couldn\'t charge your card. Update it now to avoid losing access.'
+: 'Your card was declined. Update your card to keep access.';
+if (closeBtn) closeBtn.style.display = reason === 'payment_failed_grace' ? 'flex' : 'none';
 } else if (reason === 'warning') {
 document.getElementById('pw-starter-card').style.display = 'block';
 document.getElementById('pw-pro-card').style.display = 'block';
