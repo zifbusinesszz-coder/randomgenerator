@@ -543,6 +543,20 @@ white-space:nowrap;display:inline-flex;align-items:center;gap:5px;
 .logout-cancel:hover{background:rgba(255,255,255,.1);color:white;}
 .logout-confirm{background:#c0392b;color:white;border:none;border-radius:var(--r-sm);padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background .15s;}
 .logout-confirm:hover{background:#a93226;}
+
+/* ─── LOGIN SPLASH ─── */
+#loginSplash{display:none;position:fixed;inset:0;z-index:9998;background:#0b0b0b;align-items:center;justify-content:center;flex-direction:column;}
+#loginSplash.active{display:flex;}
+#loginSplash::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 72% 65% at 50% 52%,rgba(26,158,114,0.24) 0%,transparent 70%);pointer-events:none;}
+.splash-inner{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;opacity:0;transform:scale(0.86);transition:opacity .5s cubic-bezier(.2,.8,.3,1),transform .5s cubic-bezier(.2,.8,.3,1);}
+.splash-inner.in{opacity:1;transform:scale(1);}
+.splash-inner.out{opacity:0;transform:scale(1.05) translateY(-12px);transition:opacity .4s ease,transform .4s ease;}
+.splash-logo{height:72px;width:auto;display:block;margin-bottom:20px;filter:drop-shadow(0 0 28px rgba(26,158,114,0.45));}
+.splash-name{font-family:var(--font-sans);font-size:23px;font-weight:700;color:white;letter-spacing:-0.3px;margin-bottom:7px;}
+.splash-tagline{font-size:12px;font-weight:500;color:rgba(255,255,255,.38);letter-spacing:.05em;opacity:0;transform:translateY(7px);transition:opacity .4s ease .28s,transform .4s ease .28s;}
+.splash-inner.in .splash-tagline{opacity:1;transform:translateY(0);}
+.splash-pip{width:5px;height:5px;border-radius:50%;background:var(--green);margin-top:30px;opacity:0;transition:opacity .3s ease .48s;box-shadow:0 0 10px rgba(26,158,114,.7);}
+.splash-inner.in .splash-pip{opacity:1;}
 .mob-nav-btn.insights{color:#1a9e72;border-color:rgba(26,158,114,.3);background:rgba(26,158,114,.04);}
 .calc-body{max-width:472px;margin:0 auto;padding:22px 18px 80px;position:relative;z-index:1;}
 .calc-section{margin-bottom:22px;}
@@ -2333,6 +2347,20 @@ localStorage.setItem('installBannerDismissed','1');
   </div>
 </div>
 
+<!-- LOGIN SPLASH -->
+<div id="loginSplash">
+<div class="splash-inner" id="splashInner">
+<img src="logo.PNG" alt="Wood's Waste" class="splash-logo"/>
+<div class="splash-name">Wood's Waste Pro</div>
+<div class="splash-tagline">Quote jobs in 60 seconds</div>
+<div class="splash-pip"></div>
+<div class="splash-welcome" id="splashWelcome" style="margin-top:36px;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .4s ease .55s,transform .4s ease .55s;">
+<div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.38);letter-spacing:.02em;">Welcome back,</div>
+<div id="splashOperatorName" style="font-size:17px;font-weight:700;color:white;margin-top:3px;letter-spacing:-0.2px;"></div>
+</div>
+</div>
+</div>
+
 <!-- ICON PICKER MODAL -->
 <div class="icon-picker-overlay" id="iconPickerOverlay">
 <div class="icon-picker-modal">
@@ -2723,6 +2751,24 @@ if(currentPlan==='pro')document.getElementById('aiSuccessItem').style.display='f
 showSuccess();
 }catch(e){btn.disabled=false;btn.textContent='Save & open my quote tool →';showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
 }
+function showLoginSplash(cb){
+const splash=document.getElementById('loginSplash');
+const inner=document.getElementById('splashInner');
+const welcome=document.getElementById('splashWelcome');
+const nameEl=document.getElementById('splashOperatorName');
+nameEl.textContent=session.businessName||'Operator';
+splash.classList.add('active');
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+inner.classList.add('in');
+welcome.style.opacity='1';
+welcome.style.transform='translateY(0)';
+}));
+setTimeout(()=>{
+inner.classList.remove('in');
+inner.classList.add('out');
+setTimeout(()=>{splash.classList.remove('active');inner.classList.remove('out');welcome.style.opacity='0';welcome.style.transform='translateY(8px)';cb();},420);
+},1550);
+}
 function showSuccess(){
 ['step1','step2','step3','savingOverlay','loginForm','forgotForm','resetCodeForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('successState').style.display='block';
@@ -2750,7 +2796,7 @@ localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
 }catch(e){}
 closeModal();
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
-openCalcDirect();
+showLoginSplash(()=>openCalcDirect());
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
 
