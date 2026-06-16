@@ -2541,6 +2541,23 @@ showToast('Your session has ended. Please log back in.');
 return data;
 }
 
+function queueSync(payload){
+const {token,...rest}=payload;
+try{const q=JSON.parse(localStorage.getItem('ww_pending_sync')||'[]');q.push(rest);localStorage.setItem('ww_pending_sync',JSON.stringify(q));}catch(e){}
+}
+async function flushSyncQueue(){
+if(!session.token)return;
+try{
+const q=JSON.parse(localStorage.getItem('ww_pending_sync')||'[]');
+if(!q.length)return;
+const failed=[];
+for(const payload of q){try{await api({...payload,token:session.token});}catch(e){failed.push(payload);}}
+localStorage.setItem('ww_pending_sync',JSON.stringify(failed));
+const synced=q.length-failed.length;
+if(synced>0)showToast('✓ Synced '+synced+' offline job'+(synced!==1?'s':''));
+}catch(e){}
+}
+
 function openModal(planOrMode){
 if(planOrMode==='pick'){
 document.getElementById('modalTabs').style.display='flex';
@@ -2809,6 +2826,7 @@ localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
 }catch(e){}
 closeModal();
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
+flushSyncQueue();
 showLoginSplash(()=>openCalcDirect());
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
@@ -2981,7 +2999,8 @@ const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=pars
 let sCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])sCost+=Number(specialSrc[k].fee)*qty||0;});
 const dCost=Math.round(miles*2*(userPricing.driveRate||1.5)),lCost=Math.round(hours*(userPricing.laborRate||35));
 const load=userPricing.loads[primaryLoad]||{low:0,high:0};
-api({action:'saveJob',token:session.token,jobId:entry.id,price:priceText,load:primaryLoad,specials:entry.specials,miles,hours,markup:entry.markup,driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost,jobData:entry}).catch(()=>{});
+const _qp1={action:'saveJob',jobId:entry.id,price:priceText,load:primaryLoad,specials:entry.specials,miles,hours,markup:entry.markup,driveCost:dCost,laborCost:lCost,specialsCost:sCost,baseCost:load.low+sCost+dCost+lCost,jobData:entry};
+api({..._qp1,token:session.token}).catch(()=>queueSync(_qp1));
 }
 }
 /* ── AI PHOTO ── */
@@ -3392,7 +3411,8 @@ const notes=document.getElementById('actualNotes').value.trim();
 job.actual={...job.actual,charged,hours,notes,loggedAt:new Date().toISOString()};
 persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();if(wasDashOpen){renderCompletedJobs();renderDashAnalytics();}
 if(session.token){
-api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+const _qp2={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
+api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
 }
 }
 function sendReceiptForJob(jobId){
@@ -4175,6 +4195,7 @@ renderCalendar();
 renderUpcoming();
 renderCompletedJobs();
 renderDashAnalytics();
+flushSyncQueue();
 if(window.AOS)setTimeout(()=>AOS.refreshHard(),60);
 }
 
@@ -4441,7 +4462,7 @@ panel.innerHTML=`
 ${beforePhotos.length?`
 <div style="margin-bottom:18px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:8px;">Before photos</div>
-<div style="display:flex;gap:7px;flex-wrap:wrap;">${beforePhotos.map(p=>`<img src="${p.dataUrl}" style="width:68px;height:68px;object-fit:cover;border-radius:7px;border:1px solid rgba(255,255,255,.12);"/>`).join('')}</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;">${beforePhotos.map(p=>`<img src="${p.url||p.dataUrl}" style="width:68px;height:68px;object-fit:cover;border-radius:7px;border:1px solid rgba(255,255,255,.12);"/>`).join('')}</div>
 </div>`:''}
 <div style="margin-bottom:18px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:8px;">After photos <span style="font-weight:400;color:rgba(255,255,255,.22);text-transform:none;letter-spacing:0;font-size:9px;">— optional but recommended</span></div>
@@ -4458,7 +4479,7 @@ ${beforePhotos.length?`
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:7px;">Job notes (optional)</div>
 <textarea id="after-notes-${jobId}" placeholder="Any surprises, extra items, customer feedback..." style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:9px 11px;font-size:12px;color:white;font-family:var(--font-sans);outline:none;resize:none;height:68px;line-height:1.6;box-sizing:border-box;"></textarea>
 </div>
-<button onclick="saveCompletedJob(${jobId}, ${elapsed})" style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:7px;"><i class="ph ph-check-circle" style="font-size:15px;"></i> Save & mark complete</button>
+<button id="afterSaveBtn-${jobId}" onclick="saveCompletedJob(${jobId}, ${elapsed})" style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:7px;"><i class="ph ph-check-circle" style="font-size:15px;"></i> Save & mark complete</button>
 </div>
 </div>`;
 document.body.appendChild(panel);
@@ -4487,17 +4508,32 @@ reader.readAsDataURL(f);
 });
 }
 
-function saveCompletedJob(jobId, elapsed){
+async function saveCompletedJob(jobId, elapsed){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));
 if(!job)return;
 const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const charged=parseFloat(document.getElementById('after-charged-'+jobId)?.value)||job.actual?.charged||null;
 const notes=document.getElementById('after-notes-'+jobId)?.value?.trim()||'';
 const hours=parseFloat((elapsed/3600).toFixed(2));
-const beforeSnap=(jobBeforePhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl}));
-const afterSnap=(jobAfterPhotos[jobId]||[]).map(p=>({name:p.name,dataUrl:p.dataUrl}));
+const rawBefore=jobBeforePhotos[jobId]||[];
+const rawAfter=jobAfterPhotos[jobId]||[];
 delete jobBeforePhotos[jobId];
 delete jobAfterPhotos[jobId];
+const saveBtn=document.getElementById('afterSaveBtn-'+jobId);
+let beforeSnap=[], afterSnap=[];
+if(session.token&&(rawBefore.length||rawAfter.length)){
+if(saveBtn){saveBtn.disabled=true;saveBtn.innerHTML='<i class="ph ph-spinner" style="font-size:15px;animation:spin .7s linear infinite;"></i> Uploading photos...';}
+const upload=async(photo,type,idx)=>{
+try{const r=await api({action:'uploadPhoto',token:session.token,dataUrl:photo.dataUrl,fileName:jobId+'_'+type+'_'+idx});if(r?.success)return{name:photo.name,url:r.url};}catch(e){}
+return null;
+};
+const bRes=await Promise.all(rawBefore.map((p,i)=>upload(p,'before',i)));
+const aRes=await Promise.all(rawAfter.map((p,i)=>upload(p,'after',i)));
+beforeSnap=bRes.filter(Boolean);
+afterSnap=aRes.filter(Boolean);
+const failed=(rawBefore.length+rawAfter.length)-(beforeSnap.length+afterSnap.length);
+if(failed>0)showToast(failed+' photo'+(failed>1?'s':'')+' failed to upload',true);
+}
 job.crm.status='completed';
 job.actual={
 charged,
@@ -4517,7 +4553,8 @@ renderUpcoming();
 if(wasDashOpen){renderDashAnalytics();}
 showToast('✓ Job marked complete');
 if(session.token){
-api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+const _qp3={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
+api({..._qp3,token:session.token}).catch(()=>queueSync(_qp3));
 }
 }
 
@@ -4535,8 +4572,8 @@ return `<div style="border:1px solid var(--d-border);background:rgba(255,255,255
 </div>
 ${(j.actual?.beforePhotos?.length||j.actual?.afterPhotos?.length)?`
 <div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;">
-${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">Before (${j.actual.beforePhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.beforePhotos.map(p=>`<img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
-${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map(p=>`<img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">Before (${j.actual.beforePhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.beforePhotos.map(p=>`<img src="${p.url||p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map(p=>`<img src="${p.url||p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
 </div>`:''}
 ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.38);border-top:1px solid rgba(255,255,255,.06);padding-top:7px;">${j.actual.notes}</div>`:''}
 <div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
