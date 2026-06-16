@@ -2000,7 +2000,9 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div class="crm-field" id="crmDateField" style="display:none;">
 <label>Scheduled date & time</label>
-<input type="datetime-local" class="crm-input" id="crmDateTime" style="color-scheme:dark;max-width:100%;font-size:12px;"/>
+<div style="overflow:hidden;width:100%;border-radius:var(--r-sm);">
+<input type="datetime-local" class="crm-input" id="crmDateTime" style="color-scheme:dark;width:100%;min-width:0;font-size:12px;"/>
+</div>
 </div>
 <div class="crm-field">
 <label>Notes</label>
