@@ -2827,6 +2827,7 @@ localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
 closeModal();
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
 flushSyncQueue();
+startStatusPoll();
 showLoginSplash(()=>openCalcDirect());
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
@@ -2835,7 +2836,16 @@ function saveSession(token,companyId,businessName,plan,role,ownerId){
 session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';session.role=role||'owner';session.ownerId=ownerId||null;
 localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);localStorage.setItem('ww_role',session.role);if(ownerId)localStorage.setItem('ww_owner_id',ownerId);else localStorage.removeItem('ww_owner_id');
 }
-function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id'].forEach(k=>localStorage.removeItem(k));}
+function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id'].forEach(k=>localStorage.removeItem(k));stopStatusPoll();}
+let _statusPollTimer=null;
+function startStatusPoll(){
+if(_statusPollTimer)return;
+_statusPollTimer=setInterval(async()=>{
+if(!session.token){stopStatusPoll();return;}
+try{const r=await api({action:'checkStatus',token:session.token});if(r?.success&&r.trialStatus)checkTrialStatus(r);}catch(e){}
+},5*60*1000);
+}
+function stopStatusPoll(){if(_statusPollTimer){clearInterval(_statusPollTimer);_statusPollTimer=null;}}
 function isPro(){return ['pro','pro-yearly','team','team-yearly','team10','team10-yearly'].includes(session.plan);}
 function doLogout(){
 if(document.getElementById('paywallOverlay').classList.contains('open')){
