@@ -2507,10 +2507,11 @@ if(session.ownerId)localStorage.setItem('ww_owner_id',session.ownerId);
 applyPricing(res.pricing);
 localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
 checkTrialStatus(res);
+await flushSyncQueue();
 try{
 const jobsRes=await api({action:'getJobs',token:session.token});
 if(jobsRes.success&&jobsRes.jobs.length){
-localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
+localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs)));
 }
 }catch(e){}
 }
@@ -2556,6 +2557,21 @@ localStorage.setItem('ww_pending_sync',JSON.stringify(failed));
 const synced=q.length-failed.length;
 if(synced>0)showToast('✓ Synced '+synced+' offline job'+(synced!==1?'s':''));
 }catch(e){}
+}
+
+// Merge server jobs with local snapshot — keeps local `actual` when server doesn't have it yet,
+// and preserves local-only jobs that haven't synced yet.
+// localSnap is optional; if omitted, reads current localStorage.
+function mergeJobHistory(serverJobs,localSnap){
+const local=localSnap||JSON.parse(localStorage.getItem('ww_history')||'[]');
+const merged=serverJobs.map(sj=>{
+const lj=local.find(j=>String(j.id)===String(sj.id));
+if(lj?.actual&&!sj.actual)return{...sj,actual:lj.actual};
+return sj;
+});
+const serverIds=new Set(serverJobs.map(j=>String(j.id)));
+local.filter(j=>!serverIds.has(String(j.id))).forEach(j=>merged.push(j));
+return merged;
 }
 
 function openModal(planOrMode){
@@ -2816,17 +2832,21 @@ const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.t
 if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
 saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
 applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
-// Load this user's job history from server
+// Snapshot local history before clearing — needed for merge fallback if flush fails
+const _loginSnap=JSON.parse(localStorage.getItem('ww_history')||'[]');
+// Flush queued offline actions first so server has the latest data before we pull it back
+await flushSyncQueue();
+// Load this user's job history from server, merging local actual data as a belt-and-suspenders
+// in case any jobs still have unsynced actual entries
 localStorage.removeItem('ww_history');
 try{
 const jobsRes=await api({action:'getJobs',token:session.token});
 if(jobsRes.success&&jobsRes.jobs.length){
-localStorage.setItem('ww_history',JSON.stringify(jobsRes.jobs));
+localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs,_loginSnap)));
 }
 }catch(e){}
 closeModal();
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
-flushSyncQueue();
 startStatusPoll();
 showLoginSplash(()=>openCalcDirect());
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
