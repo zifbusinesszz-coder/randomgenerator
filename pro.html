@@ -2566,7 +2566,7 @@ function mergeJobHistory(serverJobs,localSnap){
 const local=localSnap||JSON.parse(localStorage.getItem('ww_history')||'[]');
 const merged=serverJobs.map(sj=>{
 const lj=local.find(j=>String(j.id)===String(sj.id));
-if(lj?.actual&&!sj.actual)return{...sj,actual:lj.actual};
+if(lj?.actual&&(!sj.actual||(lj.actual.charged&&!sj.actual.charged)))return{...sj,actual:lj.actual};
 return sj;
 });
 const serverIds=new Set(serverJobs.map(j=>String(j.id)));
@@ -2841,7 +2841,7 @@ await flushSyncQueue();
 localStorage.removeItem('ww_history');
 try{
 const jobsRes=await api({action:'getJobs',token:session.token});
-if(jobsRes.success&&jobsRes.jobs.length){
+if(jobsRes.success){
 localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs,_loginSnap)));
 }
 }catch(e){}
@@ -3380,7 +3380,7 @@ if(session.token && jobHistory.length>=48){
 try{
 const res=await api({action:'getJobs',token:session.token});
 if(res.success&&res.jobs.length>jobHistory.length){
-jobHistory=res.jobs;
+jobHistory=mergeJobHistory(res.jobs);
 persistHistory();
 renderHistory();
 }
