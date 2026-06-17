@@ -4085,11 +4085,14 @@ document.body.style.overflow='hidden';
 }
 
 /* ── TEAM PANEL ── */
-let teamData={members:[],pending:[],maxSeats:2};
+let teamData=(()=>{try{const c=localStorage.getItem('ww_team_cache');return c?JSON.parse(c):{members:[],pending:[],maxSeats:2};}catch(e){return{members:[],pending:[],maxSeats:2};}})();
 
 function openTeamPanel(){
 document.getElementById('teamPanel').classList.add('open');
 document.body.style.overflow='hidden';
+// Render cached data immediately so panel opens instantly
+if(teamData.members.length||teamData.pending.length)renderTeamPanel();
+// Always refresh in background — no spinner, no blocking
 loadTeamData();
 }
 function closeTeamPanel(){
@@ -4099,8 +4102,12 @@ document.body.style.overflow='';
 async function loadTeamData(){
 try{
 const res=await api({action:'getTeam',token:session.token});
-if(res.success){teamData=res;renderTeamPanel();}
-}catch(e){showToast('Could not load team',true);}
+if(res.success){
+teamData=res;
+try{localStorage.setItem('ww_team_cache',JSON.stringify(res));}catch(e){}
+renderTeamPanel();
+}
+}catch(e){if(!teamData.members.length)showToast('Could not load team',true);}
 }
 function renderTeamPanel(){
 const listEl=document.getElementById('teamMembersList');
