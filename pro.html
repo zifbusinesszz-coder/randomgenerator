@@ -4654,10 +4654,13 @@ api({..._qp3,token:session.token}).catch(()=>queueSync(_qp3));
 }
 
 function buildCompletedJobCard(j){
+const _cdt=j.actual?.loggedAt?new Date(j.actual.loggedAt):j.ts?new Date(j.ts):null;
+const _cdtStr=_cdt&&!isNaN(_cdt)?_cdt.toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):'';
 return `<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
 <div>
 <div style="font-size:13px;font-weight:700;color:white;">${j.crm?.name||'Customer'}</div>
+${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;font-weight:600;">${_cdtStr}</div>`:''}
 <div style="font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1px;">${j.crm?.address||''}</div>
 </div>
 <div style="text-align:right;">
