@@ -3048,7 +3048,8 @@ list.appendChild(item);
 const reader=new FileReader();reader.onload=e=>{const th=document.getElementById('ai-thumb-'+idx);if(th){th.innerHTML='';const img=document.createElement('img');img.className='ai-file-thumb';img.src=e.target.result;th.appendChild(img);th.style.background='none';}};reader.readAsDataURL(f);
 if(result&&result.status==='done'){
 const rc=document.createElement('div');rc.className='ai-photo-result';
-rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.truckCount>1?result.truckCount+'× ':''} ${result.loadLabel}</span></div>${result.fillPercent!=null?`<div class="ai-photo-result-row"><span class="lbl">Trailer fill estimate</span><span class="val" style="color:#5DCAA5;">${result.fillPercent}% full</span></div><div style="margin:5px 0 3px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${Math.min(result.fillPercent,100)}%;background:${result.fillPercent>80?'#e8a020':result.fillPercent>50?'#5DCAA5':'#1a9e72'};border-radius:3px;transition:width .4s;"></div></div>`:''}<div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.join(', ')+'</div>':''}`;
+rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.truckCount>1?result.truckCount+'× ':''} ${result.loadLabel}</span></div>${result.fillPercent!=null?`<div class="ai-photo-result-row"><span class="lbl">Trailer fill estimate</span><span class="val" style="color:#5DCAA5;">${result.fillPercent}% full</span></div><div style="margin:5px 0 3px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${Math.min(result.fillPercent,100)}%;background:${result.fillPercent>80?'#e8a020':result.fillPercent>50?'#5DCAA5':'#1a9e72'};border-radius:3px;transition:width .4s;"></div></div>`:''}<div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.join(', ')+'</div>':''}${result.accessDifficulty==='hard'?'<div style="margin-top:7px;padding:6px 10px;background:rgba(232,160,32,.1);border:1px solid rgba(232,160,32,.3);border-radius:5px;font-size:10.5px;color:#e8a020;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Hard access — consider a labor surcharge</div>':''}${result.heavyMaterials?'<div style="margin-top:5px;padding:6px 10px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.28);border-radius:5px;font-size:10.5px;color:#e07060;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Heavy materials — dump fees may be higher</div>':''}${result.reasoning?'<div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:6px;font-size:10.5px;color:rgba(255,255,255,.45);line-height:1.55;font-style:italic;">'+result.reasoning+'</div>':''}${result.sceneType||result.itemCount||result.estimatedCuFt?`<div style="margin-top:6px;font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.03em;">${[result.sceneType,result.itemCount?result.itemCount+' items':null,result.estimatedCuFt?'~'+result.estimatedCuFt+' cu ft':null].filter(Boolean).join(' · ')}</div>`:''}`;
+
 list.appendChild(rc);
 }
 });
@@ -3069,7 +3070,64 @@ const pricingContext=`Your pricing (costs BEFORE markup):\n- Min Load: $${loads.
 for(let i=0;i<aiFiles.length;i++){
 try{
 const b64=await readFileBase64(aiFiles[i]);
-const prompt=`You are an expert junk removal estimator. Your #1 job is protecting the operator from underpricing. Err high on BOTH load size AND special items — a missed special item or underestimated load directly costs the operator money.\n\n${pricingContext}\n\nLOAD SIZE RULES:\n- "minimum": 1-3 small items (up to ~10% of truck)\n- "quarter": 4-8 items OR one small room (~25% of truck)\n- "half": 5-15 large items OR fills roughly 50-65% of visible space. Most residential cleanouts are here. When in doubt between quarter and half, pick HALF.\n- "full": multiple rooms, full garage (100% of truck)${truckCuYd?'\n\nUSE THE TRUCK DIMENSIONS above to estimate cubic yards in the photo and match to the closest load tier. If the pile clearly exceeds a full truck, still return "full" as the loadKey but mention it in reasoning.':''}\n\nBIAS: ALWAYS round up one tier when uncertain. Outdoor piles photograph 30-40% smaller than reality. A pile that "looks like a quarter load" is almost always a half. If you see a garage or room, it's at minimum a half. Never pick minimum unless the photo shows 3 items or fewer. A single large item like a fridge, mattress, washer, or hot tub is still a minimum load — but ALWAYS check for and flag it as a special item too. The load fee and the special item fee stack.\n\nSPECIAL ITEMS — scan the ENTIRE photo carefully for each one before deciding:\n${Object.entries(specialSrc).map(([k,v])=>`- "${v.label||v}" ($${v.fee}): ${getVisualCue(k)}`).join('\n')}\n\nSPECIAL ITEM RULES: (1) If you can see part of an item but not all of it, still flag it. (2) If an item is bagged, wrapped, or partially hidden, flag it. (3) When in doubt whether something qualifies, INCLUDE IT — the operator can remove it on-site. (4) Do not limit yourself to one special item — a single photo can have 4 or 5.${jobNotes?'\n\nOPERATOR NOTES: '+jobNotes+'\nUse these notes to inform your estimate — they may mention specific items or conditions not visible in the photo.':''}\n\n"Think step by step: 1) Count distinct large items visible. 2) Estimate cubic footage of the pile. 3) Compare to truck dimensions. 4) Apply the upward bias rule. THEN respond ONLY with valid JSON:\n{\"loadKey\":\"minimum|quarter|half|full\",\"loadLabel\":\"Min Load|Quarter Load|Half Load|Full Truck\",\"truckCount\":1,\"specialsFound\":[\"Label\"],\"confidence\":\"low|medium|high\",\"fillPercent\":25,\"reasoning\":\"2-3 sentences: item count, estimated cubic feet, and why you chose this tier over the next one down.\"}\n\ntruckCount must be an integer (1, 2, 3...). If the pile clearly exceeds one full truck, set loadKey to 'full' and truckCount to the estimated number of trucks needed."}`;
+const prompt=`Analyze this junk removal photo. Work through each step before writing any JSON.
+
+STEP 1 — SCENE & PHOTO ASSESSMENT
+Identify and state each of these:
+• Scene type: outdoor-pile | garage | basement | bedroom | attic | storage-unit | whole-house | yard-debris | construction-debris | other
+• Photo angle: overhead (volume accurate) | eye-level (add 25% to volume) | low-angle (add 40% to volume)
+• Visibility: full | partial (pile extends out of frame or is blocked by other items) | minimal
+• Access difficulty: easy (ground floor, open space) | moderate (some stairs or tight hallway) | hard (basement stairs, narrow doors, long carry, or above-ground deck)
+• Heavy materials: yes | no — concrete chunks, brick, tile, dirt, or drywall debris
+
+STEP 2 — ITEM INVENTORY
+List every distinct large item you can see. Then state your count: "X items total."
+
+STEP 3 — VOLUME ESTIMATE
+Estimate the total cubic feet. Show your math:
+- Loose pile: estimate L × W × H in feet
+- Discrete items: sum individual volumes
+State: "Approximately X cubic feet."
+${truckCuYd?`Truck is ${truck.length}ft × ${truck.width}ft × ${truck.height}ft = ${truckCuYd} cu yd. Cross-check your volume against this.`:'No truck dimensions saved — assume a standard 15-yard truck (~400 cu ft).'}
+
+STEP 4 — TIER SELECTION
+Base pricing before ${markup}% markup:
+• Min Load  (≤ 3 items, ≤ 10% truck): $${loads.minimum.low}–$${loads.minimum.high}
+• Quarter   (4–7 items, ~25% truck):   $${loads.quarter.low}–$${loads.quarter.high}
+• Half Load (8–14 items, ~50% truck):  $${loads.half.low}–$${loads.half.high}
+• Full Truck (15+ items / whole room):  $${loads.full.low}–$${loads.full.high}
+Map your volume to the closest tier. State your initial selection.
+
+STEP 5 — MANDATORY UPWARD BIAS CHECK
+Each rule below that applies forces you UP one full tier. Check every one:
+□ Photo is eye-level or low-angle → hidden depth, volume is understated
+□ Any part of the pile is cut off or outside the frame → unseen volume exists
+□ Scene is a garage, basement, attic, or any room interior → always more than photos show
+□ 8+ items counted → half load at minimum
+□ Confidence is low or medium → go up one tier automatically
+□ NEVER return "minimum" unless ≤ 3 small items are clearly visible with zero occlusion
+□ NEVER return "quarter" for a garage — garages are half load at minimum
+□ NEVER return "half" for a whole-house or multi-room scene — that is full truck
+State which rules fired and what tier you land on after applying them.
+
+STEP 6 — SPECIAL ITEM SCAN (RUN THIS TWICE)
+First pass: what special items can you clearly identify?
+Second pass: look again — anything partially hidden, bagged, wrapped, or buried?
+
+Special items this operator charges for:
+${Object.entries(specialSrc).map(([k,v])=>`• "${v.label||v}" ($${v.fee}): ${getVisualCue(k)}`).join('\n')}
+
+Rules: Flag it even if you only see part of it. Items in bags or under other items still count. A single photo routinely has 3–5 special items. Load fee and each special item fee always stack — flag everything. When uncertain: INCLUDE IT. The operator verifies on-site.
+${jobNotes?`\nOPERATOR NOTES — treat as ground truth, override photo estimate if these describe specific items or conditions:\n${jobNotes}`:''}
+
+STEP 7 — OUTPUT
+Respond with ONLY a valid JSON object. No markdown, no text before or after:
+{"loadKey":"minimum|quarter|half|full","loadLabel":"Min Load|Quarter Load|Half Load|Full Truck","truckCount":1,"specialsFound":["Exact Label As Listed Above"],"confidence":"low|medium|high","fillPercent":50,"sceneType":"garage|basement|outdoor-pile|bedroom|attic|storage-unit|whole-house|yard-debris|construction-debris|other","accessDifficulty":"easy|moderate|hard","heavyMaterials":false,"estimatedCuFt":45,"itemCount":8,"reasoning":"Counted 8 items (~45 cu ft). Eye-level angle — added 25% volume. Garage scene — half minimum per rules. Stairs visible in background (moderate access)."}
+
+confidence=high: full pile visible, clear item count, no occlusion — you are certain
+confidence=medium: parts hidden or angle uncertain — automatically go up one tier
+confidence=low: mostly obscured or very unclear — go up two tiers from your visual estimate
+truckCount: integer. If pile clearly exceeds one truck set loadKey=full and truckCount=2 or more.`;
 const response=await api({action:'aiAnalyzePhoto',image:b64,mediaType:aiFiles[i].type||'image/jpeg',prompt});
 if(!response.success)throw new Error(response.error||'AI error');
 let parsed;try{const raw=response.text.replace(/```json|```/g,'').trim();const jsonMatch=raw.match(/\{[\s\S]*\}/);if(!jsonMatch)throw new Error('No JSON found');parsed=JSON.parse(jsonMatch[0]);}catch(e){throw new Error('Could not parse AI response: '+response.text.slice(0,80));}
@@ -3078,7 +3136,7 @@ let specialsCost=0;const specialsApplied=[];
 (parsed.specialsFound||[]).forEach(label=>{const found=Object.entries(specialSrc).find(([k,v])=>(v.label||v).toLowerCase()===label.toLowerCase()||(v.label||v).toLowerCase().includes(label.toLowerCase())||label.toLowerCase().includes((v.label||v).toLowerCase()));if(found){specialsCost+=Number(found[1].fee)||0;specialsApplied.push(label);}});
 const baseLow=(loadCosts.low*truckCount)+specialsCost,baseHigh=(loadCosts.high*truckCount)+specialsCost;
 const quoteLow=Math.round(baseLow*(1+markupFrac)),quoteHigh=Math.round(baseHigh*(1+markupFrac));
-aiResults[i]={status:'done',loadKey,loadLabel:parsed.loadLabel||loadKey,truckCount,specialsFound:specialsApplied,baseLow,baseHigh,quoteLow,quoteHigh,markupPct:markup,markupAdded:Math.round(((quoteLow+quoteHigh)/2)-((baseLow+baseHigh)/2)),reasoning:parsed.reasoning||'',fillPercent:parsed.fillPercent||null};
+aiResults[i]={status:'done',loadKey,loadLabel:parsed.loadLabel||loadKey,truckCount,specialsFound:specialsApplied,baseLow,baseHigh,quoteLow,quoteHigh,markupPct:markup,markupAdded:Math.round(((quoteLow+quoteHigh)/2)-((baseLow+baseHigh)/2)),reasoning:parsed.reasoning||'',fillPercent:parsed.fillPercent||null,sceneType:parsed.sceneType||null,accessDifficulty:parsed.accessDifficulty||null,heavyMaterials:parsed.heavyMaterials||false,estimatedCuFt:parsed.estimatedCuFt||null,itemCount:parsed.itemCount||null};
 }catch(err){aiResults[i]={status:'error',error:err.message.slice(0,60)};}
 renderAiFileList();
 }
