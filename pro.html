@@ -1373,7 +1373,7 @@ localStorage.setItem('installBannerDismissed','1');
 <a href="#" class="btn-plan-dark" id="teamBtn" onclick="openModal('team');return false;">Start free trial</a>
 </div>
 </div>
-<p class="pricing-note" id="pricingNote">14-day free trial on all plans. Card required — you won't be charged until day 15. Cancel anytime.</p>
+<p class="pricing-note" id="pricingNote">14-day free trial on all plans. No card required to start. Cancel anytime.</p>
 </div>
 </section>
 
@@ -1475,7 +1475,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="modal-header-body">
 <div class="modal-plan-badge" id="modalPlanBadge">Starter — $29/mo</div>
 <h3 id="modalTitle">Start your free trial</h3>
-<p id="modalSubtitle">14 days free. Card required — charged only after trial ends.</p>
+<p id="modalSubtitle">14 days free. No card required to start.</p>
 <div class="modal-tabs" id="modalTabs">
 <button class="modal-tab active" id="tabSignup" onclick="switchTab('signup')">Create account</button>
 <button class="modal-tab" id="tabLogin" onclick="switchTab('login')">Log in</button>
@@ -2690,7 +2690,7 @@ document.getElementById('modalTabs').style.display='flex';
 document.getElementById('step1').style.display='block';
 updateStepDots(1);
 document.getElementById('modalTitle').textContent='Start your free trial';
-document.getElementById('modalSubtitle').textContent='14 days free. Card required — charged only after trial ends.';
+document.getElementById('modalSubtitle').textContent='14 days free. No card required to start.';
 }
 document.getElementById('modalOverlay').classList.add('open');
 document.body.style.overflow='hidden';
@@ -2706,7 +2706,7 @@ const badgeText=planKey==='pro-yearly'?'Pro Plan — $590/yr':planKey==='pro'?'P
 document.getElementById('modalPlanBadge').textContent=badgeText;
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalTitle').textContent='Start your free trial';
-document.getElementById('modalSubtitle').textContent='14 days free. Card required — charged only after trial ends.';
+document.getElementById('modalSubtitle').textContent='14 days free. No card required to start.';
 document.getElementById('modalStepDots').style.display='flex';
 document.getElementById('stepPick').style.display='none';
 document.getElementById('step1').style.display='block';
@@ -2737,7 +2737,7 @@ if(n===2)document.getElementById('step2').style.display='block';
 if(n===3)document.getElementById('step3').style.display='block';
 updateStepDots(n);
 const titles=['Start your free trial','Verify your email','Set your costs & markup'];
-const subs=['14 days free. Card required — charged only after trial ends.','','Takes 2 minutes. Change any of this anytime.'];
+const subs=['14 days free. No card required to start.','','Takes 2 minutes. Change any of this anytime.'];
 document.getElementById('modalTitle').textContent=titles[n-1]||'';
 document.getElementById('modalSubtitle').textContent=subs[n-1]||'';
 document.getElementById('modal').scrollTop=0;
@@ -4250,7 +4250,7 @@ document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
 document.getElementById('proDesc').innerHTML='Everything in Starter plus AI photo quoting — point, snap, price.';
 document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
 document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Full Pro for up to 10 operators — 1 owner + 9 members.':'Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
-document.getElementById('pricingNote').textContent='14-day free trial on all plans. Card required — you won\'t be charged until day 15. Cancel anytime.';
+document.getElementById('pricingNote').textContent='14-day free trial on all plans. No card required to start. Cancel anytime.';
 document.getElementById('starterBtn').onclick=function(){openModal('starter');return false;};
 document.getElementById('proBtn').onclick=function(){openModal('pro');return false;};
 document.getElementById('teamBtn').onclick=function(){openModal('team');return false;};
