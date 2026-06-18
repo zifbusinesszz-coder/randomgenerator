@@ -1943,6 +1943,70 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <button class="settings-save-btn" id="settingsSaveBtn" onclick="saveSettings()">Save settings</button>
 </div>
+
+<!-- PAYMENTS SECTION (Pro/Team only) -->
+<div id="stripeSettingsSection" style="display:none;border-top:1px solid rgba(255,255,255,.07);padding:18px 18px 20px;">
+<div class="settings-section-title" style="border-bottom:none;padding-bottom:0;margin-bottom:12px;padding:0;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Payments</div>
+<div id="stripeNotConnected">
+<div style="font-size:11.5px;color:rgba(255,255,255,.4);margin-bottom:12px;line-height:1.6;">Accept card payments from customers via a shareable link. They pay on Stripe, money goes straight to your bank. We take 1% per transaction.</div>
+<button id="stripeConnectBtn" onclick="connectStripe()" style="width:100%;padding:11px 16px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-stripe-logo" style="font-size:15px;"></i> Set up payments with Stripe</button>
+</div>
+<div id="stripeConnectedStatus" style="display:none;">
+<div style="display:flex;align-items:center;gap:8px;background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
+<i class="ph ph-check-circle" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
+<div>
+<div style="font-size:12.5px;font-weight:700;color:#5DCAA5;">Payments connected</div>
+<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Customers can pay via your links. 1% fee per transaction.</div>
+</div>
+</div>
+</div>
+<div id="stripePendingStatus" style="display:none;">
+<div style="display:flex;align-items:center;gap:8px;background:rgba(255,185,0,.07);border:1px solid rgba(255,185,0,.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
+<i class="ph ph-warning" style="font-size:16px;color:#f5a623;flex-shrink:0;"></i>
+<div>
+<div style="font-size:12.5px;font-weight:700;color:#f5a623;">Stripe setup incomplete</div>
+<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Finish verifying your account to accept payments.</div>
+</div>
+</div>
+<button onclick="connectStripe()" style="width:100%;padding:9px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:#f5a623;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Continue Stripe setup →</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="paymentModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1200;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)closePaymentModal()">
+<div style="background:#181818;border-radius:18px 18px 0 0;padding:22px 20px 32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+<div style="font-size:16px;font-weight:700;color:white;display:flex;align-items:center;gap:8px;"><i class="ph ph-credit-card" style="font-size:17px;color:#5DCAA5;"></i> Collect Payment</div>
+<button onclick="closePaymentModal()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+</div>
+<div id="pmJobInfo" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:rgba(255,255,255,.5);"></div>
+<div style="margin-bottom:14px;">
+<label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);display:block;margin-bottom:6px;">Amount to charge</label>
+<div style="position:relative;">
+<span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:18px;font-weight:700;color:rgba(255,255,255,.5);">$</span>
+<input type="number" id="pmAmount" min="0.50" step="0.01" placeholder="0.00" style="width:100%;padding:12px 14px 12px 26px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:9px;font-size:20px;font-weight:700;color:white;font-family:var(--font-num);outline:none;" oninput="updatePmFee()"/>
+</div>
+<div id="pmFeeNote" style="font-size:10.5px;color:rgba(255,255,255,.3);margin-top:6px;padding-left:2px;"></div>
+</div>
+<div id="pmLinkSection" style="display:none;margin-bottom:16px;">
+<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:8px;">Payment link</div>
+<div style="display:flex;gap:7px;margin-bottom:10px;">
+<input type="text" id="pmLinkInput" readonly style="flex:1;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-size:12px;color:rgba(255,255,255,.7);outline:none;min-width:0;"/>
+<button onclick="copyPaymentLink()" id="pmCopyBtn" style="padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:white;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);white-space:nowrap;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">Copy</button>
+</div>
+<button id="pmShareBtn" onclick="sharePaymentLink()" style="display:none;width:100%;padding:11px;background:rgba(93,202,165,.1);border:1px solid rgba(93,202,165,.25);color:#5DCAA5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;"><i class="ph ph-share-network" style="font-size:14px;"></i> Share link</button>
+<div style="text-align:center;">
+<img id="pmQrCode" src="" alt="QR Code" style="width:160px;height:160px;border-radius:10px;border:1px solid rgba(255,255,255,.1);"/>
+<div style="font-size:10.5px;color:rgba(255,255,255,.3);margin-top:7px;">Customer scans to pay with Apple Pay, Google Pay, or card</div>
+</div>
+</div>
+<div id="pmActions">
+<button onclick="generatePaymentLink()" id="pmCreateBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-link" style="font-size:15px;"></i> Create payment link</button>
+<div style="font-size:10.5px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;">1% platform fee · Powered by Stripe</div>
+</div>
 </div>
 </div>
 
@@ -2456,7 +2520,7 @@ function getRawPhone(){const d=document.getElementById('m-phone').value.replace(
 let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
 let userLocation = null;
-let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null};
+let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null,stripeConnected:false,stripePending:false};
 let specialItemStates={},selectedLoad=null,loadQtys={minimum:0,quarter:0,half:0,full:0},selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
 let verificationToken=null,resetToken=null,resendTimer=null,savedPassword=null;
 let userPricing={loads:{minimum:{low:100,high:130},quarter:{low:160,high:200},half:{low:230,high:280},full:{low:350,high:420}},specials:{},driveRate:1.5,laborRate:35,defaultMarkup:35,truck:{length:0,width:0,height:0}};
@@ -2514,11 +2578,20 @@ if(jobsRes.success&&jobsRes.jobs.length){
 localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs)));
 }
 }catch(e){}
+checkStripeStatus();
 }
 else loadLocalPricing();
 openCalcDirect();
 hidePageLoader();
 }catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();}
+}
+})();
+
+(function handleUrlParams(){
+const p=new URLSearchParams(window.location.search);
+if(p.get('stripe_connected')==='1'){
+history.replaceState({},'',window.location.pathname);
+setTimeout(()=>{showToast('✓ Stripe account connected! You can now collect payments.');checkStripeStatus();},800);
 }
 })();
 
@@ -2847,6 +2920,7 @@ localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs,_l
 }catch(e){}
 closeModal();
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
+checkStripeStatus();
 startStatusPoll();
 showLoginSplash(()=>openCalcDirect());
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
@@ -3229,6 +3303,7 @@ const fi=document.getElementById('ssfee-'+item.key);if(fi)fi.value=fee;
 });
 rebuildSettingsCustomItems();
 document.getElementById('settingsPanel').classList.add('open');
+renderStripeSettings();
 }
 function closeSettings(){document.getElementById('settingsPanel').classList.remove('open');}
 function closeSettingsOutside(e){if(e.target===document.getElementById('settingsPanel'))closeSettings();}
@@ -3503,6 +3578,107 @@ const _qp2={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials
 api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
 }
 }
+// ── STRIPE PAYMENTS ──────────────────────────────────────
+let _pmJobId=null,_pmLink=null;
+function openPaymentModal(jobId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
+_pmJobId=jobId;_pmLink=null;
+const name=job.crm?.name||'Customer';
+const address=job.crm?.address||'';
+document.getElementById('pmJobInfo').innerHTML=`<span style="color:rgba(255,255,255,.7);font-weight:600;">${name}</span>${address?`<span style="color:rgba(255,255,255,.35);"> · ${address}</span>`:''}`;
+document.getElementById('pmAmount').value=job.actual?.charged||'';
+document.getElementById('pmLinkSection').style.display='none';
+document.getElementById('pmActions').style.display='block';
+document.getElementById('pmCreateBtn').disabled=false;
+document.getElementById('pmCreateBtn').innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';
+updatePmFee();
+const modal=document.getElementById('paymentModal');
+modal.style.display='flex';
+document.body.style.overflow='hidden';
+}
+function closePaymentModal(){
+document.getElementById('paymentModal').style.display='none';
+document.body.style.overflow='';
+}
+function updatePmFee(){
+const amt=parseFloat(document.getElementById('pmAmount').value)||0;
+const fee=amt>0?Math.max(0.01,Math.round(amt*0.01*100)/100):0;
+document.getElementById('pmFeeNote').textContent=amt>0?`You receive $${(amt-fee).toFixed(2)} after 1% platform fee`:'';
+}
+async function generatePaymentLink(){
+const amt=parseFloat(document.getElementById('pmAmount').value);
+if(!amt||amt<0.5){showToast('Enter an amount of at least $0.50',true);return;}
+const job=jobHistory.find(j=>String(j.id)===String(_pmJobId));
+const btn=document.getElementById('pmCreateBtn');
+btn.disabled=true;btn.innerHTML='Creating link...';
+try{
+const desc=(job?.crm?.name?job.crm.name+' — ':'')+'Junk Removal Service';
+const res=await api({action:'createPaymentLink',token:session.token,amount:amt,description:desc,jobId:String(_pmJobId)});
+if(!res.success){showToast(res.error||'Could not create link',true);btn.disabled=false;btn.innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';return;}
+_pmLink=res.url;
+document.getElementById('pmLinkInput').value=_pmLink;
+document.getElementById('pmQrCode').src='https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=ffffff&bgcolor=1a1a1a&data='+encodeURIComponent(_pmLink);
+document.getElementById('pmLinkSection').style.display='block';
+document.getElementById('pmActions').style.display='none';
+if(navigator.share)document.getElementById('pmShareBtn').style.display='block';
+}catch(e){showToast('Could not reach server',true);btn.disabled=false;btn.innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';}
+}
+function copyPaymentLink(){
+if(!_pmLink)return;
+navigator.clipboard.writeText(_pmLink).then(()=>{
+const btn=document.getElementById('pmCopyBtn');
+btn.textContent='Copied!';btn.style.background='rgba(93,202,165,.2)';btn.style.color='#5DCAA5';
+setTimeout(()=>{btn.textContent='Copy';btn.style.background='rgba(255,255,255,.08)';btn.style.color='white';},2000);
+}).catch(()=>{const i=document.getElementById('pmLinkInput');i.select();document.execCommand('copy');showToast('✓ Link copied');});
+}
+function sharePaymentLink(){
+if(!_pmLink||!navigator.share)return;
+const job=jobHistory.find(j=>String(j.id)===String(_pmJobId));
+const amt=document.getElementById('pmAmount').value;
+navigator.share({title:'Payment',text:`Hi${job?.crm?.name?' '+job.crm.name:''}! Here's your payment link for $${amt}: `,url:_pmLink}).catch(()=>{});
+}
+async function checkStripeStatus(){
+if(!session.token||!isPro())return;
+try{
+const res=await api({action:'stripeAccountStatus',token:session.token});
+session.stripeConnected=!!(res.success&&res.connected);
+session.stripePending=!!(res.success&&!res.connected&&res.accountId);
+renderStripeSettings();
+}catch(e){}
+}
+function renderStripeSettings(){
+const sec=document.getElementById('stripeSettingsSection');if(!sec)return;
+if(!isPro()){sec.style.display='none';return;}
+sec.style.display='block';
+const isMember=session.role==='member';
+if(isMember){
+// Members see read-only status — no connect button
+document.getElementById('stripeNotConnected').style.display='none';
+document.getElementById('stripePendingStatus').style.display='none';
+document.getElementById('stripeConnectedStatus').style.display=session.stripeConnected?'block':'none';
+if(!session.stripeConnected){
+// Show a passive note instead
+sec.querySelector('#stripeNotConnected').innerHTML='<div style="font-size:11.5px;color:rgba(255,255,255,.35);line-height:1.6;">Ask your account owner to connect Stripe to enable payment collection.</div>';
+document.getElementById('stripeNotConnected').style.display='block';
+}
+return;
+}
+document.getElementById('stripeNotConnected').style.display=(!session.stripeConnected&&!session.stripePending)?'block':'none';
+document.getElementById('stripeConnectedStatus').style.display=session.stripeConnected?'block':'none';
+document.getElementById('stripePendingStatus').style.display=(session.stripePending&&!session.stripeConnected)?'block':'none';
+}
+async function connectStripe(){
+const btn=document.getElementById('stripeConnectBtn');
+if(btn){btn.disabled=true;btn.textContent='Opening Stripe...';}
+try{
+const res=await api({action:'stripeConnect',token:session.token,appUrl:window.location.href});
+if(res.success&&res.url){window.open(res.url,'_blank');}
+else showToast(res.error||'Could not connect to Stripe',true);
+}catch(e){showToast('Could not reach server',true);}
+if(btn){btn.disabled=false;btn.innerHTML='<i class="ph ph-stripe-logo" style="font-size:15px;"></i> Set up payments with Stripe';}
+}
+// ─────────────────────────────────────────────────────────
+
 function sendReceiptForJob(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
 const name=job.crm?.name||'Customer';
@@ -4678,6 +4854,7 @@ ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,25
 <button onclick="openActual(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-pencil" style="font-size:12px;"></i> Edit outcome</button>
 <button onclick="openCrm(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-user" style="font-size:12px;"></i> Customer info</button>
 ${j.crm?.phone?`<button onclick="sendReceiptForJob(${j.id})" style="grid-column:1/-1;padding:7px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.25);color:#5DCAA5;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:12px;"></i> Send receipt</button>`:''}
+${(session.stripeConnected&&isPro())?`<button onclick="openPaymentModal(${j.id})" style="grid-column:1/-1;padding:7px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
 </div>
 </div>`;
 }
@@ -4891,7 +5068,7 @@ const now = Date.now();
 if (now - (document._lastTouch || 0) < 300) e.preventDefault();
 document._lastTouch = now;
 }, { passive: false });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();closePaymentModal();}});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
 window.addEventListener('load',()=>{
 if(window.AOS){AOS.init({duration:600,easing:'ease-out-cubic',once:false,offset:30});}
