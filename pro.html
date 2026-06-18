@@ -164,6 +164,10 @@ transition:background .18s,transform .18s!important;
 .nav-cta:hover{background:#222!important;transform:translateY(-1px)!important;}
 
 /* ─── HERO ─── */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.skip-link:focus{position:fixed;top:12px;left:12px;width:auto;height:auto;background:white;color:#0b0b0b;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:700;z-index:10000;box-shadow:0 4px 18px rgba(0,0,0,.35);text-decoration:none;}
+:focus-visible{outline:2px solid #5DCAA5;outline-offset:2px;}
 .hero {
 min-height:100vh;display:grid;grid-template-columns:1fr 1fr;
 align-items:center;gap:60px;max-width:1100px;margin:0 auto;
@@ -1028,6 +1032,8 @@ section{padding:56px 20px;}
 
 <!-- ══ MARKETING PAGE ══ -->
 <div id="marketingPage">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="a11y-announce" aria-live="polite" aria-atomic="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;"></div>
 <nav>
 <a href="https://woodswastemn.com" class="nav-logo">
 <img src="logo.PNG" alt="Wood's Waste">
@@ -1044,7 +1050,7 @@ section{padding:56px 20px;}
 </div>
 </nav>
 
-<section style="padding:0;background:#0b0b0b;">
+<section style="padding:0;background:#0b0b0b;" id="main-content">
 <div class="hero">
 <div class="hero-left">
 <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
@@ -1105,9 +1111,9 @@ section{padding:56px 20px;}
 </section>
 
 <div id="iosInstallBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:white;border-top:1px solid #e4e4e2;padding:18px 20px 28px;box-shadow:0 -8px 30px rgba(0,0,0,0.12);">
-<button onclick="document.getElementById('iosInstallBanner').style.display='none'" style="position:absolute;top:12px;right:14px;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;">✕</button>
+<button onclick="document.getElementById('iosInstallBanner').style.display='none'" aria-label="Dismiss install banner" style="position:absolute;top:12px;right:14px;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;">✕</button>
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-<img src="icon.png" style="width:48px;height:48px;border-radius:10px;">
+<img src="icon.png" alt="Wood's Waste Pro app icon" style="width:48px;height:48px;border-radius:10px;">
 <div>
 <div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:700;color:#0d0d0d;">Wood's Waste Pro</div>
 <div style="font-family:-apple-system,sans-serif;font-size:12px;color:#6b6b6b;">Add to your home screen</div>
@@ -1323,7 +1329,7 @@ localStorage.setItem('installBannerDismissed','1');
 <h2 class="section-title" style="text-align:center;max-width:100%;margin-bottom:20px;">Simple, honest pricing.</h2>
 <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px;">
 <span id="billingLabelMonthly" style="font-size:13px;font-weight:600;color:var(--black);">Monthly</span>
-<div onclick="toggleBilling()" id="billingToggle" style="width:48px;height:26px;background:var(--green);border-radius:13px;cursor:pointer;position:relative;transition:background .2s;">
+<div onclick="toggleBilling()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleBilling();}" id="billingToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle yearly billing" style="width:48px;height:26px;background:var(--green);border-radius:13px;cursor:pointer;position:relative;transition:background .2s;">
 <div id="billingThumb" style="position:absolute;top:3px;left:3px;width:20px;height:20px;background:white;border-radius:50%;transition:transform .2s;"></div>
 </div>
 <span id="billingLabelYearly" style="font-size:13px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:9px;margin-left:4px;">Save 2 months</span></span>
@@ -1498,8 +1504,8 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 
 <!-- ══ MODAL ══ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-<div class="modal" id="modal">
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)" role="presentation">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 <div class="modal-header" id="modalHeader">
 <div class="modal-header-top">
 <div class="modal-header-brand">
@@ -1507,7 +1513,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="modal-header-brand-divider"></div>
 <div class="modal-header-brand-sub">Pro</div>
 </div>
-<button class="modal-close" onclick="closeModal()">✕</button>
+<button class="modal-close" onclick="closeModal()" aria-label="Close dialog">✕</button>
 </div>
 <div class="modal-header-body">
 <div class="modal-plan-badge" id="modalPlanBadge">Starter — $29/mo</div>
@@ -1530,13 +1536,13 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="font-size:12.5px;color:var(--gray);margin-bottom:14px;line-height:1.6;">Choose the plan that fits. All plans include a 14-day free trial — no charge until activation.</div>
 <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;">
 <span id="spBillingMonthly" style="font-size:12.5px;font-weight:600;color:var(--black);">Monthly</span>
-<div onclick="toggleSignupBilling()" id="spBillingToggle" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+<div onclick="toggleSignupBilling()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSignupBilling();}" id="spBillingToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle yearly billing" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
 <div id="spBillingThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .2s;"></div>
 </div>
 <span id="spBillingYearly" style="font-size:12.5px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;margin-left:3px;">Save 2 months</span></span>
 </div>
 <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:6px;">
-<div onclick="pickPlan('starter')" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
+<div onclick="pickPlan('starter')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('starter');}" role="button" tabindex="0" aria-label="Select Starter plan" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
 <div style="flex:1;min-width:0;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:3px;">Starter</div>
 <div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote calculator, job history, AI photo quoting, special item surcharges.</div>
@@ -1546,7 +1552,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="margin-top:6px;background:var(--black);color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
 </div>
 </div>
-<div onclick="pickPlan('pro')" style="border:1.5px solid var(--green);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;background:linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%);" onmouseover="this.style.borderColor='var(--green)';this.style.background='rgba(26,158,114,0.08)'" onmouseout="this.style.borderColor='var(--green)';this.style.background='linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%)'">
+<div onclick="pickPlan('pro')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('pro');}" role="button" tabindex="0" aria-label="Select Pro plan" style="border:1.5px solid var(--green);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;background:linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%);" onmouseover="this.style.borderColor='var(--green)';this.style.background='rgba(26,158,114,0.08)'" onmouseout="this.style.borderColor='var(--green)';this.style.background='linear-gradient(140deg,rgba(26,158,114,0.04) 0%,transparent 60%)'">
 <div style="flex:1;min-width:0;">
 <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Pro</div>
@@ -1574,7 +1580,7 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-team-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
-<div onclick="pickPlan('team')" style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;cursor:pointer;">Select →</div>
+<div onclick="pickPlan('team')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('team');}" role="button" tabindex="0" aria-label="Select Team plan" style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;cursor:pointer;">Select →</div>
 </div>
 </div>
 </div>
@@ -1586,13 +1592,13 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="modal-trial-box"><i class="ph ph-check-circle" style="font-size:13px;flex-shrink:0;margin-top:1px;color:var(--green);"></i><div><strong>No card required to start.</strong> Try free for 14 days — you'll only be asked for payment if you want to keep access after the trial.</div></div>
 <div class="form-grid">
 <div class="form-row">
-<div class="field" id="f-first"><label>First name</label><input type="text" id="m-first" placeholder="Griffin"/><span class="error-hint">Required</span></div>
-<div class="field" id="f-last"><label>Last name</label><input type="text" id="m-last" placeholder="Wood"/><span class="error-hint">Required</span></div>
+<div class="field" id="f-first"><label for="m-first">First name</label><input type="text" id="m-first" placeholder="Griffin"/><span class="error-hint">Required</span></div>
+<div class="field" id="f-last"><label for="m-last">Last name</label><input type="text" id="m-last" placeholder="Wood"/><span class="error-hint">Required</span></div>
 </div>
-<div class="field" id="f-biz"><label>Business name</label><input type="text" id="m-biz" placeholder="Your Junk Removal Co."/><span class="error-hint">Required</span></div>
-<div class="field" id="f-email"><label>Email — we'll send a verification code</label><input type="email" id="m-email" placeholder="you@yourbusiness.com"/><span class="error-hint">Valid email required</span></div>
-<div class="field" id="f-phone"><label>Phone number</label><input type="tel" id="m-phone" placeholder="(507) 555-0100" oninput="onPhoneInput(this)" maxlength="14"/><span class="error-hint" id="phone-err">Enter a valid US/CA phone number</span></div>
-<div class="field" id="f-pw"><label>Password</label><input type="password" id="m-pw" placeholder="Min 8 characters" oninput="savedPassword=this.value"/><span class="error-hint">Min 8 characters</span></div>
+<div class="field" id="f-biz"><label for="m-biz">Business name</label><input type="text" id="m-biz" placeholder="Your Junk Removal Co."/><span class="error-hint">Required</span></div>
+<div class="field" id="f-email"><label for="m-email">Email — we'll send a verification code</label><input type="email" id="m-email" placeholder="you@yourbusiness.com"/><span class="error-hint">Valid email required</span></div>
+<div class="field" id="f-phone"><label for="m-phone">Phone number</label><input type="tel" id="m-phone" placeholder="(507) 555-0100" oninput="onPhoneInput(this)" maxlength="14"/><span class="error-hint" id="phone-err">Enter a valid US/CA phone number</span></div>
+<div class="field" id="f-pw"><label for="m-pw">Password</label><input type="password" id="m-pw" placeholder="Min 8 characters" oninput="savedPassword=this.value"/><span class="error-hint">Min 8 characters</span></div>
 <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — verify your email →</button>
 <p class="fine-print">By continuing you agree to our terms. No card required to start.</p>
 </div>
@@ -1603,14 +1609,17 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="twofa-wrap">
 <div class="twofa-icon"><i class="ph ph-envelope" style="font-size:38px;color:var(--black);"></i></div>
 <div class="twofa-desc">We sent a 6-digit code to<br><strong id="twofa-email-display"></strong><br>Enter it below to verify your email.</div>
+<fieldset style="border:none;padding:0;margin:0;">
+<legend class="sr-only">6-digit verification code</legend>
 <div class="twofa-code-row">
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d0" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d1" oninput="onDigit(this,1)" onkeydown="onDigitKey(event,1)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d2" oninput="onDigit(this,2)" onkeydown="onDigitKey(event,2)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d3" oninput="onDigit(this,3)" onkeydown="onDigitKey(event,3)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d4" oninput="onDigit(this,4)" onkeydown="onDigitKey(event,4)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d5" oninput="onDigit(this,5)" onkeydown="onDigitKey(event,5)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d0" aria-label="Digit 1" oninput="onDigit(this,0)" onkeydown="onDigitKey(event,0)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d1" aria-label="Digit 2" oninput="onDigit(this,1)" onkeydown="onDigitKey(event,1)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d2" aria-label="Digit 3" oninput="onDigit(this,2)" onkeydown="onDigitKey(event,2)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d3" aria-label="Digit 4" oninput="onDigit(this,3)" onkeydown="onDigitKey(event,3)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d4" aria-label="Digit 5" oninput="onDigit(this,4)" onkeydown="onDigitKey(event,4)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="d5" aria-label="Digit 6" oninput="onDigit(this,5)" onkeydown="onDigitKey(event,5)"/>
 </div>
+</fieldset>
 <div class="twofa-resend">Didn't get it? <a onclick="resendCode()" id="resendLink">Resend code</a> <span class="countdown" id="resendCountdown"></span></div>
 <button class="submit-btn" id="verifyBtn" onclick="verifyCode()">Verify &amp; continue →</button>
 <button class="btn-back" onclick="goStep(1)" style="width:100%;margin-top:7px;">← Back</button>
@@ -1662,9 +1671,9 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="margin-top:11px;border-top:1px solid var(--border);padding-top:11px;margin-bottom:13px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gray);margin-bottom:7px;">Truck size (optional)</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;align-items:end;">
-<div><label style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Length (ft)</label><input type="number" id="p-truck-l" min="0" step="0.5" placeholder="15" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);outline:none;"/></div>
-<div><label style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Width (ft)</label><input type="number" id="p-truck-w" min="0" step="0.5" placeholder="7.5" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);outline:none;"/></div>
-<div><label style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Height (ft)</label><input type="number" id="p-truck-h" min="0" step="0.5" placeholder="7" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);outline:none;"/></div>
+<div><label for="p-truck-l" style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Length (ft)</label><input type="number" id="p-truck-l" min="0" step="0.5" placeholder="15" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);"/></div>
+<div><label for="p-truck-w" style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Width (ft)</label><input type="number" id="p-truck-w" min="0" step="0.5" placeholder="7.5" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);"/></div>
+<div><label for="p-truck-h" style="font-size:9.5px;color:var(--gray);display:block;margin-bottom:3px;">Height (ft)</label><input type="number" id="p-truck-h" min="0" step="0.5" placeholder="7" oninput="calcTruckYards()" style="width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:12px;font-family:var(--font-sans);"/></div>
 <div style="background:#f0f0ee;border-radius:5px;padding:6px 9px;text-align:center;">
 <div style="font-size:9px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:.07em;">Capacity</div>
 <div style="font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--black);letter-spacing:-0.5px;" id="p-truck-cuyd">—</div>
@@ -1697,8 +1706,8 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="err-banner" id="loginErr"></div>
 <div class="success-banner" id="loginSuccess"></div>
 <div class="form-grid">
-<div class="field"><label>Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
-<div class="field"><label>Password</label><input type="password" id="l-pw" placeholder="Your password"/></div>
+<div class="field"><label for="l-email">Email</label><input type="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
+<div class="field"><label for="l-pw">Password</label><input type="password" id="l-pw" placeholder="Your password"/></div>
 <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
 <p class="fine-print" style="text-align:center;margin-top:3px;">
 <a href="#" onclick="showForgotPassword();return false;" style="color:var(--gray);font-weight:500;text-decoration:underline;">Forgot your password?</a>
@@ -1716,7 +1725,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="font-size:12.5px;color:var(--gray);line-height:1.7;">Enter your email and we'll send a reset code.</div>
 </div>
 <div class="form-grid">
-<div class="field"><label>Email</label><input type="email" id="fp-email" placeholder="you@yourbusiness.com"/></div>
+<div class="field"><label for="fp-email">Email</label><input type="email" id="fp-email" placeholder="you@yourbusiness.com"/></div>
 <button class="submit-btn" id="forgotBtn" onclick="sendResetCode()">Send reset code →</button>
 <p class="fine-print"><a href="#" onclick="switchTab('login');return false;" style="color:var(--gray);font-weight:500;">← Back to login</a></p>
 </div>
@@ -1728,17 +1737,20 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="twofa-wrap">
 <div class="twofa-icon"><i class="ph ph-key" style="font-size:38px;color:var(--black);"></i></div>
 <div class="twofa-desc">We sent a 6-digit reset code to<br><strong id="reset-email-display"></strong></div>
+<fieldset style="border:none;padding:0;margin:0;">
+<legend class="sr-only">6-digit reset code</legend>
 <div class="twofa-code-row">
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r0" oninput="onResetDigit(this,0)" onkeydown="onResetDigitKey(event,0)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r1" oninput="onResetDigit(this,1)" onkeydown="onResetDigitKey(event,1)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r2" oninput="onResetDigit(this,2)" onkeydown="onResetDigitKey(event,2)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r3" oninput="onResetDigit(this,3)" onkeydown="onResetDigitKey(event,3)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r4" oninput="onResetDigit(this,4)" onkeydown="onResetDigitKey(event,4)"/>
-<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r5" oninput="onResetDigit(this,5)" onkeydown="onResetDigitKey(event,5)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r0" aria-label="Digit 1" oninput="onResetDigit(this,0)" onkeydown="onResetDigitKey(event,0)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r1" aria-label="Digit 2" oninput="onResetDigit(this,1)" onkeydown="onResetDigitKey(event,1)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r2" aria-label="Digit 3" oninput="onResetDigit(this,2)" onkeydown="onResetDigitKey(event,2)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r3" aria-label="Digit 4" oninput="onResetDigit(this,3)" onkeydown="onResetDigitKey(event,3)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r4" aria-label="Digit 5" oninput="onResetDigit(this,4)" onkeydown="onResetDigitKey(event,4)"/>
+<input class="twofa-digit" maxlength="1" type="text" inputmode="numeric" id="r5" aria-label="Digit 6" oninput="onResetDigit(this,5)" onkeydown="onResetDigitKey(event,5)"/>
 </div>
+</fieldset>
 <div class="twofa-resend">Didn't get it? <a onclick="sendResetCode(true)">Resend code</a></div>
 <div class="form-grid" style="margin-top:14px;">
-<div class="field"><label>New password</label><input type="password" id="new-pw" placeholder="Min 8 characters"/></div>
+<div class="field"><label for="new-pw">New password</label><input type="password" id="new-pw" placeholder="Min 8 characters"/></div>
 <button class="submit-btn" id="resetBtn" onclick="doResetPassword()">Set new password →</button>
 </div>
 </div>
@@ -1763,10 +1775,10 @@ localStorage.setItem('installBannerDismissed','1');
 <div id="joinTeamForm" style="display:none;">
 <div class="err-banner" id="joinTeamErr"></div>
 <div class="form-grid">
-<div class="field"><label>Invite token</label><input type="text" id="jt-token" placeholder="Paste invite token from email" autocomplete="off"/></div>
-<div class="field"><label>Your name</label><input type="text" id="jt-name" placeholder="First Last"/></div>
-<div class="field"><label>Your email (must match invite)</label><input type="email" id="jt-email" placeholder="you@yourbusiness.com" autocomplete="email"/></div>
-<div class="field"><label>Create a password</label><input type="password" id="jt-pw" placeholder="Min 8 characters" autocomplete="new-password"/></div>
+<div class="field"><label for="jt-token">Invite token</label><input type="text" id="jt-token" placeholder="Paste invite token from email" autocomplete="off"/></div>
+<div class="field"><label for="jt-name">Your name</label><input type="text" id="jt-name" placeholder="First Last"/></div>
+<div class="field"><label for="jt-email">Your email (must match invite)</label><input type="email" id="jt-email" placeholder="you@yourbusiness.com" autocomplete="email"/></div>
+<div class="field"><label for="jt-pw">Create a password</label><input type="password" id="jt-pw" placeholder="Min 8 characters" autocomplete="new-password"/></div>
 <button class="submit-btn" id="joinTeamBtn" onclick="submitJoinTeam()">Join team →</button>
 <p class="fine-print">Already have an account? <a href="#" onclick="switchTab('login');return false;" style="color:var(--black);font-weight:600;">Log in →</a></p>
 </div>
@@ -1970,7 +1982,7 @@ localStorage.setItem('installBannerDismissed','1');
 <input type="text" id="s-dump-address" placeholder="123 Landfill Rd, Farmington MN" style="width:100%;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:8px 11px;font-size:13px;color:white;font-family:var(--font-sans);outline:none;"/>
 <div style="font-size:9px;color:var(--d-faint);margin-top:4px;">Added as a stop in Plan My Day when needed</div>
 </div>
-<div id="settingsAddressLock" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(11,11,11,0.82);border-radius:var(--r-sm);backdrop-filter:blur(3px);flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px;cursor:pointer;" onclick="showUpgradePrompt()">
+<div id="settingsAddressLock" role="button" tabindex="0" aria-label="Upgrade to Pro to unlock address settings" onclick="showUpgradePrompt()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showUpgradePrompt();}" style="display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(11,11,11,0.82);border-radius:var(--r-sm);backdrop-filter:blur(3px);flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px;cursor:pointer;">
 <i class="ph ph-lock" style="font-size:18px;color:rgba(255,255,255,.45);"></i>
 <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-align:center;">Routing is a Pro feature</div>
 <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;">Tap to upgrade →</div>
@@ -2080,39 +2092,39 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 </div>
 <div class="crm-field">
-<label>Customer name</label>
+<label for="crmName">Customer name</label>
 <input type="text" class="crm-input" id="crmName" placeholder="Jane Smith" oninput="checkRepeatCustomer(crmJobId,this.value,document.getElementById('crmPhone').value)"/>
 </div>
 <div class="crm-field">
-<label>Phone number</label>
+<label for="crmPhone">Phone number</label>
 <input type="tel" class="crm-input" id="crmPhone" placeholder="(507) 555-0100" oninput="checkRepeatCustomer(crmJobId,document.getElementById('crmName').value,this.value)"/>
 </div>
 <div class="crm-field">
-<label>Job address</label>
+<label for="crmAddress">Job address</label>
 <input type="text" class="crm-input" id="crmAddress" placeholder="123 Main St, Farmington MN"/>
 </div>
 <div class="crm-field" style="position:relative;">
-<label>Status</label>
+<label for="crmStatus">Status</label>
 <select class="crm-select" id="crmStatus" onchange="toggleCrmDate()">
 <option value="quoted">Quoted</option>
 <option value="scheduled">Scheduled</option>
 <option value="completed">Completed</option>
 <option value="cancelled">Cancelled</option>
 </select>
-<div id="crmScheduleLock" style="display:none;position:absolute;inset:0;background:rgba(11,11,11,0.82);border-radius:var(--r-sm);backdrop-filter:blur(3px);flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px;cursor:pointer;" onclick="showUpgradePrompt()">
+<div id="crmScheduleLock" role="button" tabindex="0" aria-label="Upgrade to Pro to unlock scheduling" onclick="showUpgradePrompt()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showUpgradePrompt();}" style="display:none;position:absolute;inset:0;background:rgba(11,11,11,0.82);border-radius:var(--r-sm);backdrop-filter:blur(3px);flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:11px;cursor:pointer;">
 <i class="ph ph-lock" style="font-size:18px;color:rgba(255,255,255,.45);"></i>
 <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.65);text-align:center;">Scheduling is a Pro feature</div>
 <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;">Tap to upgrade →</div>
 </div>
 </div>
 <div class="crm-field" id="crmDateField" style="display:none;">
-<label>Scheduled date & time</label>
+<label for="crmDateTime">Scheduled date & time</label>
 <div style="overflow:hidden;width:100%;border-radius:var(--r-sm);">
 <input type="datetime-local" class="crm-input" id="crmDateTime" style="color-scheme:dark;width:100%;min-width:0;font-size:12px;"/>
 </div>
 </div>
 <div class="crm-field">
-<label>Notes</label>
+<label for="crmNotes">Notes</label>
 <textarea class="crm-input crm-notes" id="crmNotes" placeholder="Any details about the job, customer, or location..."></textarea>
 </div>
 <button class="crm-save-btn" onclick="saveCrm()">Save customer info</button>
@@ -2123,7 +2135,7 @@ localStorage.setItem('installBannerDismissed','1');
 <!-- JOB ACTUAL DRAWER -->
 <div class="actual-panel" id="actualPanel" onclick="closeActualOutside(event)">
 <div class="actual-drawer">
-<div class="actual-header"><div class="actual-title">How'd the job go?</div><button class="actual-close" onclick="closeActual()">✕</button></div>
+<div class="actual-header"><div class="actual-title">How'd the job go?</div><button class="actual-close" onclick="closeActual()" aria-label="Close job outcome panel">✕</button></div>
 <div class="actual-body">
 <div class="actual-quoted" id="actualQuotedBox">
 <div class="actual-quoted-label">You quoted</div>
@@ -2131,7 +2143,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="actual-quoted-detail" id="actualQuotedDetail"></div>
 </div>
 <div class="actual-field">
-<label>What did you actually charge?</label>
+<label for="actualCharged">What did you actually charge?</label>
 <div class="actual-dollar"><input type="number" class="actual-input" id="actualCharged" placeholder="0" min="0" oninput="onActualInput()"/></div>
 </div>
 <div class="actual-diff" id="actualDiff">
@@ -2140,11 +2152,11 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="actual-diff-sub" id="actualDiffSub"></div>
 </div>
 <div class="actual-field">
-<label>How long did it actually take? (hours)</label>
+<label for="actualHours">How long did it take? (hours)</label>
 <input type="number" class="actual-input" id="actualHours" placeholder="0" min="0" step="0.5"/>
 </div>
 <div class="actual-field">
-<label>Any surprises? (optional)</label>
+<label for="actualNotes">Any surprises? (optional)</label>
 <textarea class="actual-input actual-notes-input" id="actualNotes" placeholder="Heavier than expected, extra items, longer drive..."></textarea>
 </div>
 <button class="actual-save-btn" onclick="saveActual()">Save job outcome</button>
@@ -2188,13 +2200,13 @@ localStorage.setItem('installBannerDismissed','1');
 <div id="paywallPlanStep">
 <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
 <span id="pwBillingMonthly" style="font-size:12.5px;font-weight:600;color:var(--black);">Monthly</span>
-<div onclick="togglePaywallBilling()" id="pwBillingToggle" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+<div onclick="togglePaywallBilling()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePaywallBilling();}" id="pwBillingToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Toggle yearly billing" style="width:44px;height:24px;background:var(--green);border-radius:12px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
 <div id="pwBillingThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .2s;"></div>
 </div>
 <span id="pwBillingYearly" style="font-size:12.5px;font-weight:600;color:var(--gray);">Yearly <span style="background:var(--green);color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;margin-left:3px;">Save 2 months</span></span>
 </div>
 <div class="pricing-cards" style="margin-bottom:16px;">
-<div class="pricing-card" id="pw-starter-card" onclick="selectPaywallPlan('starter')" style="cursor:pointer;">
+<div class="pricing-card" id="pw-starter-card" onclick="selectPaywallPlan('starter')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan('starter');}" role="button" tabindex="0" aria-label="Select Starter plan" style="cursor:pointer;">
 <div class="pricing-plan">Starter</div>
 <div class="pricing-price" id="pw-starter-price">$29<span>/mo</span></div>
 <div class="pricing-desc" id="pw-starter-desc">Manual calculator with everything you need to price jobs confidently.</div>
@@ -2209,7 +2221,7 @@ localStorage.setItem('installBannerDismissed','1');
 <li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
 </ul>
 </div>
-<div class="pricing-card featured" id="pw-pro-card" onclick="selectPaywallPlan('pro')" style="cursor:pointer;">
+<div class="pricing-card featured" id="pw-pro-card" onclick="selectPaywallPlan('pro')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan('pro');}" role="button" tabindex="0" aria-label="Select Pro plan" style="cursor:pointer;">
 <div class="pricing-badge">Most Popular</div>
 <div class="pricing-plan">Pro</div>
 <div class="pricing-price" id="pw-pro-price">$59<span>/mo</span></div>
@@ -2222,7 +2234,7 @@ localStorage.setItem('installBannerDismissed','1');
 <li class="pf"><span class="chk chk-green">✓</span> Analytics & insights</li>
 </ul>
 </div>
-<div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan(teamSizeIs10?'team10':'team')" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
+<div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan(teamSizeIs10?'team10':'team')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan(teamSizeIs10?'team10':'team');}" role="button" tabindex="0" aria-label="Select Team plan" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
 <div class="pricing-plan" style="color:#5DCAA5;margin:0;">Team</div>
 <div style="display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border-radius:16px;padding:2px;gap:2px;">
@@ -2701,6 +2713,8 @@ document.getElementById('modalSubtitle').textContent='All plans include a 14-day
 document.getElementById('stepPick').style.display='block';
 document.getElementById('modalOverlay').classList.add('open');
 document.body.style.overflow='hidden';
+window._modalOpener=document.activeElement;
+setTimeout(()=>{const f=document.getElementById('modal').querySelector('button,input,[tabindex="0"]');if(f)f.focus();},80);
 return;
 }
 if(planOrMode==='login'){switchTab('login');}
@@ -2731,6 +2745,8 @@ document.getElementById('modalSubtitle').textContent='14 days free. No card requ
 }
 document.getElementById('modalOverlay').classList.add('open');
 document.body.style.overflow='hidden';
+window._modalOpener=document.activeElement;
+setTimeout(()=>{const f=document.getElementById('modal').querySelector('button,input,[tabindex="0"]');if(f)f.focus();},80);
 setTimeout(initStripe,50);
 }
 
@@ -2750,7 +2766,7 @@ document.getElementById('step1').style.display='block';
 updateStepDots(1);
 setTimeout(initStripe,50);
 }
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);if(window._modalOpener&&window._modalOpener.focus)window._modalOpener.focus();window._modalOpener=null;}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
 function switchTab(tab){
@@ -3881,6 +3897,7 @@ ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding
 function showPageLoader(msg){const d=document.createElement('div');d.id='pageLoader';d.style.cssText='position:fixed;inset:0;background:#0b0b0b;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';d.innerHTML=`<div style="width:38px;height:38px;border:3px solid rgba(255,255,255,.08);border-top-color:#1a9e72;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:14px;"></div><p style="font-size:13.5px;color:rgba(255,255,255,.35);font-family:DM Sans,sans-serif;">${msg||'Loading...'}</p>`;document.body.appendChild(d);}
 function hidePageLoader(){const el=document.getElementById('pageLoader');if(el)el.remove();}
 function showToast(msg,warn){
+const live=document.getElementById('a11y-announce');if(live){live.textContent='';requestAnimationFrame(()=>{live.textContent=msg;});}
 let t=document.getElementById('toast');
 if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
 t.textContent=msg;
@@ -3986,6 +4003,7 @@ if(pwDesc)pwDesc.textContent=is10?'Everything in Pro for up to 10 operators on o
 let signupBillingYearly = false;
 function toggleSignupBilling() {
 signupBillingYearly = !signupBillingYearly;
+document.getElementById('spBillingToggle').setAttribute('aria-checked', signupBillingYearly ? 'true' : 'false');
 document.getElementById('spBillingThumb').style.transform = signupBillingYearly ? 'translateX(20px)' : 'translateX(0)';
 document.getElementById('spBillingMonthly').style.color = signupBillingYearly ? 'var(--gray)' : 'var(--black)';
 document.getElementById('spBillingYearly').style.color = signupBillingYearly ? 'var(--black)' : 'var(--gray)';
@@ -4003,6 +4021,7 @@ document.getElementById('sp-team-price').innerHTML = (teamSizeIs10?'$299':'$149'
 let paywallBillingYearly = false;
 function togglePaywallBilling() {
 paywallBillingYearly = !paywallBillingYearly;
+document.getElementById('pwBillingToggle').setAttribute('aria-checked', paywallBillingYearly ? 'true' : 'false');
 document.getElementById('pwBillingThumb').style.transform = paywallBillingYearly ? 'translateX(20px)' : 'translateX(0)';
 document.getElementById('pwBillingMonthly').style.color = paywallBillingYearly ? 'var(--gray)' : 'var(--black)';
 document.getElementById('pwBillingYearly').style.color = paywallBillingYearly ? 'var(--black)' : 'var(--gray)';
@@ -4263,6 +4282,7 @@ showBanner('paywallErr', 'Could not connect: ' + e.message);
 let billingYearly=false;
 function toggleBilling(){
 billingYearly=!billingYearly;
+document.getElementById('billingToggle').setAttribute('aria-checked', billingYearly ? 'true' : 'false');
 const thumb=document.getElementById('billingThumb');
 const monthly=document.getElementById('billingLabelMonthly');
 const yearly=document.getElementById('billingLabelYearly');
@@ -4889,8 +4909,8 @@ ${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;
 </div>
 ${(j.actual?.beforePhotos?.length||j.actual?.afterPhotos?.length)?`
 <div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;">
-${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">Before (${j.actual.beforePhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.beforePhotos.map(p=>`<img src="${p.url||p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
-${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map(p=>`<img src="${p.url||p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+${j.actual?.beforePhotos?.length?`<div style="margin-bottom:7px;"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">Before (${j.actual.beforePhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.beforePhotos.map((p,i)=>`<img src="${p.url||p.dataUrl}" alt="Before photo ${i+1}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
+${j.actual?.afterPhotos?.length?`<div><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.25);margin-bottom:5px;">After (${j.actual.afterPhotos.length})</div><div style="display:flex;gap:5px;flex-wrap:wrap;">${j.actual.afterPhotos.map((p,i)=>`<img src="${p.url||p.dataUrl}" alt="After photo ${i+1}" style="width:48px;height:48px;object-fit:cover;border-radius:5px;border:1px solid rgba(255,255,255,.1);"/>`).join('')}</div></div>`:''}
 </div>`:''}
 ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.38);border-top:1px solid rgba(255,255,255,.06);padding-top:7px;">${j.actual.notes}</div>`:''}
 <div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
