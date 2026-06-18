@@ -2465,7 +2465,7 @@ const STRIPE_PK = 'pk_live_51TdRldLeWK0oPFPo5R4P1Y6R898Xm05cYBBJm7P0tWKTdEcxJre7
 
 const SPECIAL_ITEMS_CONFIG = [
 {key:'mattress', icon:'bed',              label:'Mattress',     fee:40 },
-{key:'boxspring',icon:'bed',              label:'Box Spring',   fee:30 },
+{key:'boxspring',icon:'armchair',         label:'Couch',        fee:30 },
 {key:'fridge',   icon:'thermometer-cold', label:'Refrigerator', fee:50 },
 {key:'washer',   icon:'washing-machine',  label:'Washer/Dryer', fee:45 },
 {key:'tv',       icon:'television-simple',label:'TV',           fee:25 },
@@ -2481,7 +2481,7 @@ const SPECIAL_ITEMS_CONFIG = [
 function getVisualCue(key){
 const cues={
 mattress:'MATTRESS — thick padded rectangular slab, 6-14 inches deep, usually white/gray/striped/floral fabric, often rolled, bagged in plastic, leaning against a wall, or lying flat. Twin/full/queen/king all count. Look for the quilted or tufted surface texture. A bagged mattress in plastic is still a mattress.',
-boxspring:'BOX SPRING — flat rectangular frame, same footprint as a mattress but only 6-9 inches thick, fabric-covered bottom with visible wooden or metal grid structure if turned over. Often paired with a mattress. Thinner and flatter than a mattress.',
+boxspring:'COUCH — upholstered sofa or loveseat, typically 6-8 feet long, with cushioned seats and back. May be a sectional (L-shaped or larger). Heavier than it looks — usually 2 people to carry. Note the number of sections if it\'s a sectional.',
 fridge:'REFRIGERATOR — large boxy appliance, taller than wide, white/black/stainless steel, one or two doors on the front, usually 5-6 feet tall. May be laying on its side during removal. Mini-fridges are smaller but still count. Look for the door handle and hinge lines.',
 washer:'WASHER OR DRYER — white or gray boxy appliance roughly cube-shaped, 3-4 feet tall. Front-load washer has a round porthole door. Top-load washer has a flat lid on top. Dryers look nearly identical to washers. Charge per unit — a washer AND dryer is two fees.',
 tv:'TELEVISION — flat panel screen, black, very thin profile (2-4 inches deep), may be face-down or face-up. Old CRT TVs are large, boxy, and deep (12+ inches). Flat screens range from small (24 inch) to very large (75+ inch). Look for the black screen face and thin bezel.',
