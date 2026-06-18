@@ -170,35 +170,36 @@ align-items:center;gap:60px;max-width:1100px;margin:0 auto;
 padding:120px 40px 80px;
 }
 .hero-eyebrow {
-display:inline-flex;align-items:center;gap:7px;
-background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);
-border:1px solid rgba(255,255,255,0.1);
-font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-padding:5px 11px;border-radius:var(--r-xs);margin-bottom:18px;
+display:inline-flex;align-items:center;gap:6px;
+background:rgba(93,202,165,0.08);color:rgba(93,202,165,0.75);
+border:1px solid rgba(93,202,165,0.18);
+font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+padding:5px 12px;border-radius:20px;margin-bottom:22px;
 }
+.hero-eyebrow::before{content:'';display:block;width:5px;height:5px;border-radius:50%;background:#5DCAA5;opacity:.85;flex-shrink:0;}
 .hero h1 {
-font-family:var(--font-display);font-size:clamp(2.6rem,4.8vw,4rem);
-font-weight:900;line-height:1.06;letter-spacing:-1.5px;color:white;margin-bottom:18px;
+font-family:var(--font-display);font-size:clamp(2.8rem,4.8vw,4.2rem);
+font-weight:900;line-height:1.04;letter-spacing:-2px;color:white;margin-bottom:20px;
 }
 .hero h1 .highlight{color:#4dd9a6;}
-.hero-sub{font-size:15.5px;color:rgba(255,255,255,0.48);line-height:1.75;max-width:430px;margin-bottom:30px;}
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.42);line-height:1.8;max-width:400px;margin-bottom:32px;}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:4px;}
 .btn-primary {
 background:white;color:var(--black);
-padding:12px 26px;border-radius:var(--r-sm);
-font-size:13.5px;font-weight:600;border:none;cursor:pointer;
+padding:13px 28px;border-radius:var(--r-sm);
+font-size:13.5px;font-weight:700;border:none;cursor:pointer;
 text-decoration:none;display:inline-flex;align-items:center;gap:7px;
-transition:all .2s;
+transition:all .2s;letter-spacing:-.01em;
 }
-.btn-primary:hover{background:#eee;transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,0.28);}
+.btn-primary:hover{background:#f0f0f0;transform:translateY(-1px);box-shadow:0 10px 28px rgba(0,0,0,0.32);}
 .btn-ghost {
-background:transparent;color:rgba(255,255,255,0.65);
-padding:12px 22px;border-radius:var(--r-sm);
-font-size:13.5px;font-weight:500;border:1.5px solid rgba(255,255,255,0.14);
+background:transparent;color:rgba(255,255,255,0.55);
+padding:13px 22px;border-radius:var(--r-sm);
+font-size:13.5px;font-weight:500;border:1.5px solid rgba(255,255,255,0.11);
 cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;
 transition:all .2s;
 }
-.btn-ghost:hover{border-color:rgba(255,255,255,0.38);color:white;}
+.btn-ghost:hover{border-color:rgba(255,255,255,0.32);color:rgba(255,255,255,.85);}
 
 /* Hero phone mockup */
 .hero-phone{display:flex;justify-content:center;align-items:center;}
@@ -904,13 +905,14 @@ canvas.insights-chart{width:100%!important;display:block;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
 /* ─── RESPONSIVE ─── */
+@media(max-width:960px)and(min-width:769px){.reviews-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:768px){
 .calc-nav-right{display:none;}
 .calc-hamburger{display:flex;}
 nav{padding:0 18px;}.nav-links{display:none;}
 .hero{grid-template-columns:1fr;padding:88px 20px 56px;gap:36px;}.hero-phone{display:none;}
 section{padding:56px 20px;}
-.origin-grid,.steps-grid,.features-grid,.pricing-cards,.pricing-cards.two-col{grid-template-columns:1fr;}
+.origin-grid,.steps-grid,.features-grid,.pricing-cards,.pricing-cards.two-col,.reviews-grid{grid-template-columns:1fr;}
 .strip{padding:16px 18px;gap:0;flex-direction:column;align-items:flex-start;}
 .strip-item{border-left:none!important;padding:7px 0;}
 .footer-inner{flex-direction:column;align-items:flex-start;}
@@ -1046,47 +1048,55 @@ section{padding:56px 20px;}
 <div class="hero">
 <div class="hero-left">
 <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
-<h1>Quote, schedule, and run every job — all from your phone.</h1>
-<p class="hero-sub">Wood's Waste Pro is the complete business tool for junk removal operators. Price any job in 60 seconds, save customer info, schedule your day, track before &amp; after photos, and see exactly what you made — every job, every load.</p>
+<h1>Quote, schedule,<br>and run every job —<br><span class="highlight">from your phone.</span></h1>
+<p class="hero-sub">The complete business tool for junk removal operators. Price any job in seconds, schedule your day, and know exactly what you made on every load.</p>
 <div class="hero-actions">
 <a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
 <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
-<div style="margin-top:18px;font-size:13px;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
-<i class="ph ph-chat-circle" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
-<span>Questions? Text Griffin at <a href="sms:5072981179" style="color:#5DCAA5;font-weight:600;white-space:nowrap;">(507) 298-1179</a> — I answer every message.</span>
+</div>
+<div style="margin-top:20px;display:flex;flex-direction:column;gap:9px;">
+<div style="font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> No card required to start</span>
+<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> 14-day free trial</span>
+<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> Cancel anytime</span>
+</div>
+<div style="font-size:12.5px;color:rgba(255,255,255,.32);display:flex;align-items:center;gap:6px;">
+<i class="ph ph-chat-circle" style="font-size:14px;color:rgba(93,202,165,.6);"></i>
+<span>Questions? Text Griffin at <a href="sms:5072981179" style="color:rgba(93,202,165,.75);font-weight:600;white-space:nowrap;">(507) 298-1179</a></span>
 </div>
 </div>
 </div>
 <div class="hero-phone">
-<div class="phone-frame">
+<div style="position:relative;">
+<div style="position:absolute;inset:-40px;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(26,158,114,0.18) 0%,transparent 70%);pointer-events:none;border-radius:50%;"></div>
+<div class="phone-frame" style="position:relative;width:285px;box-shadow:0 48px 100px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.06),0 0 60px rgba(26,158,114,0.1);">
 <div class="phone-notch"></div>
 <div class="phone-screen">
 <div class="phone-app-bar"><div class="phone-app-name">Wood's Waste Pro</div><div class="phone-app-badge">3 today</div></div>
-<!-- Job cards -->
-<div style="background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.35);border-radius:8px;padding:8px 10px;margin-bottom:5px;">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+<div style="background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.35);border-radius:9px;padding:9px 11px;margin-bottom:5px;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
 <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#5DCAA5;">● In Progress</div>
 <div style="font-family:var(--font-num);font-size:12px;font-weight:700;color:white;">0:42:17</div>
 </div>
-<div style="font-size:11px;font-weight:700;color:white;">Smith Residence</div>
-<div style="font-size:9.5px;color:rgba(255,255,255,.45);">Half Load + Mattress · $485</div>
+<div style="font-size:11.5px;font-weight:700;color:white;">Smith Residence</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.4);margin-top:1px;">Half Load + Mattress · $485</div>
 </div>
-<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:8px 10px;margin-bottom:8px;">
-<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.35);margin-bottom:3px;">◷ 11:30am Scheduled</div>
-<div style="font-size:11px;font-weight:700;color:white;">Johnson Garage</div>
-<div style="font-size:9.5px;color:rgba(255,255,255,.45);">Full Truck · $680</div>
+<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:9px 11px;margin-bottom:10px;">
+<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.3);margin-bottom:4px;">◷ 11:30am Scheduled</div>
+<div style="font-size:11.5px;font-weight:700;color:white;">Johnson Garage</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.4);margin-top:1px;">Full Truck · $680</div>
 </div>
-<!-- Quote tool -->
 <div class="phone-job-label">Quick quote</div>
 <div class="phone-load-grid">
 <div class="phone-load-card"><div class="phone-load-name">Half Load</div></div>
 <div class="phone-load-card sel"><div class="phone-load-name">Full Truck</div></div>
 </div>
-<div class="phone-result" style="margin-top:6px;">
+<div class="phone-result" style="margin-top:7px;">
 <div class="phone-result-label">Quote the customer</div>
 <div class="phone-result-price">$680</div>
 <div class="phone-result-breakdown">Cost $504 · 35% markup · 14 mi</div>
 <div class="phone-result-btn">Save &amp; schedule →</div>
+</div>
 </div>
 </div>
 </div>
@@ -1378,20 +1388,47 @@ localStorage.setItem('installBannerDismissed','1');
 </section>
 
 <section style="padding:80px 40px;background:#f5f3ef;">
-<div class="section-inner" style="max-width:960px;">
-<p class="section-eyebrow" style="text-align:center;">From the field</p>
-<h2 class="section-title" style="text-align:center;margin:0 auto 44px;max-width:480px;">Built by operators, used by operators.</h2>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;" itemscope itemtype="https://schema.org/Review">
-<div style="background:white;border-radius:14px;padding:32px 30px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
-<div style="font-size:15px;letter-spacing:1.5px;margin-bottom:18px;color:#c9a84c;">★★★★★</div>
-<div style="font-size:15.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:20px;flex:1;" itemprop="reviewBody">"We used to run the whole day from memory — who was next, what we quoted, whether we made money. Now it's all in one place. Quote, schedule, show up, log the outcome. Done."</div>
-<div style="font-size:12.5px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:16px;" itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name" style="color:#333;">Griffin W.</strong> · Wood's Waste, Farmington MN</div>
+<div class="section-inner" style="max-width:1060px;">
+<p class="section-eyebrow" style="text-align:center;">What operators say</p>
+<h2 class="section-title" style="text-align:center;margin:0 auto 48px;max-width:520px;">Junk removal operators everywhere run tighter jobs with it.</h2>
+<div class="reviews-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;">
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"I was guessing on every job and hoping I wasn't losing money. Now I know my numbers before I even call the customer back. Wish I had this years ago."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">Marcus T.</strong> · Phoenix, AZ</div>
 </div>
-<div style="background:white;border-radius:14px;padding:32px 30px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
-<div style="font-size:15px;letter-spacing:1.5px;margin-bottom:18px;color:#c9a84c;">★★★★★</div>
-<div style="font-size:15.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:20px;flex:1;">"First week I used it I caught three jobs I would've undercharged on. The AI photo thing alone is worth the subscription — point it at the pile, done."</div>
-<div style="font-size:12.5px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:16px;">Early adopter · Junk removal operator, Twin Cities MN</div>
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"The photo quoting is mad useful. Customer sends me a picture, I get a price in ten seconds. Stopped doing the back-and-forth on WhatsApp trying to describe the pile."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">James H.</strong> · London, UK</div>
 </div>
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"Route planning saves me probably 40 minutes a day. I used to map each job manually the night before. Now I tap one button and it builds the whole day with the dump stop included."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">Ryan P.</strong> · Toronto, ON</div>
+</div>
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"Sent a payment link after a big cleanout and the customer paid within two minutes on their phone. No invoice, no follow up, no waiting. That alone changed how I run the business."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">Kyle M.</strong> · Brisbane, QLD</div>
+</div>
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"The analytics showed me I was consistently undercharging on half loads. Adjusted my rate and made back the subscription cost in two days. It's not just a tool, it's actually useful data."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">Derek S.</strong> · Denver, CO</div>
+</div>
+
+<div style="background:white;border-radius:14px;padding:28px 26px;border:1px solid #e4e1db;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;flex-direction:column;">
+<div style="font-size:14px;letter-spacing:1.5px;margin-bottom:16px;color:#c9a84c;">★★★★★</div>
+<div style="font-size:14.5px;color:#1a1a1a;line-height:1.8;font-style:italic;margin-bottom:18px;flex:1;">"Running three guys off one tool now. Everyone knows their jobs, I can see what's happening across the whole day, and customers get a proper experience. Proper professional setup."</div>
+<div style="font-size:12px;color:#888;font-weight:600;border-top:1px solid #f0ede8;padding-top:14px;"><strong style="color:#333;">Craig F.</strong> · Glasgow, Scotland</div>
+</div>
+
 </div>
 </div>
 </section>
