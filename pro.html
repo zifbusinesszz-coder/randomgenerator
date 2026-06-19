@@ -910,6 +910,7 @@ canvas.insights-chart{width:100%!important;display:block;}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:960px)and(min-width:769px){.reviews-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){.mkt-footer-grid{grid-template-columns:1fr!important;}}
 @media(max-width:768px){
 .calc-nav-right{display:none;}
 .calc-hamburger{display:flex;}
@@ -1050,32 +1051,34 @@ section{padding:56px 20px;}
 </div>
 </nav>
 
-<section style="padding:0;background:#0b0b0b;" id="main-content">
+<section style="padding:0;background:#0b0b0b;position:relative;overflow:hidden;" id="main-content">
+<div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 70% 50%,rgba(26,158,114,0.11) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(26,158,114,0.06) 0%,transparent 60%);pointer-events:none;"></div>
+<div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px);pointer-events:none;"></div>
 <div class="hero">
 <div class="hero-left">
 <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
 <h1>Quote, schedule,<br>and run every job —<br><span class="highlight">from your phone.</span></h1>
 <p class="hero-sub">The complete business tool for junk removal operators. Price any job in seconds, schedule your day, and know exactly what you made on every load.</p>
 <div class="hero-actions">
-<a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
+<a href="#" class="btn-primary" onclick="openModal('pick');return false;"><i class="ph ph-rocket-launch" style="font-size:15px;"></i> Start free trial</a>
 <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
 </div>
-<div style="margin-top:20px;display:flex;flex-direction:column;gap:9px;">
-<div style="font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> No card required to start</span>
-<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> 14-day free trial</span>
-<span style="display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:13px;">✓</span> Cancel anytime</span>
+<div style="margin-top:22px;display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+<span style="font-size:11.5px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:14px;line-height:1;">✓</span> No card required</span>
+<span style="font-size:11.5px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:14px;line-height:1;">✓</span> 14-day free trial</span>
+<span style="font-size:11.5px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:5px;"><span style="color:#5DCAA5;font-size:14px;line-height:1;">✓</span> Cancel anytime</span>
 </div>
-<div style="font-size:12.5px;color:rgba(255,255,255,.32);display:flex;align-items:center;gap:6px;">
-<i class="ph ph-chat-circle" style="font-size:14px;color:rgba(93,202,165,.6);"></i>
-<span>Questions? Text Griffin at <a href="sms:5072981179" style="color:rgba(93,202,165,.75);font-weight:600;white-space:nowrap;">(507) 298-1179</a></span>
+<div style="font-size:12px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:6px;">
+<i class="ph ph-chat-circle" style="font-size:14px;color:rgba(93,202,165,.55);"></i>
+<span>Questions? Text Griffin at <a href="sms:5072981179" style="color:rgba(93,202,165,.7);font-weight:600;white-space:nowrap;">(507) 298-1179</a></span>
 </div>
 </div>
 </div>
 <div class="hero-phone">
 <div style="position:relative;">
-<div style="position:absolute;inset:-40px;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(26,158,114,0.18) 0%,transparent 70%);pointer-events:none;border-radius:50%;"></div>
-<div class="phone-frame" style="position:relative;width:285px;box-shadow:0 48px 100px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.06),0 0 60px rgba(26,158,114,0.1);">
+<div style="position:absolute;inset:-60px;background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(26,158,114,0.2) 0%,transparent 70%);pointer-events:none;"></div>
+<div class="phone-frame" style="position:relative;width:290px;box-shadow:0 56px 120px rgba(0,0,0,0.75),0 0 0 1px rgba(255,255,255,0.07),0 0 80px rgba(26,158,114,0.12);">
 <div class="phone-notch"></div>
 <div class="phone-screen">
 <div class="phone-app-bar"><div class="phone-app-name">Wood's Waste Pro</div><div class="phone-app-badge">3 today</div></div>
@@ -1485,20 +1488,44 @@ localStorage.setItem('installBannerDismissed','1');
 <p style="font-size:13px;color:rgba(255,255,255,.45);margin-top:14px;">Got an invite from a team owner? <a href="#" onclick="openModal('join-team');return false;" style="color:rgba(255,255,255,.7);font-weight:600;text-decoration:underline;">Join a team →</a></p>
 </div>
 </section>
-<footer>
-<div class="footer-inner" style="flex-direction:column;align-items:center;text-align:center;gap:20px;padding:48px 40px;">
-<a href="https://woodswastemn.com" class="nav-logo" style="justify-content:center;">
-<img src="logo.PNG" alt="Wood's Waste">
-<div class="nav-logo-divider"></div>
-<div class="nav-logo-text">Pro</div>
+<footer style="background:#080808;border-top:1px solid rgba(255,255,255,.06);padding:0;">
+<div style="max-width:1060px;margin:0 auto;padding:64px 40px 0;">
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:52px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
+<div>
+<a href="https://woodswastemn.com" class="nav-logo" style="margin-bottom:18px;display:inline-flex;">
+<img src="logo.PNG" alt="Wood's Waste"><div class="nav-logo-divider"></div><div class="nav-logo-text">Pro</div>
 </a>
-<p style="font-size:13.5px;color:var(--gray);max-width:420px;line-height:1.75;margin:0;">Built by Griffin & Gavin at Wood's Waste in Farmington, MN. A real quote tool built for real operators — so you always know what to charge before you call back.</p>
-<div class="footer-links" style="justify-content:center;flex-wrap:wrap;gap:14px;flex-direction:column;align-items:center;">
-<a href="https://woodswastemn.com">woodswastemn.com</a>
-<a href="tel:5072981179" style="white-space:nowrap;">(507) 298-1179</a>
-<a href="mailto:woodswastemn@gmail.com">woodswastemn@gmail.com</a>
+<p style="font-size:13px;color:rgba(255,255,255,.35);line-height:1.85;max-width:300px;margin-bottom:24px;">Built by Griffin &amp; Gavin at Wood's Waste in Farmington, MN — so every operator always knows what to charge before they call back.</p>
+<div style="display:flex;gap:10px;">
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" aria-label="Wood's Waste on Facebook" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-facebook-logo" style="font-size:16px;"></i></a>
+<a href="tel:5072981179" aria-label="Call Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-phone" style="font-size:16px;"></i></a>
+<a href="mailto:woodswastemn@gmail.com" aria-label="Email Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-envelope" style="font-size:16px;"></i></a>
 </div>
-<div class="footer-copy">© 2026 Wood's Waste · Farmington, MN</div>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.25);margin-bottom:18px;">Product</div>
+<div style="display:flex;flex-direction:column;gap:12px;">
+<a href="#how" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">How it works</a>
+<a href="#features" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Features</a>
+<a href="#pricing" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Pricing</a>
+<a href="#faq" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">FAQ</a>
+<a href="#" onclick="openModal('pick');return false;" style="font-size:13px;color:#5DCAA5;text-decoration:none;font-weight:600;transition:opacity .15s;" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">Start free trial →</a>
+</div>
+</div>
+<div>
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.25);margin-bottom:18px;">Contact</div>
+<div style="display:flex;flex-direction:column;gap:12px;">
+<a href="https://woodswastemn.com" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">woodswastemn.com</a>
+<a href="tel:5072981179" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">(507) 298-1179</a>
+<a href="mailto:woodswastemn@gmail.com" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">woodswastemn@gmail.com</a>
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'"><i class="ph ph-facebook-logo" style="font-size:14px;"></i>woodswastemn</a>
+</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:20px 0;flex-wrap:wrap;gap:10px;">
+<div style="font-size:11.5px;color:rgba(255,255,255,.18);">© 2026 Wood's Waste · Farmington, MN</div>
+<div style="font-size:11.5px;color:rgba(255,255,255,.12);font-style:italic;">Built by operators, for operators.</div>
+</div>
 </div>
 </footer>
 </div>
@@ -1876,19 +1903,19 @@ localStorage.setItem('installBannerDismissed','1');
 <button class="calc-btn-reset" onclick="resetCalc()">Clear</button>
 </div>
 </div>
-<footer style="background:var(--white);border-top:1px solid var(--border);padding:40px;text-align:center;">
-<a href="https://woodswastemn.com" class="nav-logo" style="justify-content:center;margin-bottom:14px;display:inline-flex;">
-<img src="logo.PNG" alt="Wood's Waste">
-<div class="nav-logo-divider"></div>
-<div class="nav-logo-text">Pro</div>
+<footer style="background:#fafaf8;border-top:1px solid var(--border);padding:36px 40px;">
+<div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+<a href="https://woodswastemn.com" class="nav-logo" style="display:inline-flex;">
+<img src="logo.PNG" alt="Wood's Waste"><div class="nav-logo-divider"></div><div class="nav-logo-text">Pro</div>
 </a>
-<p style="font-size:13px;color:var(--gray);max-width:420px;line-height:1.75;margin:0 auto 14px;">Built by Griffin & Gavin at Wood's Waste in Farmington, MN. A real quote tool built for real operators — so you always know what to charge before you call back.</p>
-<div style="display:flex;gap:22px;justify-content:center;flex-wrap:wrap;">
-<a href="https://woodswastemn.com" style="font-size:12px;color:var(--gray);text-decoration:none;">woodswastemn.com</a>
-<a href="tel:5072981179" style="font-size:12px;color:var(--gray);text-decoration:none;">(507) 298-1179</a>
-<a href="mailto:woodswastemn@gmail.com" style="font-size:12px;color:var(--gray);text-decoration:none;">woodswastemn@gmail.com</a>
+<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+<a href="https://woodswastemn.com" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">woodswastemn.com</a>
+<a href="tel:5072981179" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">(507) 298-1179</a>
+<a href="mailto:woodswastemn@gmail.com" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">woodswastemn@gmail.com</a>
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" aria-label="Facebook" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;display:flex;align-items:center;gap:5px;" onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color='#999'"><i class="ph ph-facebook-logo" style="font-size:14px;"></i> woodswastemn</a>
 </div>
-<div style="font-size:11px;color:#bbb;margin-top:12px;">© 2026 Wood's Waste · Farmington, MN</div>
+<div style="font-size:11px;color:#ccc;">© 2026 Wood's Waste</div>
+</div>
 </footer>
 </div>
 
@@ -2374,19 +2401,19 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 </div>
 </div>
-<footer style="background:var(--white);border-top:1px solid var(--border);padding:40px;text-align:center;">
-<a href="https://woodswastemn.com" class="nav-logo" style="justify-content:center;margin-bottom:14px;display:inline-flex;">
-<img src="logo.PNG" alt="Wood's Waste">
-<div class="nav-logo-divider"></div>
-<div class="nav-logo-text">Pro</div>
+<footer style="background:#fafaf8;border-top:1px solid var(--border);padding:36px 40px;">
+<div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+<a href="https://woodswastemn.com" class="nav-logo" style="display:inline-flex;">
+<img src="logo.PNG" alt="Wood's Waste"><div class="nav-logo-divider"></div><div class="nav-logo-text">Pro</div>
 </a>
-<p style="font-size:13px;color:var(--gray);max-width:420px;line-height:1.75;margin:0 auto 14px;">Built by Griffin & Gavin at Wood's Waste in Farmington, MN. A real quote tool built for real operators — so you always know what to charge before you call back.</p>
-<div style="display:flex;gap:22px;justify-content:center;flex-wrap:wrap;">
-<a href="https://woodswastemn.com" style="font-size:12px;color:var(--gray);text-decoration:none;">woodswastemn.com</a>
-<a href="tel:5072981179" style="font-size:12px;color:var(--gray);text-decoration:none;">(507) 298-1179</a>
-<a href="mailto:woodswastemn@gmail.com" style="font-size:12px;color:var(--gray);text-decoration:none;">woodswastemn@gmail.com</a>
+<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+<a href="https://woodswastemn.com" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">woodswastemn.com</a>
+<a href="tel:5072981179" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">(507) 298-1179</a>
+<a href="mailto:woodswastemn@gmail.com" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#999'">woodswastemn@gmail.com</a>
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" aria-label="Facebook" style="font-size:12px;color:#999;text-decoration:none;transition:color .15s;display:flex;align-items:center;gap:5px;" onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color='#999'"><i class="ph ph-facebook-logo" style="font-size:14px;"></i> woodswastemn</a>
 </div>
-<div style="font-size:11px;color:#bbb;margin-top:12px;">© 2026 Wood's Waste · Farmington, MN</div>
+<div style="font-size:11px;color:#ccc;">© 2026 Wood's Waste</div>
+</div>
 </footer>
 
 <!-- MEMBER DISABLED SCREEN -->
