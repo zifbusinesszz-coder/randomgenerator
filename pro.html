@@ -918,8 +918,8 @@ nav{padding:0 18px;}.nav-links{display:none;}
 .hero{grid-template-columns:1fr;padding:88px 20px 56px;gap:36px;}.hero-phone{display:none;}
 section{padding:56px 20px;}
 .origin-grid,.steps-grid,.features-grid,.pricing-cards,.pricing-cards.two-col,.reviews-grid{grid-template-columns:1fr;}
-.strip{padding:16px 18px;gap:0;flex-direction:column;align-items:flex-start;}
-.strip-item{border-left:none!important;padding:7px 0;}
+.strip{padding:15px 0;flex-direction:row;align-items:center;}
+.strip-item{padding:6px 16px;font-size:11.5px;}
 .footer-inner{flex-direction:column;align-items:flex-start;}
 .load-row{grid-template-columns:85px 1fr 1fr;}
 .special-grid{grid-template-columns:1fr;}
@@ -1028,6 +1028,98 @@ section{padding:56px 20px;}
 /* ── Paywall 3-up ── */
 #paywallPlanStep .pricing-cards{grid-template-columns:1fr;}
 </style>
+
+<!-- ═══════════ PREMIUM ANIMATION LAYER ═══════════ -->
+<style id="premium-fx">
+/* ---- Logo on dark surfaces (fixes black-on-black) ---- */
+.logo-on-dark img{filter:brightness(0) invert(1);opacity:.92;}
+.logo-on-dark .nav-logo-text{color:#fff!important;}
+.logo-on-dark .nav-logo-divider{background:rgba(255,255,255,.28)!important;}
+
+/* ---- Nav: shrink + lift on scroll ---- */
+nav{transition:height .3s cubic-bezier(.4,0,.2,1),background .3s,box-shadow .3s,border-color .3s;}
+nav.scrolled{height:54px;background:rgba(255,255,255,.86);box-shadow:0 6px 30px rgba(0,0,0,.07);}
+.nav-links a:not(.nav-cta){position:relative;}
+.nav-links a:not(.nav-cta)::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:1.5px;background:var(--green);transform:scaleX(0);transform-origin:right;transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.nav-links a:not(.nav-cta):hover::after{transform:scaleX(1);transform-origin:left;}
+.nav-cta{position:relative;overflow:hidden;}
+.nav-cta::after{content:'';position:absolute;top:0;left:-130%;width:55%;height:100%;background:linear-gradient(110deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-20deg);}
+.nav-cta:hover::after{animation:sweep .85s ease;}
+
+/* ---- Animated gradient headline ---- */
+.hero h1 .highlight{
+background:linear-gradient(100deg,#4dd9a6 0%,#1a9e72 30%,#7af0c4 55%,#1a9e72 75%,#4dd9a6 100%);
+background-size:280% 100%;-webkit-background-clip:text;background-clip:text;
+-webkit-text-fill-color:transparent;color:transparent;
+animation:gradShift 7s linear infinite;
+}
+@keyframes gradShift{to{background-position:280% 0;}}
+
+/* ---- Button shine sweep ---- */
+.btn-primary{position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;top:0;left:-130%;width:55%;height:100%;background:linear-gradient(110deg,transparent,rgba(26,158,114,.16),transparent);transform:skewX(-20deg);pointer-events:none;}
+.btn-primary:hover::after{animation:sweep .9s ease;}
+@keyframes sweep{to{left:150%;}}
+
+/* ---- Plan/feature card hover glow lift ---- */
+.pricing-card,.feat-card,.step-card{will-change:transform;}
+.pricing-card:hover,.feat-card:hover,.step-card:hover{transform:translateY(-4px);}
+.pricing-card.featured:hover{transform:translateY(-6px) scale(1.012);box-shadow:0 24px 60px rgba(0,0,0,.4),0 0 0 1px rgba(26,158,114,.3);}
+.pricing-card.featured{transition:transform .28s cubic-bezier(.34,1.4,.5,1),box-shadow .28s;}
+
+/* ---- Marquee trust strip ---- */
+.strip{overflow:hidden;position:relative;flex-wrap:nowrap;justify-content:flex-start;padding:18px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.strip-track{display:flex;align-items:center;flex-shrink:0;animation:marquee 28s linear infinite;}
+.strip:hover .strip-track{animation-play-state:paused;}
+.strip-track .strip-item{white-space:nowrap;}
+@keyframes marquee{to{transform:translateX(-50%);}}
+
+/* ---- Phosphor icon pop on parent hover ---- */
+.feat-card .feat-icon i,.step-card .step-icon i{transition:transform .3s cubic-bezier(.34,1.4,.5,1);}
+.feat-card:hover .feat-icon i{transform:scale(1.18) rotate(-5deg);}
+.step-card:hover .step-icon i{transform:scale(1.15);}
+
+/* ---- Section title gradient sheen accent ---- */
+.section-eyebrow{position:relative;display:inline-block;}
+.section-eyebrow::before{content:'';display:inline-block;width:22px;height:1.5px;background:var(--green);vertical-align:middle;margin-right:9px;opacity:.7;}
+
+@media(prefers-reduced-motion:no-preference){
+
+/* Animated aurora behind hero */
+.hero-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.hero-aurora span{position:absolute;border-radius:50%;filter:blur(90px);}
+.hero-aurora .a1{width:620px;height:620px;background:radial-gradient(circle,rgba(26,158,114,.34),transparent 62%);top:-18%;right:-6%;animation:auroraA 16s ease-in-out infinite;}
+.hero-aurora .a2{width:500px;height:500px;background:radial-gradient(circle,rgba(77,217,166,.2),transparent 62%);bottom:-22%;left:-10%;animation:auroraB 21s ease-in-out infinite;}
+.hero-aurora .a3{width:360px;height:360px;background:radial-gradient(circle,rgba(26,158,114,.16),transparent 60%);top:40%;left:38%;animation:auroraC 19s ease-in-out infinite;}
+@keyframes auroraA{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-50px,45px) scale(1.18);}}
+@keyframes auroraB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(55px,-35px) scale(1.12);}}
+@keyframes auroraC{0%,100%{transform:translate(0,0) scale(1);opacity:.8;}50%{transform:translate(-30px,-40px) scale(1.25);opacity:1;}}
+
+/* Floating phone */
+.hero-phone .phone-frame{animation:phoneFloat 6.5s ease-in-out infinite;}
+@keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-15px) rotate(-.7deg);}}
+
+/* Live pulse dot in phone */
+.phone-app-badge{position:relative;}
+
+/* CTA orb slow drift */
+.cta-bottom-orb{animation:orbDrift 17s ease-in-out infinite;}
+@keyframes orbDrift{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-46%,-54%) scale(1.14);}}
+
+/* Hero entrance stagger (runs on load) */
+.hero-left>*{opacity:0;animation:heroRise .85s cubic-bezier(.2,.7,.3,1) forwards;}
+.hero-left>*:nth-child(1){animation-delay:.05s;}
+.hero-left>*:nth-child(2){animation-delay:.16s;}
+.hero-left>*:nth-child(3){animation-delay:.27s;}
+.hero-left>*:nth-child(4){animation-delay:.38s;}
+.hero-left>*:nth-child(5){animation-delay:.49s;}
+@keyframes heroRise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+.hero-phone{opacity:0;animation:heroRise 1s cubic-bezier(.2,.7,.3,1) .35s forwards;}
+}
+
+/* Count-up numbers */
+.count-up{font-variant-numeric:tabular-nums;}
+</style>
 </head>
 <body>
 
@@ -1052,9 +1144,9 @@ section{padding:56px 20px;}
 </nav>
 
 <section style="padding:0;background:#0b0b0b;position:relative;overflow:hidden;" id="main-content">
-<div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 70% 50%,rgba(26,158,114,0.11) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(26,158,114,0.06) 0%,transparent 60%);pointer-events:none;"></div>
-<div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px);pointer-events:none;"></div>
-<div class="hero">
+<div class="hero-aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+<div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,.018) 79px,rgba(255,255,255,.018) 80px);pointer-events:none;z-index:1;"></div>
+<div class="hero" style="position:relative;z-index:2;">
 <div class="hero-left">
 <div class="hero-eyebrow">Built by Wood's Waste · Farmington, MN</div>
 <h1>Quote, schedule,<br>and run every job —<br><span class="highlight">from your phone.</span></h1>
@@ -1145,7 +1237,7 @@ localStorage.setItem('installBannerDismissed','1');
 </script>
 
 <div class="promo-banner">
-<div class="promo-content">
+<div class="promo-content" data-aos="fade-up" data-aos-duration="650">
 <div class="promo-left">
 <span class="promo-badge">Team Plan</span>
 <div>
@@ -1158,17 +1250,29 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 
 <div class="strip">
+<div class="strip-track" aria-hidden="false">
 <div class="strip-item"><i class="ph ph-lightning" style="font-size:15px;"></i> <strong>Quote in 60 seconds</strong></div>
 <div class="strip-item"><i class="ph ph-calendar-check" style="font-size:15px;"></i> <strong>CRM &amp; scheduling</strong></div>
 <div class="strip-item"><i class="ph ph-brain" style="font-size:15px;"></i> <strong>AI photo quoting</strong></div>
 <div class="strip-item"><i class="ph ph-chart-line-up" style="font-size:15px;"></i> <strong>Profit analytics</strong></div>
 <div class="strip-item"><i class="ph ph-users" style="font-size:15px;"></i> <strong>Team management</strong></div>
+<div class="strip-item"><i class="ph ph-credit-card" style="font-size:15px;"></i> <strong>Collect card payments</strong></div>
+<div class="strip-item"><i class="ph ph-navigation-arrow" style="font-size:15px;"></i> <strong>Plan My Day routing</strong></div>
+<!-- duplicate for seamless loop -->
+<div class="strip-item" aria-hidden="true"><i class="ph ph-lightning" style="font-size:15px;"></i> <strong>Quote in 60 seconds</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-calendar-check" style="font-size:15px;"></i> <strong>CRM &amp; scheduling</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-brain" style="font-size:15px;"></i> <strong>AI photo quoting</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-chart-line-up" style="font-size:15px;"></i> <strong>Profit analytics</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-users" style="font-size:15px;"></i> <strong>Team management</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-credit-card" style="font-size:15px;"></i> <strong>Collect card payments</strong></div>
+<div class="strip-item" aria-hidden="true"><i class="ph ph-navigation-arrow" style="font-size:15px;"></i> <strong>Plan My Day routing</strong></div>
+</div>
 </div>
 
 <section class="light" style="padding:88px 40px;" id="origin">
 <div class="section-inner">
 <div class="origin-grid">
-<div class="origin-body">
+<div class="origin-body" data-aos="fade-right" data-aos-duration="800">
 <p class="section-eyebrow">Our story</p>
 <h2 class="section-title">We were guessing. We stopped.</h2>
 <div style="margin-bottom:24px;">
@@ -1188,21 +1292,21 @@ localStorage.setItem('installBannerDismissed','1');
 </style>
 <div class="origin-stat-stack">
 
-<div class="stat-dark" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
+<div class="stat-dark" data-aos="fade-left" data-aos-duration="700" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
     <div class="stat-dark-bar"></div>
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.28);margin-bottom:10px;">Lost revenue</div>
-    <div style="font-family:var(--font-num);font-size:3rem;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:10px;">$1,000<span style="color:var(--green);">+</span><span style="font-size:1.4rem;opacity:.5;">/mo</span></div>
+    <div style="font-family:var(--font-num);font-size:3rem;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:10px;"><span class="count-up" data-target="1000" data-prefix="$" data-suffix="">$1,000</span><span style="color:var(--green);">+</span><span style="font-size:1.4rem;opacity:.5;">/mo</span></div>
     <div style="font-size:13.5px;color:rgba(255,255,255,.45);line-height:1.7;">The average operator leaves this much on the table every month pricing from memory — not from their actual costs.</div>
   </div>
 
-  <div class="stat-dark" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
+  <div class="stat-dark" data-aos="fade-left" data-aos-duration="700" data-aos-delay="100" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
     <div class="stat-dark-bar"></div>
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.28);margin-bottom:10px;">Quote speed</div>
-    <div style="font-family:var(--font-num);font-size:3rem;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:10px;">60<span style="color:var(--green);">s</span></div>
+    <div style="font-family:var(--font-num);font-size:3rem;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:10px;"><span class="count-up" data-target="60" data-prefix="" data-suffix="">60</span><span style="color:var(--green);">s</span></div>
     <div style="font-size:13.5px;color:rgba(255,255,255,.45);line-height:1.7;">From "what's this going to cost?" to a confident number — while the customer is still on the phone.</div>
   </div>
 
-  <div class="stat-dark" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
+  <div class="stat-dark" data-aos="fade-left" data-aos-duration="700" data-aos-delay="200" style="background:#0d0d0d;border-radius:var(--r-lg);padding:26px 24px;position:relative;overflow:hidden;">
     <div class="stat-dark-bar"></div>
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.28);margin-bottom:10px;">Your markup, your call</div>
     <div style="font-family:var(--font-num);font-size:3rem;font-weight:700;color:white;letter-spacing:-2px;line-height:1;margin-bottom:10px;">0–500<span style="color:var(--green);">%</span></div>
@@ -1219,7 +1323,7 @@ localStorage.setItem('installBannerDismissed','1');
 <p class="section-eyebrow">Sound familiar?</p>
 <h2 class="section-title">Most operators are running the business from memory. That's the gap.</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px;">
-<div style="background:#faf9f7;border-radius:var(--r-lg);padding:28px 26px;border:1px solid #e8e6e1;">
+<div data-aos="fade-up" data-aos-duration="700" style="background:#faf9f7;border-radius:var(--r-lg);padding:28px 26px;border:1px solid #e8e6e1;">
 <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#b0a898;margin-bottom:20px;">Before Pro</div>
 <div style="display:flex;flex-direction:column;gap:14px;">
 <div style="display:flex;align-items:flex-start;gap:11px;"><span style="width:18px;height:18px;border-radius:50%;background:#f0ede8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;color:#b0a898;">✕</span><span style="font-size:13.5px;color:#6b6560;line-height:1.6;">Throw out a number and hope it covers your costs</span></div>
@@ -1229,7 +1333,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="display:flex;align-items:flex-start;gap:11px;"><span style="width:18px;height:18px;border-radius:50%;background:#f0ede8;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;color:#b0a898;">✕</span><span style="font-size:13.5px;color:#6b6560;line-height:1.6;">Forget what you quoted — just charge whatever feels right</span></div>
 </div>
 </div>
-<div style="background:#0d0d0d;border-radius:var(--r-lg);padding:28px 26px;border:1px solid rgba(93,202,165,.25);">
+<div data-aos="fade-up" data-aos-duration="700" data-aos-delay="120" style="background:#0d0d0d;border-radius:var(--r-lg);padding:28px 26px;border:1px solid rgba(93,202,165,.25);">
 <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#5DCAA5;margin-bottom:20px;">With Pro</div>
 <div style="display:flex;flex-direction:column;gap:14px;">
 <div style="display:flex;align-items:flex-start;gap:11px;"><span style="width:18px;height:18px;border-radius:50%;background:rgba(26,158,114,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px;color:#5DCAA5;">✓</span><span style="font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.6;">Price in 60 seconds based on your real dump fees, drive rate, and labor cost</span></div>
@@ -1248,10 +1352,10 @@ localStorage.setItem('installBannerDismissed','1');
 <p class="section-eyebrow">How it works</p>
 <h2 class="section-title">One tool. The whole day.</h2>
 <div class="steps-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
-<div class="step-card"><div class="step-num">01 / 04</div><div class="step-icon"><i class="ph ph-currency-dollar"></i></div><div class="step-title">Quote on the spot</div><div class="step-desc">Pick load size, toggle special items, slide markup — get a real price in under 60 seconds while the customer is still on the phone.</div></div>
-<div class="step-card"><div class="step-num">02 / 04</div><div class="step-icon"><i class="ph ph-calendar-plus"></i></div><div class="step-title">Save &amp; schedule</div><div class="step-desc">Add the customer's name, address, and phone. Set a date and time. The job appears on your calendar and upcoming list immediately.</div></div>
-<div class="step-card"><div class="step-num">03 / 04</div><div class="step-icon"><i class="ph ph-timer"></i></div><div class="step-title">Run the job</div><div class="step-desc">Start the built-in timer when you arrive. Snap before &amp; after photos. Get turn-by-turn directions. Mark it done when you're finished.</div></div>
-<div class="step-card"><div class="step-num">04 / 04</div><div class="step-icon"><i class="ph ph-chart-bar"></i></div><div class="step-title">Know your numbers</div><div class="step-desc">Log what you actually charged. See quoted vs. actual, profit by load size, and revenue trends over time — so you always know where you stand.</div></div>
+<div class="step-card" data-aos="fade-up" data-aos-duration="650"><div class="step-num">01 / 04</div><div class="step-icon"><i class="ph ph-currency-dollar"></i></div><div class="step-title">Quote on the spot</div><div class="step-desc">Pick load size, toggle special items, slide markup — get a real price in under 60 seconds while the customer is still on the phone.</div></div>
+<div class="step-card" data-aos="fade-up" data-aos-duration="650" data-aos-delay="90"><div class="step-num">02 / 04</div><div class="step-icon"><i class="ph ph-calendar-plus"></i></div><div class="step-title">Save &amp; schedule</div><div class="step-desc">Add the customer's name, address, and phone. Set a date and time. The job appears on your calendar and upcoming list immediately.</div></div>
+<div class="step-card" data-aos="fade-up" data-aos-duration="650" data-aos-delay="180"><div class="step-num">03 / 04</div><div class="step-icon"><i class="ph ph-timer"></i></div><div class="step-title">Run the job</div><div class="step-desc">Start the built-in timer when you arrive. Snap before &amp; after photos. Get turn-by-turn directions. Mark it done when you're finished.</div></div>
+<div class="step-card" data-aos="fade-up" data-aos-duration="650" data-aos-delay="270"><div class="step-num">04 / 04</div><div class="step-icon"><i class="ph ph-chart-bar"></i></div><div class="step-title">Know your numbers</div><div class="step-desc">Log what you actually charged. See quoted vs. actual, profit by load size, and revenue trends over time — so you always know where you stand.</div></div>
 </div>
 </div>
 </section>
@@ -1316,7 +1420,7 @@ localStorage.setItem('installBannerDismissed','1');
 </section>
 
 <section style="padding:56px 40px;background:#0d0d0d;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);">
-<div style="max-width:620px;margin:0 auto;text-align:center;">
+<div data-aos="zoom-in" data-aos-duration="700" style="max-width:620px;margin:0 auto;text-align:center;">
 <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);font-weight:900;color:white;margin-bottom:12px;line-height:1.2;">Ready to run a tighter operation?</h2>
 <p style="font-size:14.5px;color:rgba(255,255,255,.5);margin-bottom:28px;line-height:1.7;">14-day free trial. No charge until it's actually working for you. Cancel anytime — no hassle, no fine print.</p>
 <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
@@ -1481,7 +1585,7 @@ localStorage.setItem('installBannerDismissed','1');
 
 <section class="cta-bottom">
 <div class="cta-bottom-orb"></div>
-<div style="position:relative;z-index:1;">
+<div data-aos="fade-up" data-aos-duration="750" style="position:relative;z-index:1;">
 <h2>Run a tighter business — starting today.</h2>
 <p>Quote faster. Schedule smarter. Know your numbers. 14-day free trial, no charge until it's working for you.</p>
 <a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
@@ -1492,7 +1596,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="max-width:1060px;margin:0 auto;padding:64px 40px 0;">
 <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:52px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
 <div>
-<a href="https://woodswastemn.com" class="nav-logo" style="margin-bottom:18px;display:inline-flex;">
+<a href="https://woodswastemn.com" class="nav-logo logo-on-dark" style="margin-bottom:18px;display:inline-flex;">
 <img src="logo.PNG" alt="Wood's Waste"><div class="nav-logo-divider"></div><div class="nav-logo-text">Pro</div>
 </a>
 <p style="font-size:13px;color:rgba(255,255,255,.35);line-height:1.85;max-width:300px;margin-bottom:24px;">Built by Griffin &amp; Gavin at Wood's Waste in Farmington, MN — so every operator always knows what to charge before they call back.</p>
@@ -5156,6 +5260,41 @@ document._lastTouch = now;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();closePaymentModal();}});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
 window.addEventListener('load',()=>{
+// ── Premium: auto-stagger reveals on marketing card grids (scoped to avoid paywall/dashboard) ──
+try{
+[['#marketingPage #features .feat-card',70],['#marketingPage .reviews-grid > div',70],['#marketingPage #pricing .pricing-cards > .pricing-card',110]].forEach(([sel,step])=>{
+document.querySelectorAll(sel).forEach((el,i)=>{
+if(!el.hasAttribute('data-aos'))el.setAttribute('data-aos','fade-up');
+el.setAttribute('data-aos-duration','650');
+el.setAttribute('data-aos-delay',String((i%3)*step));
+});
+});
+// FAQ rows fade in
+document.querySelectorAll('#faq .section-inner > div > div').forEach((el,i)=>{el.setAttribute('data-aos','fade-up');el.setAttribute('data-aos-delay',String((i%2)*80));});
+// Section headers reveal (skip ones already inside an animated parent)
+document.querySelectorAll('#marketingPage .section-title').forEach(el=>{if(!el.closest('[data-aos]')){el.setAttribute('data-aos','fade-up');el.setAttribute('data-aos-duration','700');}});
+document.querySelectorAll('#marketingPage .section-eyebrow').forEach(el=>{if(!el.closest('[data-aos]')){el.setAttribute('data-aos','fade-up');el.setAttribute('data-aos-duration','550');}});
+}catch(e){}
+
+// ── Premium: nav shrink-on-scroll ──
+try{
+const _nav=document.querySelector('#marketingPage nav');
+if(_nav){const onScroll=()=>{_nav.classList.toggle('scrolled',window.scrollY>40);};onScroll();window.addEventListener('scroll',onScroll,{passive:true});}
+}catch(e){}
+
+// ── Premium: count-up numbers when scrolled into view ──
+try{
+const _ease=t=>1-Math.pow(1-t,3);
+const runCount=el=>{
+if(el._counted)return;el._counted=true;
+const target=parseFloat(el.dataset.target)||0,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'',dur=900,t0=performance.now();
+const tick=now=>{const p=Math.min(1,(now-t0)/dur);const val=Math.round(target*_ease(p));el.textContent=pre+val.toLocaleString()+suf;if(p<1)requestAnimationFrame(tick);};
+requestAnimationFrame(tick);
+};
+const cObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)runCount(e.target);});},{threshold:.6});
+document.querySelectorAll('.count-up').forEach(el=>cObs.observe(el));
+}catch(e){}
+
 if(window.AOS){AOS.init({duration:600,easing:'ease-out-cubic',once:false,offset:30});}
 else{document.querySelectorAll('[data-aos]').forEach(el=>el.removeAttribute('data-aos'));}
 // Handle invite link: ?invite=TOKEN&email=...
