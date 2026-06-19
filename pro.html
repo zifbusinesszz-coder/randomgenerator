@@ -2944,8 +2944,8 @@ setTimeout(()=>{
 inner.classList.remove('in');
 inner.classList.add('out');
 cb();
-setTimeout(()=>{splash.classList.remove('active');inner.classList.remove('out');welcome.style.opacity='0';welcome.style.transform='translateY(8px)';},420);
-},1550);
+setTimeout(()=>{splash.classList.remove('active');inner.classList.remove('out');welcome.style.opacity='0';welcome.style.transform='translateY(8px)';},380);
+},900);
 }
 function showSuccess(){
 ['step1','step2','step3','savingOverlay','loginForm','forgotForm','resetCodeForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
@@ -2964,24 +2964,19 @@ const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.t
 if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
 saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
 applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
-// Snapshot local history before clearing — needed for merge fallback if flush fails
 const _loginSnap=JSON.parse(localStorage.getItem('ww_history')||'[]');
-// Flush queued offline actions first so server has the latest data before we pull it back
-await flushSyncQueue();
-// Load this user's job history from server, merging local actual data as a belt-and-suspenders
-// in case any jobs still have unsynced actual entries
-localStorage.removeItem('ww_history');
-try{
-const jobsRes=await api({action:'getJobs',token:session.token});
-if(jobsRes.success){
-localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs,_loginSnap)));
-}
-}catch(e){}
-closeModal();
-try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
-checkStripeStatus();
-startStatusPoll();
+// Show splash immediately — covers the modal/marketing page transition with no gap
+document.getElementById('modalOverlay').classList.remove('open');
+document.body.style.overflow='';
 showLoginSplash(()=>openCalcDirect());
+// Run all background tasks concurrently while splash plays
+startStatusPoll();
+checkStripeStatus();
+(async()=>{
+await flushSyncQueue();
+try{const jobsRes=await api({action:'getJobs',token:session.token});if(jobsRes.success){localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs,_loginSnap)));}}catch(e){}
+try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
+})();
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
 }
 
