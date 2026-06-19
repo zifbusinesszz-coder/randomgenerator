@@ -1095,9 +1095,13 @@ animation:gradShift 7s linear infinite;
 @keyframes auroraB{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(55px,-35px) scale(1.12);}}
 @keyframes auroraC{0%,100%{transform:translate(0,0) scale(1);opacity:.8;}50%{transform:translate(-30px,-40px) scale(1.25);opacity:1;}}
 
-/* Floating phone */
-.hero-phone .phone-frame{animation:phoneFloat 6.5s ease-in-out infinite;}
-@keyframes phoneFloat{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-15px) rotate(-.7deg);}}
+/* Floating phone stage + chips */
+.hero-stage{animation:phoneFloat 7s ease-in-out infinite;}
+@keyframes phoneFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.hero-chip{animation:chipFloat 6s ease-in-out infinite;}
+.hero-chip.chip-2{animation-duration:7.2s;animation-delay:.7s;}
+.hero-chip.chip-3{animation-duration:6.6s;animation-delay:.35s;}
+@keyframes chipFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 
 /* Live pulse dot in phone */
 .phone-app-badge{position:relative;}
@@ -1113,12 +1117,39 @@ animation:gradShift 7s linear infinite;
 .hero-left>*:nth-child(3){animation-delay:.27s;}
 .hero-left>*:nth-child(4){animation-delay:.38s;}
 .hero-left>*:nth-child(5){animation-delay:.49s;}
+.hero-left>*:nth-child(6){animation-delay:.6s;}
 @keyframes heroRise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
 .hero-phone{opacity:0;animation:heroRise 1s cubic-bezier(.2,.7,.3,1) .35s forwards;}
 }
 
 /* Count-up numbers */
 .count-up{font-variant-numeric:tabular-nums;}
+
+/* ───── HERO REDESIGN ───── */
+.hero-stage{position:relative;display:flex;justify-content:center;align-items:center;}
+.hero-stage .phone-frame{transform:perspective(1700px) rotateY(-9deg) rotateX(2.5deg);transition:transform .5s cubic-bezier(.2,.7,.3,1);will-change:transform;}
+.hero-stage:hover .phone-frame{transform:perspective(1700px) rotateY(0deg) rotateX(0deg);}
+.hero-pedestal{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);width:240px;height:54px;background:radial-gradient(ellipse,rgba(26,158,114,.35),transparent 72%);filter:blur(20px);pointer-events:none;z-index:0;}
+
+/* Floating glass UI chips */
+.hero-chip{position:absolute;z-index:4;display:flex;align-items:center;gap:10px;
+background:rgba(18,20,19,.66);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px 13px;
+box-shadow:0 20px 46px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);}
+.hero-chip-ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;}
+.hero-chip-t{font-size:12px;font-weight:700;color:#fff;line-height:1.15;letter-spacing:-.01em;white-space:nowrap;}
+.hero-chip-s{font-size:9.5px;font-weight:500;color:rgba(255,255,255,.42);margin-top:2px;white-space:nowrap;}
+.hero-chip.chip-1{top:6%;left:-13%;}
+.hero-chip.chip-2{bottom:23%;right:-15%;}
+.hero-chip.chip-3{bottom:-2%;left:-2%;}
+
+/* Social proof rating row */
+.hero-rating{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.hero-rating-stars{color:#e8b04b;font-size:14px;letter-spacing:1.5px;}
+.hero-rating-txt{font-size:12px;color:rgba(255,255,255,.5);font-weight:500;}
+
+@media(max-width:1080px){.hero-chip.chip-1{left:-4%;}.hero-chip.chip-2{right:-6%;}}
+@media(max-width:860px){.hero-chip{display:none;}}
 </style>
 </head>
 <body>
@@ -1155,7 +1186,11 @@ animation:gradShift 7s linear infinite;
 <a href="#" class="btn-primary" onclick="openModal('pick');return false;"><i class="ph ph-rocket-launch" style="font-size:15px;"></i> Start free trial</a>
 <a href="#" class="btn-ghost" onclick="openModal('login');return false;">Log in</a>
 </div>
-<div style="margin-top:30px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:14px;">
+<div class="hero-rating">
+<span class="hero-rating-stars">★★★★★</span>
+<span class="hero-rating-txt">Loved by junk removal operators in 30+ cities</span>
+</div>
+<div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:14px;">
 <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;">
 <span style="font-size:12px;font-weight:500;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px;"><i class="ph ph-check-circle" style="color:#5DCAA5;font-size:15px;"></i> No card required</span>
 <span style="font-size:12px;font-weight:500;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px;"><i class="ph ph-check-circle" style="color:#5DCAA5;font-size:15px;"></i> 14-day free trial</span>
@@ -1168,9 +1203,22 @@ animation:gradShift 7s linear infinite;
 </div>
 </div>
 <div class="hero-phone">
-<div style="position:relative;">
-<div style="position:absolute;inset:-60px;background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(26,158,114,0.2) 0%,transparent 70%);pointer-events:none;"></div>
-<div class="phone-frame" style="position:relative;width:290px;box-shadow:0 56px 120px rgba(0,0,0,0.75),0 0 0 1px rgba(255,255,255,0.07),0 0 80px rgba(26,158,114,0.12);">
+<div class="hero-stage">
+<div style="position:absolute;inset:-60px;background:radial-gradient(ellipse 65% 55% at 50% 50%,rgba(26,158,114,0.22) 0%,transparent 70%);pointer-events:none;z-index:0;"></div>
+<div class="hero-pedestal"></div>
+<div class="hero-chip chip-1">
+<div class="hero-chip-ic" style="background:rgba(26,158,114,.18);color:#5DCAA5;"><i class="ph ph-brain"></i></div>
+<div><div class="hero-chip-t">AI quoted in 9s</div><div class="hero-chip-s">Full truck · $680</div></div>
+</div>
+<div class="hero-chip chip-2">
+<div class="hero-chip-ic" style="background:rgba(93,202,165,.16);color:#5DCAA5;"><i class="ph ph-credit-card"></i></div>
+<div><div class="hero-chip-t">Payment received</div><div class="hero-chip-s">$680 · Apple Pay</div></div>
+</div>
+<div class="hero-chip chip-3">
+<div class="hero-chip-ic" style="background:rgba(232,176,75,.16);color:#e8b04b;"><i class="ph ph-trend-up"></i></div>
+<div><div class="hero-chip-t">+$1,240 this week</div><div class="hero-chip-s">vs. last week</div></div>
+</div>
+<div class="phone-frame" style="position:relative;z-index:2;width:290px;box-shadow:0 56px 120px rgba(0,0,0,0.75),0 0 0 1px rgba(255,255,255,0.07),0 0 80px rgba(26,158,114,0.12);">
 <div class="phone-notch"></div>
 <div class="phone-screen">
 <div class="phone-app-bar"><div class="phone-app-name">Wood's Waste Pro</div><div class="phone-app-badge">3 today</div></div>
@@ -1592,43 +1640,43 @@ localStorage.setItem('installBannerDismissed','1');
 <p style="font-size:13px;color:rgba(255,255,255,.45);margin-top:14px;">Got an invite from a team owner? <a href="#" onclick="openModal('join-team');return false;" style="color:rgba(255,255,255,.7);font-weight:600;text-decoration:underline;">Join a team →</a></p>
 </div>
 </section>
-<footer style="background:#080808;border-top:1px solid rgba(255,255,255,.06);padding:0;">
+<footer style="background:var(--white);border-top:1px solid var(--border);padding:0;">
 <div style="max-width:1060px;margin:0 auto;padding:64px 40px 0;">
-<div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:52px;padding-bottom:52px;border-bottom:1px solid rgba(255,255,255,.06);">
+<div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:52px;padding-bottom:52px;border-bottom:1px solid var(--border);">
 <div>
-<a href="https://woodswastemn.com" class="nav-logo logo-on-dark" style="margin-bottom:18px;display:inline-flex;">
+<a href="https://woodswastemn.com" class="nav-logo" style="margin-bottom:18px;display:inline-flex;">
 <img src="logo.PNG" alt="Wood's Waste"><div class="nav-logo-divider"></div><div class="nav-logo-text">Pro</div>
 </a>
-<p style="font-size:13px;color:rgba(255,255,255,.35);line-height:1.85;max-width:300px;margin-bottom:24px;">Built by Griffin &amp; Gavin at Wood's Waste in Farmington, MN — so every operator always knows what to charge before they call back.</p>
+<p style="font-size:13px;color:var(--gray);line-height:1.85;max-width:300px;margin-bottom:24px;">Built by Griffin &amp; Gavin at Wood's Waste in Farmington, MN — so every operator always knows what to charge before they call back.</p>
 <div style="display:flex;gap:10px;">
-<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" aria-label="Wood's Waste on Facebook" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-facebook-logo" style="font-size:16px;"></i></a>
-<a href="tel:5072981179" aria-label="Call Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-phone" style="font-size:16px;"></i></a>
-<a href="mailto:woodswastemn@gmail.com" aria-label="Email Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='rgba(93,202,165,.5)';this.style.color='#5DCAA5'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)';this.style.color='rgba(255,255,255,.5)'"><i class="ph ph-envelope" style="font-size:16px;"></i></a>
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" aria-label="Wood's Waste on Facebook" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);color:#999;text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='#999'"><i class="ph ph-facebook-logo" style="font-size:16px;"></i></a>
+<a href="tel:5072981179" aria-label="Call Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);color:#999;text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='#999'"><i class="ph ph-phone" style="font-size:16px;"></i></a>
+<a href="mailto:woodswastemn@gmail.com" aria-label="Email Wood's Waste" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);color:#999;text-decoration:none;transition:all .18s;" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='#999'"><i class="ph ph-envelope" style="font-size:16px;"></i></a>
 </div>
 </div>
 <div>
-<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.25);margin-bottom:18px;">Product</div>
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#aaa;margin-bottom:18px;">Product</div>
 <div style="display:flex;flex-direction:column;gap:12px;">
-<a href="#how" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">How it works</a>
-<a href="#features" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Features</a>
-<a href="#pricing" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">Pricing</a>
-<a href="#faq" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">FAQ</a>
-<a href="#" onclick="openModal('pick');return false;" style="font-size:13px;color:#5DCAA5;text-decoration:none;font-weight:600;transition:opacity .15s;" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">Start free trial →</a>
+<a href="#how" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">How it works</a>
+<a href="#features" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">Features</a>
+<a href="#pricing" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">Pricing</a>
+<a href="#faq" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">FAQ</a>
+<a href="#" onclick="openModal('pick');return false;" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:600;transition:opacity .15s;" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">Start free trial →</a>
 </div>
 </div>
 <div>
-<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.25);margin-bottom:18px;">Contact</div>
+<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#aaa;margin-bottom:18px;">Contact</div>
 <div style="display:flex;flex-direction:column;gap:12px;">
-<a href="https://woodswastemn.com" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">woodswastemn.com</a>
-<a href="tel:5072981179" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">(507) 298-1179</a>
-<a href="mailto:woodswastemn@gmail.com" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'">woodswastemn@gmail.com</a>
-<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" style="font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;transition:color .15s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,.45)'"><i class="ph ph-facebook-logo" style="font-size:14px;"></i>woodswastemn</a>
+<a href="https://woodswastemn.com" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">woodswastemn.com</a>
+<a href="tel:5072981179" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;white-space:nowrap;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">(507) 298-1179</a>
+<a href="mailto:woodswastemn@gmail.com" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'">woodswastemn@gmail.com</a>
+<a href="https://www.facebook.com/woodswastemn" target="_blank" rel="noopener" style="font-size:13px;color:var(--gray);text-decoration:none;transition:color .15s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.color='var(--black)'" onmouseout="this.style.color='var(--gray)'"><i class="ph ph-facebook-logo" style="font-size:14px;"></i>woodswastemn</a>
 </div>
 </div>
 </div>
 <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 0;flex-wrap:wrap;gap:10px;">
-<div style="font-size:11.5px;color:rgba(255,255,255,.18);">© 2026 Wood's Waste · Farmington, MN</div>
-<div style="font-size:11.5px;color:rgba(255,255,255,.12);font-style:italic;">Built by operators, for operators.</div>
+<div style="font-size:11.5px;color:#bbb;">© 2026 Wood's Waste · Farmington, MN</div>
+<div style="font-size:11.5px;color:#ccc;font-style:italic;">Built by operators, for operators.</div>
 </div>
 </div>
 </footer>
