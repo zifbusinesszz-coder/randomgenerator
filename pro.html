@@ -4296,11 +4296,11 @@ const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
 const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const ctx3=document.getElementById('chartDiff')?.getContext('2d');
 if(ctx3){insightCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
-const timedJobs=logged.filter(j=>j.actual?.durationSeconds>0&&j.actual?.charged>0).slice(-15);
+const timedJobs=logged.filter(j=>jobHours(j)>0&&j.actual?.charged>0).slice(-15);
 const ctx4=document.getElementById('chartDollarPerMin')?.getContext('2d');
 if(ctx4&&timedJobs.length>=2){
 const dpmLabels=timedJobs.map((_,i)=>'J'+(i+1));
-const dpmVals=timedJobs.map(j=>parseFloat((j.actual.charged/(j.actual.durationSeconds/3600)).toFixed(2)));
+const dpmVals=timedJobs.map(j=>parseFloat((j.actual.charged/jobHours(j)).toFixed(2)));
 const avgDpm=dpmVals.reduce((a,b)=>a+b,0)/dpmVals.length;
 insightCharts.dollarPerMin=new Chart(ctx4,{type:'line',data:{labels:dpmLabels,datasets:[{data:dpmVals,borderColor:'rgba(232,160,32,1)',backgroundColor:'rgba(232,160,32,0.08)',borderWidth:2,pointRadius:4,pointBackgroundColor:dpmVals.map(v=>v>=avgDpm?'rgba(26,158,114,1)':'rgba(192,57,43,0.8)'),tension:0.3,fill:true},{label:'Avg',data:dpmVals.map(()=>avgDpm),borderColor:'rgba(255,255,255,0.18)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{...chartDefaults,plugins:{legend:{display:false}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+v+'/hr'}}}}});
 }else if(ctx4){
@@ -5377,6 +5377,14 @@ btn.innerHTML=`<i class="ph ph-caret-down" id="completedOlderCaret" style="font-
 }
 
 let dashCharts={};
+// Hours a job actually took: prefer the in-app timer, else the manually-entered hours.
+function jobHours(j){
+if(j&&j.actual){
+if(j.actual.durationSeconds>0)return j.actual.durationSeconds/3600;
+if(j.actual.hours>0)return j.actual.hours;
+}
+return 0;
+}
 function renderDashKpis(){
 const grid=document.getElementById('dashKpiGrid'),welcome=document.getElementById('dashWelcome');
 if(!grid)return;
@@ -5455,11 +5463,11 @@ const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
 const diffVals=logged.slice(-15).map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const ctx3=document.getElementById('dashChartDiff')?.getContext('2d');
 if(ctx3){dashCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
-const timedJobsDash=logged.filter(j=>j.actual?.durationSeconds>0&&j.actual?.charged>0).slice(-15);
+const timedJobsDash=logged.filter(j=>jobHours(j)>0&&j.actual?.charged>0).slice(-15);
 const ctx4=document.getElementById('dashChartDollarPerMin')?.getContext('2d');
 if(ctx4&&timedJobsDash.length>=2){
 const dpmLabelsDash=timedJobsDash.map((_,i)=>'J'+(i+1));
-const dpmValsDash=timedJobsDash.map(j=>parseFloat((j.actual.charged/(j.actual.durationSeconds/3600)).toFixed(2)));
+const dpmValsDash=timedJobsDash.map(j=>parseFloat((j.actual.charged/jobHours(j)).toFixed(2)));
 const avgDpmDash=dpmValsDash.reduce((a,b)=>a+b,0)/dpmValsDash.length;
 dashCharts.dollarPerMin=new Chart(ctx4,{type:'line',data:{labels:dpmLabelsDash,datasets:[{data:dpmValsDash,borderColor:'rgba(232,160,32,1)',backgroundColor:'rgba(232,160,32,0.08)',borderWidth:2,pointRadius:4,pointBackgroundColor:dpmValsDash.map(v=>v>=avgDpmDash?'rgba(26,158,114,1)':'rgba(192,57,43,0.8)'),tension:0.3,fill:true},{data:dpmValsDash.map(()=>avgDpmDash),borderColor:'rgba(255,255,255,0.18)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false}]},options:{...chartDefaults,plugins:{legend:{display:false}},scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>'$'+v+'/hr'}}}}});
 }else if(ctx4){
