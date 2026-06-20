@@ -714,13 +714,14 @@ input[type=range].calc-slider{width:100%;accent-color:var(--green);height:3px;cu
 
 /* Result */
 .calc-result{
-border:1px solid rgba(26,158,114,.28);
-background:linear-gradient(135deg,rgba(26,158,114,.09) 0%,rgba(26,158,114,.04) 100%);
-border-radius:var(--r-lg);padding:18px;margin-bottom:18px;
+border:1px solid rgba(26,158,114,.32);
+background:linear-gradient(135deg,rgba(26,158,114,.12) 0%,rgba(26,158,114,.05) 100%);
+border-radius:var(--r-lg);padding:22px;margin-bottom:18px;
+box-shadow:0 8px 30px rgba(26,158,114,.08),inset 0 1px 0 rgba(255,255,255,.04);
 }
-.calc-result-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--d-faint);margin-bottom:5px;}
-.calc-result-price{font-family:var(--font-num);font-size:46px;font-weight:700;color:white;letter-spacing:-1px;line-height:1;margin-bottom:3px;}
-.calc-result-price.has-range{font-size:34px;}
+.calc-result-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(93,202,165,.7);margin-bottom:6px;}
+.calc-result-price{font-family:var(--font-num);font-size:56px;font-weight:700;color:white;letter-spacing:-1.5px;line-height:1;margin-bottom:3px;}
+.calc-result-price.has-range{font-size:40px;letter-spacing:-1px;}
 .calc-result-breakdown{margin-top:13px;border-top:1px solid rgba(255,255,255,.07);padding-top:11px;display:flex;flex-direction:column;gap:5px;}
 .calc-breakdown-row{display:flex;justify-content:space-between;font-size:11.5px;}
 .calc-breakdown-label{color:rgba(255,255,255,.38);}
@@ -733,6 +734,36 @@ border-radius:var(--r-lg);padding:18px;margin-bottom:18px;
 .calc-action-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px;}
 .calc-btn-save{background:var(--green);color:white;border:none;border-radius:var(--r-sm);padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background .15s;}
 .calc-btn-save:hover{background:var(--green-dk);}
+
+/* Collapsible section (Drive & labor) */
+.calc-collapse-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:11px 14px;cursor:pointer;font-family:var(--font-sans);color:rgba(255,255,255,.7);font-size:12.5px;font-weight:600;transition:all .15s;}
+.calc-collapse-toggle:hover{background:rgba(255,255,255,.05);border-color:var(--d-border-hover);}
+.calc-collapse-toggle .calc-collapse-hint{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-left:7px;}
+.calc-collapse-toggle .ph-caret-down{transition:transform .25s cubic-bezier(.2,.7,.3,1);font-size:13px;}
+.calc-collapse-toggle.open .ph-caret-down{transform:rotate(180deg);}
+.calc-collapse-toggle.active{border-color:rgba(26,158,114,.4);color:#5DCAA5;}
+.calc-collapse-body{margin-top:10px;}
+
+/* Sticky live quote bar (mobile) */
+.calc-sticky-bar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;align-items:center;justify-content:space-between;gap:12px;padding:11px 16px calc(11px + env(safe-area-inset-bottom));background:rgba(14,14,14,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(26,158,114,.25);box-shadow:0 -8px 30px rgba(0,0,0,.5);transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.7,.3,1);}
+.calc-sticky-bar.show{transform:translateY(0);}
+.calc-sticky-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(93,202,165,.7);margin-bottom:1px;}
+.calc-sticky-price{font-family:var(--font-num);font-size:24px;font-weight:700;color:white;letter-spacing:-.5px;line-height:1.05;}
+.calc-sticky-save{flex-shrink:0;background:var(--green);color:white;border:none;border-radius:var(--r-sm);padding:12px 24px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:6px;}
+.calc-sticky-save:active{background:var(--green-dk);}
+@media(max-width:768px){.calc-sticky-bar.show{display:flex;}}
+
+/* Dashboard welcome header + KPI strip */
+.dash-welcome{margin-bottom:18px;}
+.dash-welcome-title{font-size:22px;font-weight:800;color:white;letter-spacing:-.4px;}
+.dash-welcome-sub{font-size:12.5px;color:rgba(255,255,255,.42);margin-top:4px;display:flex;align-items:center;gap:6px;}
+.dash-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:768px){.dash-kpi-grid{grid-template-columns:1fr 1fr;}}
+.dash-kpi{background:linear-gradient(165deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.015) 100%);border:1px solid var(--d-border);border-radius:var(--r-lg);padding:15px 16px;transition:border-color .2s,transform .2s;}
+.dash-kpi:hover{border-color:rgba(26,158,114,.28);transform:translateY(-2px);}
+.dash-kpi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.dash-kpi-val{font-family:var(--font-num);font-size:27px;font-weight:700;color:white;letter-spacing:-.5px;line-height:1;}
+.dash-kpi-sub{font-size:10px;color:rgba(255,255,255,.3);margin-top:5px;}
 .calc-btn-reset{background:rgba(255,255,255,.05);color:rgba(255,255,255,.55);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);transition:all .15s;}
 .calc-btn-reset:hover{color:white;border-color:var(--d-border-hover);background:rgba(255,255,255,.08);}
 
@@ -2114,10 +2145,15 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="calc-specials-grid" id="calcSpecialsGrid"></div>
 </div>
 <div class="calc-section">
-<div class="calc-section-title">Drive & time</div>
+<button class="calc-collapse-toggle" id="driveToggle" onclick="toggleDriveSection()" type="button">
+<span style="display:flex;align-items:center;gap:7px;"><i class="ph ph-car" style="font-size:14px;"></i> Drive &amp; labor<span class="calc-collapse-hint">optional</span></span>
+<i class="ph ph-caret-down"></i>
+</button>
+<div class="calc-collapse-body" id="driveBody" style="display:none;">
 <div class="calc-inputs-grid">
 <div class="calc-input-card"><div class="calc-input-label">Drive distance</div><input type="number" class="calc-input-field" id="calcMiles" placeholder="0" min="0" oninput="recalc()"/><div class="calc-input-unit">miles one way</div></div>
 <div class="calc-input-card"><div class="calc-input-label">Job time</div><input type="number" class="calc-input-field" id="calcHours" placeholder="0" min="0" step="0.5" oninput="recalc()"/><div class="calc-input-unit">hours</div></div>
+</div>
 </div>
 </div>
 <div class="calc-section">
@@ -2144,6 +2180,11 @@ localStorage.setItem('installBannerDismissed','1');
 <button class="calc-btn-save" onclick="saveJob()">Save to history</button>
 <button class="calc-btn-reset" onclick="resetCalc()">Clear</button>
 </div>
+</div>
+<!-- Sticky live quote bar (mobile) -->
+<div class="calc-sticky-bar" id="calcStickyBar">
+<div><div class="calc-sticky-label">Quote the customer</div><div class="calc-sticky-price" id="calcStickyPrice">—</div></div>
+<button class="calc-sticky-save" onclick="saveJob()"><i class="ph ph-check" style="font-size:14px;"></i> Save</button>
 </div>
 <footer style="background:#fafaf8;border-top:1px solid var(--border);padding:36px 40px;">
 <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
@@ -2605,6 +2646,8 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 </nav>
 <div class="dash-body">
+<div class="dash-welcome" id="dashWelcome" data-aos="fade-up"></div>
+<div class="dash-kpi-grid" id="dashKpiGrid" data-aos="fade-up"></div>
 <div class="dash-grid">
 <!-- Calendar -->
 <div class="dash-card" data-aos="fade-up">
@@ -3389,9 +3432,24 @@ recalc();
 function toggleCalcSpecial(key){selectedSpecials[key]=!selectedSpecials[key];document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]);recalc();}
 function onMarkupSlide(){document.getElementById('calcMarkupPct').textContent=document.getElementById('calcMarkup').value+'%';recalc();}
 
+function toggleDriveSection(){
+const t=document.getElementById('driveToggle'),b=document.getElementById('driveBody');
+if(!t||!b)return;
+const open=b.style.display==='none';
+b.style.display=open?'block':'none';
+t.classList.toggle('open',open);
+}
+// Mirror the live quote onto the sticky mobile bar (and show/hide it).
+function syncStickyBar(){
+const bar=document.getElementById('calcStickyBar');if(!bar)return;
+const txt=(document.getElementById('calcFinalPrice').textContent||'').trim();
+const has=txt&&txt!=='—'&&txt!=='Select a load size';
+const pe=document.getElementById('calcStickyPrice');if(pe)pe.textContent=has?txt:'—';
+bar.classList.toggle('show',!!has);
+}
 function recalc(){
 const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
-if(!totalQty){document.getElementById('calcFinalPrice').textContent='Select a load size';document.getElementById('calcBreakdown').style.display='none';return;}
+if(!totalQty){document.getElementById('calcFinalPrice').textContent='Select a load size';document.getElementById('calcBreakdown').style.display='none';syncStickyBar();return;}
 const markup=parseInt(document.getElementById('calcMarkup').value)/100;
 const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
 const driveRate=userPricing.driveRate||1.5,laborRate=userPricing.laborRate||35;
@@ -3427,6 +3485,8 @@ document.getElementById('bd-labor').textContent='+$'+laborCost+' ('+hours+'hr ×
 document.getElementById('bd-cost').textContent='$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
 document.getElementById('bd-markup-label').textContent='+ '+(markup*100)+'% markup =';
 document.getElementById('bd-quote').textContent='$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
+const dt=document.getElementById('driveToggle');if(dt)dt.classList.toggle('active',(driveCost>0||laborCost>0));
+syncStickyBar();
 }
 
 function calcTruckYards(){const l=parseFloat(document.getElementById('p-truck-l')?.value)||0;const w=parseFloat(document.getElementById('p-truck-w')?.value)||0;const h=parseFloat(document.getElementById('p-truck-h')?.value)||0;const el=document.getElementById('p-truck-cuyd');if(el)el.textContent=(l&&w&&h)?((l*w*h)/27).toFixed(1)+' cu yd':'—';}
@@ -3441,6 +3501,7 @@ document.getElementById('calcMiles').value='';document.getElementById('calcHours
 document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
 document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
 document.getElementById('calcFinalPrice').textContent='—';
+syncStickyBar();
 document.getElementById('calcBreakdown').style.display='none';
 }
 // NEW
@@ -4829,6 +4890,7 @@ document.getElementById('dashboardPage').style.display='block';
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
 calCurrentDate=new Date();
+renderDashKpis();
 renderCalendar();
 renderUpcoming();
 renderCompletedJobs();
@@ -4966,7 +5028,7 @@ scheduled = [
 }
 
 const list = document.getElementById('upcomingList');
-if(!scheduled.length){list.innerHTML='<div class="upcoming-empty">No upcoming scheduled jobs.<br>Add a customer and set status to Scheduled.</div>';return;}
+if(!scheduled.length){list.innerHTML='<div class="upcoming-empty"><i class="ph ph-calendar-plus" style="font-size:26px;color:rgba(255,255,255,.18);display:block;margin-bottom:9px;"></i>No upcoming jobs scheduled.<br>Quote a job, add a customer, and set the status to <strong style="color:rgba(255,255,255,.6);">Scheduled</strong> — it\'ll show up here with directions.</div>';return;}
 
 list.innerHTML = scheduled.map(j => {
 const isMemberAssigned=session.role==='member'&&Array.isArray(j.assignedTo)&&j.assignedTo.includes(session.companyId);
@@ -5261,6 +5323,30 @@ btn.innerHTML=`<i class="ph ph-caret-down" id="completedOlderCaret" style="font-
 }
 
 let dashCharts={};
+function renderDashKpis(){
+const grid=document.getElementById('dashKpiGrid'),welcome=document.getElementById('dashWelcome');
+if(!grid)return;
+const logged=jobHistory.filter(j=>j.actual?.charged);
+const revenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
+const avgTicket=logged.length?Math.round(revenue/logged.length):0;
+const scheduled=getScheduledJobs();
+const today=new Date();
+const isToday=d=>{const x=new Date(d);return x.getFullYear()===today.getFullYear()&&x.getMonth()===today.getMonth()&&x.getDate()===today.getDate();};
+const todayCount=scheduled.filter(j=>j.crm?.dateTime&&isToday(j.crm.dateTime)).length;
+if(welcome){
+const hr=today.getHours();const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+const sub=todayCount>0?`<i class="ph ph-calendar-check" style="color:#5DCAA5;font-size:13px;"></i> ${todayCount} job${todayCount>1?'s':''} scheduled today`
+:scheduled.length>0?`<i class="ph ph-clock" style="color:var(--gold);font-size:13px;"></i> ${scheduled.length} upcoming job${scheduled.length>1?'s':''}`
+:`<i class="ph ph-truck" style="color:rgba(255,255,255,.4);font-size:13px;"></i> No jobs scheduled yet — quote one to get started`;
+welcome.innerHTML=`<div class="dash-welcome-title">${greet}, ${escapeHtml(session.businessName||'Operator')}</div><div class="dash-welcome-sub">${sub}</div>`;
+}
+grid.innerHTML=`
+<div class="dash-kpi"><div class="dash-kpi-label"><i class="ph ph-clock" style="color:var(--gold);"></i> Upcoming</div><div class="dash-kpi-val">${scheduled.length}</div><div class="dash-kpi-sub">scheduled</div></div>
+<div class="dash-kpi"><div class="dash-kpi-label"><i class="ph ph-check-circle" style="color:#5DCAA5;"></i> Completed</div><div class="dash-kpi-val">${logged.length}</div><div class="dash-kpi-sub">jobs logged</div></div>
+<div class="dash-kpi"><div class="dash-kpi-label"><i class="ph ph-currency-dollar" style="color:#5DCAA5;"></i> Revenue</div><div class="dash-kpi-val">$${revenue.toLocaleString()}</div><div class="dash-kpi-sub">total charged</div></div>
+<div class="dash-kpi"><div class="dash-kpi-label"><i class="ph ph-chart-line-up" style="color:#5DCAA5;"></i> Avg ticket</div><div class="dash-kpi-val">$${avgTicket.toLocaleString()}</div><div class="dash-kpi-sub">per job</div></div>`;
+}
+
 function renderDashAnalytics(){
 Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});dashCharts={};
 const body=document.getElementById('dashAnalytics');
