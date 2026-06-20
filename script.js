@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initScrollReveal();
     initFormEnhancements();
     initCounterAnimations();
+    initParallax();
+    initTilt();
 });
 
 /* ==========================================
@@ -51,7 +53,7 @@ function initNavbarScroll() {
 
     window.addEventListener("scroll", () => {
         navbar.classList.toggle("scrolled", window.scrollY > 30);
-    });
+    }, { passive: true });
 }
 
 /* ==========================================
@@ -61,7 +63,9 @@ function initNavbarScroll() {
 function initSmoothScrolling() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener("click", (e) => {
-            const target = document.querySelector(anchor.getAttribute("href"));
+            const href = anchor.getAttribute("href");
+            if (href === "#" || href.length < 2) return;
+            const target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
             window.scrollTo({ top: target.offsetTop - 80, behavior: "smooth" });
@@ -71,20 +75,80 @@ function initSmoothScrolling() {
 
 /* ==========================================
    SCROLL REVEAL
+   — adds .in-view to elements as they enter,
+     with a staggered delay for grouped items
    ========================================== */
 
 function initScrollReveal() {
+    // Marks that JS is live — CSS only hides reveal elements under this class,
+    // so if JS ever fails, everything stays visible.
+    document.documentElement.classList.add("js-reveal");
+
     const elements = document.querySelectorAll(
-        ".service-card, .section-header, .process-step, .value-item, .about-content, .about-visual"
+        ".service-card, .section-header, .process-step, .value-item, .about-content, .about-visual, .area-card, .faq-item, [data-reveal]"
     );
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add("in-view");
+            if (entry.isIntersecting) {
+                entry.target.classList.add("in-view");
+                observer.unobserve(entry.target);
+            }
         });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+    // Stagger siblings inside common grids
+    const stagger = (selector) => {
+        document.querySelectorAll(selector).forEach((grid) => {
+            Array.from(grid.children).forEach((child, i) => {
+                child.style.transitionDelay = (i % 4) * 80 + "ms";
+            });
+        });
+    };
+    stagger(".services-grid");
+    stagger(".values");
+    stagger(".area-grid");
 
     elements.forEach(el => observer.observe(el));
+}
+
+/* ==========================================
+   PARALLAX (hero shapes / orbs)
+   ========================================== */
+
+function initParallax() {
+    const layers = document.querySelectorAll("[data-parallax]");
+    if (!layers.length) return;
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            const y = window.scrollY;
+            layers.forEach(l => {
+                const speed = parseFloat(l.getAttribute("data-parallax")) || 0.15;
+                l.style.transform = "translate3d(0," + (y * speed) + "px,0)";
+            });
+            ticking = false;
+        });
+    }, { passive: true });
+}
+
+/* ==========================================
+   TILT (subtle 3D on cards)
+   ========================================== */
+
+function initTilt() {
+    if (window.matchMedia("(hover: none)").matches) return;
+    document.querySelectorAll("[data-tilt]").forEach(card => {
+        card.addEventListener("mousemove", (e) => {
+            const r = card.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width - 0.5;
+            const py = (e.clientY - r.top) / r.height - 0.5;
+            card.style.transform = "perspective(800px) rotateX(" + (-py * 5) + "deg) rotateY(" + (px * 5) + "deg) translateY(-4px)";
+        });
+        card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+    });
 }
 
 /* ==========================================
@@ -114,22 +178,14 @@ function initCounterAnimations() {
     const counters = document.querySelectorAll(".stat-number");
 
     counters.forEach(el => {
-        // Pull the numeric value out of the element's data attribute
-        // (set below), then wrap the bare text node in a .num span
-        // so we can update just the number without touching .suffix
-
         const suffixEl = el.querySelector(".suffix");
         const suffixText = suffixEl ? suffixEl.outerHTML : "";
 
-        // Get the raw number — strip everything non-numeric
         const raw = el.innerText.replace(/\D/g, "");
         const target = parseInt(raw);
         if (!target) return;
 
-        // Store target for the observer callback
         el.dataset.target = target;
-
-        // Rebuild innerHTML: a .num span + the suffix span
         el.innerHTML = `<span class="num">0</span>${suffixText}`;
     });
 
@@ -138,16 +194,14 @@ function initCounterAnimations() {
         const numEl = el.querySelector(".num");
         if (!numEl) return;
 
-        let count = 0;
-        const step = Math.max(1, Math.floor(target / 60));
-
-        const update = () => {
-            count = Math.min(count + step, target);
-            numEl.innerText = count;
-            if (count < target) requestAnimationFrame(update);
+        const dur = 1200, t0 = performance.now();
+        const ease = t => 1 - Math.pow(1 - t, 3);
+        const tick = (now) => {
+            const p = Math.min(1, (now - t0) / dur);
+            numEl.innerText = Math.round(ease(p) * target);
+            if (p < 1) requestAnimationFrame(tick);
         };
-
-        update();
+        requestAnimationFrame(tick);
     };
 
     const observer = new IntersectionObserver((entries, obs) => {
@@ -161,14 +215,25 @@ function initCounterAnimations() {
 
     document.querySelectorAll(".stat-number").forEach(c => observer.observe(c));
 }
+
+/* ==========================================
+   SERVICE AREAS TOGGLE
+   ========================================== */
+
 function toggleAreas() {
     const extras = document.querySelectorAll('.area-card.extra');
     const btn = document.getElementById('areaToggle');
+    if (!extras.length || !btn) return;
     const isHidden = extras[0].classList.contains('hidden');
 
     extras.forEach(card => card.classList.toggle('hidden'));
     btn.textContent = isHidden ? 'Show less ↑' : 'View all areas ↓';
 }
+
+/* ==========================================
+   FAQ ACCORDION
+   ========================================== */
+
 document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
         const answer = btn.nextElementSibling;
@@ -184,7 +249,7 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     });
 });
 
-// ── JOB ACTUAL & INSIGHTS ──
+// ── JOB ACTUAL & INSIGHTS ──  (used by /pro tooling / subpages)
 let actualJobId = null;
 
 function openActual(jobId) {
@@ -318,6 +383,7 @@ function renderInsights() {
   }
   body.innerHTML = html;
 }
+
 // ── Date / Time picker ───────────────────────────────────────
 (function() {
   var GAS_URL = 'https://script.google.com/macros/s/AKfycbzGbctgjm5ekt7CFSVRzCHDxff_6X88b6mjY3yyb5gHXzTcGD5ZTtSWOYrP8-I4-IkQVw/exec';
@@ -330,8 +396,9 @@ function renderInsights() {
 
   var dateEl = document.getElementById('bDate');
   var timeEl = document.getElementById('bTime');
+  if (!dateEl || !timeEl) return;
 
-  // Populate next 14 days (skip Sundays if you want — remove the check to include all)
+  // Populate next 14 days
   var today = new Date();
   for (var i = 1; i <= 14; i++) {
     var d = new Date(today);
@@ -378,7 +445,6 @@ function renderInsights() {
         timeEl.style.cursor = 'pointer';
       })
       .catch(function() {
-        // If GAS fetch fails, just show all times
         timeEl.innerHTML = '<option value="">Select a time...</option>';
         ALL_TIMES.forEach(function(t) {
           var opt = document.createElement('option');
