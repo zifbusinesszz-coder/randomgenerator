@@ -3998,6 +3998,7 @@ navigator.share({title:'Payment',text:`Hi${job?.crm?.name?' '+job.crm.name:''}! 
 }
 async function checkStripeStatus(){
 if(!session.token||!isPro())return;
+loadStripe().catch(()=>{}); // preload Stripe.js in the background so connected-account / payment flows are ready
 try{
 const res=await api({action:'stripeAccountStatus',token:session.token});
 session.stripeConnected=!!(res.success&&res.connected);
