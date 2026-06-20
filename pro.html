@@ -576,6 +576,34 @@ footer{background:var(--white);border-top:1px solid var(--border);padding:28px 4
 .markup-signup-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);}
 .markup-signup-val{font-family:var(--font-num);font-size:26px;font-weight:700;color:var(--black);}
 .markup-signup-sub{font-size:10px;color:var(--gray);margin-top:5px;}
+
+/* ─── Signup step 3 (pricing setup): dark theme to match the calculator ─── */
+#step3{background:var(--d-surface);margin:-20px -20px -26px;padding:22px 20px 24px;}
+#step3>div:first-child{color:rgba(255,255,255,.5)!important;}
+#step3 [style*="var(--gray)"]{color:rgba(255,255,255,.45)!important;}
+#step3 [style*="color:var(--black)"]{color:#fff!important;}
+#step3 [style*="color:#bbb"]{color:rgba(255,255,255,.3)!important;}
+#step3 [style*="#f0f0ee"]{background:rgba(255,255,255,.05)!important;}
+#step3 [style*="solid var(--border)"]{border-color:rgba(255,255,255,.08)!important;}
+#step3 .pricing-section-title{color:rgba(255,255,255,.62)!important;border-bottom-color:rgba(255,255,255,.08);}
+#step3 .pricing-section-title i{color:#5DCAA5;}
+#step3 .pricing-section-title span{color:rgba(255,255,255,.4)!important;}
+#step3 input[type=number]{background:rgba(255,255,255,.05)!important;border:1px solid var(--d-border)!important;color:#fff!important;}
+#step3 input[type=number]:focus{border-color:rgba(26,158,114,.5)!important;}
+#step3 .price-input-wrap::before{color:rgba(255,255,255,.4);}
+#step3 .sitem-left,#step3 .sitem-icon{color:rgba(255,255,255,.72)!important;}
+#step3 .special-item-row{background:rgba(255,255,255,.04)!important;border-color:var(--d-border)!important;}
+#step3 .special-item-row:hover{border-color:var(--d-border-hover)!important;}
+#step3 .special-item-row.active{border-color:rgba(26,158,114,.5)!important;background:rgba(26,158,114,.1)!important;}
+#step3 .sitem-toggle{background:rgba(255,255,255,.08);border-color:var(--d-border);}
+#step3 .sitem-toggle.on{background:var(--green);border-color:var(--green);color:#fff;}
+#step3 .extras-card{background:rgba(255,255,255,.04)!important;border-color:var(--d-border)!important;}
+#step3 .extras-card-title,#step3 .extras-rate-row{color:rgba(255,255,255,.5)!important;}
+#step3 .markup-signup-card{background:rgba(26,158,114,.07)!important;border-color:rgba(26,158,114,.3)!important;}
+#step3 .markup-signup-title,#step3 .markup-signup-sub{color:rgba(255,255,255,.5)!important;}
+#step3 .markup-signup-val{color:#fff!important;}
+#step3 .btn-back{border-color:var(--d-border)!important;color:rgba(255,255,255,.6)!important;}
+#step3 .btn-back:hover{border-color:var(--d-border-hover)!important;color:#fff!important;}
 .success-state{display:none;text-align:center;padding:18px 8px 8px;}
 .success-mark{width:54px;height:54px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:21px;}
 .success-state h3{font-family:var(--font-display);font-size:21px;font-weight:900;margin-bottom:7px;}
@@ -2059,17 +2087,14 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="saving-overlay" id="savingOverlay"><div class="saving-spinner"></div><p id="savingMsg">Setting up your account...</p></div>
 <div class="success-state" id="successState">
 <div class="success-mark"><i class="ph ph-check" style="font-size:21px;color:white;"></i></div>
-<div class="sheet-saved-badge"><i class="ph ph-check" style="font-size:11px;"></i> Pricing saved to your account</div>
-<h3>You're all set.</h3>
-<p>Your costs are saved. Pull up the quote tool on your phone anytime — 30 seconds per job.</p>
+<div class="sheet-saved-badge" id="successPlanBadge"><i class="ph ph-check" style="font-size:11px;"></i> Pricing saved to your account</div>
+<h3 id="successHeading">You're all set.</h3>
+<p id="successSubtext">Your pricing is saved and your 14-day free trial is live — no charge today.</p>
 <div class="success-next">
-<div class="success-next-label">Good to know</div>
-<div class="success-next-item"><i class="ph ph-sliders" style="font-size:13px;flex-shrink:0;margin-top:2px;"></i> Markup slider starts at your default — change it per job</div>
-<div class="success-next-item"><i class="ph ph-clipboard-text" style="font-size:13px;flex-shrink:0;margin-top:2px;"></i> Every saved quote goes into your job history</div>
-<div id="aiSuccessItem" style="display:none;" class="success-next-item"><i class="ph ph-camera" style="font-size:13px;flex-shrink:0;margin-top:2px;"></i> AI photo quoting is ready — tap the AI button in your dashboard</div>
-<div class="success-next-item"><i class="ph ph-chat-circle" style="font-size:13px;flex-shrink:0;margin-top:2px;"></i> Griffin will text to make sure everything looks right</div>
+<div class="success-next-label" id="successNextLabel">What's ready for you</div>
+<div id="successNextItems"></div>
 </div>
-<button class="submit-btn green" onclick="openCalc()">Open my quote tool →</button>
+<button class="submit-btn green" id="successCtaBtn" onclick="openCalc()">Open my quote tool →</button>
 <p style="font-size:12.5px;color:var(--gray);margin-top:13px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
 </div>
 <div id="joinTeamForm" style="display:none;">
@@ -3272,7 +3297,6 @@ if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goSte
 saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan,res.role||'owner',res.ownerId||null);
 applyPricing(pricing);localStorage.setItem('ww_pricing',JSON.stringify(pricing));
 localStorage.setItem('ww_new_user','1');
-if(currentPlan==='pro')document.getElementById('aiSuccessItem').style.display='flex';
 showSuccess();
 }catch(e){btn.disabled=false;btn.textContent='Save & open my quote tool →';showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
 }
@@ -3295,8 +3319,38 @@ cb();
 setTimeout(()=>{splash.classList.remove('active');inner.classList.remove('out');welcome.style.opacity='0';welcome.style.transform='translateY(8px)';},380);
 },900);
 }
+// Tailor the "You're all set" screen to the plan the operator just signed up for.
+function populateSuccessScreen(plan){
+const base=String(plan||'starter').replace('-yearly','').replace('team10','team');
+const planName={starter:'Starter',pro:'Pro',team:'Team'}[base]||'Starter';
+const badge=document.getElementById('successPlanBadge');
+if(badge)badge.innerHTML='<i class="ph ph-check" style="font-size:11px;"></i> '+planName+' plan · 14-day free trial active';
+const heading=document.getElementById('successHeading');
+if(heading)heading.textContent=base==='team'?"Your team's all set.":"You're all set.";
+const sub=document.getElementById('successSubtext');
+if(sub)sub.textContent='Your pricing is saved and your 14-day free trial is live — no charge today. Here\'s what\'s ready for you:';
+const item=(icon,txt)=>'<div class="success-next-item"><i class="ph ph-'+icon+'" style="font-size:13px;flex-shrink:0;margin-top:2px;color:#1a9e72;"></i> '+txt+'</div>';
+let items=
+  item('camera','<strong>AI photo quoting</strong> — point your phone at the pile, get a price')+
+  item('sliders','Markup slider starts at your default — change it per job')+
+  item('clipboard-text','Every saved quote goes into your job history');
+if(base==='pro'||base==='team'){
+  items+=
+    item('squares-four','<strong>Dashboard</strong> — calendar, scheduling, CRM &amp; analytics')+
+    item('path','<strong>Plan My Day</strong> — optimized route with your dump stop')+
+    item('credit-card','<strong>Collect card payments</strong> via a Stripe link');
+}
+if(base==='team'){
+  items+=item('users','<strong>Invite your crew</strong> &amp; assign jobs from the dashboard');
+}
+items+=item('chat-circle','Griffin will text to make sure everything looks right');
+const wrap=document.getElementById('successNextItems');if(wrap)wrap.innerHTML=items;
+const cta=document.getElementById('successCtaBtn');
+if(cta)cta.innerHTML=base==='team'?'Start using Team &rarr;':base==='pro'?'Start using Pro &rarr;':'Open my quote tool &rarr;';
+}
 function showSuccess(){
 ['step1','step2','step3','savingOverlay','loginForm','forgotForm','resetCodeForm'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+populateSuccessScreen(currentPlan);
 document.getElementById('successState').style.display='block';
 document.getElementById('modalStepDots').style.display='none';
 document.getElementById('modalTitle').textContent="You're all set.";
