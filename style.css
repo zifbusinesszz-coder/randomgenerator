@@ -186,7 +186,7 @@ img{display:block;max-width:100%;}
 }
 @keyframes truckIdle{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
 @keyframes floorPulse{0%,100%{opacity:.2;}50%{opacity:.6;}}
-@media (prefers-reduced-motion:reduce){.junk,.haul-truck::before,.haul-floor::after{animation:none;}.junk{opacity:1;transform:none;}.junk.j1{left:6%;}.junk.j2{left:18%;}.junk.j3{left:30%;}.junk.j4{left:42%;}.junk.j5{left:54%;}.junk.j6{left:64%;}}
+/* haul animation intentionally keeps running under prefers-reduced-motion (like the marquee/glow) so it still plays on phones that have Reduce Motion enabled */
 
 /* ── trust strip ── */
 .strip{border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);background:var(--canvas);overflow:hidden;padding:16px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
@@ -349,7 +349,8 @@ select.input{cursor:pointer;}
   .promo{padding:26px 22px;}
   .foot-grid{grid-template-columns:1fr;gap:28px;}
   .cta-banner{padding:48px 24px;}
-  .about-chip{left:0;}
+  /* drop the rating badge below the photo so it doesn't cover a founder on the short mobile image */
+  .about-chip{position:static;display:inline-block;margin-top:14px;left:auto;bottom:auto;}
   /* hero "haul" animation: scale the fixed-px scene down so it fits a phone */
   .haul-stage{height:300px;}
   .haul-truck{font-size:74px;right:22px;bottom:66px;}
