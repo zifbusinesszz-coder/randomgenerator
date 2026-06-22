@@ -350,6 +350,17 @@ select.input{cursor:pointer;}
   .foot-grid{grid-template-columns:1fr;gap:28px;}
   .cta-banner{padding:48px 24px;}
   .about-chip{left:0;}
+  /* hero "haul" animation: scale the fixed-px scene down so it fits a phone */
+  .haul-stage{height:300px;}
+  .haul-truck{font-size:74px;right:22px;bottom:66px;}
+  .haul-truck::before{width:64px;height:64px;}
+  .haul-truck::after{width:70px;}
+  .haul-floor{left:20px;right:40px;bottom:76px;}
+  .junk{bottom:82px;}
+  .junk.j1{font-size:31px;}.junk.j2{font-size:23px;}.junk.j3{font-size:28px;}
+  .junk.j4{font-size:21px;}.junk.j5{font-size:27px;}.junk.j6{font-size:24px;}
+  /* team photo: show the full 1.9:1 landscape instead of a tall center-crop that cuts the founders off the sides */
+  .about-frame img{height:auto;}
 }
 
 /* ============================================================
