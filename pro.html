@@ -223,8 +223,8 @@
 --font-num:'Space Grotesk',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation;}
-html{scroll-behavior:smooth;}
-body{font-family:var(--font-sans);background:var(--white);color:var(--black);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+html{scroll-behavior:smooth;overflow-x:clip;}
+body{font-family:var(--font-sans);background:var(--white);color:var(--black);overflow-x:clip;max-width:100%;-webkit-font-smoothing:antialiased;}
 .ph{display:inline-flex;align-items:center;justify-content:center;}
 
 /* ─── NAV ─── */
