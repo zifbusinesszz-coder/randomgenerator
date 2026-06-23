@@ -1593,8 +1593,8 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div class="feat-card pro-feat">
 <div class="feat-icon"><i class="ph ph-address-book" style="color:var(--green);"></i></div>
-<div class="feat-title">Customer CRM <span class="pro-badge-inline">PRO</span></div>
-<div class="feat-desc">Every job has a customer record — name, phone, address, status, notes, and job history. Pull up any customer in seconds. No spreadsheet, no sticky notes.</div>
+<div class="feat-title">Customer Directory <span class="pro-badge-inline">PRO</span></div>
+<div class="feat-desc">A searchable directory of every customer — find anyone by name, phone, or address, filter by pipeline stage (quoted / scheduled / completed), and sort by recent or value. Cold-lead recovery flags quotes sitting unbooked so a quick follow-up text wins the job back.</div>
 </div>
 <div class="feat-card pro-feat">
 <div class="feat-icon"><i class="ph ph-chart-line-up" style="color:var(--green);"></i></div>
@@ -1611,10 +1611,15 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="feat-title">Job Timer &amp; Photo Docs <span class="pro-badge-inline">PRO</span></div>
 <div class="feat-desc">Start a timer when you pull up. Snap before &amp; after photos tied to the job. Log duration and what you actually charged when it's done.</div>
 </div>
-<div class="feat-card pro-feat">
+<div class="feat-card">
 <div class="feat-icon"><i class="ph ph-credit-card" style="color:var(--green);"></i></div>
-<div class="feat-title">Collect Card Payments <span class="pro-badge-inline">PRO</span></div>
-<div class="feat-desc">Generate a Stripe payment link on the spot. Text or AirDrop it to the customer — they pay with Apple Pay, Google Pay, or card. Money hits your bank account directly. No card reader needed.</div>
+<div class="feat-title">Get Paid On the Spot <span class="pro-badge-inline" style="background:rgba(26,158,114,.12);color:var(--green);">ALL PLANS</span></div>
+<div class="feat-desc">Text the customer a Stripe link — they pay with Apple Pay, Google Pay, or card, money straight to your bank. Or log cash &amp; check. Every payment is tracked (paid / unpaid), and the customer gets an automatic Stripe receipt — you get a copy too. Just 2% on Starter, 1% on Pro &amp; Team.</div>
+</div>
+<div class="feat-card">
+<div class="feat-icon"><i class="ph ph-paper-plane-tilt" style="color:var(--green);"></i></div>
+<div class="feat-title">Text Branded Quotes <span class="pro-badge-inline" style="background:rgba(26,158,114,.12);color:var(--green);">ALL PLANS</span></div>
+<div class="feat-desc">Lock in one final price (no more ranges) and text the customer a clean, branded quote in one tap — load, add-ons, travel, and total. When the job's done, the same button sends the receipt.</div>
 </div>
 <div class="feat-card" style="border-color:rgba(93,202,165,.25);">
 <div class="feat-icon"><i class="ph ph-users" style="color:#5DCAA5;"></i></div>
@@ -1656,12 +1661,13 @@ localStorage.setItem('installBannerDismissed','1');
 <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
 <li class="pf"><span class="chk">✓</span> AI Photo Quoting</li>
 <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
-<li class="pf"><span class="chk">✓</span> Send receipts via text</li>
-<li class="pf"><span class="chk">✓</span> Job history & tracking</li>
-<li class="pf"><span class="chk">✓</span> Basic CRM — name, phone & address per job</li>
+<li class="pf"><span class="chk">✓</span> Set one final price &amp; text branded quotes</li>
+<li class="pf"><span class="chk">✓</span> Collect card payments — Apple/Google Pay or card (2% fee)</li>
+<li class="pf"><span class="chk">✓</span> Auto Stripe receipts + paid/unpaid tracking</li>
+<li class="pf"><span class="chk">✓</span> Job history with outcome tracking (quoted vs. charged)</li>
+<li class="pf"><span class="chk">✓</span> Basic CRM — name, phone, email &amp; address per job</li>
 <li class="pf"><span class="chk">✓</span> Trailer dimension calculator</li>
-<li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
-<li class="pf"><span class="chk">✓</span> Custom special items</li>
+<li class="pf"><span class="chk">✓</span> Custom costs, load rates &amp; special items</li>
 <li class="pf"><span class="chk">✓</span> 14-day free trial</li>
 </ul>
 <a href="#" class="btn-plan-dark" id="starterBtn" onclick="openModal('starter');return false;">Start free trial</a>
@@ -1673,12 +1679,14 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-desc" id="proDesc">Everything in Starter plus advanced CRM & Analytics.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-<li class="pf"><span class="chk chk-green">✓</span> Advanced CRM — scheduling, job status & notes</li>
-<li class="pf"><span class="chk chk-green">✓</span> Dashboard with calendar, scheduling & upcoming jobs</li>
+<li class="pf"><span class="chk chk-green">✓</span> Lower 1% payment fee — half of Starter's</li>
+<li class="pf"><span class="chk chk-green">✓</span> Dashboard with calendar, scheduling &amp; upcoming jobs</li>
+<li class="pf"><span class="chk chk-green">✓</span> Searchable customer directory — filters, sort &amp; lead aging</li>
+<li class="pf"><span class="chk chk-green">✓</span> Cold-lead recovery — follow-up nudges for unbooked quotes</li>
 <li class="pf"><span class="chk chk-green">✓</span> Plan My Day — optimized route with dump stop included</li>
-<li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual profit tracking</li>
-<li class="pf"><span class="chk chk-green">✓</span> Analytics - know your numbers</li>
-<li class="pf"><span class="chk chk-green">✓</span> Collect card payments via Stripe link</li>
+<li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual profit analytics</li>
+<li class="pf"><span class="chk chk-green">✓</span> Job timer + before/after photo docs</li>
+<li class="pf"><span class="chk chk-green">✓</span> Export customers to CSV</li>
 <li class="pf"><span class="chk chk-green">✓</span> Priority support from Griffin</li>
 </ul>
 <a href="#" class="btn-plan-green" id="proBtn" onclick="openModal('pro');return false;">Start free trial</a>
@@ -1882,7 +1890,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div onclick="pickPlan('starter')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('starter');}" role="button" tabindex="0" aria-label="Select Starter plan" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
 <div style="flex:1;min-width:0;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:3px;">Starter</div>
-<div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote calculator, job history, AI photo quoting, special item surcharges.</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote, get paid (card/cash), receipts, and job outcome tracking. AI photo quoting included.</div>
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-starter-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$29<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
@@ -1895,7 +1903,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Pro</div>
 <div style="font-size:8.5px;font-weight:700;background:var(--green);color:white;padding:2px 7px;border-radius:9px;">Most Popular</div>
 </div>
-<div style="font-size:11px;color:var(--gray);line-height:1.5;">Everything in Starter plus full CRM, dashboard &amp; insights.</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Everything in Starter + a lower 1% fee, dashboard, searchable customer directory &amp; analytics.</div>
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-pro-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$59<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
@@ -2208,6 +2216,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="calc-breakdown-row" id="bd-labor-row" style="display:none;"><span class="calc-breakdown-label">Labor</span><span class="calc-breakdown-val" id="bd-labor">—</span></div>
 <div class="calc-breakdown-row total"><span class="calc-breakdown-label">Your cost</span><span class="calc-breakdown-val" id="bd-cost">—</span></div>
 <div class="calc-breakdown-row total"><span class="calc-breakdown-label" id="bd-markup-label">+ markup</span><span class="calc-breakdown-val" id="bd-quote">—</span></div>
+<div class="calc-breakdown-row total"><span class="calc-breakdown-label" style="color:var(--green);">Your profit</span><span class="calc-breakdown-val" id="bd-profit" style="color:var(--green);">—</span></div>
 </div>
 </div>
 <div class="calc-action-row">
@@ -2283,6 +2292,33 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
 <div class="settings-drawer">
 <div class="settings-header"><div class="settings-title">Settings</div><button class="settings-close" onclick="closeSettings()">✕</button></div>
+<!-- PAYMENTS SECTION (Pro/Team only) — top for visibility -->
+<div id="stripeSettingsSection" style="display:none;margin:16px 18px 0;border:1px solid rgba(99,91,255,.28);background:rgba(99,91,255,.06);border-radius:var(--r-md);padding:14px;">
+<div class="settings-section-title" style="border-bottom:none;padding-bottom:0;margin-bottom:12px;padding:0;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Payments</div>
+<div id="stripeNotConnected">
+<div style="font-size:11.5px;color:rgba(255,255,255,.4);margin-bottom:12px;line-height:1.6;">Accept card payments via a shareable link — money goes straight to your bank. Platform fee: <strong style="color:rgba(255,255,255,.7);">1% on Pro &amp; Team, 2% on Starter</strong>.</div>
+<button id="stripeConnectBtn" onclick="connectStripe()" style="width:100%;padding:11px 16px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-stripe-logo" style="font-size:15px;"></i> Set up payments with Stripe</button>
+</div>
+<div id="stripeConnectedStatus" style="display:none;">
+<div style="display:flex;align-items:center;gap:8px;background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.2);border-radius:8px;padding:10px 13px;">
+<i class="ph ph-check-circle" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
+<div>
+<div style="font-size:12.5px;font-weight:700;color:#5DCAA5;">Payments connected</div>
+<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Customers can pay via your links. 1% fee per transaction.</div>
+</div>
+</div>
+</div>
+<div id="stripePendingStatus" style="display:none;">
+<div style="display:flex;align-items:center;gap:8px;background:rgba(255,185,0,.07);border:1px solid rgba(255,185,0,.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
+<i class="ph ph-warning" style="font-size:16px;color:#f5a623;flex-shrink:0;"></i>
+<div>
+<div style="font-size:12.5px;font-weight:700;color:#f5a623;">Stripe setup incomplete</div>
+<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Finish verifying your account to accept payments.</div>
+</div>
+</div>
+<button onclick="connectStripe()" style="width:100%;padding:9px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:#f5a623;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Continue Stripe setup →</button>
+</div>
+</div>
 <div class="settings-body">
 <div style="margin-bottom:18px;">
 <div class="settings-section-title" style="margin-bottom:14px;"><i class="ph ph-truck" style="font-size:12px;"></i> Load costs (before markup)</div>
@@ -2343,33 +2379,7 @@ localStorage.setItem('installBannerDismissed','1');
 <button class="settings-save-btn" id="settingsSaveBtn" onclick="saveSettings()">Save settings</button>
 </div>
 
-<!-- PAYMENTS SECTION (Pro/Team only) -->
-<div id="stripeSettingsSection" style="display:none;border-top:1px solid rgba(255,255,255,.07);padding:18px 18px 20px;">
-<div class="settings-section-title" style="border-bottom:none;padding-bottom:0;margin-bottom:12px;padding:0;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Payments</div>
-<div id="stripeNotConnected">
-<div style="font-size:11.5px;color:rgba(255,255,255,.4);margin-bottom:12px;line-height:1.6;">Accept card payments from customers via a shareable link. They pay on Stripe, money goes straight to your bank. We take 1% per transaction.</div>
-<button id="stripeConnectBtn" onclick="connectStripe()" style="width:100%;padding:11px 16px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-stripe-logo" style="font-size:15px;"></i> Set up payments with Stripe</button>
-</div>
-<div id="stripeConnectedStatus" style="display:none;">
-<div style="display:flex;align-items:center;gap:8px;background:rgba(93,202,165,.08);border:1px solid rgba(93,202,165,.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
-<i class="ph ph-check-circle" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
-<div>
-<div style="font-size:12.5px;font-weight:700;color:#5DCAA5;">Payments connected</div>
-<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Customers can pay via your links. 1% fee per transaction.</div>
-</div>
-</div>
-</div>
-<div id="stripePendingStatus" style="display:none;">
-<div style="display:flex;align-items:center;gap:8px;background:rgba(255,185,0,.07);border:1px solid rgba(255,185,0,.2);border-radius:8px;padding:10px 13px;margin-bottom:10px;">
-<i class="ph ph-warning" style="font-size:16px;color:#f5a623;flex-shrink:0;"></i>
-<div>
-<div style="font-size:12.5px;font-weight:700;color:#f5a623;">Stripe setup incomplete</div>
-<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">Finish verifying your account to accept payments.</div>
-</div>
-</div>
-<button onclick="connectStripe()" style="width:100%;padding:9px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.3);color:#f5a623;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Continue Stripe setup →</button>
-</div>
-</div>
+<!-- PAYMENTS SECTION moved to top of settings for visibility -->
 
 </div>
 </div>
@@ -2396,6 +2406,7 @@ localStorage.setItem('installBannerDismissed','1');
 <input type="text" id="pmLinkInput" readonly style="flex:1;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-size:12px;color:rgba(255,255,255,.7);outline:none;min-width:0;"/>
 <button onclick="copyPaymentLink()" id="pmCopyBtn" style="padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:white;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);white-space:nowrap;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">Copy</button>
 </div>
+<button id="pmTextBtn" onclick="textPaymentLink()" style="display:none;width:100%;padding:11px;background:var(--green);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-chat-circle-text" style="font-size:14px;"></i> Text link to customer</button>
 <button id="pmShareBtn" onclick="sharePaymentLink()" style="display:none;width:100%;padding:11px;background:rgba(93,202,165,.1);border:1px solid rgba(93,202,165,.25);color:#5DCAA5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;"><i class="ph ph-share-network" style="font-size:14px;"></i> Share link</button>
 <div style="text-align:center;">
 <img id="pmQrCode" src="" alt="QR Code" style="width:160px;height:160px;border-radius:10px;border:1px solid rgba(255,255,255,.1);"/>
@@ -2404,7 +2415,12 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div id="pmActions">
 <button onclick="generatePaymentLink()" id="pmCreateBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-link" style="font-size:15px;"></i> Create payment link</button>
-<div style="font-size:10.5px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;">1% platform fee · Powered by Stripe</div>
+<div id="pmFeeNote" style="font-size:10.5px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;">Powered by Stripe</div>
+<div style="display:flex;align-items:center;gap:8px;margin:14px 0 11px;"><div style="flex:1;height:1px;background:rgba(255,255,255,.08);"></div><div style="font-size:9.5px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;">or mark as paid</div><div style="flex:1;height:1px;background:rgba(255,255,255,.08);"></div></div>
+<div style="display:flex;gap:7px;">
+<button onclick="markPaidManual('cash')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-money" style="font-size:13px;"></i> Cash</button>
+<button onclick="markPaidManual('check')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-receipt" style="font-size:13px;"></i> Check</button>
+</div>
 </div>
 </div>
 </div>
@@ -2427,6 +2443,12 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="crm-quoted-label">Job quote</div>
 <div class="crm-quoted-price" id="crmQuotedPrice">—</div>
 <div class="crm-quoted-detail" id="crmQuotedDetail"></div>
+<div style="margin-top:11px;">
+<label for="crmFinalPrice" style="display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45);margin-bottom:5px;">Price to send</label>
+<input type="text" id="crmFinalPrice" class="crm-input" placeholder="e.g. $275" onchange="saveFinalPrice()" style="width:100%;box-sizing:border-box;"/>
+<div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;">Set one price to send the customer instead of a range.</div>
+</div>
+<button id="crmSendBtn" onclick="crmSend()" style="margin-top:12px;width:100%;padding:9px;background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-paper-plane-tilt" style="font-size:14px;"></i> Text quote to customer</button>
 </div>
 <div id="crmRepeatBanner" style="display:none;align-items:center;gap:9px;background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.22);border-radius:var(--r-sm);padding:10px 13px;margin-bottom:14px;">
 <i class="ph ph-arrows-clockwise" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
@@ -2442,6 +2464,10 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="crm-field">
 <label for="crmPhone">Phone number</label>
 <input type="tel" class="crm-input" id="crmPhone" placeholder="(507) 555-0100" oninput="checkRepeatCustomer(crmJobId,document.getElementById('crmName').value,this.value)"/>
+</div>
+<div class="crm-field">
+<label for="crmEmail">Email <span style="font-weight:400;color:rgba(255,255,255,.35);text-transform:none;letter-spacing:0;">— for the Stripe receipt</span></label>
+<input type="email" class="crm-input" id="crmEmail" placeholder="customer@email.com" autocomplete="off"/>
 </div>
 <div class="crm-field">
 <label for="crmAddress">Job address</label>
@@ -2553,29 +2579,28 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-card" id="pw-starter-card" onclick="selectPaywallPlan('starter')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan('starter');}" role="button" tabindex="0" aria-label="Select Starter plan" style="cursor:pointer;">
 <div class="pricing-plan">Starter</div>
 <div class="pricing-price" id="pw-starter-price">$29<span>/mo</span></div>
-<div class="pricing-desc" id="pw-starter-desc">Manual calculator with everything you need to price jobs confidently.</div>
+<div class="pricing-desc" id="pw-starter-desc">Price, quote, get paid, and track every job — solo.</div>
 <ul class="pricing-features">
-<li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
-<li class="pf"><span class="chk">✓</span> AI Photo Quoting</li>
-<li class="pf"><span class="chk">✓</span> Special item surcharges</li>
-<li class="pf"><span class="chk">✓</span> Send receipts via text</li>
-<li class="pf"><span class="chk">✓</span> Job history & tracking</li>
-<li class="pf"><span class="chk">✓</span> Basic CRM — name, phone & address per job</li>
-<li class="pf"><span class="chk">✓</span> Trailer dimension calculator</li>
-<li class="pf"><span class="chk">✓</span> Custom costs & load rates</li>
+<li class="pf"><span class="chk">✓</span> Pricing calculator + AI Photo Quoting</li>
+<li class="pf"><span class="chk">✓</span> Text branded quotes &amp; set one final price</li>
+<li class="pf"><span class="chk">✓</span> Collect card payments — 2% fee</li>
+<li class="pf"><span class="chk">✓</span> Auto Stripe receipts + paid/unpaid tracking</li>
+<li class="pf"><span class="chk">✓</span> Job history with outcome tracking</li>
+<li class="pf"><span class="chk">✓</span> Basic CRM — name, phone, email &amp; address</li>
+<li class="pf"><span class="chk">✓</span> Trailer calc, custom costs &amp; special items</li>
 </ul>
 </div>
 <div class="pricing-card featured" id="pw-pro-card" onclick="selectPaywallPlan('pro')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan('pro');}" role="button" tabindex="0" aria-label="Select Pro plan" style="cursor:pointer;">
 <div class="pricing-badge">Most Popular</div>
 <div class="pricing-plan">Pro</div>
 <div class="pricing-price" id="pw-pro-price">$59<span>/mo</span></div>
-<div class="pricing-desc" id="pw-pro-desc">Everything in Starter plus advanced CRM & Analytics.</div>
+<div class="pricing-desc" id="pw-pro-desc">Everything in Starter, a lower 1% fee, plus the full dashboard &amp; CRM.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-<li class="pf"><span class="chk chk-green">✓</span> Advanced CRM, dashboard & scheduling</li>
-<li class="pf"><span class="chk chk-green">✓</span> Plan My Day with dump stop</li>
-<li class="pf"><span class="chk chk-green">✓</span> Quoted vs. actual tracking</li>
-<li class="pf"><span class="chk chk-green">✓</span> Analytics & insights</li>
+<li class="pf"><span class="chk chk-green">✓</span> Lower 1% payment fee</li>
+<li class="pf"><span class="chk chk-green">✓</span> Dashboard + searchable customer directory</li>
+<li class="pf"><span class="chk chk-green">✓</span> Cold-lead recovery &amp; scheduling</li>
+<li class="pf"><span class="chk chk-green">✓</span> Plan My Day, analytics &amp; CSV export</li>
 </ul>
 </div>
 <div class="pricing-card" id="pw-team-card" onclick="selectPaywallPlan(teamSizeIs10?'team10':'team')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPaywallPlan(teamSizeIs10?'team10':'team');}" role="button" tabindex="0" aria-label="Select Team plan" style="cursor:pointer;border-color:rgba(93,202,165,.25);">
@@ -2682,6 +2707,24 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="dash-body">
 <div class="dash-welcome" id="dashWelcome" data-aos="fade-up"></div>
 <div class="dash-kpi-grid" id="dashKpiGrid" data-aos="fade-up"></div>
+<!-- Customer search -->
+<div class="dash-card" data-aos="fade-up" style="margin-bottom:18px;">
+<div class="dash-card-title"><i class="ph ph-address-book" style="font-size:12px;color:#5DCAA5;"></i> Customers <span id="custSearchCount" style="margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.38);text-transform:none;"></span><button onclick="exportCustomersCSV()" title="Export customers to CSV" style="background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.5);border-radius:6px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);text-transform:none;letter-spacing:0;display:inline-flex;align-items:center;gap:5px;margin-left:10px;" onmouseover="this.style.color='#5DCAA5';this.style.borderColor='rgba(26,158,114,.4)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='var(--d-border)'"><i class="ph ph-download-simple" style="font-size:12px;"></i> Export</button></div>
+<div id="followUpBanner" style="display:none;"></div>
+<div style="position:relative;margin-bottom:14px;">
+<i class="ph ph-magnifying-glass" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:rgba(255,255,255,.3);pointer-events:none;"></i>
+<input type="text" id="custSearchInput" oninput="renderCustomerSearch()" placeholder="Search by name, phone, address, or notes…" aria-label="Search customers by name, phone, address, or notes" autocomplete="off" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--d-border);border-radius:var(--r-md);padding:11px 13px 11px 38px;color:#fff;font-size:13px;font-family:var(--font-sans);outline:none;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(26,158,114,.5)'" onblur="this.style.borderColor='var(--d-border)'"/>
+</div>
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+<div id="custFilterChips" style="display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0;"></div>
+<select id="custSort" onchange="setCustSort(this.value)" aria-label="Sort customers" style="flex-shrink:0;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.6);border-radius:var(--r-sm);padding:6px 9px;font-size:11px;font-weight:600;font-family:var(--font-sans);cursor:pointer;outline:none;color-scheme:dark;">
+<option value="recent">Most recent</option>
+<option value="value">Highest value</option>
+<option value="name">Name A–Z</option>
+</select>
+</div>
+<div id="custSearchResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;"></div>
+</div>
 <div class="dash-grid">
 <!-- Calendar -->
 <div class="dash-card" data-aos="fade-up">
@@ -2914,7 +2957,7 @@ const elements=stripe.elements();
 cardComplete=false;
 const pr=stripe.paymentRequest({country:'US',currency:'usd',total:{label:"Wood's Waste Pro — Free Trial (no charge today)",amount:100},requestPayerName:true,requestPayerEmail:true,requestPayerPhone:true});
 const prButton=elements.create('paymentRequestButton',{paymentRequest:pr,style:{paymentRequestButton:{type:'default',theme:'dark',height:'44px'}}});
-pr.canMakePayment().then(result=>{const wrap=document.getElementById('prButtonWrap');if(result&&result.applePay){wrap.style.display='block';prButton.mount('#prButtonElement');}else{wrap.style.display='none';}});
+pr.canMakePayment().then(result=>{const wrap=document.getElementById('prButtonWrap');if(!wrap)return;if(result&&result.applePay){wrap.style.display='block';prButton.mount('#prButtonElement');}else{wrap.style.display='none';}});
 pr.on('paymentmethod',async(ev)=>{window._pendingPaymentMethodId=ev.paymentMethod.id;const nameParts=(ev.payerName||'').split(' ');if(!document.getElementById('m-first').value&&nameParts[0])document.getElementById('m-first').value=nameParts[0];if(!document.getElementById('m-last').value&&nameParts[1])document.getElementById('m-last').value=nameParts[1]||'';if(!document.getElementById('m-email').value&&ev.payerEmail)document.getElementById('m-email').value=ev.payerEmail;if(!document.getElementById('m-phone').value&&ev.payerPhone)document.getElementById('m-phone').value=ev.payerPhone;ev.complete('success');cardComplete=true;showToast('✓ Apple Pay authorized — fill in remaining fields');});
 window._signupPR=pr;
 }catch(e){console.warn('Stripe:',e.message);}
@@ -3073,7 +3116,7 @@ if(synced>0)showToast('✓ Synced '+synced+' offline job'+(synced!==1?'s':''));
 // and preserves local-only jobs that haven't synced yet.
 // localSnap is optional; if omitted, reads current localStorage.
 function mergeJobHistory(serverJobs,localSnap){
-const local=localSnap||JSON.parse(localStorage.getItem('ww_history')||'[]');
+let local=localSnap;if(!local){try{local=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){local=[];}}
 const merged=serverJobs.map(sj=>{
 const lj=local.find(j=>String(j.id)===String(sj.id));
 if(lj?.actual&&(!sj.actual||(lj.actual.charged&&!sj.actual.charged)))return{...sj,actual:lj.actual};
@@ -3375,7 +3418,7 @@ const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.t
 if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
 saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
 applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
-const _loginSnap=JSON.parse(localStorage.getItem('ww_history')||'[]');
+let _loginSnap=[];try{_loginSnap=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){}
 // Show splash immediately — covers the modal/marketing page transition with no gap
 document.getElementById('modalOverlay').classList.remove('open');
 document.body.style.overflow='';
@@ -3514,7 +3557,7 @@ function recalc(){
 const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
 if(!totalQty){document.getElementById('calcFinalPrice').textContent='Select a load size';document.getElementById('calcBreakdown').style.display='none';syncStickyBar();return;}
 const markup=parseInt(document.getElementById('calcMarkup').value)/100;
-const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
+const miles=Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours=Math.max(0,parseFloat(document.getElementById('calcHours').value)||0);
 const driveRate=userPricing.driveRate||1.5,laborRate=userPricing.laborRate||35;
 const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
 let specialsCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])specialsCost+=Number(specialSrc[k].fee)*qty||0;});
@@ -3548,6 +3591,8 @@ document.getElementById('bd-labor').textContent='+$'+laborCost+' ('+hours+'hr ×
 document.getElementById('bd-cost').textContent='$'+baseLow+(baseLow!==baseHigh?'–$'+baseHigh:'');
 document.getElementById('bd-markup-label').textContent='+ '+(markup*100)+'% markup =';
 document.getElementById('bd-quote').textContent='$'+quoteLow+(quoteLow!==quoteHigh?'–$'+quoteHigh:'');
+const profitLow=quoteLow-baseLow,profitHigh=quoteHigh-baseHigh;
+document.getElementById('bd-profit').textContent='$'+profitLow.toLocaleString()+(profitLow!==profitHigh?'–$'+profitHigh.toLocaleString():'');
 const dt=document.getElementById('driveToggle');if(dt)dt.classList.toggle('active',(driveCost>0||laborCost>0));
 syncStickyBar();
 }
@@ -3578,11 +3623,11 @@ const activeSpecials=Object.keys(selectedSpecials).filter(k=>selectedSpecials[k]
 const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
 const loadSummary=Object.entries(loadQtys).filter(([k,q])=>q>0).map(([k,q])=>q>1?q+'× '+loadNames[k]:loadNames[k]).join(' + ')||'Unknown';
 const primaryLoad=Object.entries(loadQtys).filter(([k,q])=>q>0).sort((a,b)=>b[1]-a[1])[0]?.[0]||'minimum';
-const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:parseFloat(document.getElementById('calcMiles').value)||0,hours:parseFloat(document.getElementById('calcHours').value)||0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
+const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours:Math.max(0,parseFloat(document.getElementById('calcHours').value)||0),markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
 jobHistory.unshift(entry);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
 persistHistory();renderHistory();showToast('✓ Job saved to history');
 if(session.token){
-const miles=parseFloat(document.getElementById('calcMiles').value)||0,hours=parseFloat(document.getElementById('calcHours').value)||0;
+const miles=Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours=Math.max(0,parseFloat(document.getElementById('calcHours').value)||0);
 let sCost=0;Object.keys(selectedSpecials).forEach(k=>{const qty=selectedSpecials[k]||0;if(qty>0&&specialSrc[k])sCost+=Number(specialSrc[k].fee)*qty||0;});
 const dCost=Math.round(miles*2*(userPricing.driveRate||1.5)),lCost=Math.round(hours*(userPricing.laborRate||35));
 const load=userPricing.loads[primaryLoad]||{low:0,high:0};
@@ -3898,7 +3943,7 @@ row.innerHTML = `
 container.appendChild(row);
 });
 }
-function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];}renderHistory();refreshInsightsBtn();}
+function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
 async function clearHistory(){
 if(!confirm('Clear all job history?'))return;
@@ -3915,19 +3960,38 @@ if(!jobHistory.length){list.innerHTML='<div class="history-empty">No saved jobs 
 const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
 const statusClass={quoted:'crm-status-quoted',scheduled:'crm-status-scheduled',completed:'crm-status-completed',cancelled:'crm-status-cancelled'};
 const statusLabel={quoted:'Quoted',scheduled:'Scheduled',completed:'Completed',cancelled:'Cancelled'};
-list.innerHTML=jobHistory.map(j=>{
+// results summary — same outcome data the Pro dashboard uses, surfaced here so Starter users get it too
+const logged=jobHistory.filter(j=>j.actual&&j.actual.charged);
+let summary='';
+if(logged.length){
+const rev=logged.reduce((s,j)=>s+j.actual.charged,0);
+const avg=Math.round(rev/logged.length);
+const wins=logged.filter(j=>{const m=priceMid(jobQuotePrice(j));return m&&j.actual.charged>=m;}).length;
+const winPct=Math.round(wins/logged.length*100);
+const cell=(label,val)=>`<div style="flex:1;min-width:0;text-align:center;"><div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#fff;letter-spacing:-.5px;">${val}</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-top:2px;">${label}</div></div>`;
+summary=`<div style="display:flex;gap:6px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.18);border-radius:var(--r-md);padding:12px 8px;margin-bottom:12px;">${cell('Jobs done',logged.length)}${cell('Earned','$'+rev.toLocaleString())}${cell('Avg job','$'+avg.toLocaleString())}${cell('Hit quote',winPct+'%')}</div>`;
+}
+list.innerHTML=summary+jobHistory.map(j=>{
 const hasCrm=j.crm&&(j.crm.name||j.crm.phone||j.crm.address);
 const statusBadge=j.crm?.status?`<span class="crm-status-badge ${statusClass[j.crm.status]||'crm-status-quoted'}">${statusLabel[j.crm.status]||j.crm.status}</span>`:'';
 const customerInfo=hasCrm?`<div class="crm-customer-info">${[j.crm.name,j.crm.phone,j.crm.address].filter(Boolean).map(escapeHtml).join(' · ')}</div>`:'';
+const isLogged=j.actual&&j.actual.charged;
+let resultLine='';
+if(isLogged){
+const mid=priceMid(jobQuotePrice(j)),diff=Math.round(j.actual.charged-mid),dcol=diff>=0?'#5DCAA5':'#E0883B';
+resultLine=`<div style="margin-top:7px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:7px 9px;"><i class="ph ph-check-circle" style="color:#5DCAA5;font-size:14px;flex-shrink:0;"></i><div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.4;">Charged <strong style="color:#fff;">$${j.actual.charged.toLocaleString()}</strong>${mid?` · <span style="color:${dcol};font-weight:700;">${diff>=0?'+':'−'}$${Math.abs(diff).toLocaleString()}</span> vs quote`:''}${j.actual.hours?` · ${j.actual.hours}hr`:''}</div></div>`;
+}
 return `<div class="history-item">
-     <div class="history-item-top"><div class="history-item-price">${j.price}</div><div class="history-item-time">${j.ts||''}</div></div>
+     <div class="history-item-top"><div class="history-item-price">${jobQuotePrice(j)}</div><div class="history-item-time">${j.ts||''}</div></div>
      <div class="history-item-detail">${j.loadSummary||ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.map(escapeHtml).join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div>
-     <div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span>${statusBadge}${j.actual?.charged?'<span class="history-item-markup" style="background:rgba(26,158,114,.12);color:#5DCAA5;margin-left:4px;">✓ logged</span>':''}</div>
+     <div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span>${statusBadge}${paymentBadge(j)}</div>
      ${customerInfo}
+     ${resultLine}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px;">
        <button onclick="event.stopPropagation();openCrm(${j.id})" style="background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.35);border-radius:5px;padding:5px;font-size:10.5px;cursor:pointer;font-family:var(--font-sans);transition:all .15s;" onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">${hasCrm?'Edit customer':'Add customer →'}</button>
-       ${!j.actual?.durationFormatted?`<button onclick="event.stopPropagation();openActual(${j.id})" style="background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.35);border-radius:5px;padding:5px;font-size:10.5px;cursor:pointer;font-family:var(--font-sans);transition:all .15s;" onmouseover="this.style.background='rgba(255,255,255,.07)'" onmouseout="this.style.background='rgba(255,255,255,.03)'">How'd it go? →</button>`:''}
+       <button onclick="event.stopPropagation();openActual(${j.id})" style="background:${isLogged?'rgba(26,158,114,.08)':'rgba(255,255,255,.03)'};border:1px solid ${isLogged?'rgba(26,158,114,.28)':'var(--d-border)'};color:${isLogged?'#5DCAA5':'rgba(255,255,255,.35)'};border-radius:5px;padding:5px;font-size:10.5px;cursor:pointer;font-family:var(--font-sans);transition:all .15s;">${isLogged?'Edit outcome':'How\'d it go? →'}</button>
      </div>
+     ${session.stripeConnected?`<button onclick="event.stopPropagation();openPaymentModal(${j.id})" style="margin-top:5px;width:100%;padding:6px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:5px;font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
      <button onclick="event.stopPropagation();deleteJob(${j.id})" style="margin-top:5px;width:100%;background:none;border:1px solid rgba(255,80,80,.15);color:rgba(255,80,80,.35);border-radius:5px;padding:5px;font-size:10.5px;cursor:pointer;font-family:var(--font-sans);transition:all .15s;" onmouseover="this.style.background='rgba(255,80,80,.06)';this.style.color='rgba(255,80,80,.65)'" onmouseout="this.style.background='none';this.style.color='rgba(255,80,80,.35)'">Delete job</button>
    </div>`;
 }).join('');
@@ -3980,16 +4044,20 @@ document.getElementById('crmDateField').style.display=status==='scheduled'?'bloc
 function openCrm(jobId){
 const job=jobHistory.find(j=>j.id===jobId);if(!job)return;crmJobId=jobId;
 document.getElementById('crmScheduleLock').style.display=isPro()?'none':'flex';
-document.getElementById('crmQuotedPrice').textContent=job.price;
+document.getElementById('crmQuotedPrice').textContent=jobQuotePrice(job);
 const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
 const parts=[ll[job.load]||job.load];if(job.specials&&job.specials.length)parts.push(job.specials.join(', '));if(job.miles)parts.push(job.miles+' mi');
 document.getElementById('crmQuotedDetail').textContent=parts.join(' · ');
 document.getElementById('crmName').value=job.crm?.name||'';
 document.getElementById('crmPhone').value=job.crm?.phone||'';
+document.getElementById('crmEmail').value=job.crm?.email||'';
 document.getElementById('crmAddress').value=job.crm?.address||'';
 document.getElementById('crmStatus').value=job.crm?.status||'quoted';
 document.getElementById('crmNotes').value=job.crm?.notes||'';
 document.getElementById('crmDateTime').value=job.crm?.dateTime||'';
+document.getElementById('crmFinalPrice').value=job.finalPrice||'';
+const _sb=document.getElementById('crmSendBtn');
+if(_sb){const done=job.crm&&job.crm.status==='completed';_sb.innerHTML=done?'<i class="ph ph-receipt" style="font-size:14px;"></i> Send receipt to customer':'<i class="ph ph-paper-plane-tilt" style="font-size:14px;"></i> Text quote to customer';}
 toggleCrmDate();
 checkRepeatCustomer(jobId, job.crm?.name||'', job.crm?.phone||'');
 document.getElementById('crmPanel').classList.add('open');
@@ -4011,11 +4079,7 @@ if(normName.length>=2&&jName&&jName===normName)return true;
 return false;
 });
 if(matches.length===0){banner.style.display='none';return;}
-const total=matches.reduce((sum,j)=>{
-if(j.actual?.charged)return sum+j.actual.charged;
-const parts=j.price.replace(/[^0-9]/g,' ').trim().split(/\s+/).map(Number).filter(Boolean);
-return sum+(parts.length>=2?(parts[0]+parts[1])/2:parts[0]||0);
-},0);
+const total=matches.reduce((sum,j)=>sum+jobAvgValue(j),0);
 const word=matches.length===1?'job':'jobs';
 document.getElementById('crmRepeatSub').textContent=`${matches.length} prior ${word} · $${Math.round(total).toLocaleString()} total`;
 banner.style.display='flex';
@@ -4026,6 +4090,7 @@ const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
 job.crm={
 name:document.getElementById('crmName').value.trim(),
 phone:document.getElementById('crmPhone').value.trim(),
+email:document.getElementById('crmEmail').value.trim(),
 address:document.getElementById('crmAddress').value.trim(),
 status:document.getElementById('crmStatus').value,
 dateTime:document.getElementById('crmDateTime').value||null,
@@ -4055,7 +4120,9 @@ const charged=parseFloat(document.getElementById('actualCharged').value)||null;
 const hours=parseFloat(document.getElementById('actualHours').value)||null;
 const notes=document.getElementById('actualNotes').value.trim();
 job.actual={...job.actual,charged,hours,notes,loggedAt:new Date().toISOString()};
-persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();if(wasDashOpen){renderCompletedJobs();renderDashAnalytics();}
+if(charged){if(!job.crm)job.crm={};job.crm.status='completed';}   // logged an outcome = the job is done
+persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
+if(wasDashOpen){renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();}
 if(session.token){
 const _qp2={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
 api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
@@ -4063,6 +4130,27 @@ api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
 }
 // ── STRIPE PAYMENTS ──────────────────────────────────────
 let _pmJobId=null,_pmLink=null;
+// payment status pill — shown on completed jobs: Stripe-paid / manually-paid / unpaid
+function paymentBadge(j){
+if(!(j.crm&&j.crm.status==='completed'))return '';
+const p=j.payment;
+if(p&&p.paid){
+if(p.method==='stripe')return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a09eff;border:1px solid rgba(99,91,255,.4);border-radius:20px;padding:2px 7px;margin-left:4px;"><i class="ph ph-credit-card" style="font-size:10px;"></i> Paid · Stripe</span>';
+return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5DCAA5;border:1px solid rgba(26,158,114,.4);border-radius:20px;padding:2px 7px;margin-left:4px;"><i class="ph ph-money" style="font-size:10px;"></i> Paid · '+escapeHtml(p.method||'other')+'</span>';
+}
+return '<span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#E0883B;border:1px solid rgba(224,136,59,.4);border-radius:20px;padding:2px 7px;margin-left:4px;">Unpaid</span>';
+}
+function markPaidManual(method){
+const job=jobHistory.find(j=>j.id===_pmJobId);if(!job)return;
+const amt=parseFloat(document.getElementById('pmAmount').value)||job.actual?.charged||null;
+job.payment={paid:true,method:method,amount:amt,at:new Date().toISOString()};
+if(amt&&!(job.actual&&job.actual.charged))job.actual={...job.actual,charged:amt,loggedAt:new Date().toISOString()};
+if(!job.crm)job.crm={};job.crm.status='completed';
+persistHistory();renderHistory();
+if(document.getElementById('dashboardPage').style.display!=='none'){renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();}
+closePaymentModal();showToast('✓ Marked paid · '+method);
+if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
+}
 function openPaymentModal(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
 _pmJobId=jobId;_pmLink=null;
@@ -4070,6 +4158,7 @@ const name=job.crm?.name||'Customer';
 const address=job.crm?.address||'';
 document.getElementById('pmJobInfo').innerHTML=`<span style="color:rgba(255,255,255,.7);font-weight:600;">${name}</span>${address?`<span style="color:rgba(255,255,255,.35);"> · ${address}</span>`:''}`;
 document.getElementById('pmAmount').value=job.actual?.charged||'';
+const _fn=document.getElementById('pmFeeNote');if(_fn)_fn.textContent=(isPro()?'1%':'2%')+' platform fee · Powered by Stripe';
 document.getElementById('pmLinkSection').style.display='none';
 document.getElementById('pmActions').style.display='block';
 document.getElementById('pmCreateBtn').disabled=false;
@@ -4085,8 +4174,28 @@ document.body.style.overflow='';
 }
 function updatePmFee(){
 const amt=parseFloat(document.getElementById('pmAmount').value)||0;
-const fee=amt>0?Math.max(0.01,Math.round(amt*0.01*100)/100):0;
-document.getElementById('pmFeeNote').textContent=amt>0?`You receive $${(amt-fee).toFixed(2)} after 1% platform fee`:'';
+const rate=isPro()?0.01:0.02,pct=isPro()?'1%':'2%';
+const fee=amt>0?Math.max(0.01,Math.round(amt*rate*100)/100):0;
+document.getElementById('pmFeeNote').textContent=amt>0?`You receive $${(amt-fee).toFixed(2)} after ${pct} platform fee`:'';
+}
+function textPaymentLink(){
+const job=jobHistory.find(j=>String(j.id)===String(_pmJobId));
+const phone=(job&&job.crm&&job.crm.phone||'').replace(/\D/g,'');
+if(!phone){showToast('No phone on file for this customer',true);return;}
+if(!_pmLink){showToast('Create the link first',true);return;}
+const amt=document.getElementById('pmAmount').value;
+const name=(job.crm&&job.crm.name||'').trim();
+const lines=[
+'💳 '+(session.businessName||'Payment'),
+'',
+'Hi'+(name?' '+name:'')+'! Here\'s your secure payment link'+(amt?' for $'+amt:'')+':',
+'',
+_pmLink,
+'',
+'Pay with Apple Pay, Google Pay, or card — thanks for your business!'
+].join('\n');
+window.open('sms:'+phone+'?body='+encodeURIComponent(lines));
+showToast('✓ Payment text opened — tap send');
 }
 async function generatePaymentLink(){
 const amt=parseFloat(document.getElementById('pmAmount').value);
@@ -4096,13 +4205,16 @@ const btn=document.getElementById('pmCreateBtn');
 btn.disabled=true;btn.innerHTML='Creating link...';
 try{
 const desc=(job?.crm?.name?job.crm.name+' — ':'')+'Junk Removal Service';
-const res=await api({action:'createPaymentLink',token:session.token,amount:amt,description:desc,jobId:String(_pmJobId)});
+const res=await api({action:'createPaymentLink',token:session.token,amount:amt,description:desc,jobId:String(_pmJobId),customerEmail:job?.crm?.email||'',customerName:job?.crm?.name||''});
 if(!res.success){showToast(res.error||'Could not create link',true);btn.disabled=false;btn.innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';return;}
 _pmLink=res.url;
 document.getElementById('pmLinkInput').value=_pmLink;
 document.getElementById('pmQrCode').src='https://api.qrserver.com/v1/create-qr-code/?size=160x160&color=ffffff&bgcolor=1a1a1a&data='+encodeURIComponent(_pmLink);
 document.getElementById('pmLinkSection').style.display='block';
 document.getElementById('pmActions').style.display='none';
+const _pjob=jobHistory.find(j=>String(j.id)===String(_pmJobId));
+const _ptb=document.getElementById('pmTextBtn');
+if(_ptb)_ptb.style.display=(_pjob&&_pjob.crm&&_pjob.crm.phone)?'flex':'none';
 if(navigator.share)document.getElementById('pmShareBtn').style.display='block';
 }catch(e){showToast('Could not reach server',true);btn.disabled=false;btn.innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';}
 }
@@ -4121,7 +4233,7 @@ const amt=document.getElementById('pmAmount').value;
 navigator.share({title:'Payment',text:`Hi${job?.crm?.name?' '+job.crm.name:''}! Here's your payment link for $${amt}: `,url:_pmLink}).catch(()=>{});
 }
 async function checkStripeStatus(){
-if(!session.token||!isPro())return;
+if(!session.token)return;   // payments available on all plans (tiered fee: Starter 2%, Pro/Team 1%)
 loadStripe().catch(()=>{}); // preload Stripe.js in the background so connected-account / payment flows are ready
 try{
 const res=await api({action:'stripeAccountStatus',token:session.token});
@@ -4132,8 +4244,7 @@ renderStripeSettings();
 }
 function renderStripeSettings(){
 const sec=document.getElementById('stripeSettingsSection');if(!sec)return;
-if(!isPro()){sec.style.display='none';return;}
-sec.style.display='block';
+sec.style.display='block';   // payments on all plans
 const isMember=session.role==='member';
 if(isMember){
 // Members see read-only status — no connect button
@@ -4162,6 +4273,57 @@ else showToast(res.error||'Could not connect to Stripe',true);
 if(btn){btn.disabled=false;btn.innerHTML='<i class="ph ph-stripe-logo" style="font-size:15px;"></i> Set up payments with Stripe';}
 }
 // ─────────────────────────────────────────────────────────
+
+function quoteSmsBody(job,name){
+const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'Junk removal'};
+const what=job.loadSummary||ll[job.load]||'Junk removal';
+return [
+'💬 '+(session.businessName||'Your Quote'),
+'─────────────────',
+'',
+'Hi'+(name?' '+name:'')+'! Here\'s your junk removal quote:',
+'',
+'🚛 '+what,
+job.specials&&job.specials.length?'   + '+job.specials.join(', '):'',
+job.miles?'📍 '+job.miles+' mi travel included':'',
+'',
+'💵 Your price: '+jobQuotePrice(job),
+'',
+'Ready to book? Reply or call/text this number and we\'ll get you on the schedule!',
+'',
+'— '+(session.businessName||'')
+].filter(Boolean).join('\n');
+}
+function crmSend(){
+const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+if(job.crm&&job.crm.status==='completed')sendReceiptForJob(job.id);
+else textQuote();
+}
+function saveFinalPrice(){
+const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+let fp=(document.getElementById('crmFinalPrice').value||'').trim();
+if(fp&&!/[a-zA-Z$]/.test(fp))fp='$'+fp;            // bare number -> add $
+job.finalPrice=(fp&&fp!==job.price)?fp:null;        // only an override when it differs from the calc range
+persistHistory();renderHistory();
+if(typeof renderCustomerSearch==='function'&&document.getElementById('dashboardPage')&&document.getElementById('dashboardPage').style.display!=='none')renderCustomerSearch();
+if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
+}
+function textQuote(){
+const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+const name=(document.getElementById('crmName').value||'').trim();
+const phone=(document.getElementById('crmPhone').value||'').replace(/\D/g,'');
+if(!phone){showToast('Add the customer\'s phone number first',true);document.getElementById('crmPhone').focus();return;}
+saveFinalPrice();                                   // capture any edit before sending
+window.open('sms:'+phone+'?body='+encodeURIComponent(quoteSmsBody(job,name)));
+showToast('✓ Quote opened — tap send');
+}
+function quickText(jobId){
+const job=jobHistory.find(j=>j.id===jobId);if(!job)return;
+const phone=(job.crm&&job.crm.phone||'').replace(/\D/g,'');
+if(!phone){showToast('No phone on file — open the customer to add one',true);return;}
+window.open('sms:'+phone+'?body='+encodeURIComponent(quoteSmsBody(job,(job.crm&&job.crm.name||'').trim())));
+showToast('✓ Quote opened — tap send');
+}
 
 function sendReceiptForJob(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
@@ -4602,9 +4764,9 @@ initPaywallStripe();
 
 function toggleNewCard() {
 usingNewCard = !usingNewCard;
-document.getElementById('paywallNewCardWrap').style.display = usingNewCard ? 'block' : 'none';
-document.getElementById('paywallCardOnFile').style.opacity = usingNewCard ? '0.4' : '1';
-document.getElementById('useNewCardToggle').textContent = usingNewCard ? 'Use card on file instead' : 'Use a different card';
+const _w=document.getElementById('paywallNewCardWrap');if(_w)_w.style.display=usingNewCard?'block':'none';
+const _cf=document.getElementById('paywallCardOnFile');if(_cf)_cf.style.opacity=usingNewCard?'0.4':'1';
+const _tg=document.getElementById('useNewCardToggle');if(_tg)_tg.textContent=usingNewCard?'Use card on file instead':'Use a different card';
 }
 
 async function initPaywallStripe() {
@@ -4668,9 +4830,9 @@ if (!res.success) {
 showBanner('paywallErr', res.error || 'Payment failed. Try a different card or text Griffin at (507) 298-1179.');
 if (res.requiresNewCard) {
 usingNewCard = true;
-document.getElementById('paywallNewCardWrap').style.display = 'block';
-document.getElementById('paywallCardOnFile').style.opacity = '0.4';
-document.getElementById('useNewCardToggle').textContent = 'Use card on file instead';
+const _w=document.getElementById('paywallNewCardWrap');if(_w)_w.style.display='block';
+const _cf=document.getElementById('paywallCardOnFile');if(_cf)_cf.style.opacity='0.4';
+const _tg=document.getElementById('useNewCardToggle');if(_tg)_tg.textContent='Use card on file instead';
 }
 return;
 }
@@ -4719,7 +4881,7 @@ if(billingYearly){
 document.getElementById('starterPrice').innerHTML='$290<span>/yr</span>';
 document.getElementById('starterDesc').innerHTML='Great value — get 2 months free vs monthly. Everything to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$590<span>/yr</span>';
-document.getElementById('proDesc').innerHTML='Best value — 2 months free. AI photo quoting + Insights all year long.';
+document.getElementById('proDesc').innerHTML='Best value — 2 months free. Dashboard, customer directory &amp; analytics all year.';
 document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$2,999':'$1,490')+'<span>/yr</span>';
 document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Best value for a large crew — 2 months free. Up to 10 operators all year.':'Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 document.getElementById('pricingNote').textContent='Billed once per year. 14-day free trial included. Cancel anytime before day 15.';
@@ -4730,7 +4892,7 @@ document.getElementById('teamBtn').onclick=function(){openModal('team-yearly');r
 document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
 document.getElementById('starterDesc').innerHTML='Manual calculator with everything you need to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
-document.getElementById('proDesc').innerHTML='Everything in Starter plus AI photo quoting — point, snap, price.';
+document.getElementById('proDesc').innerHTML='Everything in Starter + a lower 1% fee, the dashboard &amp; searchable customer directory.';
 document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
 document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Full Pro for up to 10 operators — 1 owner + 9 members.':'Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
 document.getElementById('pricingNote').textContent='14-day free trial on all plans. No card required to start. Cancel anytime.';
@@ -4953,7 +5115,10 @@ document.getElementById('dashboardPage').style.display='block';
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
 calCurrentDate=new Date();
+const csi=document.getElementById('custSearchInput');if(csi)csi.value='';custFilter='all';custSort='recent';
+const css=document.getElementById('custSort');if(css)css.value='recent';
 renderDashKpis();
+renderCustomerSearch();
 renderCalendar();
 renderUpcoming();
 renderCompletedJobs();
@@ -5058,6 +5223,148 @@ const msg=assigned.length===1?`Assigned to you: ${names[0]}`:`${assigned.length}
 showToast('📋 '+msg);
 }
 
+/* ── CUSTOMER SEARCH / DIRECTORY ── */
+let custFilter='all';
+let custSort='recent';
+function setCustFilter(f){custFilter=f;renderCustomerSearch();}
+function setCustSort(v){custSort=v;renderCustomerSearch();}
+function exportCustomersCSV(){
+const groups={};
+jobHistory.filter(j=>j.crm&&(j.crm.name||j.crm.phone||j.crm.address)).forEach(j=>{const k=customerKey(j);(groups[k]=groups[k]||[]).push(j);});
+const rows=Object.values(groups).map(jobs=>{
+jobs.sort((a,b)=>new Date(b.crm.savedAt||0)-new Date(a.crm.savedAt||0)||(b.id-a.id));
+const c=jobs[0].crm,total=jobs.reduce((s,j)=>s+jobAvgValue(j),0);
+return [c.name||'',c.phone||'',c.address||'',c.status||'quoted',jobs.length,Math.round(total),(c.savedAt||'').slice(0,10),(c.notes||'').replace(/\s+/g,' ').trim()];
+}).sort((a,b)=>(b[6]||'').localeCompare(a[6]||''));
+if(!rows.length){showToast('No customers to export yet',true);return;}
+const esc=v=>{v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+const csv=[['Name','Phone','Address','Status','Jobs','Total $','Last activity','Notes'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
+const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob);
+const a=document.createElement('a');a.href=url;a.download='woodswaste-customers-'+new Date().toISOString().slice(0,10)+'.csv';
+document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+showToast('✓ Exported '+rows.length+' customer'+(rows.length!==1?'s':''));
+}
+function customerKey(j){
+const ph=(j.crm&&j.crm.phone||'').replace(/\D/g,'');
+if(ph.length>=10)return 'p:'+ph;
+const nm=(j.crm&&j.crm.name||'').trim().toLowerCase();
+return nm?('n:'+nm):('id:'+j.id);
+}
+function priceNums(str){return ((str||'').replace(/,/g,'').match(/\d+(?:\.\d+)?/g)||[]).map(Number);}
+function priceMid(str){const v=priceNums(str);return v.length>=2?(v[0]+v[1])/2:(v[0]||0);}
+function jobQuotePrice(j){return (j&&j.finalPrice)||(j&&j.price)||'';}  // agreed final price if set, else the calc range
+function jobAvgValue(j){
+if(j.actual&&j.actual.charged)return j.actual.charged;
+return priceMid(jobQuotePrice(j));
+}
+function relTime(iso){
+if(!iso)return'';const d=new Date(iso);if(isNaN(d))return'';
+const days=Math.floor((Date.now()-d.getTime())/86400000);
+if(days<=0)return'today';if(days===1)return'yesterday';
+if(days<7)return days+'d ago';if(days<30)return Math.floor(days/7)+'w ago';
+if(days<365)return Math.floor(days/30)+'mo ago';return Math.floor(days/365)+'y ago';
+}
+const STALE_DAYS=3;
+function daysSince(iso){if(!iso)return 0;const d=new Date(iso);if(isNaN(d))return 0;return Math.floor((Date.now()-d.getTime())/86400000);}
+function isColdQuote(c){return (c.latest.crm.status||'quoted')==='quoted'&&daysSince(c.latest.crm.savedAt)>=STALE_DAYS;}
+const AV_COLORS=['#1A9E72','#3B82F6','#8B5CF6','#E0883B','#C9A24B','#D9536B','#2AA198'];
+function avatarColor(name){let h=0;const s=name||'?';for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return AV_COLORS[h%AV_COLORS.length];}
+function renderCustomerSearch(){
+const box=document.getElementById('custSearchResults');if(!box)return;
+const countEl=document.getElementById('custSearchCount');
+const q=(document.getElementById('custSearchInput').value||'').trim().toLowerCase();
+const qDigits=q.replace(/\D/g,'');
+const groups={};
+jobHistory.filter(j=>j.crm&&(j.crm.name||j.crm.phone||j.crm.address)).forEach(j=>{
+const k=customerKey(j);(groups[k]=groups[k]||[]).push(j);
+});
+let customers=Object.values(groups).map(jobs=>{
+jobs.sort((a,b)=>new Date(b.crm.savedAt||0)-new Date(a.crm.savedAt||0)||(b.id-a.id));
+return {latest:jobs[0],count:jobs.length,total:jobs.reduce((s,j)=>s+jobAvgValue(j),0)};
+});
+const totalCustomers=customers.length;
+// cold-lead follow-up nudge (from the full list, independent of current filter)
+const fb=document.getElementById('followUpBanner');
+if(fb){
+const cold=customers.filter(isColdQuote);
+if(cold.length){
+fb.style.display='block';
+fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:rgba(201,162,75,.1);border:1px solid rgba(201,162,75,.3);border-radius:var(--r-md);padding:11px 13px;margin-bottom:14px;">'+
+'<i class="ph ph-bell-ringing" style="font-size:18px;color:#C9A24B;flex-shrink:0;"></i>'+
+'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#C9A24B;">'+cold.length+' quote'+(cold.length!==1?'s':'')+' going cold</div>'+
+'<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;">Quoted '+STALE_DAYS+'+ days ago with no booking — a quick follow-up text wins jobs back.</div></div>'+
+'<button onclick="setCustFilter(\'quoted\')" style="flex-shrink:0;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:7px 12px;border-radius:var(--r-sm);background:#C9A24B;color:#0b0b0b;border:none;">Review →</button></div>';
+}else{fb.style.display='none';}
+}
+// status-filter chips with live counts
+const chipBox=document.getElementById('custFilterChips');
+if(chipBox){
+const statusOf=c=>c.latest.crm.status||'quoted';
+const counts={all:totalCustomers,quoted:0,scheduled:0,completed:0,lost:0};
+customers.forEach(c=>{const s=statusOf(c);if(counts[s]!==undefined)counts[s]++;});
+const chips=[['all','All'],['quoted','Quoted'],['scheduled','Scheduled'],['completed','Completed'],['lost','Lost']];
+const cc={all:'#5DCAA5',quoted:'#C9A24B',scheduled:'#5DCAA5',completed:'#5DCAA5',lost:'#c0392b'};
+chipBox.innerHTML=chips.filter(([k])=>k==='all'||counts[k]>0).map(([k,label])=>{
+const active=custFilter===k,col=cc[k];
+return '<button onclick="setCustFilter(\''+k+'\')" style="cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;transition:all .15s;'+
+(active?('background:'+col+';color:#0b0b0b;border:1px solid '+col+';'):('background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);border:1px solid var(--d-border);'))+'">'+label+' '+counts[k]+'</button>';
+}).join('');
+}
+if(custFilter!=='all')customers=customers.filter(c=>(c.latest.crm.status||'quoted')===custFilter);
+if(q){
+customers=customers.filter(c=>{
+const j=c.latest.crm;
+const hay=[j.name,j.phone,j.address,j.notes].filter(Boolean).join(' ').toLowerCase();
+const phoneMatch=qDigits.length>=3&&(j.phone||'').replace(/\D/g,'').includes(qDigits);
+return hay.includes(q)||phoneMatch;
+});
+}
+if(custSort==='value')customers.sort((a,b)=>b.total-a.total);
+else if(custSort==='name')customers.sort((a,b)=>(a.latest.crm.name||'~').toLowerCase().localeCompare((b.latest.crm.name||'~').toLowerCase()));
+else customers.sort((a,b)=>new Date(b.latest.crm.savedAt||0)-new Date(a.latest.crm.savedAt||0)||(b.latest.id-a.latest.id));
+const isQuery=q||custFilter!=='all';
+if(countEl)countEl.textContent=isQuery?(customers.length+' match'+(customers.length!==1?'es':'')):(totalCustomers+' total');
+if(!customers.length){
+if(totalCustomers===0){
+box.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:36px 22px;">'+
+'<div style="width:54px;height:54px;border-radius:50%;background:rgba(26,158,114,.12);border:1px solid rgba(26,158,114,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ph ph-address-book" style="font-size:24px;color:#5DCAA5;"></i></div>'+
+'<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">Your customer directory starts here</div>'+
+'<div style="font-size:12px;color:rgba(255,255,255,.45);max-width:330px;margin:0 auto 16px;line-height:1.5;">Every quote you save with a name or phone shows up here — searchable, sortable, and ready to follow up or re-quote in one tap.</div>'+
+'<button onclick="closeDashboard()" style="background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:inline-flex;align-items:center;gap:6px;"><i class="ph ph-calculator" style="font-size:14px;"></i> Quote your first job</button>'+
+'</div>';
+}else{
+const msg=q?('No customers match “'+escapeHtml(q)+'”.'):('No '+custFilter+' customers right now.');
+box.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:22px;color:rgba(255,255,255,.32);font-size:12px;">'+msg+'</div>';
+}
+return;
+}
+const shown=isQuery?customers:customers.slice(0,8);
+const sc={quoted:'#C9A24B',scheduled:'#5DCAA5',completed:'#5DCAA5',lost:'#c0392b'};
+box.innerHTML=shown.map(c=>{
+const j=c.latest.crm,st=j.status||'quoted',col=sc[st]||'rgba(255,255,255,.4)',rt=relTime(j.savedAt),cold=isColdQuote(c);
+const bd=cold?'rgba(201,162,75,.4)':'var(--d-border)';
+const initial=escapeHtml(((j.name||'').trim().charAt(0)||'?').toUpperCase()),avColor=avatarColor(j.name);
+const sub=[j.phone,j.address].filter(Boolean).map(escapeHtml).join(' · ');
+return '<div onclick="openCrm('+c.latest.id+')" role="button" tabindex="0" aria-label="Open customer '+escapeHtml(j.name||'Unnamed customer')+'" onkeydown="if((event.key===\'Enter\'||event.key===\' \')&&event.target===this){event.preventDefault();openCrm('+c.latest.id+');}" onfocus="this.style.borderColor=\'rgba(26,158,114,.5)\'" onblur="this.style.borderColor=\''+bd+'\'" style="cursor:pointer;outline:none;background:rgba(255,255,255,.025);border:1px solid '+bd+';border-radius:var(--r-md);padding:12px 13px;transition:all .15s;" onmouseover="this.style.background=\'rgba(26,158,114,.07)\';this.style.borderColor=\'rgba(26,158,114,.32)\'" onmouseout="this.style.background=\'rgba(255,255,255,.025)\';this.style.borderColor=\''+bd+'\'">'+
+'<div style="display:flex;align-items:center;gap:10px;">'+
+'<div aria-hidden="true" style="width:32px;height:32px;border-radius:50%;background:'+avColor+';color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+initial+'</div>'+
+'<div style="flex:1;min-width:0;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;"><div style="font-weight:700;color:#fff;font-size:13px;line-height:1.3;">'+escapeHtml(j.name||'Unnamed customer')+'</div>'+
+'<span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:'+col+';border:1px solid '+col+'55;border-radius:20px;padding:2px 7px;white-space:nowrap;flex-shrink:0;">'+st+'</span></div></div>'+
+(sub?'<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;line-height:1.35;">'+sub+'</div>':'')+
+'<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone?'<button onclick="event.stopPropagation();'+(st==='completed'?'sendReceiptForJob':'quickText')+'('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph '+(st==='completed'?'ph-receipt':'ph-paper-plane-tilt')+'" style="font-size:11px;"></i> '+(st==='completed'?'Send receipt':'Text quote')+'</button>':'')+'</div>';
+}).join('')+(!isQuery&&customers.length>8?'<div style="grid-column:1/-1;text-align:center;font-size:11px;color:rgba(255,255,255,.3);padding:6px;">Showing 8 most recent · search or filter to see all '+totalCustomers+'</div>':'');
+}
+
+// keyboard: "/" focuses customer search (when dashboard is open & not already typing), Esc clears it
+document.addEventListener('keydown',function(e){
+const dash=document.getElementById('dashboardPage');
+if(!dash||dash.style.display==='none')return;
+const tag=(e.target.tagName||'').toLowerCase();
+const typing=tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable;
+if(e.key==='/'&&!typing){const el=document.getElementById('custSearchInput');if(el){e.preventDefault();el.focus();}}
+else if(e.key==='Escape'&&e.target.id==='custSearchInput'){e.target.value='';renderCustomerSearch();e.target.blur();}
+});
+
 function renderUpcoming(){
 const now = new Date();
 
@@ -5107,7 +5414,7 @@ ${isMemberAssigned?`<div style="display:inline-flex;align-items:center;gap:5px;b
 <div class="upcoming-name">${escapeHtml(j.crm.name||'Customer')}</div>
 <div class="upcoming-detail">${escapeHtml(j.crm.address||'')}${j.crm.phone?' · '+escapeHtml(j.crm.phone):''}</div>
 <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
-${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="margin-top:7px;width:100%;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Get directions</button>`:''}
+${(j.crm.address||j.crm.phone)?`<div style="display:flex;gap:6px;margin-top:7px;">${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle-text" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
 <div id="timer-block-${j.id}" style="margin-top:10px;border:1px solid ${isRunning?'rgba(26,158,114,.45)':'var(--d-border)'};border-radius:var(--r-md);padding:11px 13px;background:${isRunning?'rgba(26,158,114,.07)':'rgba(255,255,255,.02)'};transition:all .2s;">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${isRunning?'#5DCAA5':'rgba(255,255,255,.32)'};">${isRunning?'Job in progress':'Job timer'}</div>
@@ -5213,7 +5520,7 @@ panel.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.8
 panel.innerHTML=`
 <div style="background:var(--d-surface);border-radius:18px;border:1px solid var(--d-border);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:modalIn .22s ease both;">
 <div style="padding:16px 18px;border-bottom:1px solid var(--d-border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d-surface);z-index:10;">
-<div style="font-family:var(--font-display);font-size:16px;font-weight:900;color:white;">Job complete <span style="font-size:12px;font-weight:500;color:#5DCAA5;margin-left:6px;">${formatElapsed(elapsed)}</span></div>
+<div style="font-family:var(--font-sans);font-size:16px;font-weight:700;color:white;">Job complete <span style="font-family:var(--font-num);font-size:12px;font-weight:600;color:#5DCAA5;margin-left:6px;">${formatElapsed(elapsed)}</span></div>
 <button onclick="document.getElementById('afterPhotoPanel').remove();renderUpcoming();" style="background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);width:27px;height:27px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
 </div>
 <div style="padding:18px;">
@@ -5311,9 +5618,10 @@ loggedAt:new Date().toISOString()
 persistHistory();
 const panel=document.getElementById('afterPhotoPanel');
 if(panel)panel.remove();
+renderHistory();
 renderCompletedJobs();
 renderUpcoming();
-if(wasDashOpen){renderDashAnalytics();}
+if(wasDashOpen){renderCustomerSearch();renderCalendar();renderDashAnalytics();}
 showToast('✓ Job marked complete');
 if(session.token){
 const _qp3={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
@@ -5327,7 +5635,7 @@ const _cdtStr=_cdt&&!isNaN(_cdt)?_cdt.toLocaleString('en-US',{month:'short',day:
 return `<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
 <div>
-<div style="font-size:13px;font-weight:700;color:white;">${escapeHtml(j.crm?.name||'Customer')}</div>
+<div style="font-size:13px;font-weight:700;color:white;">${escapeHtml(j.crm?.name||'Customer')}${paymentBadge(j)}</div>
 ${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;font-weight:600;">${_cdtStr}</div>`:''}
 <div style="font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1px;">${escapeHtml(j.crm?.address||'')}</div>
 </div>
@@ -5346,7 +5654,7 @@ ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,25
 <button onclick="openActual(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-pencil" style="font-size:12px;"></i> Edit outcome</button>
 <button onclick="openCrm(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-user" style="font-size:12px;"></i> Customer info</button>
 ${j.crm?.phone?`<button onclick="sendReceiptForJob(${j.id})" style="grid-column:1/-1;padding:7px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.25);color:#5DCAA5;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:12px;"></i> Send receipt</button>`:''}
-${(session.stripeConnected&&isPro())?`<button onclick="openPaymentModal(${j.id})" style="grid-column:1/-1;padding:7px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
+${session.stripeConnected?`<button onclick="openPaymentModal(${j.id})" style="grid-column:1/-1;padding:7px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
 </div>
 </div>`;
 }
