@@ -1910,14 +1910,14 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="margin-top:6px;background:var(--green);color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;">Select →</div>
 </div>
 </div>
-<div style="border:1.5px solid #5b6af0;border-radius:var(--r-lg);padding:14px 16px;background:linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%);">
+<div onclick="pickPlan('team')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('team');}" role="button" tabindex="0" aria-label="Select Team plan" style="border:1.5px solid #5b6af0;border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:background .18s;background:linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%);" onmouseover="this.style.background='rgba(91,106,240,0.08)'" onmouseout="this.style.background='linear-gradient(140deg,rgba(91,106,240,0.04) 0%,transparent 60%)'">
 <div style="display:flex;align-items:center;gap:14px;">
 <div style="flex:1;min-width:0;">
 <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);">Team</div>
 <div style="display:inline-flex;align-items:center;background:rgba(0,0,0,.07);border-radius:16px;padding:2px;gap:2px;">
-<button id="sp-team3-btn" onclick="setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:var(--black);color:white;transition:all .15s;">3</button>
-<button id="sp-team10-btn" onclick="setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(0,0,0,.4);transition:all .15s;">10</button>
+<button id="sp-team3-btn" onclick="event.stopPropagation();setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:var(--black);color:white;transition:all .15s;">3</button>
+<button id="sp-team10-btn" onclick="event.stopPropagation();setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(0,0,0,.4);transition:all .15s;">10</button>
 </div>
 <div style="font-size:8.5px;color:var(--gray);">seats</div>
 </div>
@@ -1925,7 +1925,7 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-team-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$149<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
-<div onclick="pickPlan('team')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('team');}" role="button" tabindex="0" aria-label="Select Team plan" style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;cursor:pointer;">Select →</div>
+<div onclick="event.stopPropagation();pickPlan('team')" style="margin-top:6px;background:#5b6af0;color:white;border-radius:var(--r-sm);padding:5px 12px;font-size:11.5px;font-weight:600;white-space:nowrap;cursor:pointer;">Select →</div>
 </div>
 </div>
 </div>
