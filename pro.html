@@ -1148,6 +1148,10 @@ section{padding:56px 20px;}
 .upcoming-empty{text-align:center;padding:24px 0;font-size:12px;color:rgba(255,255,255,.22);}
 /* Analytics */
 .dash-stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:18px;}
+.cust-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+@media(max-width:1000px){.cust-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media(max-width:820px){.cust-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:560px){.cust-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 .dash-stat{border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:13px;}
 .dash-stat-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--d-faint);margin-bottom:5px;}
 .dash-stat-val{font-family:var(--font-num);font-size:21px;font-weight:700;color:white;}
@@ -2723,7 +2727,7 @@ localStorage.setItem('installBannerDismissed','1');
 <option value="name">Name A–Z</option>
 </select>
 </div>
-<div id="custSearchResults" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;"></div>
+<div id="custSearchResults" class="cust-grid"></div>
 </div>
 <div class="dash-grid">
 <!-- Calendar -->
@@ -5115,7 +5119,7 @@ document.getElementById('dashboardPage').style.display='block';
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
 calCurrentDate=new Date();
-const csi=document.getElementById('custSearchInput');if(csi)csi.value='';custFilter='all';custSort='recent';
+const csi=document.getElementById('custSearchInput');if(csi)csi.value='';custFilter='all';custSort='recent';custExpanded=false;
 const css=document.getElementById('custSort');if(css)css.value='recent';
 renderDashKpis();
 renderCustomerSearch();
@@ -5226,8 +5230,10 @@ showToast('📋 '+msg);
 /* ── CUSTOMER SEARCH / DIRECTORY ── */
 let custFilter='all';
 let custSort='recent';
+let custExpanded=false;
 function setCustFilter(f){custFilter=f;renderCustomerSearch();}
 function setCustSort(v){custSort=v;renderCustomerSearch();}
+function toggleCustExpanded(){custExpanded=!custExpanded;renderCustomerSearch();}
 function exportCustomersCSV(){
 const groups={};
 jobHistory.filter(j=>j.crm&&(j.crm.name||j.crm.phone||j.crm.address)).forEach(j=>{const k=customerKey(j);(groups[k]=groups[k]||[]).push(j);});
@@ -5338,7 +5344,9 @@ box.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:22px;color
 }
 return;
 }
-const shown=isQuery?customers:customers.slice(0,8);
+const LIMIT=5;
+const showAll=isQuery||custExpanded;
+const shown=showAll?customers:customers.slice(0,LIMIT);
 const sc={quoted:'#C9A24B',scheduled:'#5DCAA5',completed:'#5DCAA5',lost:'#c0392b'};
 box.innerHTML=shown.map(c=>{
 const j=c.latest.crm,st=j.status||'quoted',col=sc[st]||'rgba(255,255,255,.4)',rt=relTime(j.savedAt),cold=isColdQuote(c);
@@ -5352,7 +5360,7 @@ return '<div onclick="openCrm('+c.latest.id+')" role="button" tabindex="0" aria-
 '<span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:'+col+';border:1px solid '+col+'55;border-radius:20px;padding:2px 7px;white-space:nowrap;flex-shrink:0;">'+st+'</span></div></div>'+
 (sub?'<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;line-height:1.35;">'+sub+'</div>':'')+
 '<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone?'<button onclick="event.stopPropagation();'+(st==='completed'?'sendReceiptForJob':'quickText')+'('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph '+(st==='completed'?'ph-receipt':'ph-paper-plane-tilt')+'" style="font-size:11px;"></i> '+(st==='completed'?'Send receipt':'Text quote')+'</button>':'')+'</div>';
-}).join('')+(!isQuery&&customers.length>8?'<div style="grid-column:1/-1;text-align:center;font-size:11px;color:rgba(255,255,255,.3);padding:6px;">Showing 8 most recent · search or filter to see all '+totalCustomers+'</div>':'');
+}).join('')+(!isQuery&&customers.length>LIMIT?'<button onclick="toggleCustExpanded()" style="grid-column:1/-1;margin-top:2px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.55);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,.55)\'"><i class="ph ph-caret-'+(custExpanded?'up':'down')+'" style="font-size:12px;"></i> '+(custExpanded?'Show less':('View '+(customers.length-LIMIT)+' more'))+'</button>':'');
 }
 
 // keyboard: "/" focuses customer search (when dashboard is open & not already typing), Esc clears it
