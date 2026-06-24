@@ -2417,6 +2417,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div style="font-size:10.5px;color:rgba(255,255,255,.3);margin-top:7px;">Customer scans to pay with Apple Pay, Google Pay, or card</div>
 </div>
 </div>
+<div id="pmSuccess" style="display:none;"></div>
 <div id="pmActions">
 <button onclick="generatePaymentLink()" id="pmCreateBtn" style="width:100%;padding:13px;background:linear-gradient(135deg,#635bff,#5851e8);border:none;color:white;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ph ph-link" style="font-size:15px;"></i> Create payment link</button>
 <div id="pmFeeNote" style="font-size:10.5px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;">Powered by Stripe</div>
@@ -4173,6 +4174,8 @@ const address=job.crm?.address||'';
 document.getElementById('pmJobInfo').innerHTML=`<span style="color:rgba(255,255,255,.7);font-weight:600;">${name}</span>${address?`<span style="color:rgba(255,255,255,.35);"> · ${address}</span>`:''}`;
 document.getElementById('pmAmount').value=job.actual?.charged||'';
 const _fn=document.getElementById('pmFeeNote');if(_fn)_fn.textContent=(isPro()?'1%':'2%')+' platform fee · Powered by Stripe';
+stopPaymentPoll();
+const _ps=document.getElementById('pmSuccess');if(_ps)_ps.style.display='none';
 document.getElementById('pmLinkSection').style.display='none';
 document.getElementById('pmActions').style.display='block';
 document.getElementById('pmCreateBtn').disabled=false;
@@ -4183,8 +4186,46 @@ modal.style.display='flex';
 document.body.style.overflow='hidden';
 }
 function closePaymentModal(){
+stopPaymentPoll();
 document.getElementById('paymentModal').style.display='none';
 document.body.style.overflow='';
+}
+// Live payment detection — while the payment screen is open, poll the server so the job
+// flips to "Paid · Stripe" the moment the customer's payment lands (no manual refresh).
+let _pmPollTimer=null,_pmPollStart=0;
+function startPaymentPoll(){stopPaymentPoll();_pmPollStart=Date.now();_pmPollTimer=setInterval(checkPaymentPoll,5000);}
+function stopPaymentPoll(){if(_pmPollTimer){clearInterval(_pmPollTimer);_pmPollTimer=null;}}
+async function checkPaymentPoll(){
+if(!_pmJobId||!session.token){stopPaymentPoll();return;}
+if(Date.now()-_pmPollStart>5*60*1000){stopPaymentPoll();return;}   // give up after 5 min
+try{
+const res=await api({action:'getJobs',token:session.token});
+if(!(res&&res.success&&Array.isArray(res.jobs)))return;
+const sj=res.jobs.find(j=>String(j.id)===String(_pmJobId));
+if(sj&&sj.payment&&sj.payment.paid){
+stopPaymentPoll();
+jobHistory=mergeJobHistory(res.jobs);
+if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
+persistHistory();
+renderHistory();
+const _d=document.getElementById('dashboardPage');
+if(_d&&_d.style.display!=='none'){try{renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}catch(e){}}
+showPaymentSuccess(sj.payment);
+showToast('✓ Payment received — Paid · Stripe');
+}
+}catch(e){}
+}
+function showPaymentSuccess(payment){
+const amt=(payment&&payment.amount!=null)?('$'+Number(payment.amount).toFixed(2)):'';
+['pmLinkSection','pmActions'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+const s=document.getElementById('pmSuccess');if(!s)return;
+s.style.display='block';
+s.innerHTML='<div style="text-align:center;padding:16px 0 4px;">'+
+'<div style="width:58px;height:58px;border-radius:50%;background:rgba(93,202,165,.15);border:1px solid rgba(93,202,165,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ph ph-check-circle" style="font-size:30px;color:#5DCAA5;"></i></div>'+
+'<div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:5px;">Payment received'+(amt?' · '+amt:'')+'</div>'+
+'<div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.5;margin-bottom:18px;">Job marked <span style="color:#a09eff;font-weight:700;">Paid · Stripe</span>. The customer was emailed a receipt.</div>'+
+'<button onclick="closePaymentModal()" style="width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Done</button>'+
+'</div>';
 }
 function updatePmFee(){
 const amt=parseFloat(document.getElementById('pmAmount').value)||0;
@@ -4230,6 +4271,7 @@ const _pjob=jobHistory.find(j=>String(j.id)===String(_pmJobId));
 const _ptb=document.getElementById('pmTextBtn');
 if(_ptb)_ptb.style.display=(_pjob&&_pjob.crm&&_pjob.crm.phone)?'flex':'none';
 if(navigator.share)document.getElementById('pmShareBtn').style.display='block';
+startPaymentPoll();   // watch for the customer's payment and auto-flip to Paid · Stripe
 }catch(e){showToast('Could not reach server',true);btn.disabled=false;btn.innerHTML='<i class="ph ph-link" style="font-size:15px;"></i> Create payment link';}
 }
 function copyPaymentLink(){
