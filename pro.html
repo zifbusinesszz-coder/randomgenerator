@@ -2983,7 +2983,7 @@ function getRawPhone(){const d=document.getElementById('m-phone').value.replace(
 let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
 let userLocation = null;
-let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null,stripeConnected:false,stripePending:false};
+let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null,stripeConnected:localStorage.getItem('ww_stripe_connected')==='1',stripePending:false};
 let specialItemStates={},selectedLoad=null,loadQtys={minimum:0,quarter:0,half:0,full:0},selectedSpecials={},jobHistory=[],activeTab='signup',sSpecialStates={};
 let verificationToken=null,resetToken=null,resendTimer=null,savedPassword=null;
 let userPricing={loads:{minimum:{low:100,high:130},quarter:{low:160,high:200},half:{low:230,high:280},full:{low:350,high:420}},specials:{},driveRate:1.5,laborRate:35,defaultMarkup:35,truck:{length:0,width:0,height:0}};
@@ -3442,7 +3442,7 @@ function saveSession(token,companyId,businessName,plan,role,ownerId){
 session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';session.role=role||'owner';session.ownerId=ownerId||null;
 localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);localStorage.setItem('ww_role',session.role);if(ownerId)localStorage.setItem('ww_owner_id',ownerId);else localStorage.removeItem('ww_owner_id');
 }
-function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id'].forEach(k=>localStorage.removeItem(k));stopStatusPoll();}
+function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';session.stripeConnected=false;['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id','ww_stripe_connected'].forEach(k=>localStorage.removeItem(k));stopStatusPoll();}
 let _statusPollTimer=null;
 function startStatusPoll(){
 if(_statusPollTimer)return;
@@ -4002,6 +4002,7 @@ return `<div class="history-item">
 }
 async function openHistory(){
 document.getElementById('historyPanel').classList.add('open');
+if(session.token)checkStripeStatus();   // keep payment buttons in sync when opening history
 if(session.token && jobHistory.length>=48){
 try{
 const res=await api({action:'getJobs',token:session.token});
@@ -4139,10 +4140,10 @@ function paymentBadge(j){
 if(!(j.crm&&j.crm.status==='completed'))return '';
 const p=j.payment;
 if(p&&p.paid){
-if(p.method==='stripe')return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a09eff;border:1px solid rgba(99,91,255,.4);border-radius:20px;padding:2px 7px;margin-left:4px;"><i class="ph ph-credit-card" style="font-size:10px;"></i> Paid · Stripe</span>';
-return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5DCAA5;border:1px solid rgba(26,158,114,.4);border-radius:20px;padding:2px 7px;margin-left:4px;"><i class="ph ph-money" style="font-size:10px;"></i> Paid · '+escapeHtml(p.method||'other')+'</span>';
+if(p.method==='stripe')return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a09eff;border:1px solid rgba(99,91,255,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;"><i class="ph ph-credit-card" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · Stripe</span>';
+return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5DCAA5;border:1px solid rgba(26,158,114,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;"><i class="ph ph-money" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · '+escapeHtml(p.method||'other')+'</span>';
 }
-return '<span style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#E0883B;border:1px solid rgba(224,136,59,.4);border-radius:20px;padding:2px 7px;margin-left:4px;">Unpaid</span>';
+return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#E0883B;border:1px solid rgba(224,136,59,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;">Unpaid</span>';
 }
 function markPaidManual(method){
 const job=jobHistory.find(j=>j.id===_pmJobId);if(!job)return;
@@ -4241,10 +4242,18 @@ if(!session.token)return;   // payments available on all plans (tiered fee: Star
 loadStripe().catch(()=>{}); // preload Stripe.js in the background so connected-account / payment flows are ready
 try{
 const res=await api({action:'stripeAccountStatus',token:session.token});
-session.stripeConnected=!!(res.success&&res.connected);
-session.stripePending=!!(res.success&&!res.connected&&res.accountId);
+// Only update on a definitive answer — a transient/failed call must NOT flip the buttons off.
+if(res&&res.success){
+session.stripeConnected=!!res.connected;
+session.stripePending=!!(!res.connected&&res.accountId);
+try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');}catch(e){}
+}
+}catch(e){/* keep prior connected state on error */}
 renderStripeSettings();
-}catch(e){}
+// refresh any open list views so the Collect-payment / Send-receipt buttons appear once status is known
+try{if(typeof renderHistory==='function')renderHistory();}catch(e){}
+const _dash=document.getElementById('dashboardPage');
+if(_dash&&_dash.style.display!=='none'){try{renderCustomerSearch();renderCompletedJobs();renderUpcoming();}catch(e){}}
 }
 function renderStripeSettings(){
 const sec=document.getElementById('stripeSettingsSection');if(!sec)return;
@@ -5115,6 +5124,7 @@ function openDashboard(){
 if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='block';
+if(session.token)checkStripeStatus();   // refresh payment state so Collect-payment buttons don't drop out
 // Show Team button only for team owners
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
