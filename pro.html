@@ -5694,6 +5694,10 @@ btn.innerHTML=`<i class="ph ph-caret-down" id="completedOlderCaret" style="font-
 }
 
 let dashCharts={};
+let dashRange='lifetime';
+function setDashRange(r){dashRange=r;renderDashAnalytics();}
+// best available timestamp for a job: outcome-logged time → job id (Date.now) → quote timestamp
+function jobMs(j){const t=j.actual&&j.actual.loggedAt?Date.parse(j.actual.loggedAt):NaN;if(!isNaN(t))return t;if(typeof j.id==='number')return j.id;const t2=Date.parse(j.ts);return isNaN(t2)?0:t2;}
 // Hours a job actually took: prefer the in-app timer, else the manually-entered hours.
 function jobHours(j){
 if(j&&j.actual){
@@ -5729,19 +5733,33 @@ grid.innerHTML=`
 function renderDashAnalytics(){
 Object.values(dashCharts).forEach(c=>{try{c.destroy();}catch(e){}});dashCharts={};
 const body=document.getElementById('dashAnalytics');
-const logged=jobHistory.filter(j=>j.actual?.charged);
+const allLogged=jobHistory.filter(j=>j.actual?.charged);
+const RANGES={'30d':30,'90d':90,'year':365,'lifetime':Infinity};
+const winDays=RANGES[dashRange]||Infinity;
+const nowMs=Date.now();
+const curStart=isFinite(winDays)?nowMs-winDays*86400000:-Infinity;
+const prevStart=isFinite(winDays)?curStart-winDays*86400000:-Infinity;
+const logged=isFinite(winDays)?allLogged.filter(j=>jobMs(j)>=curStart):allLogged;
+const prevLogged=isFinite(winDays)?allLogged.filter(j=>{const m=jobMs(j);return m>=prevStart&&m<curStart;}):[];
+const rangeBtns=[['30d','30 days'],['90d','90 days'],['year','1 year'],['lifetime','Lifetime']];
+const switchHtml='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">'+rangeBtns.map(rb=>{const on=dashRange===rb[0];return '<button onclick="setDashRange(\''+rb[0]+'\')" style="cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:6px 13px;border-radius:20px;transition:all .15s;'+(on?'background:#5DCAA5;color:#0b0b0b;border:1px solid #5DCAA5;':'background:rgba(255,255,255,.04);color:rgba(255,255,255,.5);border:1px solid var(--d-border);')+'">'+rb[1]+'</button>';}).join('')+'</div>';
 if(!logged.length){
-body.innerHTML='<div class="upcoming-empty">No logged job outcomes yet.<br>Save a quote, then tap "How\'d it go?" to track your numbers.</div>';
+body.innerHTML=switchHtml+'<div class="upcoming-empty">No logged outcomes in this range.'+(dashRange!=='lifetime'?' Try a longer range, or':'<br>')+' tap "How\'d it go?" on a job to track your numbers.</div>';
 return;
 }
+const sumCharged=arr=>arr.reduce((s,j)=>s+(j.actual.charged||0),0);
+const dumpOf=arr=>arr.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=userPricing.loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
 const diffs=logged.map(j=>{const p=j.price.replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
 const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
 const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
-const totalRevenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
+const totalRevenue=sumCharged(logged);
 const avgRevenue=Math.round(totalRevenue/logged.length);
-const totalDumpFees=logged.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=userPricing.loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
+const totalDumpFees=dumpOf(logged);
 const totalProfit=Math.round(totalRevenue-totalDumpFees);
+const pRev=sumCharged(prevLogged),pJobs=prevLogged.length,pAvg=pJobs?Math.round(pRev/pJobs):0,pProfit=Math.round(pRev-dumpOf(prevLogged));
+const chg=(cur,prev)=>{if(dashRange==='lifetime'||!prev)return '';const pct=Math.round((cur-prev)/Math.abs(prev)*100);if(!isFinite(pct))return '';const up=pct>=0;return ' <span style="font-size:10px;font-weight:700;color:'+(up?'#5DCAA5':'#E0883B')+';white-space:nowrap;">'+(up?'▲':'▼')+Math.abs(pct)+'%</span>';};
+const vsTxt=dashRange==='lifetime'?'all time':('vs prior '+(dashRange==='year'?'year':dashRange));
 const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
 const loadStats={};
 ['minimum','quarter','half','full'].forEach(k=>{
@@ -5751,13 +5769,14 @@ loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharg
 });
 const totalSecDash=logged.reduce((s,j)=>s+(j.actual?.durationSeconds||0),0);
 const totalTimeStrDash=totalSecDash>0?(Math.floor(totalSecDash/3600)+'h '+(Math.floor((totalSecDash%3600)/60))+'m'):'—';
-body.innerHTML=`<div class="dash-stat-grid">
+body.innerHTML=switchHtml+`<div class="dash-stat-grid">
+   <div class="dash-stat positive"><div class="dash-stat-label">Total revenue</div><div class="dash-stat-val">$${totalRevenue.toLocaleString()}${chg(totalRevenue,pRev)}</div><div class="dash-stat-sub">${logged.length} jobs · ${vsTxt}</div></div>
+   <div class="dash-stat"><div class="dash-stat-label">Avg job revenue</div><div class="dash-stat-val">$${avgRevenue}${chg(avgRevenue,pAvg)}</div><div class="dash-stat-sub">${vsTxt}</div></div>
+   <div class="dash-stat ${totalProfit>=0?'positive':'negative'}"><div class="dash-stat-label">Est. total profit</div><div class="dash-stat-val">$${totalProfit.toLocaleString()}${chg(totalProfit,pProfit)}</div><div class="dash-stat-sub">revenue minus dump fees</div></div>
    <div class="dash-stat ${avgDiff>=0?'positive':'negative'}"><div class="dash-stat-label">Avg vs quoted</div><div class="dash-stat-val">${avgDiff>=0?'+':''}$${Math.abs(Math.round(avgDiff))}</div><div class="dash-stat-sub">${logged.length} jobs logged</div></div>
    <div class="dash-stat ${winRate>=50?'positive':'negative'}"><div class="dash-stat-label">Quoted right</div><div class="dash-stat-val">${winRate}%</div><div class="dash-stat-sub">charged ≥ quoted</div></div>
-   <div class="dash-stat"><div class="dash-stat-label">Avg job revenue</div><div class="dash-stat-val">$${avgRevenue}</div><div class="dash-stat-sub">actual charged</div></div>
    <div class="dash-stat ${totalLeft<-50?'negative':''}"><div class="dash-stat-label">Left on table</div><div class="dash-stat-val">$${Math.abs(Math.round(totalLeft))}</div><div class="dash-stat-sub">total undercharges</div></div>
    <div class="dash-stat negative"><div class="dash-stat-label">Total dump fees</div><div class="dash-stat-val">$${totalDumpFees}</div><div class="dash-stat-sub">estimated disposal cost</div></div>
-   <div class="dash-stat ${totalProfit>=0?'positive':'negative'}"><div class="dash-stat-label">Est. total profit</div><div class="dash-stat-val">$${totalProfit.toLocaleString()}</div><div class="dash-stat-sub">revenue minus dump fees</div></div>
    <div class="dash-stat"><div class="dash-stat-label">Total time on jobs</div><div class="dash-stat-val">${totalTimeStrDash}</div><div class="dash-stat-sub">timer-logged jobs</div></div>
  </div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-line-up" style="font-size:12px;color:#5DCAA5;"></i> Quoted vs. Actual charged</div><div class="chart-canvas-wrap"><canvas id="dashChartQuotedActual" class="insights-chart" height="180"></canvas></div></div>
