@@ -3130,6 +3130,24 @@ const serverIds=new Set(serverJobs.map(j=>String(j.id)));
 local.filter(j=>!serverIds.has(String(j.id))).forEach(j=>merged.push(j));
 return merged;
 }
+// Pull the latest jobs for this account from the server and merge them in — keeps every
+// device current (history saves to the server on every change; this re-reads it).
+async function syncJobsFromServer(){
+if(!session.token)return;
+try{
+const res=await api({action:'getJobs',token:session.token});
+if(res&&res.success&&Array.isArray(res.jobs)){
+jobHistory=mergeJobHistory(res.jobs);
+if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
+persistHistory();
+renderHistory();
+const _dash=document.getElementById('dashboardPage');
+if(_dash&&_dash.style.display!=='none'){
+try{renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}catch(e){}
+}
+}
+}catch(e){/* offline — keep local copy */}
+}
 
 function openModal(planOrMode){
 if(planOrMode==='pick'){
@@ -4003,16 +4021,7 @@ return `<div class="history-item">
 async function openHistory(){
 document.getElementById('historyPanel').classList.add('open');
 if(session.token)checkStripeStatus();   // keep payment buttons in sync when opening history
-if(session.token && jobHistory.length>=48){
-try{
-const res=await api({action:'getJobs',token:session.token});
-if(res.success&&res.jobs.length>jobHistory.length){
-jobHistory=mergeJobHistory(res.jobs);
-persistHistory();
-renderHistory();
-}
-}catch(e){}
-}
+syncJobsFromServer();                    // always pull the latest from the server (cross-device)
 }
 function closeHistory(){document.getElementById('historyPanel').classList.remove('open');}
 function closeHistoryOutside(e){if(e.target===document.getElementById('historyPanel'))closeHistory();}
@@ -5125,6 +5134,7 @@ if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='block';
 if(session.token)checkStripeStatus();   // refresh payment state so Collect-payment buttons don't drop out
+syncJobsFromServer();                    // pull the latest jobs from the server (cross-device)
 // Show Team button only for team owners
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
