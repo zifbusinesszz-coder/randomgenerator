@@ -4140,7 +4140,7 @@ const notes=document.getElementById('actualNotes').value.trim();
 job.actual={...job.actual,charged,hours,notes,loggedAt:new Date().toISOString()};
 if(charged){if(!job.crm)job.crm={};job.crm.status='completed';}   // logged an outcome = the job is done
 persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
-if(wasDashOpen){renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();}
+if(wasDashOpen){renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}
 if(session.token){
 const _qp2={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
 api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
@@ -4165,7 +4165,7 @@ job.payment={paid:true,method:method,amount:amt,at:new Date().toISOString()};
 if(amt&&!(job.actual&&job.actual.charged))job.actual={...job.actual,charged:amt,loggedAt:new Date().toISOString()};
 if(!job.crm)job.crm={};job.crm.status='completed';
 persistHistory();renderHistory();
-if(document.getElementById('dashboardPage').style.display!=='none'){renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();}
+if(document.getElementById('dashboardPage').style.display!=='none'){renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}
 closePaymentModal();showToast('✓ Marked paid · '+method);
 if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
 }
@@ -5729,7 +5729,7 @@ if(panel)panel.remove();
 renderHistory();
 renderCompletedJobs();
 renderUpcoming();
-if(wasDashOpen){renderCustomerSearch();renderCalendar();renderDashAnalytics();}
+if(wasDashOpen){renderCustomerSearch();renderCalendar();renderDashAnalytics();renderDashKpis();}
 showToast('✓ Job marked complete');
 if(session.token){
 const _qp3={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
