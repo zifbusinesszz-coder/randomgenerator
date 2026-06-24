@@ -2434,6 +2434,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="history-panel" id="historyPanel" onclick="closeHistoryOutside(event)">
 <div class="history-drawer">
 <div class="history-header"><div class="history-title">Job history</div><button class="history-close" onclick="closeHistory()">✕</button></div>
+<div style="padding:11px 11px 0;"><div id="histBalanceCard" style="display:none;"></div></div>
 <div class="history-list" id="historyList"><div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div></div>
 <div class="history-clear"><button class="history-clear-btn" onclick="clearHistory()">Clear all history</button></div>
 </div>
@@ -2712,6 +2713,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="dash-body">
 <div class="dash-welcome" id="dashWelcome" data-aos="fade-up"></div>
 <div class="dash-kpi-grid" id="dashKpiGrid" data-aos="fade-up"></div>
+<div id="dashBalanceCard" style="display:none;"></div>
 <!-- Customer search -->
 <div class="dash-card" data-aos="fade-up" style="margin-bottom:18px;">
 <div class="dash-card-title"><i class="ph ph-address-book" style="font-size:12px;color:#5DCAA5;"></i> Customers <span id="custSearchCount" style="margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.38);text-transform:none;"></span><button onclick="exportCustomersCSV()" title="Export customers to CSV" style="background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.5);border-radius:6px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);text-transform:none;letter-spacing:0;display:inline-flex;align-items:center;gap:5px;margin-left:10px;" onmouseover="this.style.color='#5DCAA5';this.style.borderColor='rgba(26,158,114,.4)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='var(--d-border)'"><i class="ph ph-share-network" style="font-size:12px;"></i> Export</button></div>
@@ -4023,6 +4025,7 @@ async function openHistory(){
 document.getElementById('historyPanel').classList.add('open');
 if(session.token)checkStripeStatus();   // keep payment buttons in sync when opening history
 syncJobsFromServer();                    // always pull the latest from the server (cross-device)
+loadBalanceCard('histBalanceCard');      // held-funds / payout balance (Starter + all plans)
 }
 function closeHistory(){document.getElementById('historyPanel').classList.remove('open');}
 function closeHistoryOutside(e){if(e.target===document.getElementById('historyPanel'))closeHistory();}
@@ -4325,6 +4328,40 @@ return;
 document.getElementById('stripeNotConnected').style.display=(!session.stripeConnected&&!session.stripePending)?'block':'none';
 document.getElementById('stripeConnectedStatus').style.display=session.stripeConnected?'block':'none';
 document.getElementById('stripePendingStatus').style.display=(session.stripePending&&!session.stripeConnected)?'block':'none';
+}
+// Held-funds / payout balance card — what you're owed net of Stripe + platform fees.
+function balanceCardHtml(avail,pend,total){
+const money=n=>'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+return '<div style="background:linear-gradient(135deg,rgba(99,91,255,.13),rgba(99,91,255,.05));border:1px solid rgba(99,91,255,.3);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:16px;">'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">'+
+'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#a09eff;display:flex;align-items:center;gap:6px;"><i class="ph ph-credit-card" style="font-size:13px;"></i> Your balance</div>'+
+'<div style="font-size:9.5px;color:rgba(255,255,255,.35);">net of fees · pays out daily</div>'+
+'</div>'+
+'<div style="font-family:var(--font-num);font-size:30px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;">'+money(total)+'</div>'+
+'<div style="font-size:10.5px;color:rgba(255,255,255,.42);margin-top:3px;">estimated net payout</div>'+
+'<div style="display:flex;gap:8px;margin-top:14px;">'+
+'<div style="flex:1;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:9px 11px;">'+
+'<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#5DCAA5;margin-bottom:3px;">Available</div>'+
+'<div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#fff;">'+money(avail)+'</div>'+
+'<div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:1px;">ready to pay out</div>'+
+'</div>'+
+'<div style="flex:1;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:9px 11px;">'+
+'<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:3px;">Clearing</div>'+
+'<div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#fff;">'+money(pend)+'</div>'+
+'<div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:1px;">~2 business days</div>'+
+'</div>'+
+'</div>'+
+'</div>';
+}
+async function loadBalanceCard(containerId){
+const el=document.getElementById(containerId);if(!el)return;
+if(!session.token||!session.stripeConnected){el.style.display='none';el.innerHTML='';return;}
+try{
+const res=await api({action:'stripeBalance',token:session.token});
+if(!res||!res.success||res.connected===false){el.style.display='none';el.innerHTML='';return;}
+el.innerHTML=balanceCardHtml((res.available||0)/100,(res.pending||0)/100,(res.total||0)/100);
+el.style.display='block';
+}catch(e){el.style.display='none';el.innerHTML='';}
 }
 async function connectStripe(){
 const btn=document.getElementById('stripeConnectBtn');
@@ -5177,6 +5214,7 @@ document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='block';
 if(session.token)checkStripeStatus();   // refresh payment state so Collect-payment buttons don't drop out
 syncJobsFromServer();                    // pull the latest jobs from the server (cross-device)
+loadBalanceCard('dashBalanceCard');      // held-funds / payout balance
 // Show Team button only for team owners
 const teamBtn=document.getElementById('teamNavBtn');
 if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
