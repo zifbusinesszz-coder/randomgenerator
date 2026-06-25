@@ -5294,7 +5294,11 @@ if(!dashboardVisible())return;
 // the next frame internally, so calling it directly here is already cheap — no extra gating needed.
 // skipAnalytics lets callers that don't change job data (e.g. a Stripe-status refresh) avoid
 // needlessly destroying & rebuilding the charts, which is what made them flicker/vanish.
-try{renderCalendar();renderUpcoming();renderCompletedJobs();if(!opts.skipAnalytics)renderDashAnalytics();}catch(e){}
+// Each section gets its OWN try/catch so a throw in one can never silently blank the others.
+try{renderCalendar();}catch(e){console.warn('renderCalendar failed',e);}
+try{renderUpcoming();}catch(e){console.warn('renderUpcoming failed',e);}
+try{renderCompletedJobs();}catch(e){console.warn('renderCompletedJobs failed',e);}
+try{if(!opts.skipAnalytics)renderDashAnalytics();}catch(e){console.warn('renderDashAnalytics failed',e);}
 });
 }
 function openDashboard(){
@@ -5626,7 +5630,10 @@ ${!isRunning?`
 </div>`;
 }).join('');
 
-if(isRunning){
+// (isRunning was declared per-job inside the map above and is out of scope here — referencing it
+// threw a ReferenceError that aborted renderUpcoming, which silently took Completed Jobs and
+// Analytics down with it.) Re-arm the live display interval for whatever timers are active.
+if(Object.keys(activeTimers).length){
 Object.keys(activeTimers).forEach(jid=>{
 const t=activeTimers[jid];
 if(t.interval)clearInterval(t.interval);
@@ -5938,7 +5945,7 @@ body.innerHTML=switchHtml+'<div class="upcoming-empty">No logged outcomes in thi
 return;
 }
 const sumCharged=arr=>arr.reduce((s,j)=>s+(j.actual.charged||0),0);
-const dumpOf=arr=>arr.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=userPricing.loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
+const dumpOf=arr=>arr.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};const _loads=userPricing.loads||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=_loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
 const diffs=logged.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
 const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
 const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
