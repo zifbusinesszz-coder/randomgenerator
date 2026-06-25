@@ -5211,7 +5211,7 @@ btn.disabled=false;btn.textContent='Join team →';
    duplicate full re-render that used to fire on every server sync; KPIs + customers (above
    the fold) paint immediately, the rest is deferred to the next frame, and the analytics
    block (4 charts) is built lazily only when it scrolls into view. */
-let _lastDashSig=null,_analyticsObserver=null,_analyticsPending=true;
+let _lastDashSig=null;
 function dashboardVisible(){const d=document.getElementById('dashboardPage');return !!d&&d.style.display!=='none';}
 function renderDashboard(opts){
 opts=opts||{};
@@ -5223,21 +5223,10 @@ renderDashKpis();        // above the fold — paint immediately
 renderCustomerSearch();
 requestAnimationFrame(()=>{ // below the fold — defer so first paint isn't blocked by the rest
 if(!dashboardVisible())return;
-try{renderCalendar();renderUpcoming();renderCompletedJobs();scheduleAnalytics();}catch(e){}
+// renderDashAnalytics paints its stat grid synchronously and defers the 4 Chart.js builds to
+// the next frame internally, so calling it directly here is already cheap — no extra gating needed.
+try{renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();}catch(e){}
 });
-}
-function _dashInViewport(el){if(!el)return false;const r=el.getBoundingClientRect();return r.top<(window.innerHeight||0)+200&&r.bottom>-200;}
-function ensureAnalyticsObserver(){
-if(_analyticsObserver||!('IntersectionObserver' in window))return;
-const el=document.getElementById('dashAnalytics');if(!el)return;
-_analyticsObserver=new IntersectionObserver(es=>{if(_analyticsPending&&es.some(e=>e.isIntersecting)){_analyticsPending=false;renderDashAnalytics();}},{rootMargin:'200px'});
-_analyticsObserver.observe(el);
-}
-// Build the analytics block only when it's on/near screen — it's the heaviest part of the dashboard.
-function scheduleAnalytics(){
-const el=document.getElementById('dashAnalytics');
-if(!('IntersectionObserver' in window)||_dashInViewport(el)){_analyticsPending=false;renderDashAnalytics();ensureAnalyticsObserver();return;}
-_analyticsPending=true;ensureAnalyticsObserver();
 }
 function openDashboard(){
 if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
