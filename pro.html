@@ -3041,7 +3041,8 @@ await flushSyncQueue();
 try{
 const jobsRes=await api({action:'getJobs',token:session.token});
 if(jobsRes.success&&jobsRes.jobs.length){
-localStorage.setItem('ww_history',JSON.stringify(mergeJobHistory(jobsRes.jobs)));
+let _m=mergeJobHistory(jobsRes.jobs);if(_m.length>1000)_m=_m.slice(0,1000);
+jobHistory=_m;localStorage.setItem('ww_history',JSON.stringify(_m));   // refresh in-memory now, not just localStorage
 }
 }catch(e){}
 checkStripeStatus();
@@ -3126,7 +3127,14 @@ function mergeJobHistory(serverJobs,localSnap){
 let local=localSnap;if(!local){try{local=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){local=[];}}
 const merged=serverJobs.map(sj=>{
 const lj=local.find(j=>String(j.id)===String(sj.id));
-if(lj?.actual&&(!sj.actual||(lj.actual.charged&&!sj.actual.charged)))return{...sj,actual:lj.actual};
+if(!lj)return sj;
+// Last-write-wins by updatedAt so an in-flight/failed local edit (crm, payment, finalPrice)
+// is never silently reverted by a sync that pulled the server's older copy.
+const lu=Number(lj.updatedAt)||0,su=Number(sj.updatedAt)||0;
+if(lu>su)return lj;
+if(su>lu)return sj;
+// Legacy jobs with no timestamp on either side — keep the old safety net for local outcomes.
+if(lj.actual&&(!sj.actual||(lj.actual.charged&&!sj.actual.charged)))return{...sj,actual:lj.actual};
 return sj;
 });
 const serverIds=new Set(serverJobs.map(j=>String(j.id)));
@@ -3141,7 +3149,7 @@ try{
 const res=await api({action:'getJobs',token:session.token});
 if(res&&res.success&&Array.isArray(res.jobs)){
 jobHistory=mergeJobHistory(res.jobs);
-if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
+if(jobHistory.length>1000)jobHistory=jobHistory.slice(0,1000);
 persistHistory();
 renderHistory();
 renderDashboard(); // signature-guarded — no-op when the server returned the same jobs we already show
@@ -3450,7 +3458,7 @@ startStatusPoll();
 checkStripeStatus();
 (async()=>{
 await flushSyncQueue();
-try{const jobsRes=await api({action:'getJobs',token:session.token});if(jobsRes.success){jobHistory=mergeJobHistory(jobsRes.jobs,_loginSnap);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);persistHistory();renderHistory();renderDashboard();}}catch(e){}
+try{const jobsRes=await api({action:'getJobs',token:session.token});if(jobsRes.success){jobHistory=mergeJobHistory(jobsRes.jobs,_loginSnap);if(jobHistory.length>1000)jobHistory=jobHistory.slice(0,1000);persistHistory();renderHistory();renderDashboard();}}catch(e){}
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
 })();
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
@@ -3635,9 +3643,12 @@ syncStickyBar();
 document.getElementById('calcBreakdown').style.display='none';
 }
 // NEW
+let _savingJob=false;
 async function saveJob(){
+if(_savingJob)return;            // ignore rapid double-taps that would create duplicate jobs
 const totalQty=Object.values(loadQtys).reduce((a,b)=>a+b,0);
 if(!totalQty){showToast('Select a load size first',true);return;}
+_savingJob=true;setTimeout(()=>{_savingJob=false;},800);
 const priceText=document.getElementById('calcFinalPrice').textContent;
 if(priceText==='—'||priceText==='Select a load size')return;
 const specialSrc=Object.keys(userPricing.specials).length>0?userPricing.specials:Object.fromEntries(SPECIAL_ITEMS_CONFIG.map(i=>[i.key,i]));
@@ -3645,8 +3656,8 @@ const activeSpecials=Object.keys(selectedSpecials).filter(k=>selectedSpecials[k]
 const loadNames={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck'};
 const loadSummary=Object.entries(loadQtys).filter(([k,q])=>q>0).map(([k,q])=>q>1?q+'× '+loadNames[k]:loadNames[k]).join(' + ')||'Unknown';
 const primaryLoad=Object.entries(loadQtys).filter(([k,q])=>q>0).sort((a,b)=>b[1]-a[1])[0]?.[0]||'minimum';
-const entry={id:Date.now(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours:Math.max(0,parseFloat(document.getElementById('calcHours').value)||0),markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:false};
-jobHistory.unshift(entry);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
+const entry={id:newJobId(),price:priceText,load:primaryLoad,loadSummary,loadQtys:{...loadQtys},specials:activeSpecials.map(k=>specialSrc[k]?.label||k),miles:Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours:Math.max(0,parseFloat(document.getElementById('calcHours').value)||0),markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),updatedAt:Date.now(),aiQuote:false};
+jobHistory.unshift(entry);if(jobHistory.length>1000)jobHistory=jobHistory.slice(0,1000);
 persistHistory();renderHistory();showToast('✓ Job saved to history');
 if(session.token){
 const miles=Math.max(0,parseFloat(document.getElementById('calcMiles').value)||0),hours=Math.max(0,parseFloat(document.getElementById('calcHours').value)||0);
@@ -3799,9 +3810,15 @@ async function saveAiJob(){
 const doneResults=aiResults.filter(r=>r&&r.status==='done');if(!doneResults.length)return;
 const totalLow=doneResults.reduce((s,r)=>s+r.quoteLow,0),totalHigh=doneResults.reduce((s,r)=>s+r.quoteHigh,0);
 const priceText='$'+totalLow+(totalLow!==totalHigh?'–$'+totalHigh:'');
-const entry={id:Date.now(),price:priceText,load:'ai-multi',specials:[...new Set(doneResults.flatMap(r=>r.specialsFound))],miles:0,hours:0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),aiQuote:true,photoCount:doneResults.length};
-jobHistory.unshift(entry);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
+const entry={id:newJobId(),price:priceText,load:'ai-multi',specials:[...new Set(doneResults.flatMap(r=>r.specialsFound))],miles:0,hours:0,markup:parseInt(document.getElementById('calcMarkup').value),ts:new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}),updatedAt:Date.now(),aiQuote:true,photoCount:doneResults.length};
+jobHistory.unshift(entry);if(jobHistory.length>1000)jobHistory=jobHistory.slice(0,1000);
 persistHistory();renderHistory();showToast('✓ AI quote saved to history');closeAiPanel();
+// AI quotes used to be local-only — sync to the server like every other saved job so they
+// survive a cache clear / device switch and show up for the rest of the crew.
+if(session.token){
+const _qp={action:'saveJob',jobId:entry.id,price:entry.price,load:entry.load,specials:entry.specials,miles:0,hours:0,markup:entry.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:entry};
+api({..._qp,token:session.token}).catch(()=>queueSync(_qp));
+}
 }
 function readFileBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>resolve(e.target.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(file);});}
 
@@ -3967,6 +3984,11 @@ container.appendChild(row);
 }
 function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
+// Stamp a job as locally edited "now" — the merge uses this to win against a stale server copy.
+function touchJob(j){if(j)j.updatedAt=Date.now();return j;}
+// Collision-proof job id. Date.now() alone collides when two saves land in the same millisecond
+// (double-tap, or two crew devices), which the merge would then silently fold into one job.
+function newJobId(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(e){}return Date.now()+'-'+Math.random().toString(36).slice(2,8);}
 async function clearHistory(){
 if(!confirm('Clear all job history?'))return;
 if(!jobHistory.length){return;}
@@ -4105,21 +4127,45 @@ banner.style.display='flex';
 // NEW
 function saveCrm(){const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+const _email=document.getElementById('crmEmail').value.trim();
+const _phoneRaw=document.getElementById('crmPhone').value.trim();
+const _phoneDigits=_phoneRaw.replace(/\D/g,'');
+// Light, non-blocking validation — warn but still save, so the operator is never blocked mid-job.
+if(_phoneRaw&&_phoneDigits.length&&_phoneDigits.length!==10&&_phoneDigits.length!==11)showToast('Heads up: phone number looks incomplete',true);
+if(_email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(_email))showToast('Heads up: email looks invalid',true);
 job.crm={
 name:document.getElementById('crmName').value.trim(),
-phone:document.getElementById('crmPhone').value.trim(),
-email:document.getElementById('crmEmail').value.trim(),
+phone:_phoneRaw,
+email:_email,
 address:document.getElementById('crmAddress').value.trim(),
 status:document.getElementById('crmStatus').value,
 dateTime:document.getElementById('crmDateTime').value||null,
 notes:document.getElementById('crmNotes').value.trim(),
 savedAt:new Date().toISOString(),
-reminderSent:false
+reminderSent:job.crm&&job.crm.reminderSent||false   // don't reset a reminder we already sent
 };
+touchJob(job);
+propagateCustomerContact(job);   // keep the same customer's other jobs in sync (name/phone/address/email)
 persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');if(wasDashOpen)renderDashboard({force:true});
 if(session.token){
-api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
+const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
+api({..._p,token:session.token}).catch(()=>queueSync(_p));   // was .catch(()=>{}) — failures were silently lost
 }
+}
+// When a customer's contact details are edited on one job, update their OTHER jobs too so the
+// derived customer directory never shows conflicting name/phone/address for the same person.
+function propagateCustomerContact(srcJob){
+if(!srcJob||!srcJob.crm)return;
+const key=customerKey(srcJob);
+if(key.indexOf('id:')===0)return;   // no shared identity (no phone/name) — nothing to propagate
+const c=srcJob.crm;
+jobHistory.forEach(j=>{
+if(j===srcJob||!j.crm)return;
+if(customerKey(j)!==key)return;
+let changed=false;
+['name','phone','email','address'].forEach(f=>{if((c[f]||'')&&j.crm[f]!==c[f]){j.crm[f]=c[f];changed=true;}});
+if(changed){touchJob(j);if(session.token){const _pp={action:'saveJob',jobId:j.id,price:j.price,load:j.load,specials:j.specials,miles:j.miles,hours:j.hours,markup:j.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:j};api({..._pp,token:session.token}).catch(()=>queueSync(_pp));}}
+});
 }
 
 async function deleteJob(jobId){
@@ -4127,8 +4173,10 @@ if(!confirm('Delete this job from history?'))return;
 jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
 persistHistory();renderHistory();showToast('Job deleted');
 if(session.token){
+// Queue the delete on failure — otherwise the job stays on the server and the next
+// getJobs sync silently resurrects it.
 try{await api({action:'deleteJob',token:session.token,jobId:String(jobId)});}
-catch(e){showToast('Could not sync delete to server',true);}
+catch(e){queueSync({action:'deleteJob',jobId:String(jobId)});showToast('Delete will sync when you reconnect');}
 }
 }
 // NEW
@@ -4139,6 +4187,7 @@ const hours=parseFloat(document.getElementById('actualHours').value)||null;
 const notes=document.getElementById('actualNotes').value.trim();
 job.actual={...job.actual,charged,hours,notes,loggedAt:new Date().toISOString()};
 if(charged){if(!job.crm)job.crm={};job.crm.status='completed';}   // logged an outcome = the job is done
+touchJob(job);
 persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
 if(wasDashOpen)renderDashboard({force:true});
 if(session.token){
@@ -4164,6 +4213,7 @@ const amt=parseFloat(document.getElementById('pmAmount').value)||job.actual?.cha
 job.payment={paid:true,method:method,amount:amt,at:new Date().toISOString()};
 if(amt&&!(job.actual&&job.actual.charged))job.actual={...job.actual,charged:amt,loggedAt:new Date().toISOString()};
 if(!job.crm)job.crm={};job.crm.status='completed';
+touchJob(job);
 persistHistory();renderHistory();
 renderDashboard({force:true});
 closePaymentModal();showToast('✓ Marked paid · '+method);
@@ -4202,19 +4252,14 @@ async function checkPaymentPoll(){
 if(!_pmJobId||!session.token){stopPaymentPoll();return;}
 if(Date.now()-_pmPollStart>5*60*1000){stopPaymentPoll();return;}   // give up after 5 min
 try{
-const res=await api({action:'getJobs',token:session.token});
-if(!(res&&res.success&&Array.isArray(res.jobs)))return;
-const sj=res.jobs.find(j=>String(j.id)===String(_pmJobId));
-if(sj&&sj.payment&&sj.payment.paid){
+// Fetch just this one job's payment status instead of pulling every job's full JSON every 5s.
+const res=await api({action:'getJobPayment',token:session.token,jobId:String(_pmJobId)});
+if(!(res&&res.success&&res.paid&&res.payment))return;
 stopPaymentPoll();
-jobHistory=mergeJobHistory(res.jobs);
-if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
-persistHistory();
-renderHistory();
-renderDashboard({force:true});
-showPaymentSuccess(sj.payment);
+const job=jobHistory.find(j=>String(j.id)===String(_pmJobId));
+if(job){job.payment=res.payment;if(!job.crm)job.crm={};job.crm.status='completed';touchJob(job);persistHistory();renderHistory();renderDashboard({force:true});}
+showPaymentSuccess(res.payment);
 showToast('✓ Payment received — Paid · Stripe');
-}
 }catch(e){}
 }
 function showPaymentSuccess(payment){
@@ -4403,6 +4448,7 @@ const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
 let fp=(document.getElementById('crmFinalPrice').value||'').trim();
 if(fp&&!/[a-zA-Z$]/.test(fp))fp='$'+fp;            // bare number -> add $
 job.finalPrice=(fp&&fp!==job.price)?fp:null;        // only an override when it differs from the calc range
+touchJob(job);
 persistHistory();renderHistory();
 if(typeof renderCustomerSearch==='function'&&document.getElementById('dashboardPage')&&document.getElementById('dashboardPage').style.display!=='none')renderCustomerSearch();
 if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
