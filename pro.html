@@ -4371,7 +4371,7 @@ try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');
 renderStripeSettings();
 // refresh any open list views so the Collect-payment / Send-receipt buttons appear once status is known
 try{if(typeof renderHistory==='function')renderHistory();}catch(e){}
-renderDashboard({force:true}); // Stripe state changed (not job data) — force past the signature guard so payment buttons refresh
+renderDashboard({force:true,skipAnalytics:true}); // Stripe state changed (not job data) — refresh payment buttons without rebuilding the charts
 }
 function renderStripeSettings(){
 const sec=document.getElementById('stripeSettingsSection');if(!sec)return;
@@ -5292,7 +5292,9 @@ requestAnimationFrame(()=>{ // below the fold — defer so first paint isn't blo
 if(!dashboardVisible())return;
 // renderDashAnalytics paints its stat grid synchronously and defers the 4 Chart.js builds to
 // the next frame internally, so calling it directly here is already cheap — no extra gating needed.
-try{renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();}catch(e){}
+// skipAnalytics lets callers that don't change job data (e.g. a Stripe-status refresh) avoid
+// needlessly destroying & rebuilding the charts, which is what made them flicker/vanish.
+try{renderCalendar();renderUpcoming();renderCompletedJobs();if(!opts.skipAnalytics)renderDashAnalytics();}catch(e){}
 });
 }
 function openDashboard(){
@@ -5972,6 +5974,7 @@ body.innerHTML=switchHtml+`<div class="dash-stat-grid">
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-trend-up" style="font-size:12px;color:#5DCAA5;"></i> Over/Under per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDiff" class="insights-chart" height="140"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-lightning" style="font-size:12px;color:var(--gold);"></i> Efficiency — $/hr per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDollarPerMin" class="insights-chart" height="140"></canvas></div></div>`;
 requestAnimationFrame(()=>{
+if(!dashboardVisible())return;   // never build charts into a hidden canvas — Chart.js sizes them to 0 and they stay blank
 const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
 const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
 const chrono=[...logged].sort((a,b)=>jobMs(a)-jobMs(b));   // oldest → newest so charts read left-to-right in time
@@ -6000,6 +6003,9 @@ dashCharts.dollarPerMin=new Chart(ctx4,{type:'line',data:{labels:dpmLabelsDash,d
 ctx4.canvas.style.display='none';
 ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding:28px 0;font-size:12px;color:rgba(255,255,255,.25);">Log 2+ timed jobs to see efficiency trend.</div>');
 }
+// Safety net: re-measure once the dashboard is definitely laid out. Fixes a chart built a frame
+// too early (first dashboard open / right after login) that came out 0-sized and blank.
+setTimeout(()=>{if(dashboardVisible())Object.values(dashCharts).forEach(c=>{try{c.resize();}catch(e){}});},90);
 });
 }
 function startLocationWatch(){
