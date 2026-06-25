@@ -3982,13 +3982,34 @@ row.innerHTML = `
 container.appendChild(row);
 });
 }
-function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}renderHistory();refreshInsightsBtn();}
+// One-time repair: an earlier build briefly assigned UUID-string job ids, which broke the inline
+// onclick handlers (openCrm(${id}) etc.) and numeric id comparisons. Re-key any non-numeric id
+// back to a numeric one, and on the server delete the old row + re-save under the new id.
+function migrateLegacyIds(){
+let changed=false;
+jobHistory.forEach(j=>{
+if(!j||j.id==null||typeof j.id==='number'||/^\d+$/.test(String(j.id)))return;
+const oldId=j.id;
+j.id=newJobId();touchJob(j);changed=true;
+if(session.token){
+api({action:'deleteJob',token:session.token,jobId:String(oldId)}).catch(()=>queueSync({action:'deleteJob',jobId:String(oldId)}));
+const _p={action:'saveJob',jobId:j.id,price:j.price,load:j.load,specials:j.specials,miles:j.miles,hours:j.hours,markup:j.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:j};
+api({..._p,token:session.token}).catch(()=>queueSync(_p));
+}
+});
+if(changed)persistHistory();
+}
+function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}migrateLegacyIds();renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
 // Stamp a job as locally edited "now" — the merge uses this to win against a stale server copy.
 function touchJob(j){if(j)j.updatedAt=Date.now();return j;}
 // Collision-proof job id. Date.now() alone collides when two saves land in the same millisecond
 // (double-tap, or two crew devices), which the merge would then silently fold into one job.
-function newJobId(){try{if(crypto&&crypto.randomUUID)return crypto.randomUUID();}catch(e){}return Date.now()+'-'+Math.random().toString(36).slice(2,8);}
+let _lastJobId=0;
+// Monotonic NUMERIC id — unique even for same-millisecond saves (double-tap / two quick saves),
+// while staying a plain number so the inline handlers (openCrm(${id})), strict id comparisons,
+// and numeric sorts (b.id-a.id) all keep working. A UUID string broke every history button.
+function newJobId(){let t=Date.now();if(t<=_lastJobId)t=_lastJobId+1;_lastJobId=t;return t;}
 async function clearHistory(){
 if(!confirm('Clear all job history?'))return;
 if(!jobHistory.length){return;}
