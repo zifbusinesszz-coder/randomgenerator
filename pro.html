@@ -3144,10 +3144,7 @@ jobHistory=mergeJobHistory(res.jobs);
 if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
 persistHistory();
 renderHistory();
-const _dash=document.getElementById('dashboardPage');
-if(_dash&&_dash.style.display!=='none'){
-try{renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}catch(e){}
-}
+renderDashboard(); // signature-guarded — no-op when the server returned the same jobs we already show
 }
 }catch(e){/* offline — keep local copy */}
 }
@@ -3453,7 +3450,7 @@ startStatusPoll();
 checkStripeStatus();
 (async()=>{
 await flushSyncQueue();
-try{const jobsRes=await api({action:'getJobs',token:session.token});if(jobsRes.success){jobHistory=mergeJobHistory(jobsRes.jobs,_loginSnap);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);persistHistory();renderHistory();const _d=document.getElementById('dashboardPage');if(_d&&_d.style.display!=='none'){renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashKpis();renderDashAnalytics();}}}catch(e){}
+try{const jobsRes=await api({action:'getJobs',token:session.token});if(jobsRes.success){jobHistory=mergeJobHistory(jobsRes.jobs,_loginSnap);if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);persistHistory();renderHistory();renderDashboard();}}catch(e){}
 try{const trialRes=await api({action:'getUser',token:session.token});if(trialRes.success)checkTrialStatus(trialRes);}catch(e){}
 })();
 }catch(e){btn.disabled=false;btn.textContent='Log in to my quote tool →';showBanner('loginErr','Could not connect: '+e.message);}
@@ -3979,6 +3976,8 @@ try{await api({action:'deleteAllJobs',token:session.token});}
 catch(e){showToast('Could not sync delete to server',true);}
 }
 }
+let historyShown=30; // cap the history list — render the rest behind a "show more" so 200 jobs don't all build at once
+function showMoreHistory(){historyShown+=30;renderHistory();}
 function renderHistory(){
 const list=document.getElementById('historyList');
 if(!jobHistory.length){list.innerHTML='<div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div>';return;}
@@ -3996,7 +3995,7 @@ const winPct=Math.round(wins/logged.length*100);
 const cell=(label,val)=>`<div style="flex:1;min-width:0;text-align:center;"><div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#fff;letter-spacing:-.5px;">${val}</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);margin-top:2px;">${label}</div></div>`;
 summary=`<div style="display:flex;gap:6px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.18);border-radius:var(--r-md);padding:12px 8px;margin-bottom:12px;">${cell('Jobs done',logged.length)}${cell('Earned','$'+rev.toLocaleString())}${cell('Avg job','$'+avg.toLocaleString())}${cell('Hit quote',winPct+'%')}</div>`;
 }
-list.innerHTML=summary+jobHistory.map(j=>{
+list.innerHTML=summary+jobHistory.slice(0,historyShown).map(j=>{
 const hasCrm=j.crm&&(j.crm.name||j.crm.phone||j.crm.address);
 const statusBadge=j.crm?.status?`<span class="crm-status-badge ${statusClass[j.crm.status]||'crm-status-quoted'}">${statusLabel[j.crm.status]||j.crm.status}</span>`:'';
 const customerInfo=hasCrm?`<div class="crm-customer-info">${[j.crm.name,j.crm.phone,j.crm.address].filter(Boolean).map(escapeHtml).join(' · ')}</div>`:'';
@@ -4019,10 +4018,11 @@ return `<div class="history-item">
      ${session.stripeConnected?`<button onclick="event.stopPropagation();openPaymentModal(${j.id})" style="margin-top:5px;width:100%;padding:6px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:5px;font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
      <button onclick="event.stopPropagation();deleteJob(${j.id})" style="margin-top:5px;width:100%;background:none;border:1px solid rgba(255,80,80,.15);color:rgba(255,80,80,.35);border-radius:5px;padding:5px;font-size:10.5px;cursor:pointer;font-family:var(--font-sans);transition:all .15s;" onmouseover="this.style.background='rgba(255,80,80,.06)';this.style.color='rgba(255,80,80,.65)'" onmouseout="this.style.background='none';this.style.color='rgba(255,80,80,.35)'">Delete job</button>
    </div>`;
-}).join('');
+}).join('')+(jobHistory.length>historyShown?`<button onclick="showMoreHistory()" style="width:100%;margin-top:8px;padding:10px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.45);border-radius:var(--r-sm);font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Show ${Math.min(30,jobHistory.length-historyShown)} more · ${jobHistory.length-historyShown} older job${jobHistory.length-historyShown>1?'s':''}</button>`:'');
 }
 async function openHistory(){
 document.getElementById('historyPanel').classList.add('open');
+historyShown=30; // fresh start each time the panel opens
 if(session.token)checkStripeStatus();   // keep payment buttons in sync when opening history
 syncJobsFromServer();                    // always pull the latest from the server (cross-device)
 loadBalanceCard('histBalanceCard');      // held-funds / payout balance (Starter + all plans)
@@ -4116,7 +4116,7 @@ notes:document.getElementById('crmNotes').value.trim(),
 savedAt:new Date().toISOString(),
 reminderSent:false
 };
-persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');if(wasDashOpen){renderCalendar();renderUpcoming();renderCompletedJobs();}
+persistHistory();renderHistory();closeCrm();showToast('✓ Customer info saved');if(wasDashOpen)renderDashboard({force:true});
 if(session.token){
 api({action:'saveJob',token:session.token,jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job}).catch(()=>{});
 }
@@ -4140,7 +4140,7 @@ const notes=document.getElementById('actualNotes').value.trim();
 job.actual={...job.actual,charged,hours,notes,loggedAt:new Date().toISOString()};
 if(charged){if(!job.crm)job.crm={};job.crm.status='completed';}   // logged an outcome = the job is done
 persistHistory();renderHistory();closeActual();showToast('✓ Job outcome saved');refreshInsightsBtn();
-if(wasDashOpen){renderCustomerSearch();renderCalendar();renderUpcoming();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}
+if(wasDashOpen)renderDashboard({force:true});
 if(session.token){
 const _qp2={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
 api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
@@ -4165,7 +4165,7 @@ job.payment={paid:true,method:method,amount:amt,at:new Date().toISOString()};
 if(amt&&!(job.actual&&job.actual.charged))job.actual={...job.actual,charged:amt,loggedAt:new Date().toISOString()};
 if(!job.crm)job.crm={};job.crm.status='completed';
 persistHistory();renderHistory();
-if(document.getElementById('dashboardPage').style.display!=='none'){renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}
+renderDashboard({force:true});
 closePaymentModal();showToast('✓ Marked paid · '+method);
 if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
 }
@@ -4211,8 +4211,7 @@ jobHistory=mergeJobHistory(res.jobs);
 if(jobHistory.length>200)jobHistory=jobHistory.slice(0,200);
 persistHistory();
 renderHistory();
-const _d=document.getElementById('dashboardPage');
-if(_d&&_d.style.display!=='none'){try{renderCustomerSearch();renderCompletedJobs();renderDashAnalytics();renderDashKpis();}catch(e){}}
+renderDashboard({force:true});
 showPaymentSuccess(sj.payment);
 showToast('✓ Payment received — Paid · Stripe');
 }
@@ -4306,8 +4305,7 @@ try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');
 renderStripeSettings();
 // refresh any open list views so the Collect-payment / Send-receipt buttons appear once status is known
 try{if(typeof renderHistory==='function')renderHistory();}catch(e){}
-const _dash=document.getElementById('dashboardPage');
-if(_dash&&_dash.style.display!=='none'){try{renderCustomerSearch();renderCompletedJobs();renderUpcoming();}catch(e){}}
+renderDashboard({force:true}); // Stripe state changed (not job data) — force past the signature guard so payment buttons refresh
 }
 function renderStripeSettings(){
 const sec=document.getElementById('stripeSettingsSection');if(!sec)return;
@@ -5208,6 +5206,39 @@ applyPricing({});closeModal();openCalcDirect();
 btn.disabled=false;btn.textContent='Join team →';
 }
 
+/* ── Dashboard render orchestration ──
+   Single entry point for re-rendering the dashboard. A cheap signature guard kills the
+   duplicate full re-render that used to fire on every server sync; KPIs + customers (above
+   the fold) paint immediately, the rest is deferred to the next frame, and the analytics
+   block (4 charts) is built lazily only when it scrolls into view. */
+let _lastDashSig=null,_analyticsObserver=null,_analyticsPending=true;
+function dashboardVisible(){const d=document.getElementById('dashboardPage');return !!d&&d.style.display!=='none';}
+function renderDashboard(opts){
+opts=opts||{};
+if(!dashboardVisible())return;
+let sig;try{sig=JSON.stringify(jobHistory);}catch(e){sig=null;}
+if(!opts.force&&sig!==null&&sig===_lastDashSig)return; // nothing the dashboard renders has changed — skip the whole pass
+_lastDashSig=sig;
+renderDashKpis();        // above the fold — paint immediately
+renderCustomerSearch();
+requestAnimationFrame(()=>{ // below the fold — defer so first paint isn't blocked by the rest
+if(!dashboardVisible())return;
+try{renderCalendar();renderUpcoming();renderCompletedJobs();scheduleAnalytics();}catch(e){}
+});
+}
+function _dashInViewport(el){if(!el)return false;const r=el.getBoundingClientRect();return r.top<(window.innerHeight||0)+200&&r.bottom>-200;}
+function ensureAnalyticsObserver(){
+if(_analyticsObserver||!('IntersectionObserver' in window))return;
+const el=document.getElementById('dashAnalytics');if(!el)return;
+_analyticsObserver=new IntersectionObserver(es=>{if(_analyticsPending&&es.some(e=>e.isIntersecting)){_analyticsPending=false;renderDashAnalytics();}},{rootMargin:'200px'});
+_analyticsObserver.observe(el);
+}
+// Build the analytics block only when it's on/near screen — it's the heaviest part of the dashboard.
+function scheduleAnalytics(){
+const el=document.getElementById('dashAnalytics');
+if(!('IntersectionObserver' in window)||_dashInViewport(el)){_analyticsPending=false;renderDashAnalytics();ensureAnalyticsObserver();return;}
+_analyticsPending=true;ensureAnalyticsObserver();
+}
 function openDashboard(){
 if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
 document.getElementById('calcPage').style.display='none';
@@ -5221,12 +5252,7 @@ if(teamBtn)teamBtn.style.display=isTeamOwner()?'inline-flex':'none';
 calCurrentDate=new Date();
 const csi=document.getElementById('custSearchInput');if(csi)csi.value='';custFilter='all';custSort='recent';custExpanded=false;
 const css=document.getElementById('custSort');if(css)css.value='recent';
-renderDashKpis();
-renderCustomerSearch();
-renderCalendar();
-renderUpcoming();
-renderCompletedJobs();
-renderDashAnalytics();
+renderDashboard({force:true});
 flushSyncQueue();
 if(window.AOS)setTimeout(()=>AOS.refreshHard(),60);
 }
@@ -5727,9 +5753,7 @@ persistHistory();
 const panel=document.getElementById('afterPhotoPanel');
 if(panel)panel.remove();
 renderHistory();
-renderCompletedJobs();
-renderUpcoming();
-if(wasDashOpen){renderCustomerSearch();renderCalendar();renderDashAnalytics();renderDashKpis();}
+renderDashboard({force:true});
 showToast('✓ Job marked complete');
 if(session.token){
 const _qp3={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};
