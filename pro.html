@@ -4219,14 +4219,17 @@ api({..._qp2,token:session.token}).catch(()=>queueSync(_qp2));
 // ── STRIPE PAYMENTS ──────────────────────────────────────
 let _pmJobId=null,_pmLink=null;
 // payment status pill — shown on completed jobs: Stripe-paid / manually-paid / unpaid
-function paymentBadge(j){
+function paymentBadge(j,inline){
 if(!(j.crm&&j.crm.status==='completed'))return '';
 const p=j.payment;
+// inline=true → sits next to a name in a flex row (no top margin / left margin; gap handles spacing).
+// default → own row alongside other badges, where the 3px top margin lines it up with the text.
+const base=`display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:7px;padding:2px 7px;margin-top:${inline?'0':'3px'};margin-left:${inline?'0':'4px'};`;
 if(p&&p.paid){
-if(p.method==='stripe')return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a09eff;border:1px solid rgba(99,91,255,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;"><i class="ph ph-credit-card" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · Stripe</span>';
-return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#5DCAA5;border:1px solid rgba(26,158,114,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;"><i class="ph ph-money" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · '+escapeHtml(p.method||'other')+'</span>';
+if(p.method==='stripe')return `<span style="${base}color:#a09eff;border:1px solid rgba(99,91,255,.4);"><i class="ph ph-credit-card" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · Stripe</span>`;
+return `<span style="${base}color:#5DCAA5;border:1px solid rgba(26,158,114,.4);"><i class="ph ph-money" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · `+escapeHtml(p.method||'other')+`</span>`;
 }
-return '<span style="display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#E0883B;border:1px solid rgba(224,136,59,.4);border-radius:7px;padding:2px 7px;margin-top:3px;margin-left:4px;">Unpaid</span>';
+return `<span style="${base}color:#E0883B;border:1px solid rgba(224,136,59,.4);">Unpaid</span>`;
 }
 function markPaidManual(method){
 const job=jobHistory.find(j=>j.id===_pmJobId);if(!job)return;
@@ -5832,7 +5835,7 @@ const _cdtStr=_cdt&&!isNaN(_cdt)?_cdt.toLocaleString('en-US',{month:'short',day:
 return `<div style="border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-md);padding:12px 14px;margin-bottom:7px;">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px;">
 <div>
-<div style="font-size:13px;font-weight:700;color:white;">${escapeHtml(j.crm?.name||'Customer')}${paymentBadge(j)}</div>
+<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:13px;font-weight:700;color:white;">${escapeHtml(j.crm?.name||'Customer')}${paymentBadge(j,true)}</div>
 ${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;font-weight:600;">${_cdtStr}</div>`:''}
 <div style="font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1px;">${escapeHtml(j.crm?.address||'')}</div>
 </div>
@@ -5901,6 +5904,10 @@ if(j&&j.actual){
 if(j.actual.durationSeconds>0)return j.actual.durationSeconds/3600;
 if(j.actual.hours>0)return j.actual.hours;
 }
+// fall back to the quoted/estimated labor hours so EVERY completed job can plot a $/hr
+// point — otherwise jobs logged without a timer drop out and the chart shows fewer jobs
+// than the others (e.g. 4 of 8).
+if(j&&j.hours>0)return j.hours;
 return 0;
 }
 function renderDashKpis(){
