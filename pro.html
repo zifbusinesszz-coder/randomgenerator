@@ -5858,10 +5858,13 @@ ${session.stripeConnected?`<button onclick="openPaymentModal(${j.id})" style="gr
 </div>
 </div>`;
 }
+let _completedExpanded=false;   // expand state lives here, NOT re-read from the DOM we're rebuilding
 function renderCompletedJobs(){
 const container=document.getElementById('completedJobsSection');
 if(!container)return;
-const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted).slice(0,50);
+const completed=jobHistory.filter(j=>j.crm?.status==='completed'&&j.actual?.durationFormatted)
+.sort((a,b)=>new Date(b.actual.loggedAt||0)-new Date(a.actual.loggedAt||0))   // newest COMPLETION first (not creation order)
+.slice(0,50);
 if(!completed.length){container.style.display='none';return;}
 container.style.display='block';
 if(window.AOS)setTimeout(()=>AOS.refresh(),50);
@@ -5871,7 +5874,8 @@ const recent=completed.slice(0,2);
 const older=completed.slice(2);
 const olderId='completedOlderJobs';
 const btnId='completedOlderBtn';
-const isOpen=document.getElementById(olderId)?.style.display==='block';
+if(!older.length)_completedExpanded=false;   // nothing to expand
+const isOpen=_completedExpanded;
 let html=recent.map(buildCompletedJobCard).join('');
 if(older.length){
 html+=`<button id="${btnId}" onclick="toggleOlderCompleted()" style="width:100%;margin-top:2px;padding:9px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.42);border-radius:var(--r-sm);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;">
@@ -5882,15 +5886,8 @@ html+=`<button id="${btnId}" onclick="toggleOlderCompleted()" style="width:100%;
 list.innerHTML=html;
 }
 function toggleOlderCompleted(){
-const panel=document.getElementById('completedOlderJobs');
-const btn=document.getElementById('completedOlderBtn');
-const caret=document.getElementById('completedOlderCaret');
-if(!panel)return;
-const open=panel.style.display==='block';
-panel.style.display=open?'none':'block';
-caret.style.transform=open?'':'rotate(180deg)';
-const count=document.getElementById('completedJobsList').querySelectorAll('#completedOlderJobs > div').length;
-btn.innerHTML=`<i class="ph ph-caret-down" id="completedOlderCaret" style="font-size:13px;transition:transform .2s;${open?'':'transform:rotate(180deg)'}"></i> ${open?'Show':'Hide'} ${count} older job${count>1?'s':''}`;
+_completedExpanded=!_completedExpanded;
+renderCompletedJobs();   // single source of truth — re-render reflects the new state consistently
 }
 
 let dashCharts={};
