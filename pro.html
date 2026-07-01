@@ -3106,6 +3106,7 @@ return data;
 
 function queueSync(payload){
 const {token,...rest}=payload;
+rest._cid=session.companyId;   // tag with the account that queued it — never replay into a different login
 try{const q=JSON.parse(localStorage.getItem('ww_pending_sync')||'[]');q.push(rest);localStorage.setItem('ww_pending_sync',JSON.stringify(q));}catch(e){}
 }
 async function flushSyncQueue(){
@@ -3113,10 +3114,14 @@ if(!session.token)return;
 try{
 const q=JSON.parse(localStorage.getItem('ww_pending_sync')||'[]');
 if(!q.length)return;
+// Only replay items queued by THIS account (untagged legacy items replay too); keep the rest queued.
+const mine=[],others=[];
+for(const item of q)((!item._cid||item._cid===session.companyId)?mine:others).push(item);
+if(!mine.length)return;
 const failed=[];
-for(const payload of q){try{await api({...payload,token:session.token});}catch(e){failed.push(payload);}}
-localStorage.setItem('ww_pending_sync',JSON.stringify(failed));
-const synced=q.length-failed.length;
+for(const payload of mine){const {_cid,...rest}=payload;try{await api({...rest,token:session.token});}catch(e){failed.push(payload);}}
+localStorage.setItem('ww_pending_sync',JSON.stringify(others.concat(failed)));
+const synced=mine.length-failed.length;
 if(synced>0)showToast('✓ Synced '+synced+' offline job'+(synced!==1?'s':''));
 }catch(e){}
 }
@@ -3682,6 +3687,7 @@ function closeAiPanel(){document.getElementById('aiPanel').classList.remove('ope
 function closeAiOutside(e){if(e.target===document.getElementById('aiPanel'))closeAiPanel();}
 function handleAiFiles(files){
 const remaining=5-aiFiles.length;
+if(files.length>remaining)showToast(remaining>0?'Max 5 photos — added the first '+remaining:'Max 5 photos per quote',true);
 Array.from(files).slice(0,remaining).forEach(f=>{if(!aiFiles.find(x=>x.name===f.name&&x.size===f.size))aiFiles.push(f);});
 aiAnalyzed=false;aiResults=[];
 document.getElementById('aiTotalCard').style.display='none';document.getElementById('aiSaveBtn').style.display='none';
@@ -4012,6 +4018,9 @@ let _lastJobId=0;
 // and numeric sorts (b.id-a.id) all keep working. A UUID string broke every history button.
 function newJobId(){let t=Date.now();if(t<=_lastJobId)t=_lastJobId+1;_lastJobId=t;return t;}
 async function clearHistory(){
+// The shared team history lives under the owner's account — a member's server-side delete is a
+// no-op, so their local clear would just resurrect on the next sync. Block it up front.
+if(session.token&&session.role==='member'){showToast('Only the account owner can clear the shared history',true);return;}
 if(!confirm('Clear all job history?'))return;
 if(!jobHistory.length){return;}
 jobHistory=[];persistHistory();renderHistory();showToast('History cleared');
@@ -4077,7 +4086,7 @@ function closeHistoryOutside(e){if(e.target===document.getElementById('historyPa
 /* ── JOB ACTUAL ── */
 function openActual(jobId){
 const job=jobHistory.find(j=>j.id===jobId);if(!job)return;actualJobId=jobId;
-document.getElementById('actualQuotedPrice').textContent=job.price;
+document.getElementById('actualQuotedPrice').textContent=jobQuotePrice(job);
 const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
 const parts=[ll[job.load]||job.load];if(job.specials&&job.specials.length)parts.push(job.specials.join(', '));if(job.miles)parts.push(job.miles+' mi');
 document.getElementById('actualQuotedDetail').textContent=parts.join(' · ');
@@ -4093,7 +4102,7 @@ function onActualInput(){
 const charged=parseFloat(document.getElementById('actualCharged').value)||0;
 const job=jobHistory.find(j=>j.id===actualJobId);
 if(!job||!charged){document.getElementById('actualDiff').style.display='none';return;}
-const parts=job.price.replace(/[^0-9–]/g,'').split('–').map(Number);const quotedMid=parts.length===2?(parts[0]+parts[1])/2:parts[0];const diff=charged-quotedMid;
+const quotedMid=priceMid(jobQuotePrice(job));const diff=charged-quotedMid;
 const diffEl=document.getElementById('actualDiff');diffEl.style.display='block';diffEl.className='actual-diff '+(diff>=0?'over':'under');
 document.getElementById('actualDiffLabel').textContent=diff>=0?'Charged more than quoted':'Charged less than quoted';
 document.getElementById('actualDiffVal').textContent=(diff>=0?'+':'')+'$'+Math.abs(Math.round(diff));
@@ -4552,7 +4561,7 @@ Object.values(insightCharts).forEach(c=>{try{c.destroy();}catch(e){}});insightCh
 const body=document.getElementById('insightsBody');
 const logged=jobHistory.filter(j=>j.actual?.charged);
 if(logged.length<1){body.innerHTML='<div class="insights-empty">Log at least 1 job outcome to see insights.<br><br>After saving a quote, tap "How\'d it go?" in history to record what actually happened.</div>';return;}
-const diffs=logged.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const diffs=logged.map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));   // finalPrice-aware, same as the history card
 const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
 const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
 const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
@@ -4573,7 +4582,7 @@ const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',ful
 const loadStats={};
 ['minimum','quarter','half','full'].forEach(k=>{
 const jobs=logged.filter(j=>j.load===k);if(!jobs.length)return;
-const d=jobs.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const d=jobs.map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));
 loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
 });
 const alerts=[];
@@ -4612,7 +4621,7 @@ const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
 const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
 const recent=logged.slice(-15);
 const labels=recent.map((_,i)=>'Job '+(i+1));
-const quotedVals=recent.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
+const quotedVals=recent.map(j=>priceMid(jobQuotePrice(j)));
 const actualVals=recent.map(j=>j.actual.charged||0);
 const ctx1=document.getElementById('chartQuotedActual')?.getContext('2d');
 if(ctx1){insightCharts.quotedActual=new Chart(ctx1,{type:'line',data:{labels,datasets:[{label:'Quoted',data:quotedVals,borderColor:'rgba(255,255,255,0.25)',backgroundColor:'rgba(255,255,255,0.03)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.4)',tension:0.3,fill:false},{label:'Actual',data:actualVals,borderColor:'#1a9e72',backgroundColor:'rgba(26,158,114,0.1)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1a9e72',tension:0.3,fill:true}]},options:{...chartDefaults,plugins:{legend:{display:true,position:'top',labels:{color:'rgba(255,255,255,0.45)',font:{size:9.5,family:'DM Sans'},boxWidth:10,padding:10}}}}});}
@@ -4620,7 +4629,7 @@ const lKeys=Object.keys(loadStats);
 const ctx2=document.getElementById('chartLoadRevenue')?.getContext('2d');
 if(ctx2&&lKeys.length){insightCharts.loadRevenue=new Chart(ctx2,{type:'bar',data:{labels:lKeys.map(k=>loadLabels[k]),datasets:[{data:lKeys.map(k=>loadStats[k].avgCharged),backgroundColor:['rgba(26,158,114,0.45)','rgba(26,158,114,0.55)','rgba(26,158,114,0.7)','rgba(26,158,114,0.88)'],borderColor:'rgba(26,158,114,1)',borderWidth:1,borderRadius:4}]},options:chartDefaults});}
 const diffLabels=logged.slice(-15).map((_,i)=>'J'+(i+1));
-const diffVals=logged.slice(-15).map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const diffVals=logged.slice(-15).map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));
 const ctx3=document.getElementById('chartDiff')?.getContext('2d');
 if(ctx3){insightCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
 const timedJobs=logged.filter(j=>jobHours(j)>0&&j.actual?.charged>0).slice(-15);
@@ -5939,7 +5948,7 @@ return;
 }
 const sumCharged=arr=>arr.reduce((s,j)=>s+(j.actual.charged||0),0);
 const dumpOf=arr=>arr.reduce((s,j)=>{let dump=0;const qtys=j.loadQtys||{};const _loads=userPricing.loads||{};['minimum','quarter','half','full'].forEach(k=>{const qty=qtys[k]||0;const d=_loads[k]?.dump||0;dump+=d*qty;});return s+dump;},0);
-const diffs=logged.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const diffs=logged.map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));   // finalPrice-aware, same as the history card
 const avgDiff=diffs.reduce((a,b)=>a+b,0)/diffs.length;
 const totalLeft=diffs.filter(d=>d<0).reduce((a,b)=>a+b,0);
 const winRate=Math.round((diffs.filter(d=>d>=0).length/diffs.length)*100);
@@ -5954,7 +5963,7 @@ const loadLabels={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',ful
 const loadStats={};
 ['minimum','quarter','half','full'].forEach(k=>{
 const jobs=logged.filter(j=>j.load===k);if(!jobs.length)return;
-const d=jobs.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const d=jobs.map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));
 loadStats[k]={count:jobs.length,avgDiff:d.reduce((a,b)=>a+b,0)/d.length,avgCharged:Math.round(jobs.reduce((s,j)=>s+(j.actual.charged||0),0)/jobs.length)};
 });
 const totalSecDash=logged.reduce((s,j)=>s+(j.actual?.durationSeconds||0),0);
@@ -5980,7 +5989,7 @@ const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gri
 const chrono=[...logged].sort((a,b)=>jobMs(a)-jobMs(b));   // oldest → newest so charts read left-to-right in time
 const recent=chrono.slice(-15);
 const labels=recent.map((_,i)=>'Job '+(i+1));
-const quotedVals=recent.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');return p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);});
+const quotedVals=recent.map(j=>priceMid(jobQuotePrice(j)));
 const actualVals=recent.map(j=>j.actual.charged||0);
 const ctx1=document.getElementById('dashChartQuotedActual')?.getContext('2d');
 if(ctx1){dashCharts.quotedActual=new Chart(ctx1,{type:'line',data:{labels,datasets:[{label:'Quoted',data:quotedVals,borderColor:'rgba(255,255,255,0.25)',backgroundColor:'rgba(255,255,255,0.03)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(255,255,255,0.4)',tension:0.3,fill:false},{label:'Actual',data:actualVals,borderColor:'#1a9e72',backgroundColor:'rgba(26,158,114,0.1)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1a9e72',tension:0.3,fill:true}]},options:{...chartDefaults,plugins:{legend:{display:true,position:'top',labels:{color:'rgba(255,255,255,0.45)',font:{size:9.5,family:'DM Sans'},boxWidth:10,padding:10}}}}});}
@@ -5989,7 +5998,7 @@ const ctx2=document.getElementById('dashChartLoadRevenue')?.getContext('2d');
 if(ctx2&&lKeys.length){dashCharts.loadRevenue=new Chart(ctx2,{type:'bar',data:{labels:lKeys.map(k=>loadLabels[k]),datasets:[{data:lKeys.map(k=>loadStats[k].avgCharged),backgroundColor:['rgba(26,158,114,0.45)','rgba(26,158,114,0.55)','rgba(26,158,114,0.7)','rgba(26,158,114,0.88)'],borderColor:'rgba(26,158,114,1)',borderWidth:1,borderRadius:4}]},options:chartDefaults});}
 const recentDiff=chrono.slice(-15);
 const diffLabels=recentDiff.map((_,i)=>'J'+(i+1));
-const diffVals=recentDiff.map(j=>{const p=(j.price||'').replace(/[^0-9–]/g,'').split('–');const quoted=p.length===2?(Number(p[0])+Number(p[1]))/2:Number(p[0]);return j.actual.charged-quoted;});
+const diffVals=recentDiff.map(j=>j.actual.charged-priceMid(jobQuotePrice(j)));
 const ctx3=document.getElementById('dashChartDiff')?.getContext('2d');
 if(ctx3){dashCharts.diff=new Chart(ctx3,{type:'bar',data:{labels:diffLabels,datasets:[{data:diffVals,backgroundColor:diffVals.map(d=>d>=0?'rgba(26,158,114,0.65)':'rgba(192,57,43,0.65)'),borderRadius:3}]},options:{...chartDefaults,scales:{...chartDefaults.scales,y:{...chartDefaults.scales.y,ticks:{...chartDefaults.scales.y.ticks,callback:v=>(v>=0?'+':'')+'$'+v}}}}});}
 const timedJobsDash=chrono.filter(j=>jobHours(j)>0&&j.actual?.charged>0).slice(-15);
