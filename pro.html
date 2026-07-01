@@ -1621,7 +1621,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="feat-desc">Text the customer a Stripe link — they pay with Apple Pay, Google Pay, or card, money straight to your bank. Or log cash &amp; check. Every payment is tracked (paid / unpaid), and the customer gets an automatic Stripe receipt — you get a copy too. Just 2% on Starter, 1% on Pro &amp; Team.</div>
 </div>
 <div class="feat-card">
-<div class="feat-icon"><i class="ph ph-paper-plane-tilt" style="color:var(--green);"></i></div>
+<div class="feat-icon"><i class="ph ph-paper-plane-right" style="color:var(--green);"></i></div>
 <div class="feat-title">Text Branded Quotes <span class="pro-badge-inline" style="background:rgba(26,158,114,.12);color:var(--green);">ALL PLANS</span></div>
 <div class="feat-desc">Lock in one final price (no more ranges) and text the customer a clean, branded quote in one tap — load, add-ons, travel, and total. When the job's done, the same button sends the receipt.</div>
 </div>
@@ -2410,7 +2410,7 @@ localStorage.setItem('installBannerDismissed','1');
 <input type="text" id="pmLinkInput" readonly style="flex:1;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;font-size:12px;color:rgba(255,255,255,.7);outline:none;min-width:0;"/>
 <button onclick="copyPaymentLink()" id="pmCopyBtn" style="padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:white;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);white-space:nowrap;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.14)'" onmouseout="this.style.background='rgba(255,255,255,.08)'">Copy</button>
 </div>
-<button id="pmTextBtn" onclick="textPaymentLink()" style="display:none;width:100%;padding:11px;background:var(--green);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-chat-circle-text" style="font-size:14px;"></i> Text link to customer</button>
+<button id="pmTextBtn" onclick="textPaymentLink()" style="display:none;width:100%;padding:11px;background:var(--green);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-chat-circle" style="font-size:14px;"></i> Text link to customer</button>
 <button id="pmShareBtn" onclick="sharePaymentLink()" style="display:none;width:100%;padding:11px;background:rgba(93,202,165,.1);border:1px solid rgba(93,202,165,.25);color:#5DCAA5;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);margin-bottom:10px;"><i class="ph ph-share-network" style="font-size:14px;"></i> Share link</button>
 <div style="text-align:center;">
 <img id="pmQrCode" src="" alt="QR Code" style="width:160px;height:160px;border-radius:10px;border:1px solid rgba(255,255,255,.1);"/>
@@ -2423,8 +2423,8 @@ localStorage.setItem('installBannerDismissed','1');
 <div id="pmFeeNote" style="font-size:10.5px;color:rgba(255,255,255,.25);text-align:center;margin-top:10px;">Powered by Stripe</div>
 <div style="display:flex;align-items:center;gap:8px;margin:14px 0 11px;"><div style="flex:1;height:1px;background:rgba(255,255,255,.08);"></div><div style="font-size:9.5px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;">or mark as paid</div><div style="flex:1;height:1px;background:rgba(255,255,255,.08);"></div></div>
 <div style="display:flex;gap:7px;">
-<button onclick="markPaidManual('cash')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-money" style="font-size:13px;"></i> Cash</button>
-<button onclick="markPaidManual('check')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-receipt" style="font-size:13px;"></i> Check</button>
+<button onclick="markPaidManual('cash')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-currency-dollar" style="font-size:13px;"></i> Cash</button>
+<button onclick="markPaidManual('check')" style="flex:1;padding:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);"><i class="ph ph-clipboard-text" style="font-size:13px;"></i> Check</button>
 </div>
 </div>
 </div>
@@ -2454,7 +2454,7 @@ localStorage.setItem('installBannerDismissed','1');
 <input type="text" id="crmFinalPrice" class="crm-input" placeholder="e.g. $275" onchange="saveFinalPrice()" style="width:100%;box-sizing:border-box;"/>
 <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;">Set one price to send the customer instead of a range.</div>
 </div>
-<button id="crmSendBtn" onclick="crmSend()" style="margin-top:12px;width:100%;padding:9px;background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-paper-plane-tilt" style="font-size:14px;"></i> Text quote to customer</button>
+<button id="crmSendBtn" onclick="crmSend()" style="margin-top:12px;width:100%;padding:9px;background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;"><i class="ph ph-paper-plane-right" style="font-size:14px;"></i> Text quote to customer</button>
 </div>
 <div id="crmRepeatBanner" style="display:none;align-items:center;gap:9px;background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.22);border-radius:var(--r-sm);padding:10px 13px;margin-bottom:14px;">
 <i class="ph ph-arrows-clockwise" style="font-size:16px;color:#5DCAA5;flex-shrink:0;"></i>
@@ -2719,7 +2719,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="dash-card-title"><i class="ph ph-address-book" style="font-size:12px;color:#5DCAA5;"></i> Customers <span id="custSearchCount" style="margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.38);text-transform:none;"></span><button onclick="exportCustomersCSV()" title="Export customers to CSV" style="background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.5);border-radius:6px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);text-transform:none;letter-spacing:0;display:inline-flex;align-items:center;gap:5px;margin-left:10px;" onmouseover="this.style.color='#5DCAA5';this.style.borderColor='rgba(26,158,114,.4)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='var(--d-border)'"><i class="ph ph-share-network" style="font-size:12px;"></i> Export</button></div>
 <div id="followUpBanner" style="display:none;"></div>
 <div style="position:relative;margin-bottom:14px;">
-<i class="ph ph-magnifying-glass" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:rgba(255,255,255,.3);pointer-events:none;"></i>
+<i class="ph ph-address-book" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:rgba(255,255,255,.3);pointer-events:none;"></i>
 <input type="text" id="custSearchInput" oninput="renderCustomerSearch()" placeholder="Search by name, phone, address, or notes…" aria-label="Search customers by name, phone, address, or notes" autocomplete="off" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--d-border);border-radius:var(--r-md);padding:11px 13px 11px 38px;color:#fff;font-size:13px;font-family:var(--font-sans);outline:none;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(26,158,114,.5)'" onblur="this.style.borderColor='var(--d-border)'"/>
 </div>
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
@@ -2940,7 +2940,7 @@ paint:'PAINT CANS — cylindrical metal cans with a wire bail handle on top, 1-5
 demo:'DEMOLITION DEBRIS — broken drywall sheets (white/gray flat panels, often in large pieces or crumbles), concrete chunks or rubble, ceramic tile pieces, lumber with nails, plywood scraps, insulation batts (pink/yellow fluffy material). Usually a messy mixed pile of construction materials.',
 hazmat:'HAZARDOUS MATERIALS — look for: chemical drums or jugs with warning labels, fluorescent tube lights (long thin glass tubes), car or truck batteries (black rectangular boxes with terminals), bags of asbestos tile or wrapped insulation, paint thinner/solvent cans, propane tanks. ANY item with a hazard label counts.'
 };
-return cues[key]||`look carefully for any "${v.label}" in the photo — if you can see one or reasonably suspect one is present based on the context, include it. Err on the side of flagging it.`;
+return cues[key]||`look carefully for any "${(userPricing.specials[key]&&userPricing.specials[key].label)||key}" in the photo — if you can see one or reasonably suspect one is present based on the context, include it. Err on the side of flagging it.`;
 }
 
 function isTeamOwner(){return ['team','team-yearly','team10','team10-yearly'].includes(session.plan)&&session.role==='owner';}
@@ -3048,7 +3048,8 @@ jobHistory=_m;localStorage.setItem('ww_history',JSON.stringify(_m));   // refres
 checkStripeStatus();
 }
 else loadLocalPricing();
-openCalcDirect();
+if(session.token)openCalcDirect();   // token was cleared (session expired) -> stay on the login/marketing page
+else document.getElementById('marketingPage').style.display='block';
 hidePageLoader();
 }catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();}
 }
@@ -3565,7 +3566,7 @@ document.getElementById('qty-'+key).textContent=loadQtys[key];
 document.getElementById('cl-'+key).classList.toggle('has-qty',loadQtys[key]>0);
 recalc();
 }
-function toggleCalcSpecial(key){selectedSpecials[key]=!selectedSpecials[key];document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]);recalc();}
+function toggleCalcSpecial(key){selectedSpecials[key]=(selectedSpecials[key]||0)>0?0:1;const q=document.getElementById('csqty-'+key);if(q)q.textContent=selectedSpecials[key];document.getElementById('cs-'+key).classList.toggle('sel',selectedSpecials[key]>0);recalc();}
 function onMarkupSlide(){document.getElementById('calcMarkupPct').textContent=document.getElementById('calcMarkup').value+'%';recalc();}
 
 function toggleDriveSection(){
@@ -4080,7 +4081,7 @@ document.getElementById('actualQuotedPrice').textContent=job.price;
 const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
 const parts=[ll[job.load]||job.load];if(job.specials&&job.specials.length)parts.push(job.specials.join(', '));if(job.miles)parts.push(job.miles+' mi');
 document.getElementById('actualQuotedDetail').textContent=parts.join(' · ');
-document.getElementById('actualCharged').value='';document.getElementById('actualHours').value=job.hours||'';
+document.getElementById('actualCharged').value=job.actual?.charged||'';document.getElementById('actualHours').value=job.actual?.hours||job.hours||'';
 document.getElementById('actualNotes').value=job.actual?.notes||'';document.getElementById('actualDiff').style.display='none';
 const receiptBtn=document.getElementById('sendReceiptBtn');
 if(receiptBtn)receiptBtn.style.display=(job.crm?.phone||job.crm?.email)?'block':'none';
@@ -4118,7 +4119,7 @@ document.getElementById('crmNotes').value=job.crm?.notes||'';
 document.getElementById('crmDateTime').value=job.crm?.dateTime||'';
 document.getElementById('crmFinalPrice').value=job.finalPrice||'';
 const _sb=document.getElementById('crmSendBtn');
-if(_sb){const done=job.crm&&job.crm.status==='completed';_sb.innerHTML=done?'<i class="ph ph-receipt" style="font-size:14px;"></i> Send receipt to customer':'<i class="ph ph-paper-plane-tilt" style="font-size:14px;"></i> Text quote to customer';}
+if(_sb){const done=job.crm&&job.crm.status==='completed';_sb.innerHTML=done?'<i class="ph ph-clipboard-text" style="font-size:14px;"></i> Send receipt to customer':'<i class="ph ph-paper-plane-right" style="font-size:14px;"></i> Text quote to customer';}
 toggleCrmDate();
 checkRepeatCustomer(jobId, job.crm?.name||'', job.crm?.phone||'');
 document.getElementById('crmPanel').classList.add('open');
@@ -4227,7 +4228,7 @@ const p=j.payment;
 const base=`display:inline-block;vertical-align:middle;font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:7px;padding:2px 7px;margin-top:${inline?'0':'3px'};margin-left:${inline?'0':'4px'};`;
 if(p&&p.paid){
 if(p.method==='stripe')return `<span style="${base}color:#a09eff;border:1px solid rgba(99,91,255,.4);"><i class="ph ph-credit-card" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · Stripe</span>`;
-return `<span style="${base}color:#5DCAA5;border:1px solid rgba(26,158,114,.4);"><i class="ph ph-money" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · `+escapeHtml(p.method||'other')+`</span>`;
+return `<span style="${base}color:#5DCAA5;border:1px solid rgba(26,158,114,.4);"><i class="ph ph-currency-dollar" style="font-size:10px;vertical-align:-1px;margin-right:2px;"></i>Paid · `+escapeHtml(p.method||'other')+`</span>`;
 }
 return `<span style="${base}color:#E0883B;border:1px solid rgba(224,136,59,.4);">Unpaid</span>`;
 }
@@ -4494,61 +4495,47 @@ window.open('sms:'+phone+'?body='+encodeURIComponent(quoteSmsBody(job,(job.crm&&
 showToast('✓ Quote opened — tap send');
 }
 
+// One receipt format shared by BOTH receipt buttons (history card + outcome panel).
+// Conditional lines are null (dropped); '' lines are intentional spacing and are kept,
+// with consecutive blanks collapsed — the old .filter(Boolean) stripped ALL spacing.
+function receiptSmsBody(job){
+const biz=session.businessName||"Wood's Waste";
+const ll={minimum:'Minimum Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'Junk Removal'};
+const when=job.actual?.loggedAt?new Date(job.actual.loggedAt).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}):(job.ts||'');
+const total=job.actual?.charged?'$'+Number(job.actual.charged).toLocaleString():(jobQuotePrice(job)||'');
+const payment=job.payment&&job.payment.paid?('Paid — '+(job.payment.method==='stripe'?'card':job.payment.method||'received')):'';
+const lines=[
+biz,
+'Receipt of Service',
+'',
+when?'Date: '+when:null,
+job.crm?.name?'Customer: '+job.crm.name:null,
+job.crm?.address?'Address: '+job.crm.address:null,
+'',
+'Service: '+(job.loadSummary||ll[job.load]||'Junk removal'),
+job.specials?.length?'Add-ons: '+job.specials.join(', '):null,
+'',
+total?'Total: '+total:null,
+payment?'Payment: '+payment:null,
+'',
+'Thank you for choosing '+biz+'!',
+'Questions? Just reply to this text.'
+].filter(l=>l!==null);
+return lines.filter((l,i,a)=>l!==''||(i>0&&a[i-1]!=='')).join('\n');
+}
 function sendReceiptForJob(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
-const name=job.crm?.name||'Customer';
-const phone=job.crm?.phone||'';
-const address=job.crm?.address||'';
-const charged=job.actual?.charged?'$'+job.actual.charged:'';
-const lines=[
-'🧾 '+session.businessName,
-'─────────────────',
-'',
-'👤 '+name,
-address?'📍 '+address:'',
-job.ts?'📅 '+job.ts:'',
-'',
-'🚛 What we removed:',
-job.loadSummary?'   '+job.loadSummary:'',
-job.specials?.length?'   '+job.specials.join(', '):'',
-'',
-charged?'💵 Total charged: '+charged:'',
-'',
-'─────────────────',
-'Thanks for choosing '+session.businessName+'!',
-'Questions? Call/text this number!',
-].filter(Boolean).join('\n');
-if(phone){window.open('sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(lines));}
+const phone=(job.crm?.phone||'').replace(/\D/g,'');
+if(!phone){showToast('No phone on file for this customer',true);return;}
+window.open('sms:'+phone+'?body='+encodeURIComponent(receiptSmsBody(job)));
 showToast('✓ Receipt opened — tap send');
 }
 
 function sendReceipt(){
 const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
-const name=job.crm?.name||'Customer';
-const phone=job.crm?.phone||'';
-const address=job.crm?.address||'';
-const charged=job.actual?.charged?'$'+job.actual.charged:'';
-const lines=[
-'🧾 '+session.businessName,
-'─────────────────',
-'',
-'👤 '+name,
-address?'📍 '+address:'',
-job.ts?'📅 '+job.ts:'',
-'',
-'🚛 What we removed:',
-job.loadSummary?'   '+job.loadSummary:'',
-job.specials?.length?'   '+job.specials.join(', '):'',
-'',
-charged?'💵 Total charged: '+charged:'',
-'',
-'─────────────────',
-'Thanks for choosing '+session.businessName+'!',
-'Questions? Call/text this number!',
-].filter(Boolean).join('\n');
-if(phone){
-window.open('sms:'+phone.replace(/\D/g,'')+'?body='+encodeURIComponent(lines));
-}
+const phone=(job.crm?.phone||'').replace(/\D/g,'');
+if(!phone){showToast('No phone on file for this customer',true);return;}
+window.open('sms:'+phone+'?body='+encodeURIComponent(receiptSmsBody(job)));
 showToast('✓ Receipt opened — tap send');
 }
 
@@ -4949,8 +4936,9 @@ paywallCardElement.mount('#paywallCardElement');
 paywallCardElement.on('change',e=>{paywallCardComplete=e.complete;const err=document.getElementById('paywallCardErrors');err.textContent=e.error?e.error.message:'';document.getElementById('paywallStripeWrap').classList.toggle('error',!!e.error);});
 paywallCardElement.on('focus',()=>document.getElementById('paywallStripeWrap').classList.add('focused'));
 paywallCardElement.on('blur',()=>document.getElementById('paywallStripeWrap').classList.remove('focused'));
-const amount=paywallSelectedPlan==='pro'?5900:2900;
-const planLabel=paywallSelectedPlan==='pro'?'Pro — $59/mo':'Starter — $29/mo';
+const PLAN_AMOUNTS={starter:2900,'starter-yearly':29000,pro:5900,'pro-yearly':59000,team:14900,'team-yearly':149000,team10:29900,'team10-yearly':299900};
+const amount=PLAN_AMOUNTS[paywallSelectedPlan]||2900;
+const planLabel=document.getElementById('paywallPaymentPlanLabel')?.textContent||'Plan';
 const pr=paywallStripe.paymentRequest({country:'US',currency:'usd',total:{label:"Wood's Waste "+planLabel,amount},requestPayerName:true,requestPayerEmail:true});
 const prButton=elements.create('paymentRequestButton',{paymentRequest:pr,style:{paymentRequestButton:{type:'default',theme:'dark',height:'44px'}}});
 pr.canMakePayment().then(result=>{const wrap=document.getElementById('paywallPrButtonWrap');if(result&&result.applePay){wrap.style.display='block';prButton.mount('#paywallPrButtonElement');}else{wrap.style.display='none';}});
@@ -5156,7 +5144,7 @@ const scheduled=jobHistory.filter(j=>j.crm&&j.crm.status==='scheduled');
 if(!scheduled.length){el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,.3);padding:8px 0;">No scheduled jobs yet.</div>';return;}
 const members=teamData.members||[];
 el.innerHTML=scheduled.map(j=>{
-const label=(j.crm&&j.crm.name)||(j.load?j.load+' load':'Job');
+const label=escapeHtml((j.crm&&j.crm.name)||(j.load?j.load+' load':'Job'));
 const dt=formatAssignDateTime(j.crm&&j.crm.dateTime);
 const price=j.actual?.charged?'$'+j.actual.charged:j.price||'';
 const assigned=Array.isArray(j.assignedTo)?j.assignedTo:[];
@@ -5487,7 +5475,7 @@ const cold=customers.filter(isColdQuote);
 if(cold.length){
 fb.style.display='block';
 fb.innerHTML='<div style="display:flex;align-items:center;gap:10px;background:rgba(201,162,75,.1);border:1px solid rgba(201,162,75,.3);border-radius:var(--r-md);padding:11px 13px;margin-bottom:14px;">'+
-'<i class="ph ph-bell-ringing" style="font-size:18px;color:#C9A24B;flex-shrink:0;"></i>'+
+'<i class="ph ph-clock" style="font-size:18px;color:#C9A24B;flex-shrink:0;"></i>'+
 '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;color:#C9A24B;">'+cold.length+' quote'+(cold.length!==1?'s':'')+' going cold</div>'+
 '<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;">Quoted '+STALE_DAYS+'+ days ago with no booking — a quick follow-up text wins jobs back.</div></div>'+
 '<button onclick="setCustFilter(\'quoted\')" style="flex-shrink:0;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:7px 12px;border-radius:var(--r-sm);background:#C9A24B;color:#0b0b0b;border:none;">Review →</button></div>';
@@ -5527,7 +5515,7 @@ box.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:36px 22px;
 '<div style="width:54px;height:54px;border-radius:50%;background:rgba(26,158,114,.12);border:1px solid rgba(26,158,114,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;"><i class="ph ph-address-book" style="font-size:24px;color:#5DCAA5;"></i></div>'+
 '<div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:6px;">Your customer directory starts here</div>'+
 '<div style="font-size:12px;color:rgba(255,255,255,.45);max-width:330px;margin:0 auto 16px;line-height:1.5;">Every quote you save with a name or phone shows up here — searchable, sortable, and ready to follow up or re-quote in one tap.</div>'+
-'<button onclick="closeDashboard()" style="background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:inline-flex;align-items:center;gap:6px;"><i class="ph ph-calculator" style="font-size:14px;"></i> Quote your first job</button>'+
+'<button onclick="closeDashboard()" style="background:var(--green);color:#fff;border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:inline-flex;align-items:center;gap:6px;"><i class="ph ph-plus-circle" style="font-size:14px;"></i> Quote your first job</button>'+
 '</div>';
 }else{
 const msg=q?('No customers match “'+escapeHtml(q)+'”.'):('No '+custFilter+' customers right now.');
@@ -5550,8 +5538,8 @@ return '<div onclick="openCrm('+c.latest.id+')" role="button" tabindex="0" aria-
 '<div style="flex:1;min-width:0;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="flex:1;min-width:0;font-weight:700;color:#fff;font-size:13px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escapeHtml(j.name||'Unnamed customer')+'</div>'+
 '<span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:'+col+';border:1px solid '+col+'55;border-radius:20px;padding:2px 6px;white-space:nowrap;flex-shrink:0;">'+st+'</span></div></div>'+
 (sub?'<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;line-height:1.35;">'+sub+'</div>':'')+
-'<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone&&st!=='completed'?'<button onclick="event.stopPropagation();quickText('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-tilt" style="font-size:11px;"></i> Text quote</button>':'')+'</div>';
-}).join('')+(!isQuery&&customers.length>LIMIT?'<button onclick="toggleCustExpanded()" style="grid-column:1/-1;margin-top:2px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.55);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,.55)\'"><i class="ph ph-caret-'+(custExpanded?'up':'down')+'" style="font-size:12px;"></i> '+(custExpanded?'Show less':('View '+(customers.length-LIMIT)+' more'))+'</button>':'');
+'<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone&&st!=='completed'?'<button onclick="event.stopPropagation();quickText('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:11px;"></i> Text quote</button>':'')+'</div>';
+}).join('')+(!isQuery&&customers.length>LIMIT?'<button onclick="toggleCustExpanded()" style="grid-column:1/-1;margin-top:2px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.55);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,.55)\'"><i class="ph ph-caret-down" style="font-size:12px;transition:transform .2s;'+(custExpanded?'transform:rotate(180deg);':'')+'"></i> '+(custExpanded?'Show less':('View '+(customers.length-LIMIT)+' more'))+'</button>':'');
 }
 
 // keyboard: "/" focuses customer search (when dashboard is open & not already typing), Esc clears it
@@ -5613,7 +5601,7 @@ ${isMemberAssigned?`<div style="display:inline-flex;align-items:center;gap:5px;b
 <div class="upcoming-name">${escapeHtml(j.crm.name||'Customer')}</div>
 <div class="upcoming-detail">${escapeHtml(j.crm.address||'')}${j.crm.phone?' · '+escapeHtml(j.crm.phone):''}</div>
 <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
-${(j.crm.address||j.crm.phone)?`<div style="display:flex;gap:6px;margin-top:7px;">${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle-text" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
+${(j.crm.address||j.crm.phone)?`<div style="display:flex;gap:6px;margin-top:7px;">${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
 <div id="timer-block-${j.id}" style="margin-top:10px;border:1px solid ${isRunning?'rgba(26,158,114,.45)':'var(--d-border)'};border-radius:var(--r-md);padding:11px 13px;background:${isRunning?'rgba(26,158,114,.07)':'rgba(255,255,255,.02)'};transition:all .2s;">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${isRunning?'#5DCAA5':'rgba(255,255,255,.32)'};">${isRunning?'Job in progress':'Job timer'}</div>
@@ -5806,6 +5794,7 @@ afterSnap=aRes.filter(Boolean);
 const failed=(rawBefore.length+rawAfter.length)-(beforeSnap.length+afterSnap.length);
 if(failed>0)showToast(failed+' photo'+(failed>1?'s':'')+' failed to upload',true);
 }
+if(!job.crm)job.crm={};
 job.crm.status='completed';
 job.actual={
 charged,
@@ -6019,9 +6008,10 @@ ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding
 setTimeout(()=>{if(dashboardVisible())Object.values(dashCharts).forEach(c=>{try{c.resize();}catch(e){}});},90);
 });
 }
+let _locationWatchId=null;
 function startLocationWatch(){
-if(!navigator.geolocation) return;
-navigator.geolocation.watchPosition(
+if(!navigator.geolocation||_locationWatchId!=null) return;   // one watcher is enough — openCalcDirect runs repeatedly
+_locationWatchId=navigator.geolocation.watchPosition(
 pos => {
 userLocation = {
 lat: pos.coords.latitude,
