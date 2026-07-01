@@ -3903,7 +3903,10 @@ document.getElementById('s-dump-qtr').value=l.quarter?.dump||0;
 document.getElementById('s-dump-half').value=l.half?.dump||0;
 document.getElementById('s-dump-full').value=l.full?.dump||0;
 document.getElementById('s-home-address').value=userPricing.homeAddress||'';
-const addrLock=document.getElementById('settingsAddressLock');if(addrLock)addrLock.style.display=isPro()?'none':'flex';
+const _addrLocked=!isPro();   // routing (Plan My Day) is Pro/Team — overlay + disable both inputs (overlay alone leaves them tab-focusable)
+const addrLock=document.getElementById('settingsAddressLock');if(addrLock)addrLock.style.display=_addrLocked?'flex':'none';
+document.getElementById('s-home-address').disabled=_addrLocked;
+document.getElementById('s-dump-address').disabled=_addrLocked;
 document.getElementById('s-dump-address').value=userPricing.dumpAddress||'';
 document.getElementById('s-drive').value=userPricing.driveRate;document.getElementById('s-labor').value=userPricing.laborRate;document.getElementById('s-truck-l').value=userPricing.truck?.length||'';document.getElementById('s-truck-w').value=userPricing.truck?.width||'';document.getElementById('s-truck-h').value=userPricing.truck?.height||'';calcSTruckYards();
 document.getElementById('sMarkup').value=userPricing.defaultMarkup;document.getElementById('sMarkupVal').textContent=userPricing.defaultMarkup+'%';
