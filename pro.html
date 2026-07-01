@@ -2436,7 +2436,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="history-header"><div class="history-title">Job history</div><button class="history-close" onclick="closeHistory()">✕</button></div>
 <div style="padding:11px 11px 0;"><div id="histBalanceCard" style="display:none;"></div></div>
 <div class="history-list" id="historyList"><div class="history-empty">No saved jobs yet.<br>Price a job and hit "Save to history."</div></div>
-<div class="history-clear"><button class="history-clear-btn" onclick="clearHistory()">Clear all history</button></div>
+<div class="history-clear" style="display:flex;gap:8px;justify-content:center;"><button class="history-clear-btn" onclick="exportJobsCSV()" style="color:rgba(255,255,255,.5);"><i class="ph ph-share-network" style="font-size:11px;vertical-align:-1px;"></i> Export jobs CSV</button><button class="history-clear-btn" onclick="clearHistory()">Clear all history</button></div>
 </div>
 </div>
 
@@ -2714,6 +2714,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="dash-welcome" id="dashWelcome" data-aos="fade-up"></div>
 <div class="dash-kpi-grid" id="dashKpiGrid" data-aos="fade-up"></div>
 <div id="dashBalanceCard" style="display:none;"></div>
+<div id="dashUnpaidSection" style="display:none;" data-aos="fade-up"></div>
 <!-- Customer search -->
 <div class="dash-card" data-aos="fade-up" style="margin-bottom:18px;">
 <div class="dash-card-title"><i class="ph ph-address-book" style="font-size:12px;color:#5DCAA5;"></i> Customers <span id="custSearchCount" style="margin-left:auto;font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.38);text-transform:none;"></span><button onclick="exportCustomersCSV()" title="Export customers to CSV" style="background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.5);border-radius:6px;padding:4px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);text-transform:none;letter-spacing:0;display:inline-flex;align-items:center;gap:5px;margin-left:10px;" onmouseover="this.style.color='#5DCAA5';this.style.borderColor='rgba(26,158,114,.4)'" onmouseout="this.style.color='rgba(255,255,255,.5)';this.style.borderColor='var(--d-border)'"><i class="ph ph-share-network" style="font-size:12px;"></i> Export</button></div>
@@ -4472,6 +4473,26 @@ job.miles?'📍 '+job.miles+' mi travel included':'',
 '— '+(session.businessName||'')
 ].filter(Boolean).join('\n');
 }
+// Follow-up for a quote that's going cold — a nudge to book, NOT a re-send of the same price sheet.
+function followUpSmsBody(job,firstName){
+const biz=session.businessName||"Wood's Waste";
+const price=jobQuotePrice(job);
+return [
+'Hi'+(firstName?' '+firstName:'')+', it\'s '+biz+' — just following up on your junk removal quote'+(price?' ('+price+')':'')+'.',
+'',
+'We\'ve still got room on this week\'s schedule if you\'d like to get that taken care of. Reply here and we\'ll lock in a time that works for you!',
+'',
+'— '+biz
+].join('\n');
+}
+function quickFollowUp(jobId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
+const phone=(job.crm&&job.crm.phone||'').replace(/\D/g,'');
+if(!phone){showToast('No phone on file — open the customer to add one',true);return;}
+const firstName=((job.crm&&job.crm.name)||'').trim().split(' ')[0];
+window.open('sms:'+phone+'?body='+encodeURIComponent(followUpSmsBody(job,firstName)));
+showToast('✓ Follow-up opened — tap send');
+}
 function crmSend(){
 const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
 if(job.crm&&job.crm.status==='completed')sendReceiptForJob(job.id);
@@ -4513,6 +4534,8 @@ const ll={minimum:'Minimum Load',quarter:'Quarter Load',half:'Half Load',full:'F
 const when=job.actual?.loggedAt?new Date(job.actual.loggedAt).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}):(job.ts||'');
 const total=job.actual?.charged?'$'+Number(job.actual.charged).toLocaleString():(jobQuotePrice(job)||'');
 const payment=job.payment&&job.payment.paid?('Paid — '+(job.payment.method==='stripe'?'card':job.payment.method||'received')):'';
+// proof-of-work: uploaded Drive links only (p.url) — never inline base64 dataUrls
+const photos=[...(job.actual?.beforePhotos||[]),...(job.actual?.afterPhotos||[])].map(p=>p&&p.url).filter(Boolean).slice(0,4);
 const lines=[
 biz,
 'Receipt of Service',
@@ -4526,6 +4549,7 @@ job.specials?.length?'Add-ons: '+job.specials.join(', '):null,
 '',
 total?'Total: '+total:null,
 payment?'Payment: '+payment:null,
+...(photos.length?['','Before & after photos:',...photos]:[]),
 '',
 'Thank you for choosing '+biz+'!',
 'Questions? Just reply to this text.'
@@ -5438,6 +5462,26 @@ const a=document.createElement('a');a.href=url;a.download='woodswaste-customers-
 document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
 showToast('✓ Exported '+rows.length+' customer'+(rows.length!==1?'s':''));
 }
+function exportJobsCSV(){
+if(!jobHistory.length){showToast('No jobs to export yet',true);return;}
+const esc=v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
+const rows=jobHistory.map(j=>[
+(j.actual&&j.actual.loggedAt)?j.actual.loggedAt.slice(0,10):(j.ts||''),
+j.crm?.name||'',j.crm?.phone||'',j.crm?.address||'',
+j.loadSummary||ll[j.load]||j.load||'',
+(j.specials||[]).join('; '),
+j.price||'',j.finalPrice||'',
+j.actual?.charged??'',j.actual?.hours??'',
+j.crm?.status||'quoted',
+j.payment&&j.payment.paid?('paid ('+(j.payment.method||'other')+')'):(j.crm?.status==='completed'?'unpaid':'')
+]);
+const csv=[['Date','Customer','Phone','Address','Load','Add-ons','Quoted','Final price','Charged','Hours','Status','Payment'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
+const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob);
+const a=document.createElement('a');a.href=url;a.download='woodswaste-jobs-'+new Date().toISOString().slice(0,10)+'.csv';
+document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+showToast('✓ Exported '+rows.length+' job'+(rows.length!==1?'s':''));
+}
 function customerKey(j){
 const ph=(j.crm&&j.crm.phone||'').replace(/\D/g,'');
 if(ph.length>=10)return 'p:'+ph;
@@ -5547,7 +5591,9 @@ return '<div onclick="openCrm('+c.latest.id+')" role="button" tabindex="0" aria-
 '<div style="flex:1;min-width:0;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="flex:1;min-width:0;font-weight:700;color:#fff;font-size:13px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escapeHtml(j.name||'Unnamed customer')+'</div>'+
 '<span style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:'+col+';border:1px solid '+col+'55;border-radius:20px;padding:2px 6px;white-space:nowrap;flex-shrink:0;">'+st+'</span></div></div>'+
 (sub?'<div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:5px;line-height:1.35;">'+sub+'</div>':'')+
-'<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone&&st!=='completed'?'<button onclick="event.stopPropagation();quickText('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:11px;"></i> Text quote</button>':'')+'</div>';
+'<div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:7px;font-family:var(--font-num);letter-spacing:-.2px;">'+c.count+' job'+(c.count!==1?'s':'')+' · '+(c.count===1?escapeHtml(c.latest.price||'$0'):'$'+Math.round(c.total).toLocaleString())+(rt?' · '+rt:'')+(cold?' · <span style="color:#C9A24B;font-weight:700;">follow up</span>':'')+'</div>'+(j.phone&&st!=='completed'?(cold
+?'<button onclick="event.stopPropagation();quickFollowUp('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(201,162,75,.12);color:#C9A24B;border:1px solid rgba(201,162,75,.35);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:11px;"></i> Send follow-up</button>'
+:'<button onclick="event.stopPropagation();quickText('+c.latest.id+')" style="margin-top:9px;width:100%;padding:6px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:11px;"></i> Text quote</button>'):'')+'</div>';
 }).join('')+(!isQuery&&customers.length>LIMIT?'<button onclick="toggleCustExpanded()" style="grid-column:1/-1;margin-top:2px;padding:8px;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:rgba(255,255,255,.55);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,.55)\'"><i class="ph ph-caret-down" style="font-size:12px;transition:transform .2s;'+(custExpanded?'transform:rotate(180deg);':'')+'"></i> '+(custExpanded?'Show less':('View '+(customers.length-LIMIT)+' more'))+'</button>':'');
 }
 
@@ -5610,7 +5656,7 @@ ${isMemberAssigned?`<div style="display:inline-flex;align-items:center;gap:5px;b
 <div class="upcoming-name">${escapeHtml(j.crm.name||'Customer')}</div>
 <div class="upcoming-detail">${escapeHtml(j.crm.address||'')}${j.crm.phone?' · '+escapeHtml(j.crm.phone):''}</div>
 <div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
-${(j.crm.address||j.crm.phone)?`<div style="display:flex;gap:6px;margin-top:7px;">${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
+${(j.crm.address||j.crm.phone||j.crm.dateTime)?`<div style="display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;">${j.crm.dateTime?`<button onclick="addToCalendar('${j.id}')" title="Add to your calendar" style="flex:1;min-width:90px;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-calendar-plus" style="font-size:12px;"></i> Calendar</button>`:''}${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
 <div id="timer-block-${j.id}" style="margin-top:10px;border:1px solid ${isRunning?'rgba(26,158,114,.45)':'var(--d-border)'};border-radius:var(--r-md);padding:11px 13px;background:${isRunning?'rgba(26,158,114,.07)':'rgba(255,255,255,.02)'};transition:all .2s;">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
 <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:${isRunning?'#5DCAA5':'rgba(255,255,255,.32)'};">${isRunning?'Job in progress':'Job timer'}</div>
@@ -5646,6 +5692,22 @@ if(el)el.textContent=formatElapsed(t.elapsed);
 }
 }
 
+// Google-Calendar link for a scheduled job — puts it on the operator's real phone calendar
+// with the address as the location (floating local time, so it lands at the hour they picked).
+function calendarUrlForJob(job){
+const d=new Date(job.crm.dateTime);
+const pad=n=>String(n).padStart(2,'0');
+const fmt=x=>x.getFullYear()+pad(x.getMonth()+1)+pad(x.getDate())+'T'+pad(x.getHours())+pad(x.getMinutes())+'00';
+const end=new Date(d.getTime()+Math.max(1,job.hours||2)*3600e3);
+const title='Junk removal — '+(job.crm.name||'Customer');
+const details=[jobQuotePrice(job)?'Quoted: '+jobQuotePrice(job):'',job.crm.phone?'Phone: '+job.crm.phone:'',job.loadSummary||'',job.crm.notes||''].filter(Boolean).join('\n');
+return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title)+'&dates='+fmt(d)+'/'+fmt(end)+'&details='+encodeURIComponent(details)+'&location='+encodeURIComponent(job.crm.address||'');
+}
+function addToCalendar(jobId){
+const job=jobHistory.find(j=>String(j.id)===String(jobId));
+if(!job||!job.crm?.dateTime){showToast('No date/time on this job yet',true);return;}
+window.open(calendarUrlForJob(job),'_blank');
+}
 function formatElapsed(seconds){
 const h=Math.floor(seconds/3600);
 const m=Math.floor((seconds%3600)/60);
@@ -5905,9 +5967,39 @@ if(j.actual.hours>0)return j.actual.hours;
 if(j&&j.hours>0)return j.hours;
 return 0;
 }
+// ── Outstanding payments rollup: completed jobs that haven't been paid yet ──
+let _unpaidExpanded=false;
+function toggleUnpaidList(){_unpaidExpanded=!_unpaidExpanded;renderUnpaidSection();}
+function unpaidJobs(){return jobHistory.filter(j=>j.crm?.status==='completed'&&!(j.payment&&j.payment.paid));}
+function jobOwedAmount(j){return (j.actual&&j.actual.charged)||priceMid(jobQuotePrice(j))||0;}
+function renderUnpaidSection(){
+const el=document.getElementById('dashUnpaidSection');if(!el)return;
+const unpaid=unpaidJobs();
+if(!unpaid.length){el.style.display='none';el.innerHTML='';return;}
+const owed=unpaid.reduce((s,j)=>s+jobOwedAmount(j),0);
+unpaid.sort((a,b)=>jobOwedAmount(b)-jobOwedAmount(a));
+let html='<div style="background:linear-gradient(135deg,rgba(224,136,59,.12),rgba(224,136,59,.04));border:1px solid rgba(224,136,59,.35);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:16px;">'+
+'<div style="display:flex;align-items:center;gap:10px;">'+
+'<i class="ph ph-warning" style="font-size:18px;color:#E0883B;flex-shrink:0;"></i>'+
+'<div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:700;color:#E0883B;">Outstanding: $'+Math.round(owed).toLocaleString()+' across '+unpaid.length+' job'+(unpaid.length!==1?'s':'')+'</div>'+
+'<div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;">Completed but not yet marked paid — collect or log the payment.</div></div>'+
+'<button onclick="toggleUnpaidList()" style="flex-shrink:0;cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;padding:7px 12px;border-radius:var(--r-sm);background:#E0883B;color:#0b0b0b;border:none;">'+(_unpaidExpanded?'Hide':'View')+' →</button></div>';
+if(_unpaidExpanded){
+html+='<div style="margin-top:12px;border-top:1px solid rgba(224,136,59,.2);padding-top:10px;">'+unpaid.map(j=>
+'<div style="display:flex;align-items:center;gap:9px;padding:7px 0;">'+
+'<div style="flex:1;min-width:0;font-size:12px;color:rgba(255,255,255,.75);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escapeHtml(j.crm?.name||'Customer')+
+'<span style="color:rgba(255,255,255,.35);"> · '+escapeHtml(j.ts||'')+'</span></div>'+
+'<div style="font-family:var(--font-num);font-size:13px;font-weight:700;color:#fff;flex-shrink:0;">$'+Math.round(jobOwedAmount(j)).toLocaleString()+'</div>'+
+'<button onclick="openPaymentModal('+j.id+')" style="flex-shrink:0;cursor:pointer;font-family:var(--font-sans);font-size:10.5px;font-weight:700;padding:5px 11px;border-radius:var(--r-sm);background:rgba(26,158,114,.12);color:#5DCAA5;border:1px solid rgba(26,158,114,.3);">Collect</button>'+
+'</div>').join('')+'</div>';
+}
+el.innerHTML=html+'</div>';
+el.style.display='block';
+}
 function renderDashKpis(){
 const grid=document.getElementById('dashKpiGrid'),welcome=document.getElementById('dashWelcome');
 if(!grid)return;
+renderUnpaidSection();
 const logged=jobHistory.filter(j=>j.actual?.charged);
 const revenue=logged.reduce((s,j)=>s+(j.actual.charged||0),0);
 const avgTicket=logged.length?Math.round(revenue/logged.length):0;
