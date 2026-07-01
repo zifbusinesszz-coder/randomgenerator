@@ -3012,6 +3012,7 @@ try{
 const data=JSON.parse(localStorage.getItem('ww_activeTimers')||'{}');
 Object.keys(data).forEach(jid=>{
 if(activeTimers[jid])return;
+if(!jobHistory.some(j=>String(j.id)===String(jid)))return;   // job was deleted — don't resurrect its timer
 activeTimers[jid]={startMs:data[jid],elapsed:Math.floor((Date.now()-data[jid])/1000),beforePhotos:[],interval:null};
 const t=activeTimers[jid];
 t.interval=setInterval(()=>{
@@ -3103,7 +3104,7 @@ throw err;
 }
 if(data&&!data.success&&payload.action!=='login'&&session.token&&(data.error==='Session expired.'||data.error==='User not found.')){
 clearSession();
-localStorage.removeItem('ww_history');
+purgeLocalAccountData();
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='none';
 document.getElementById('marketingPage').style.display='block';
@@ -3159,6 +3160,9 @@ return sj;
 });
 const serverIds=new Set(serverJobs.map(j=>String(j.id)));
 local.filter(j=>!serverIds.has(String(j.id))).forEach(j=>merged.push(j));
+// ids are creation timestamps — sort newest-first so a local-only job created offline stays
+// at the top of history instead of sinking below every synced job.
+merged.sort((a,b)=>(Number(b.id)||0)-(Number(a.id)||0));
 return merged;
 }
 // Pull the latest jobs for this account from the server and merge them in — keeps every
@@ -3488,7 +3492,19 @@ function saveSession(token,companyId,businessName,plan,role,ownerId){
 session.token=token;session.companyId=companyId;session.businessName=businessName||"Wood's Waste";session.plan=plan||'starter';session.role=role||'owner';session.ownerId=ownerId||null;
 localStorage.setItem('ww_token',token);localStorage.setItem('ww_cid',companyId);localStorage.setItem('ww_biz',session.businessName);localStorage.setItem('ww_plan',session.plan);localStorage.setItem('ww_role',session.role);if(ownerId)localStorage.setItem('ww_owner_id',ownerId);else localStorage.removeItem('ww_owner_id');
 }
-function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';session.stripeConnected=false;['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id','ww_stripe_connected'].forEach(k=>localStorage.removeItem(k));stopStatusPoll();}
+function clearSession(){session.token=session.companyId=session.ownerId=null;session.role='owner';session.plan='starter';session.stripeConnected=false;['ww_token','ww_cid','ww_biz','ww_plan','ww_role','ww_owner_id','ww_stripe_connected'].forEach(k=>localStorage.removeItem(k));stopStatusPoll();}
+// Wipe the signed-out account's local data so the NEXT login on this device never sees or
+// merges another account's jobs. ww_pending_sync survives on purpose — queued offline writes
+// are tagged with their account (_cid) and flush safely when that account logs back in.
+function purgeLocalAccountData(){
+jobHistory=[];
+Object.values(activeTimers).forEach(t=>{if(t&&t.interval)clearInterval(t.interval);});
+activeTimers={};
+['ww_history','ww_activeTimers','ww_team_cache'].forEach(k=>{try{localStorage.removeItem(k);}catch(e){}});
+try{teamData={members:[],pending:[],maxSeats:2};}catch(e){}
+try{renderHistory();}catch(e){}
+try{renderCalcTodayStrip();}catch(e){}
+}
 let _statusPollTimer=null;
 function startStatusPoll(){
 if(_statusPollTimer)return;
@@ -3502,7 +3518,7 @@ function isPro(){return ['pro','pro-yearly','team','team-yearly','team10','team1
 function doLogout(){
 if(document.getElementById('paywallOverlay').classList.contains('open')){
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
-clearSession();document.getElementById('calcPage').style.display='none';document.getElementById('dashboardPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();closePaywall();return;
+clearSession();purgeLocalAccountData();document.getElementById('calcPage').style.display='none';document.getElementById('dashboardPage').style.display='none';document.getElementById('marketingPage').style.display='block';document.body.style.overflow='';resetCalc();closePaywall();return;
 }
 closeMobSidebar();
 document.getElementById('logoutOverlay').classList.add('open');
@@ -3517,6 +3533,7 @@ async function confirmLogout(){
 closeLogoutOverlay();
 if(session.token)api({action:'logout',token:session.token}).catch(()=>{});
 clearSession();
+purgeLocalAccountData();
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='none';
 document.getElementById('marketingPage').style.display='block';
@@ -3924,6 +3941,9 @@ renderStripeSettings();
 function closeSettings(){document.getElementById('settingsPanel').classList.remove('open');}
 function closeSettingsOutside(e){if(e.target===document.getElementById('settingsPanel'))closeSettings();}
 async function saveSettings(){
+// Members inherit the owner's pricing — a member's save would write to a row nobody reads
+// and silently revert on the next sync. Tell them instead of pretending it saved.
+if(session.role==='member'){showToast('Only the account owner can change pricing',true);return;}
 const btn=document.getElementById('settingsSaveBtn');btn.disabled=true;btn.textContent='Saving...';
 // Only ENABLED items are saved — an item toggled off in settings disappears from the calc
 // and the AI prompt (openSettings reads absence as disabled, so the toggle round-trips).
@@ -4052,7 +4072,7 @@ api({..._p,token:session.token}).catch(()=>queueSync(_p));
 if(changed)persistHistory();
 }
 function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}migrateLegacyIds();renderHistory();refreshInsightsBtn();}
-function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}}
+function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}try{renderCalcTodayStrip();}catch(e){}}   // every job mutation flows through here — keeps the today strip live
 // Stamp a job as locally edited "now" — the merge uses this to win against a stale server copy.
 function touchJob(j){if(j)j.updatedAt=Date.now();return j;}
 // Collision-proof job id. Date.now() alone collides when two saves land in the same millisecond
@@ -4068,7 +4088,10 @@ async function clearHistory(){
 if(session.token&&session.role==='member'){showToast('Only the account owner can clear the shared history',true);return;}
 if(!confirm('Clear all job history?'))return;
 if(!jobHistory.length){return;}
-jobHistory=[];persistHistory();renderHistory();showToast('History cleared');
+jobHistory=[];
+Object.values(activeTimers).forEach(t=>{if(t&&t.interval)clearInterval(t.interval);});
+activeTimers={};saveTimerState();
+persistHistory();renderHistory();showToast('History cleared');
 if(session.token){
 try{await api({action:'deleteAllJobs',token:session.token});}
 catch(e){showToast('Could not sync delete to server',true);}
@@ -4253,6 +4276,9 @@ if(changed){touchJob(j);if(session.token){const _pp={action:'saveJob',jobId:j.id
 async function deleteJob(jobId){
 if(!confirm('Delete this job from history?'))return;
 jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
+// stop a running timer for this job so it doesn't tick on as an orphan
+Object.keys(activeTimers).forEach(k=>{if(String(k)===String(jobId)){if(activeTimers[k].interval)clearInterval(activeTimers[k].interval);delete activeTimers[k];}});
+saveTimerState();
 persistHistory();renderHistory();showToast('Job deleted');
 if(session.token){
 // Queue the delete on failure — otherwise the job stays on the server and the next
@@ -5159,7 +5185,8 @@ document.getElementById('teamPanel').classList.add('open');
 document.body.style.overflow='hidden';
 // Render cached data immediately so panel opens instantly
 if(teamData.members.length||teamData.pending.length)renderTeamPanel();
-// Always refresh in background — no spinner, no blocking
+else{const el=document.getElementById('teamMembersList');if(el)el.innerHTML='<div style="display:flex;align-items:center;gap:9px;padding:14px 4px;color:rgba(255,255,255,.4);font-size:12px;"><div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.12);border-top-color:#5DCAA5;border-radius:50%;animation:spin .7s linear infinite;"></div> Loading your team…</div>';}
+// Always refresh in background — no spinner over cached data, no blocking
 loadTeamData();
 }
 function closeTeamPanel(){
