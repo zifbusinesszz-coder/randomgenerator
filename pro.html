@@ -881,6 +881,9 @@ box-shadow:0 8px 30px rgba(26,158,114,.08),inset 0 1px 0 rgba(255,255,255,.04);
 .s-specials-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px;}
 .s-special-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-sm);padding:6px 9px;gap:7px;}
 .s-special-row.active{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);}
+.s-special-row:not(.active){opacity:.45;}
+.s-special-row .sitem-toggle{background:rgba(255,255,255,.08);border-color:var(--d-border);color:transparent;}
+.s-special-row .sitem-toggle.on{background:var(--green);border-color:var(--green);color:#fff;}
 .s-sitem-left{display:flex;align-items:center;gap:5px;font-size:10.5px;color:rgba(255,255,255,.6);font-weight:500;}
 .s-sitem-icon{font-size:13px;color:rgba(255,255,255,.42);display:flex;align-items:center;}
 .s-sitem-fee .s-input-wrap input{width:58px;font-size:10.5px;padding:4px 4px 4px 15px;}
@@ -2166,6 +2169,7 @@ localStorage.setItem('installBannerDismissed','1');
 </nav>
 
 <div class="calc-body">
+<div id="calcTodayStrip" style="display:none;"></div>
 <div class="trial-warning-banner" id="trialWarningBanner" style="display:none;background:linear-gradient(140deg,rgba(232,160,32,0.15) 0%,rgba(232,160,32,0.06) 100%);border:1px solid rgba(232,160,32,.35);border-radius:var(--r-md);padding:14px 16px;margin-bottom:18px;position:relative;">
 <div style="font-size:12.5px;font-weight:700;color:var(--gold);margin-bottom:3px;display:flex;align-items:center;gap:5px;"><i class="ph ph-clock" style="font-size:13px;"></i> <span id="trialWarningTitle">Trial ending soon</span></div>
 <div style="font-size:11.5px;color:rgba(255,255,255,.55);line-height:1.6;" id="trialWarningBody">Your free trial ends in <strong id="trialDaysLeft"></strong>. After that your access will pause until payment is confirmed.</div>
@@ -2721,7 +2725,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div id="followUpBanner" style="display:none;"></div>
 <div style="position:relative;margin-bottom:14px;">
 <i class="ph ph-address-book" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:rgba(255,255,255,.3);pointer-events:none;"></i>
-<input type="text" id="custSearchInput" oninput="renderCustomerSearch()" placeholder="Search by name, phone, address, or notes…" aria-label="Search customers by name, phone, address, or notes" autocomplete="off" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--d-border);border-radius:var(--r-md);padding:11px 13px 11px 38px;color:#fff;font-size:13px;font-family:var(--font-sans);outline:none;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(26,158,114,.5)'" onblur="this.style.borderColor='var(--d-border)'"/>
+<input type="text" id="custSearchInput" oninput="debouncedCustomerSearch()" placeholder="Search by name, phone, address, or notes…" aria-label="Search customers by name, phone, address, or notes" autocomplete="off" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--d-border);border-radius:var(--r-md);padding:11px 13px 11px 38px;color:#fff;font-size:13px;font-family:var(--font-sans);outline:none;box-sizing:border-box;transition:border-color .15s;" onfocus="this.style.borderColor='rgba(26,158,114,.5)'" onblur="this.style.borderColor='var(--d-border)'"/>
 </div>
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
 <div id="custFilterChips" style="display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0;"></div>
@@ -3066,15 +3070,24 @@ setTimeout(()=>{showToast('✓ Stripe account connected! You can now collect pay
 
 function loadLocalPricing(){try{const lp=localStorage.getItem('ww_pricing');if(lp)applyPricing(JSON.parse(lp));}catch(e){}}
 
+// Read-only actions are safe to retry once on a transient failure (flaky mobile signal,
+// Apps Script hiccup). Mutations are NEVER retried here — failed writes go through queueSync.
+const API_READ_ACTIONS={getUser:1,getJobs:1,checkStatus:1,stripeAccountStatus:1,stripeBalance:1,getTeam:1,getJobPayment:1};
 async function api(payload){
 const fd=new FormData();fd.append('payload',JSON.stringify(payload));
+const canRetry=!!API_READ_ACTIONS[payload.action];
 let res;
+for(let attempt=0;;attempt++){
 try{
 res=await fetch(API_URL,{method:'POST',body:fd});
 }catch(e){
+if(canRetry&&attempt===0&&navigator.onLine!==false){await new Promise(r=>setTimeout(r,900));continue;}
 const err=new Error(navigator.onLine===false?"You're offline — changes will sync when you reconnect.":'Network error — could not reach the server.');
 err.kind='network';err.action=payload.action;console.warn('[api] network error on "'+payload.action+'":',e&&e.message);
 throw err;
+}
+if(!res.ok&&res.status>=500&&canRetry&&attempt===0){await new Promise(r=>setTimeout(r,900));continue;}
+break;
 }
 const text=await res.text();
 if(!res.ok){
@@ -3536,23 +3549,48 @@ document.getElementById('calcMarkup').value=userPricing.defaultMarkup;
 document.getElementById('calcMarkupPct').textContent=userPricing.defaultMarkup+'%';
 const dashBtn=document.querySelector('.calc-icon-btn[onclick="openDashboard()"]');
 if(dashBtn)dashBtn.style.display=isPro()?'inline-flex':'none';
-document.getElementById('aiNavBtn').style.display=isPro()?'inline-flex':'none';
-document.getElementById('mobAiBtn').style.display=isPro()?'flex':'none';
+document.getElementById('aiNavBtn').style.display='inline-flex';   // AI photo quoting is on ALL plans
+document.getElementById('mobAiBtn').style.display='flex';
 const upgradeBtn=document.getElementById('desktopUpgradeBtn');
 if(upgradeBtn)upgradeBtn.style.display=isPro()?'none':'inline-flex';
 const mobUpgradeBtn=document.getElementById('mobUpgradeBtn');
 if(mobUpgradeBtn)mobUpgradeBtn.style.display=isPro()?'none':'flex';
 const mobAiBtn=document.getElementById('mobAiBtn');
-if(mobAiBtn)mobAiBtn.style.display=isPro()?'flex':'none';
+if(mobAiBtn)mobAiBtn.style.display='flex';   // all plans
 const mobInsightsBtn=document.getElementById('mobInsightsBtn');
 if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
-buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();
+buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();renderCalcTodayStrip();
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
 }
 function dismissWelcome(){const banner=document.getElementById('welcomeBanner');if(banner)banner.classList.remove('show');}
+
+// ── Today's jobs strip: the calculator is the screen operators live on — surface the day's
+// schedule right there (tap a row for the customer, tap the arrow for directions).
+function renderCalcTodayStrip(){
+const el=document.getElementById('calcTodayStrip');if(!el)return;
+if(!isPro()){el.style.display='none';el.innerHTML='';return;}   // scheduling is Pro/Team — no strip on Starter
+const today=new Date();
+const isToday=d=>{const x=new Date(d);return !isNaN(x)&&x.getFullYear()===today.getFullYear()&&x.getMonth()===today.getMonth()&&x.getDate()===today.getDate();};
+const jobs=getScheduledJobs().filter(j=>isToday(j.crm.dateTime)).sort((a,b)=>new Date(a.crm.dateTime)-new Date(b.crm.dateTime));
+if(!jobs.length){el.style.display='none';el.innerHTML='';return;}
+const rows=jobs.slice(0,3).map(j=>{
+const t=new Date(j.crm.dateTime).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+const past=new Date(j.crm.dateTime).getTime()<Date.now();
+return '<div onclick="openCrm('+j.id+')" style="display:flex;align-items:center;gap:9px;padding:7px 0;cursor:pointer;'+(past?'opacity:.55;':'')+'">'+
+'<div style="font-family:var(--font-num);font-size:12px;font-weight:700;color:#5DCAA5;white-space:nowrap;flex-shrink:0;min-width:62px;">'+t+'</div>'+
+'<div style="flex:1;min-width:0;font-size:12px;color:rgba(255,255,255,.75);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+escapeHtml(j.crm.name||'Customer')+(j.crm.address?' <span style="color:rgba(255,255,255,.35);">· '+escapeHtml(j.crm.address)+'</span>':'')+'</div>'+
+'<div style="font-family:var(--font-num);font-size:11.5px;font-weight:700;color:rgba(255,255,255,.5);flex-shrink:0;">'+escapeHtml(jobQuotePrice(j))+'</div>'+
+(j.crm.address?'<button onclick="event.stopPropagation();getSingleDirections(this.dataset.addr)" data-addr="'+escapeHtml(j.crm.address)+'" title="Directions" style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(26,158,114,.12);border:1px solid rgba(26,158,114,.3);color:#5DCAA5;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i></button>':'')+
+'</div>';}).join('');
+const more=jobs.length>3?'<div onclick="'+(isPro()?'openDashboard()':'showUpgradePrompt()')+'" style="font-size:10.5px;font-weight:700;color:rgba(255,255,255,.4);padding:6px 0 0;cursor:pointer;">+'+(jobs.length-3)+' more today — open dashboard →</div>':'';
+el.innerHTML='<div style="background:rgba(26,158,114,.06);border:1px solid rgba(26,158,114,.22);border-radius:var(--r-md);padding:10px 14px;margin-bottom:14px;">'+
+'<div style="display:flex;align-items:center;gap:6px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5DCAA5;margin-bottom:2px;"><i class="ph ph-calendar-check" style="font-size:12px;"></i> Today — '+jobs.length+' job'+(jobs.length!==1?'s':'')+'</div>'+
+rows+more+'</div>';
+el.style.display='block';
+}
 
 function buildCalcSpecialsGrid(){
 const grid=document.getElementById('calcSpecialsGrid');grid.innerHTML='';selectedSpecials={};
@@ -3711,7 +3749,7 @@ list.appendChild(item);
 const reader=new FileReader();reader.onload=e=>{const th=document.getElementById('ai-thumb-'+idx);if(th){th.innerHTML='';const img=document.createElement('img');img.className='ai-file-thumb';img.src=e.target.result;th.appendChild(img);th.style.background='none';}};reader.readAsDataURL(f);
 if(result&&result.status==='done'){
 const rc=document.createElement('div');rc.className='ai-photo-result';
-rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.truckCount>1?result.truckCount+'× ':''} ${result.loadLabel}</span></div>${result.fillPercent!=null?`<div class="ai-photo-result-row"><span class="lbl">Trailer fill estimate</span><span class="val" style="color:#5DCAA5;">${result.fillPercent}% full</span></div><div style="margin:5px 0 3px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${Math.min(result.fillPercent,100)}%;background:${result.fillPercent>80?'#e8a020':result.fillPercent>50?'#5DCAA5':'#1a9e72'};border-radius:3px;transition:width .4s;"></div></div>`:''}<div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.join(', ')+'</div>':''}${result.accessDifficulty==='hard'?'<div style="margin-top:7px;padding:6px 10px;background:rgba(232,160,32,.1);border:1px solid rgba(232,160,32,.3);border-radius:5px;font-size:10.5px;color:#e8a020;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Hard access — consider a labor surcharge</div>':''}${result.heavyMaterials?'<div style="margin-top:5px;padding:6px 10px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.28);border-radius:5px;font-size:10.5px;color:#e07060;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Heavy materials — dump fees may be higher</div>':''}${result.reasoning?'<div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:6px;font-size:10.5px;color:rgba(255,255,255,.45);line-height:1.55;font-style:italic;">'+result.reasoning+'</div>':''}${result.sceneType||result.itemCount||result.estimatedCuFt?`<div style="margin-top:6px;font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.03em;">${[result.sceneType,result.itemCount?result.itemCount+' items':null,result.estimatedCuFt?'~'+result.estimatedCuFt+' cu ft':null].filter(Boolean).join(' · ')}</div>`:''}`;
+rc.innerHTML=`<div class="ai-photo-result-header"><div class="ai-photo-result-title">Photo ${idx+1} estimate</div><div class="ai-photo-result-price">$${result.quoteLow}${result.quoteLow!==result.quoteHigh?'–$'+result.quoteHigh:''}</div></div><div class="ai-photo-result-rows"><div class="ai-photo-result-row"><span class="lbl">Load size detected</span><span class="val">${result.truckCount>1?result.truckCount+'× ':''} ${escapeHtml(result.loadLabel)}</span></div>${result.fillPercent!=null?`<div class="ai-photo-result-row"><span class="lbl">Trailer fill estimate</span><span class="val" style="color:#5DCAA5;">${result.fillPercent}% full</span></div><div style="margin:5px 0 3px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${Math.min(result.fillPercent,100)}%;background:${result.fillPercent>80?'#e8a020':result.fillPercent>50?'#5DCAA5':'#1a9e72'};border-radius:3px;transition:width .4s;"></div></div>`:''}<div class="ai-photo-result-row"><span class="lbl">Base cost</span><span class="val">$${result.baseLow}${result.baseLow!==result.baseHigh?'–$'+result.baseHigh:''}</span></div><div class="ai-photo-result-row"><span class="lbl">Markup (${result.markupPct}%)</span><span class="val">+$${result.markupAdded}</span></div></div>${result.specialsFound.length?'<div class="ai-photo-result-items">Special items: '+result.specialsFound.map(escapeHtml).join(', ')+'</div>':''}${result.accessDifficulty==='hard'?'<div style="margin-top:7px;padding:6px 10px;background:rgba(232,160,32,.1);border:1px solid rgba(232,160,32,.3);border-radius:5px;font-size:10.5px;color:#e8a020;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Hard access — consider a labor surcharge</div>':''}${result.heavyMaterials?'<div style="margin-top:5px;padding:6px 10px;background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.28);border-radius:5px;font-size:10.5px;color:#e07060;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph ph-warning" style="font-size:12px;"></i> Heavy materials — dump fees may be higher</div>':''}${result.reasoning?'<div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,.04);border-radius:6px;font-size:10.5px;color:rgba(255,255,255,.45);line-height:1.55;font-style:italic;">'+escapeHtml(result.reasoning)+'</div>':''}${result.sceneType||result.itemCount||result.estimatedCuFt?`<div style="margin-top:6px;font-size:9px;color:rgba(255,255,255,.22);letter-spacing:.03em;">${[result.sceneType,result.itemCount?result.itemCount+' items':null,result.estimatedCuFt?'~'+result.estimatedCuFt+' cu ft':null].filter(Boolean).join(' · ')}</div>`:''}`;
 
 list.appendChild(rc);
 }
@@ -3791,7 +3829,7 @@ confidence=high: full pile visible, clear item count, no occlusion — you are c
 confidence=medium: parts hidden or angle uncertain — automatically go up one tier
 confidence=low: mostly obscured or very unclear — go up two tiers from your visual estimate
 truckCount: integer. If pile clearly exceeds one truck set loadKey=full and truckCount=2 or more.`;
-const response=await api({action:'aiAnalyzePhoto',image:b64,mediaType:aiFiles[i].type||'image/jpeg',prompt});
+const response=await api({action:'aiAnalyzePhoto',token:session.token,image:b64,mediaType:aiFiles[i].type||'image/jpeg',prompt});
 if(!response.success)throw new Error(response.error||'AI error');
 let parsed;try{const raw=response.text.replace(/```json|```/g,'').trim();const jsonMatch=raw.match(/\{[\s\S]*\}/);if(!jsonMatch)throw new Error('No JSON found');parsed=JSON.parse(jsonMatch[0]);}catch(e){throw new Error('Could not parse AI response: '+response.text.slice(0,80));}
 const loadKey=parsed.loadKey||'quarter',loadCosts=userPricing.loads[loadKey]||userPricing.loads.quarter,truckCount=parsed.truckCount||1;
@@ -3852,7 +3890,7 @@ const grid=document.getElementById('sSpecialsGrid');if(!grid)return;grid.innerHT
 SPECIAL_ITEMS_CONFIG.forEach(item=>{
 sSpecialStates[item.key]={enabled:true,fee:item.fee};
 const row=document.createElement('div');row.className='s-special-row active';row.id='ss-'+item.key;
-row.innerHTML=`<div class="s-sitem-left"><span class="s-sitem-icon"><i class="ph ph-${item.icon}" style="font-size:12px;"></i></span>${escapeHtml(item.label)}</div><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div>`;
+row.innerHTML=`<div class="s-sitem-left"><span class="s-sitem-icon"><i class="ph ph-${item.icon}" style="font-size:12px;"></i></span>${escapeHtml(item.label)}</div><div style="display:flex;align-items:center;gap:7px;"><div class="s-sitem-fee"><div class="s-input-wrap"><input type="number" id="ssfee-${item.key}" value="${item.fee}" min="0" oninput="sSpecialStates['${item.key}'].fee=Number(this.value)||0"/></div></div><div class="sitem-toggle on" id="sstoggle-${item.key}" onclick="toggleSSpecial('${item.key}')" title="Charge for this item?">✓</div></div>`;
 grid.appendChild(row);
 });
 }
@@ -3884,7 +3922,10 @@ function closeSettings(){document.getElementById('settingsPanel').classList.remo
 function closeSettingsOutside(e){if(e.target===document.getElementById('settingsPanel'))closeSettings();}
 async function saveSettings(){
 const btn=document.getElementById('settingsSaveBtn');btn.disabled=true;btn.textContent='Saving...';
-const specials={};SPECIAL_ITEMS_CONFIG.forEach(item=>{specials[item.key]={fee:sSpecialStates[item.key]?.fee??item.fee,label:item.label,icon:item.icon};});Object.entries(sSpecialStates).forEach(([key,item])=>{if(item.custom)specials[key]={fee:item.fee,label:item.label,icon:item.icon,custom:true};});
+// Only ENABLED items are saved — an item toggled off in settings disappears from the calc
+// and the AI prompt (openSettings reads absence as disabled, so the toggle round-trips).
+const specials={};SPECIAL_ITEMS_CONFIG.forEach(item=>{if(sSpecialStates[item.key]?.enabled!==false)specials[item.key]={fee:sSpecialStates[item.key]?.fee??item.fee,label:item.label,icon:item.icon};});Object.entries(sSpecialStates).forEach(([key,item])=>{if(item.custom)specials[key]={fee:item.fee,label:item.label,icon:item.icon,custom:true};});
+if(!Object.keys(specials).length){showToast('Keep at least one special item on — set its fee to $0 if you never charge for it',true);btn.disabled=false;btn.textContent='Save pricing changes';return;}
 const newPricing={loads:{minimum:{low:nsv('s-min-low'),high:nsv('s-min-high'),dump:nsv('s-dump-min')},quarter:{low:nsv('s-qtr-low'),high:nsv('s-qtr-high'),dump:nsv('s-dump-qtr')},half:{low:nsv('s-half-low'),high:nsv('s-half-high'),dump:nsv('s-dump-half')},full:{low:nsv('s-full-low'),high:nsv('s-full-high'),dump:nsv('s-dump-full')}},specials,driveRate:nsv('s-drive'),laborRate:nsv('s-labor'),defaultMarkup:parseInt(document.getElementById('sMarkup').value),truck:{length:parseFloat(document.getElementById('s-truck-l')?.value)||0,width:parseFloat(document.getElementById('s-truck-w')?.value)||0,height:parseFloat(document.getElementById('s-truck-h')?.value)||0},homeAddress:document.getElementById('s-home-address').value.trim(),
 dumpAddress:document.getElementById('s-dump-address')?.value.trim()||''};
 if(session.token){try{const res=await api({action:'updatePricing',token:session.token,...newPricing});if(!res.success)showToast('Could not save to server',true);}catch(e){showToast('Could not reach server',true);}}
@@ -4124,6 +4165,10 @@ document.getElementById('crmName').value=job.crm?.name||'';
 document.getElementById('crmPhone').value=job.crm?.phone||'';
 document.getElementById('crmEmail').value=job.crm?.email||'';
 document.getElementById('crmAddress').value=job.crm?.address||'';
+// Plan gate: "Scheduled" is Pro/Team. Keep it selectable if the job is ALREADY scheduled
+// (e.g. downgraded account) so opening the panel never corrupts existing data.
+const _schedOpt=document.querySelector('#crmStatus option[value="scheduled"]');
+if(_schedOpt){const _already=job.crm?.status==='scheduled';_schedOpt.disabled=!isPro()&&!_already;_schedOpt.textContent=(!isPro()&&!_already)?'Scheduled — Pro feature':'Scheduled';}
 document.getElementById('crmStatus').value=job.crm?.status||'quoted';
 document.getElementById('crmNotes').value=job.crm?.notes||'';
 document.getElementById('crmDateTime').value=job.crm?.dateTime||'';
@@ -4159,6 +4204,8 @@ banner.style.display='flex';
 // NEW
 function saveCrm(){const wasDashOpen=document.getElementById('dashboardPage').style.display!=='none';
 const job=jobHistory.find(j=>j.id===crmJobId);if(!job)return;
+// Plan gate: a Starter account cannot set a job to Scheduled (belt for the disabled option).
+if(document.getElementById('crmStatus').value==='scheduled'&&!isPro()&&job.crm?.status!=='scheduled'){showToast('Scheduling is a Pro feature',true);showUpgradePrompt();return;}
 const _email=document.getElementById('crmEmail').value.trim();
 const _phoneRaw=document.getElementById('crmPhone').value.trim();
 const _phoneDigits=_phoneRaw.replace(/\D/g,'');
@@ -4259,7 +4306,7 @@ const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
 _pmJobId=jobId;_pmLink=null;
 const name=job.crm?.name||'Customer';
 const address=job.crm?.address||'';
-document.getElementById('pmJobInfo').innerHTML=`<span style="color:rgba(255,255,255,.7);font-weight:600;">${name}</span>${address?`<span style="color:rgba(255,255,255,.35);"> · ${address}</span>`:''}`;
+document.getElementById('pmJobInfo').innerHTML=`<span style="color:rgba(255,255,255,.7);font-weight:600;">${escapeHtml(name)}</span>${address?`<span style="color:rgba(255,255,255,.35);"> · ${escapeHtml(address)}</span>`:''}`;
 document.getElementById('pmAmount').value=job.actual?.charged||'';
 const _fn=document.getElementById('pmFeeNote');if(_fn)_fn.textContent=(isPro()?'1%':'2%')+' platform fee · Powered by Stripe';
 stopPaymentPoll();
@@ -4810,7 +4857,7 @@ document.getElementById('pw-team-price').innerHTML = (teamSizeIs10?'$2,999':'$1,
 document.getElementById('pw-team-desc').textContent = 'Best value for a crew — 2 months free. Full Pro for 3 operators all year.';
 } else {
 document.getElementById('pw-starter-price').innerHTML = '$29<span>/mo</span>';
-document.getElementById('pw-starter-desc').textContent = 'Manual calculator with everything you need to price jobs confidently.';
+document.getElementById('pw-starter-desc').textContent = 'AI photo quoting + the full calculator — everything you need to price jobs confidently.';
 document.getElementById('pw-pro-price').innerHTML = '$59<span>/mo</span>';
 document.getElementById('pw-pro-desc').textContent = 'Everything in Starter plus advanced CRM & Analytics.';
 document.getElementById('pw-team-price').innerHTML = (teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
@@ -5080,7 +5127,7 @@ document.getElementById('proBtn').onclick=function(){openModal('pro-yearly');ret
 document.getElementById('teamBtn').onclick=function(){openModal('team-yearly');return false;};
 } else {
 document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
-document.getElementById('starterDesc').innerHTML='Manual calculator with everything you need to price jobs confidently.';
+document.getElementById('starterDesc').innerHTML='AI photo quoting + the full calculator — everything you need to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
 document.getElementById('proDesc').innerHTML='Everything in Starter + a lower 1% fee, the dashboard &amp; searchable customer directory.';
 document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
@@ -5507,6 +5554,10 @@ function daysSince(iso){if(!iso)return 0;const d=new Date(iso);if(isNaN(d))retur
 function isColdQuote(c){return (c.latest.crm.status||'quoted')==='quoted'&&daysSince(c.latest.crm.savedAt)>=STALE_DAYS;}
 const AV_COLORS=['#1A9E72','#3B82F6','#8B5CF6','#E0883B','#C9A24B','#D9536B','#2AA198'];
 function avatarColor(name){let h=0;const s=name||'?';for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return AV_COLORS[h%AV_COLORS.length];}
+// Typing rebuilds the whole card grid — debounce so a fast typist on a phone doesn't
+// pay a full re-render per keystroke (Esc-to-clear and filter chips still render instantly).
+let _custSearchTimer=null;
+function debouncedCustomerSearch(){clearTimeout(_custSearchTimer);_custSearchTimer=setTimeout(renderCustomerSearch,120);}
 function renderCustomerSearch(){
 const box=document.getElementById('custSearchResults');if(!box)return;
 const countEl=document.getElementById('custSearchCount');
@@ -6218,6 +6269,16 @@ if (now - (document._lastTouch || 0) < 300) e.preventDefault();
 document._lastTouch = now;
 }, { passive: false });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();closePaymentModal();}});
+// When the app returns to the foreground (operators flip between apps all day), push queued
+// offline work and pull the latest jobs so crew devices stay current — throttled to 1/min.
+let _lastFgSync=0;
+document.addEventListener('visibilitychange',()=>{
+if(document.visibilityState!=='visible'||!session.token)return;
+if(Date.now()-_lastFgSync<60000)return;
+_lastFgSync=Date.now();
+flushSyncQueue();
+syncJobsFromServer().then(()=>{try{renderCalcTodayStrip();}catch(e){}});
+});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
 window.addEventListener('load',()=>{
 // ── Premium: auto-stagger reveals on marketing card grids (scoped to avoid paywall/dashboard) ──
