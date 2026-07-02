@@ -4245,6 +4245,7 @@ email:_email,
 address:document.getElementById('crmAddress').value.trim(),
 status:document.getElementById('crmStatus').value,
 dateTime:document.getElementById('crmDateTime').value||null,
+tz:(Intl.DateTimeFormat().resolvedOptions().timeZone||null),   // operator's IANA zone — reminders fire at the RIGHT local time out of state
 notes:document.getElementById('crmNotes').value.trim(),
 savedAt:new Date().toISOString(),
 reminderSent:job.crm&&job.crm.reminderSent||false   // don't reset a reminder we already sent
