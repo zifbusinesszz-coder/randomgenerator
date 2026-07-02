@@ -2824,42 +2824,6 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 
 <!-- UPGRADE MODAL -->
-<div id="upgradeModal" style="display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
-<div style="background:white;border-radius:20px;width:100%;max-width:400px;overflow:hidden;box-shadow:var(--sh-modal);animation:modalIn .22s ease both;">
-<div style="background:white;padding:22px 22px 18px;border-bottom:1px solid var(--border);">
-<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-<div style="display:flex;align-items:center;gap:8px;">
-<img src="logo.PNG" alt="Wood's Waste" style="height:22px;width:auto;">
-<div style="width:1px;height:14px;background:var(--border-strong);"></div>
-<span style="font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;font-size:13px;font-weight:600;color:var(--black);">Pro</span>
-</div>
-<button onclick="closeUpgradeModal()" style="background:var(--off);border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-</div>
-<div style="display:inline-flex;align-items:center;gap:5px;background:var(--green-l);border:1px solid rgba(26,158,114,.3);border-radius:6px;padding:3px 9px;margin-bottom:10px;">
-<i class="ph ph-arrow-circle-up" style="font-size:11px;color:var(--green);"></i>
-<span style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);">Upgrade to Pro</span>
-</div>
-<div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--black);letter-spacing:-0.5px;margin-bottom:5px;">Unlock everything.</div>
-<div style="font-size:12px;color:var(--gray);line-height:1.6;">Full CRM with scheduling, dashboard & insights, quoted vs. actual tracking — all for $59/mo.</div>
-</div>
-<div style="padding:18px 22px;">
-<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
-<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-address-book" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Full CRM with scheduling & job status</div>
-<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-squares-four" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Dashboard with calendar & upcoming jobs</div>
-<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-chart-line-up" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Quoted vs. actual profit tracking</div>
-<div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--black);"><i class="ph ph-path" style="font-size:15px;color:var(--green);flex-shrink:0;"></i> Plan My Day — optimized route with dump stop</div>
-</div>
-<div style="background:var(--off);border-radius:var(--r-md);padding:11px 13px;margin-bottom:16px;font-size:11.5px;color:var(--gray);display:flex;gap:7px;align-items:flex-start;">
-<i class="ph ph-credit-card" style="font-size:13px;flex-shrink:0;margin-top:1px;color:var(--black);"></i>
-<div>Your card on file will be charged <strong style="color:var(--black);">$59 today</strong> and monthly after that. Cancel anytime.</div>
-</div>
-<button id="upgradeConfirmBtn" onclick="confirmUpgrade()" style="width:100%;padding:12px;background:var(--green);color:white;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background .18s;margin-bottom:8px;">Upgrade to Pro — $59/mo</button>
-<button onclick="closeUpgradeModal()" style="width:100%;padding:10px;background:none;border:1.5px solid var(--border);color:var(--gray);border-radius:var(--r-sm);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);">Maybe later</button>
-<p style="font-size:10.5px;color:#bbb;text-align:center;margin-top:9px;">Questions? Text Griffin at <a href="tel:5072981179" style="color:var(--black);font-weight:600;">(507) 298-1179</a></p>
-</div>
-</div>
-</div>
-
 <!-- DUMP RUN POPUP -->
 <div id="dumpPopup" style="display:none;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
 <div style="background:var(--d-surface);border:1px solid var(--d-border);border-radius:var(--r-xl);width:100%;max-width:360px;overflow:hidden;animation:modalIn .22s ease both;">
@@ -2909,7 +2873,8 @@ localStorage.setItem('installBannerDismissed','1');
 </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Chart.js is lazy-loaded on first dashboard/insights open via loadChartJs() — it's ~200KB
+     that marketing visitors and Starter users should never pay for at page load. -->
 <script>
 
 const API_URL   = 'https://script.google.com/macros/s/AKfycbzGxYErhivjt2cevxWKlLqE6lo6UDHRI2WXk8NHCTkJf-WMEKPbdZLJXsQRMEPN3npb/exec';
@@ -2961,6 +2926,19 @@ const s=document.createElement('script');
 s.src='https://js.stripe.com/v3/';s.async=true;
 s.onload=resolve;
 s.onerror=()=>{_stripeLoader=null;reject(new Error('Stripe failed to load'));};
+document.head.appendChild(s);
+}));
+}
+// Lazy Chart.js — same pattern as Stripe.js. Charts are Pro-dashboard territory; nobody
+// else should download or parse the library.
+let _chartLoader=null;
+function loadChartJs(){
+if(window.Chart)return Promise.resolve();
+return _chartLoader||(_chartLoader=new Promise((resolve,reject)=>{
+const s=document.createElement('script');
+s.src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';s.async=true;
+s.onload=resolve;
+s.onerror=()=>{_chartLoader=null;reject(new Error('Chart.js failed to load'));};
 document.head.appendChild(s);
 }));
 }
@@ -3060,7 +3038,7 @@ else loadLocalPricing();
 if(session.token)openCalcDirect();   // token was cleared (session expired) -> stay on the login/marketing page
 else document.getElementById('marketingPage').style.display='block';
 hidePageLoader();
-}catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();}
+}catch(e){hidePageLoader();loadLocalPricing();openCalcDirect();if(session.token)checkStripeStatus();}
 }
 })();
 
@@ -3552,6 +3530,7 @@ document.getElementById('calcPage').style.display='block';
 document.body.style.overflow='';
 startLocationWatch();
 initCalc();
+if(session.token)checkStripeStatus();   // every load path refreshes payment-connected state (throttled)
 if(session.token){
 try{
 const res=await api({action:'getUser',token:session.token});
@@ -4089,7 +4068,7 @@ async function clearHistory(){
 // The shared team history lives under the owner's account — a member's server-side delete is a
 // no-op, so their local clear would just resurrect on the next sync. Block it up front.
 if(session.token&&session.role==='member'){showToast('Only the account owner can clear the shared history',true);return;}
-if(!confirm('Clear all job history?'))return;
+if(!await appConfirm('This permanently deletes EVERY job, customer, and outcome in your history — on all your devices.',{title:'Clear all history?',confirmText:'Clear everything'}))return;
 if(!jobHistory.length){return;}
 jobHistory=[];
 Object.values(activeTimers).forEach(t=>{if(t&&t.interval)clearInterval(t.interval);});
@@ -4292,7 +4271,7 @@ if(changed){touchJob(j);if(session.token){const _pp={action:'saveJob',jobId:j.id
 }
 
 async function deleteJob(jobId){
-if(!confirm('Delete this job from history?'))return;
+if(!await appConfirm('This removes the job, its customer info, and its outcome from your history.',{title:'Delete this job?',confirmText:'Delete job'}))return;
 jobHistory=jobHistory.filter(j=>String(j.id)!==String(jobId));
 // stop a running timer for this job so it doesn't tick on as an orphan
 Object.keys(activeTimers).forEach(k=>{if(String(k)===String(jobId)){if(activeTimers[k].interval)clearInterval(activeTimers[k].interval);delete activeTimers[k];}});
@@ -4464,8 +4443,13 @@ const job=jobHistory.find(j=>String(j.id)===String(_pmJobId));
 const amt=document.getElementById('pmAmount').value;
 navigator.share({title:'Payment',text:`Hi${job?.crm?.name?' '+job.crm.name:''}! Here's your payment link for $${amt}: `,url:_pmLink}).catch(()=>{});
 }
+let _lastStripeCheck=0;
 async function checkStripeStatus(){
 if(!session.token)return;   // payments available on all plans (tiered fee: Starter 2%, Pro/Team 1%)
+// Buttons render instantly from the cached ww_stripe_connected state on every load; this
+// refresh is throttled so the many load paths that call it don't stack duplicate requests.
+if(Date.now()-_lastStripeCheck<60000){renderStripeSettings();return;}
+_lastStripeCheck=Date.now();
 loadStripe().catch(()=>{}); // preload Stripe.js in the background so connected-account / payment flows are ready
 try{
 const res=await api({action:'stripeAccountStatus',token:session.token});
@@ -4731,10 +4715,11 @@ html+=`<div class="insights-load-row"><div class="insights-load-name">${loadLabe
 });
 }
 body.innerHTML=html;
-requestAnimationFrame(()=>drawInsightCharts(logged,loadStats,loadLabels));
+loadChartJs().catch(()=>null).then(()=>requestAnimationFrame(()=>drawInsightCharts(logged,loadStats,loadLabels)));
 }
 
 function drawInsightCharts(logged,loadStats,loadLabels){
+if(!window.Chart)return;   // CDN failed — the stat tiles above are already painted
 const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
 const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
 const recent=logged.slice(-15);
@@ -4764,6 +4749,32 @@ ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding
 }
 
 /* ── UTILS ── */
+// ── Styled confirm dialog (replaces native confirm() — matches the dark app UI) ──
+let _appConfirmResolve=null;
+function _appConfirmDone(v){
+const o=document.getElementById('appConfirmOverlay');
+if(o)o.style.display='none';
+if(_appConfirmResolve){const r=_appConfirmResolve;_appConfirmResolve=null;r(v);}
+}
+function appConfirm(msg,opts){
+opts=opts||{};
+const title=opts.title||'Are you sure?',confirmText=opts.confirmText||'Confirm';
+return new Promise(res=>{
+_appConfirmResolve=res;
+let o=document.getElementById('appConfirmOverlay');
+if(!o){o=document.createElement('div');o.id='appConfirmOverlay';document.body.appendChild(o);}
+o.style.cssText='display:flex;position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px;';
+o.onclick=e=>{if(e.target===o)_appConfirmDone(false);};
+o.innerHTML='<div style="background:var(--d-surface);border:1px solid var(--d-border);border-radius:var(--r-xl);width:100%;max-width:340px;padding:22px 20px;animation:modalIn .18s ease both;">'+
+'<div style="font-family:var(--font-sans);font-size:15px;font-weight:700;color:#fff;margin-bottom:7px;">'+escapeHtml(title)+'</div>'+
+'<div style="font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:18px;">'+escapeHtml(msg)+'</div>'+
+'<div style="display:flex;gap:8px;">'+
+'<button onclick="_appConfirmDone(false)" style="flex:1;padding:10px;background:rgba(255,255,255,.05);border:1px solid var(--d-border);color:rgba(255,255,255,.65);border-radius:var(--r-sm);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Cancel</button>'+
+'<button onclick="_appConfirmDone(true)" style="flex:1;padding:10px;background:#c0392b;border:none;color:#fff;border-radius:var(--r-sm);font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">'+escapeHtml(confirmText)+'</button>'+
+'</div></div>';
+setTimeout(()=>{const c=o.querySelector('button');if(c)c.focus();},60);
+});
+}
 function showPageLoader(msg){const d=document.createElement('div');d.id='pageLoader';d.style.cssText='position:fixed;inset:0;background:#0b0b0b;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;';d.innerHTML=`<div style="width:38px;height:38px;border:3px solid rgba(255,255,255,.08);border-top-color:#1a9e72;border-radius:50%;animation:spin .7s linear infinite;margin-bottom:14px;"></div><p style="font-size:13.5px;color:rgba(255,255,255,.35);font-family:DM Sans,sans-serif;">${msg||'Loading...'}</p>`;document.body.appendChild(d);}
 function hidePageLoader(){const el=document.getElementById('pageLoader');if(el)el.remove();}
 function showToast(msg,warn){
@@ -4785,48 +4796,8 @@ function hideBanner(id){const el=document.getElementById(id);if(el)el.classList.
 function showUpgradePrompt() {
 openPaywall('upgrade');
 }
-function closeUpgradeModal() {
-document.getElementById('upgradeModal').style.display = 'none';
-document.body.style.overflow = '';
-// Reset button in case it was mid-loading
-const btn = document.getElementById('upgradeConfirmBtn');
-btn.disabled = false;
-btn.textContent = 'Upgrade to Pro — $59/mo';
-}
-
-async function confirmUpgrade() {
-const mobBtn  = document.getElementById('mobUpgradeBtn');
-const deskBtn = document.getElementById('desktopUpgradeBtn');
-
-// Loading state on whichever button is visible
-if (mobBtn)  { mobBtn.disabled  = true; mobBtn.innerHTML  = '<i class="ph ph-spinner" style="font-size:15px;"></i> Upgrading...'; }
-if (deskBtn) { deskBtn.disabled = true; deskBtn.innerHTML = '<i class="ph ph-spinner" style="font-size:13px;"></i> Upgrading...'; }
-
-// Also update confirm button inside the modal
-const confirmBtn = document.getElementById('upgradeConfirmBtn');
-if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.textContent = 'Upgrading...'; }
-
-try {
-const res = await api({ action: 'upgradePlan', token: session.token, newPlan: 'pro' });
-if (res.success) {
-session.plan = 'pro';
-localStorage.setItem('ww_plan', 'pro');
-initCalc();
-closeUpgradeModal();
-closeMobSidebar();
-showToast('✓ Upgraded to Pro!');
-} else {
-showToast(res.error || 'Upgrade failed — text Griffin at (507) 298-1179', true);
-}
-} catch(e) {
-showToast('Could not connect — try again', true);
-} finally {
-// Always reset all buttons
-if (mobBtn)  { mobBtn.disabled  = false; mobBtn.innerHTML  = '<i class="ph ph-arrow-circle-up" style="font-size:15px;"></i> Upgrade to Pro'; }
-if (deskBtn) { deskBtn.disabled = false; deskBtn.innerHTML = '<i class="ph ph-arrow-circle-up" style="font-size:13px;"></i> Upgrade to Pro'; }
-if (confirmBtn) { confirmBtn.disabled = false; confirmBtn.textContent = 'Upgrade to Pro — $59/mo'; }
-}
-}
+// (the old confirmUpgrade/upgradeModal flow was removed — all upgrades go through the
+// paywall via showUpgradePrompt(), which charges through activateAfterTrial with re-verify)
 function openMobSidebar(){
 document.getElementById('mobAiBtn').style.display='flex';
 const hasActuals=jobHistory.some(j=>j.actual?.charged);
@@ -4920,12 +4891,26 @@ paywallSelectedPlan = planKey;
 }
 }
 
+// Restore the banner's default (gold) look AND body markup — the payment-failed variant
+// replaces the body's innerHTML, which destroyed the #trialDaysLeft span and made a later
+// expiring_soon status THROW on the missing element (crashing checkTrialStatus entirely).
+function resetTrialBanner(){
+const b=document.getElementById('trialWarningBanner');if(!b)return;
+b.style.background='linear-gradient(140deg,rgba(232,160,32,0.15) 0%,rgba(232,160,32,0.06) 100%)';
+b.style.borderColor='rgba(232,160,32,.35)';
+const t=document.getElementById('trialWarningTitle');
+if(t){t.style.color='';t.textContent='Trial ending soon';}
+const body=document.getElementById('trialWarningBody');
+if(body&&!document.getElementById('trialDaysLeft'))body.innerHTML='Your free trial ends in <strong id="trialDaysLeft"></strong>. After that your access will pause until payment is confirmed.';
+}
 function checkTrialStatus(res) {
 if (!res.trialEnd && !res.trialStatus) return;
 const isNewUser = localStorage.getItem('ww_new_user');
 if (isNewUser) return;
 const status = res.trialStatus;
 const daysLeft = res.trialDaysLeft ?? null;
+if (status === 'expiring_soon' || status === 'active') resetTrialBanner();
+if (status === 'active'){const _b=document.getElementById('trialWarningBanner');if(_b)_b.style.display='none';}
 
 if (status === 'expiring_soon' && daysLeft !== null) {
 const banner = document.getElementById('trialWarningBanner');
@@ -4939,7 +4924,9 @@ if (banner) banner.style.display = 'block';
 
 if (status === 'payment_failed_grace') {
 const banner = document.getElementById('trialWarningBanner');
-const graceMsg = daysLeft === 0
+const graceMsg = daysLeft == null
+? 'Access will pause soon if payment isn\'t resolved.'
+: daysLeft === 0
 ? 'Access pauses today if payment isn\'t resolved.'
 : `You have <strong>${daysLeft === 1 ? '1 day' : daysLeft + ' days'}</strong> before access pauses.`;
 banner.style.background = 'linear-gradient(140deg,rgba(255,80,80,0.13) 0%,rgba(255,80,80,0.05) 100%)';
@@ -5001,8 +4988,12 @@ document.getElementById('paywallSubtitle').textContent = 'Choose a plan to keep 
 if (closeBtn) closeBtn.style.display = 'none';
 }
 showPaywallPlanStep();
-const onPro = session.plan === 'pro' || session.plan === 'pro-yearly';
-selectPaywallPlan(reason === 'upgrade' ? (onPro ? 'team' : 'pro') : (onPro ? 'pro' : 'starter'));
+// Pre-select the user's CURRENT tier (an expired Team owner used to get Starter pre-picked);
+// on a voluntary upgrade, pre-select the next tier up instead.
+const _pbase = String(session.plan || 'starter').replace('-yearly', '');
+const _onTeam = _pbase.indexOf('team') === 0;
+selectPaywallPlan(reason === 'upgrade' ? ((_pbase === 'pro' || _onTeam) ? 'team' : 'pro')
+                                       : (_onTeam ? 'team' : _pbase === 'pro' ? 'pro' : 'starter'));
 overlay.classList.add('open');
 document.body.style.overflow = 'hidden';
 }
@@ -5336,7 +5327,7 @@ else showToast(res.error||'Could not send invite',true);
 async function confirmRemoveMember(memberId){
 const _m=(teamData.members||[]).find(x=>x.companyId===memberId);
 const name=(_m&&(_m.name||_m.email))||'this member';
-if(!confirm('Remove '+name+' from your team? They will lose access immediately.'))return;
+if(!await appConfirm('Remove '+name+' from your team? They lose access immediately and their seat opens up.',{title:'Remove team member?',confirmText:'Remove'}))return;
 try{
 const res=await api({action:'removeMember',token:session.token,memberCompanyId:memberId});
 if(res.success){showToast('✓ '+name+' removed');loadTeamData();}
@@ -5422,6 +5413,7 @@ try{if(!opts.skipAnalytics)renderDashAnalytics();}catch(e){console.warn('renderD
 }
 function openDashboard(){
 if(!isPro()){showToast('Dashboard is a Pro feature',true);return;}
+loadChartJs().catch(()=>{});   // fetch the chart lib in parallel with the data render
 document.getElementById('calcPage').style.display='none';
 document.getElementById('dashboardPage').style.display='block';
 if(session.token)checkStripeStatus();   // refresh payment state so Collect-payment buttons don't drop out
@@ -6173,8 +6165,8 @@ body.innerHTML=switchHtml+`<div class="dash-stat-grid">
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-chart-bar" style="font-size:12px;color:var(--gold);"></i> Revenue by load size</div><div class="chart-canvas-wrap"><canvas id="dashChartLoadRevenue" class="insights-chart" height="160"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-trend-up" style="font-size:12px;color:#5DCAA5;"></i> Over/Under per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDiff" class="insights-chart" height="140"></canvas></div></div>
  <div class="chart-card"><div class="chart-card-title"><i class="ph ph-lightning" style="font-size:12px;color:var(--gold);"></i> Efficiency — $/hr per job</div><div class="chart-canvas-wrap"><canvas id="dashChartDollarPerMin" class="insights-chart" height="140"></canvas></div></div>`;
-requestAnimationFrame(()=>{
-if(!dashboardVisible())return;   // never build charts into a hidden canvas — Chart.js sizes them to 0 and they stay blank
+loadChartJs().catch(()=>null).then(()=>requestAnimationFrame(()=>{
+if(!dashboardVisible()||!window.Chart)return;   // hidden canvas or CDN failed — stat grid is already painted
 const gridColor='rgba(255,255,255,0.06)',tickColor='rgba(255,255,255,0.32)';
 const chartDefaults={plugins:{legend:{display:false}},scales:{x:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'}}},y:{grid:{color:gridColor},ticks:{color:tickColor,font:{size:9.5,family:'DM Sans'},callback:v=>'$'+v}}}};
 const chrono=[...logged].sort((a,b)=>jobMs(a)-jobMs(b));   // oldest → newest so charts read left-to-right in time
@@ -6206,7 +6198,7 @@ ctx4.canvas.insertAdjacentHTML('afterend','<div style="text-align:center;padding
 // Safety net: re-measure once the dashboard is definitely laid out. Fixes a chart built a frame
 // too early (first dashboard open / right after login) that came out 0-sized and blank.
 setTimeout(()=>{if(dashboardVisible())Object.values(dashCharts).forEach(c=>{try{c.resize();}catch(e){}});},90);
-});
+}));
 }
 let _locationWatchId=null;
 function startLocationWatch(){
@@ -6316,7 +6308,7 @@ const now = Date.now();
 if (now - (document._lastTouch || 0) < 300) e.preventDefault();
 document._lastTouch = now;
 }, { passive: false });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeUpgradeModal();closeDumpPopup();closeLogoutOverlay();closePaymentModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeInsights();closeMobSidebar();closeCrm();closeDumpPopup();closeLogoutOverlay();closePaymentModal();_appConfirmDone(false);}});
 // When the app returns to the foreground (operators flip between apps all day), push queued
 // offline work and pull the latest jobs so crew devices stay current — throttled to 1/min.
 let _lastFgSync=0;
