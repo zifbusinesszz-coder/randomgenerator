@@ -3008,6 +3008,7 @@ session.plan=res.plan||'starter';
 session.role=res.role||session.role||'owner';
 session.ownerId=res.ownerId||session.ownerId||null;
 session.cardLast4=res.cardLast4||null;
+if(res.hasStripeAccount!=null){session.stripeConnected=!!res.hasStripeAccount;try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');}catch(e){}}
 localStorage.setItem('ww_role',session.role);
 if(session.ownerId)localStorage.setItem('ww_owner_id',session.ownerId);
 applyPricing(res.pricing);
@@ -3441,6 +3442,9 @@ try{
 const res=await api({action:'login',email,password:pw});btn.disabled=false;btn.textContent='Log in to my quote tool →';
 if(!res.success){showBanner('loginErr',res.error||'Login failed. Check your email and password.');return;}
 saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
+// Seed the payment-connected state straight from the login response — no more "Set up
+// payments with Stripe" flash on a connected account while the async status check runs.
+if(res.hasStripeAccount!=null){session.stripeConnected=!!res.hasStripeAccount;try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');}catch(e){}}
 applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
 let _loginSnap=[];try{_loginSnap=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){}
 // Show splash immediately — covers the modal/marketing page transition with no gap
