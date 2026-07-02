@@ -4633,17 +4633,24 @@ return lines.filter((l,i,a)=>l!==''||(i>0&&a[i-1]!=='')).join('\n');
 function sendReceiptForJob(jobId){
 const job=jobHistory.find(j=>String(j.id)===String(jobId));if(!job)return;
 const phone=(job.crm?.phone||'').replace(/\D/g,'');
-if(!phone){showToast('No phone on file for this customer',true);return;}
+if(phone){
 window.open('sms:'+phone+'?body='+encodeURIComponent(receiptSmsBody(job)));
 showToast('✓ Receipt opened — tap send');
+return;
+}
+if(job.crm?.email&&session.token){emailReceiptFor(job);return;}   // email-only customers get an emailed receipt
+showToast('No phone or email on file for this customer',true);
+}
+// Server-sent receipt email (from the verified domain, reply-to = the operator).
+function emailReceiptFor(job){
+showToast('Emailing receipt…');
+api({action:'emailReceipt',token:session.token,jobId:String(job.id)})
+.then(r=>showToast(r&&r.success?'✓ Receipt emailed to '+job.crm.email:((r&&r.error)||'Could not email receipt'),!(r&&r.success)))
+.catch(()=>showToast('Could not email receipt',true));
 }
 
 function sendReceipt(){
-const job=jobHistory.find(j=>j.id===actualJobId);if(!job)return;
-const phone=(job.crm?.phone||'').replace(/\D/g,'');
-if(!phone){showToast('No phone on file for this customer',true);return;}
-window.open('sms:'+phone+'?body='+encodeURIComponent(receiptSmsBody(job)));
-showToast('✓ Receipt opened — tap send');
+if(actualJobId!=null)sendReceiptForJob(actualJobId);   // same phone-first / email-fallback path
 }
 
 /* (Insights panel removed — superseded by the dashboard analytics section) */
@@ -5904,7 +5911,7 @@ ${j.actual?.notes?`<div style="margin-top:7px;font-size:10.5px;color:rgba(255,25
 <div style="margin-top:9px;border-top:1px solid rgba(255,255,255,.06);padding-top:9px;display:grid;grid-template-columns:1fr 1fr;gap:7px;">
 <button onclick="openActual(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-pencil" style="font-size:12px;"></i> Edit outcome</button>
 <button onclick="openCrm(${j.id})" style="padding:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);color:rgba(255,255,255,.38);border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-user" style="font-size:12px;"></i> Customer info</button>
-${j.crm?.phone?`<button onclick="sendReceiptForJob(${j.id})" style="grid-column:1/-1;padding:7px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.25);color:#5DCAA5;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:12px;"></i> Send receipt</button>`:''}
+${(j.crm?.phone||j.crm?.email)?`<button onclick="sendReceiptForJob(${j.id})" style="grid-column:1/-1;padding:7px;background:rgba(26,158,114,.07);border:1px solid rgba(26,158,114,.25);color:#5DCAA5;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-paper-plane-right" style="font-size:12px;"></i> Send receipt</button>`:''}
 ${session.stripeConnected?`<button onclick="openPaymentModal(${j.id})" style="grid-column:1/-1;padding:7px;background:linear-gradient(135deg,rgba(99,91,255,.15),rgba(99,91,255,.08));border:1px solid rgba(99,91,255,.35);color:#a09eff;border-radius:var(--r-sm);font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-credit-card" style="font-size:12px;"></i> Collect payment</button>`:''}
 </div>
 </div>`;
