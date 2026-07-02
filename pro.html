@@ -1666,7 +1666,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-desc" id="starterDesc">Everything you need to price every job confidently and keep your numbers straight.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk">✓</span> Job pricing calculator</li>
-<li class="pf"><span class="chk">✓</span> AI Photo Quoting</li>
+<li class="pf"><span class="chk">✓</span> AI Photo Quoting — 30 photos/day</li>
 <li class="pf"><span class="chk">✓</span> Special item surcharges</li>
 <li class="pf"><span class="chk">✓</span> Set one final price &amp; text branded quotes</li>
 <li class="pf"><span class="chk">✓</span> Collect card payments — Apple/Google Pay or card (2% fee)</li>
@@ -1686,7 +1686,8 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-desc" id="proDesc">Everything in Starter plus advanced CRM & Analytics.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-<li class="pf"><span class="chk chk-green">✓</span> Lower 1% payment fee — half of Starter's</li>
+<li class="pf"><span class="chk chk-green">✓</span> <strong>Unlimited</strong> AI photo quoting</li>
+<li class="pf"><span class="chk chk-green">✓</span> 1% payment fee (vs 2%) — pays for itself past ~$6k/mo collected</li>
 <li class="pf"><span class="chk chk-green">✓</span> Dashboard with calendar, scheduling &amp; upcoming jobs</li>
 <li class="pf"><span class="chk chk-green">✓</span> Searchable customer directory — filters, sort &amp; lead aging</li>
 <li class="pf"><span class="chk chk-green">✓</span> Cold-lead recovery — follow-up nudges for unbooked quotes</li>
@@ -1717,6 +1718,7 @@ localStorage.setItem('installBannerDismissed','1');
 <a href="#" class="btn-plan-dark" id="teamBtn" onclick="openModal('team');return false;">Start free trial</a>
 </div>
 </div>
+<p class="pricing-note" style="margin-bottom:6px;"><strong style="color:var(--black);">💳 Do the math:</strong> collect $6,000+/mo in card payments and Pro's 1% fee (vs 2% on Starter) saves you $60+/mo — <strong style="color:var(--green);">Pro pays for itself</strong>.</p>
 <p class="pricing-note" id="pricingNote">14-day free trial on all plans. No card required to start. Cancel anytime.</p>
 </div>
 </section>
@@ -1897,7 +1899,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div onclick="pickPlan('starter')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pickPlan('starter');}" role="button" tabindex="0" aria-label="Select Starter plan" style="border:1.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;cursor:pointer;transition:border-color .18s;display:flex;align-items:center;gap:14px;" onmouseover="this.style.borderColor='var(--black)'" onmouseout="this.style.borderColor='var(--border)'">
 <div style="flex:1;min-width:0;">
 <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:3px;">Starter</div>
-<div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote, get paid (card/cash), receipts, and job outcome tracking. AI photo quoting included.</div>
+<div style="font-size:11px;color:var(--gray);line-height:1.5;">Quote, get paid (card/cash), receipts, and job outcome tracking. AI photo quoting included (30/day).</div>
 </div>
 <div style="text-align:right;flex-shrink:0;">
 <div id="sp-starter-price" style="font-family:var(--font-num);font-size:22px;font-weight:700;color:var(--black);letter-spacing:-0.5px;">$29<span style="font-family:var(--font-sans);font-size:11px;font-weight:400;opacity:.5;">/mo</span></div>
@@ -2592,7 +2594,7 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-price" id="pw-starter-price">$29<span>/mo</span></div>
 <div class="pricing-desc" id="pw-starter-desc">Price, quote, get paid, and track every job — solo.</div>
 <ul class="pricing-features">
-<li class="pf"><span class="chk">✓</span> Pricing calculator + AI Photo Quoting</li>
+<li class="pf"><span class="chk">✓</span> Pricing calculator + AI Photo Quoting (30/day)</li>
 <li class="pf"><span class="chk">✓</span> Text branded quotes &amp; set one final price</li>
 <li class="pf"><span class="chk">✓</span> Collect card payments — 2% fee</li>
 <li class="pf"><span class="chk">✓</span> Auto Stripe receipts + paid/unpaid tracking</li>
@@ -2607,8 +2609,8 @@ localStorage.setItem('installBannerDismissed','1');
 <div class="pricing-price" id="pw-pro-price">$59<span>/mo</span></div>
 <div class="pricing-desc" id="pw-pro-desc">Everything in Starter, a lower 1% fee, plus the full dashboard &amp; CRM.</div>
 <ul class="pricing-features">
-<li class="pf"><span class="chk chk-green">✓</span> Everything in Starter</li>
-<li class="pf"><span class="chk chk-green">✓</span> Lower 1% payment fee</li>
+<li class="pf"><span class="chk chk-green">✓</span> Everything in Starter + <strong>unlimited</strong> AI quoting</li>
+<li class="pf"><span class="chk chk-green">✓</span> 1% payment fee (vs 2%) — pays for itself past ~$6k/mo</li>
 <li class="pf"><span class="chk chk-green">✓</span> Dashboard + searchable customer directory</li>
 <li class="pf"><span class="chk chk-green">✓</span> Cold-lead recovery &amp; scheduling</li>
 <li class="pf"><span class="chk chk-green">✓</span> Plan My Day, analytics &amp; CSV export</li>
@@ -3438,7 +3440,7 @@ const sub=document.getElementById('successSubtext');
 if(sub)sub.textContent='Your pricing is saved and your 14-day free trial is live — no charge today. Here\'s what\'s ready for you:';
 const item=(icon,txt)=>'<div class="success-next-item"><i class="ph ph-'+icon+'" style="font-size:13px;flex-shrink:0;margin-top:2px;color:#1a9e72;"></i> '+txt+'</div>';
 let items=
-  item('camera','<strong>AI photo quoting</strong> — point your phone at the pile, get a price')+
+  item('camera','<strong>AI photo quoting</strong> — point your phone at the pile, get a price'+(base==='starter'?' (30/day — Pro is unlimited)':' (unlimited)'))+
   item('sliders','Markup slider starts at your default — change it per job')+
   item('clipboard-text','Every saved quote goes into your job history');
 if(base==='pro'||base==='team'){
@@ -4987,7 +4989,7 @@ document.getElementById('paywallTitle').textContent = 'Upgrade to Team';
 document.getElementById('paywallSubtitle').textContent = 'Add crew seats and shared job management.';
 } else {
 document.getElementById('paywallTitle').textContent = 'Upgrade your plan';
-document.getElementById('paywallSubtitle').textContent = 'Unlock the full CRM, dashboard, insights, and more.';
+document.getElementById('paywallSubtitle').textContent = 'Unlimited AI quoting, the full CRM & dashboard — and a 1% card fee (vs 2%) that pays for the upgrade past ~$6k/mo collected.';
 }
 if (closeBtn) closeBtn.style.display = 'flex';
 } else {
@@ -5174,7 +5176,7 @@ document.getElementById('teamBtn').onclick=function(){openModal('team-yearly');r
 document.getElementById('starterPrice').innerHTML='$29<span>/mo</span>';
 document.getElementById('starterDesc').innerHTML='AI photo quoting + the full calculator — everything you need to price jobs confidently.';
 document.getElementById('proPrice').innerHTML='$59<span>/mo</span>';
-document.getElementById('proDesc').innerHTML='Everything in Starter + a lower 1% fee, the dashboard &amp; searchable customer directory.';
+document.getElementById('proDesc').innerHTML='Everything in Starter + unlimited AI quoting, a 1% fee (vs 2%) &amp; the full dashboard.';
 document.getElementById('teamPrice').innerHTML=(teamSizeIs10?'$299':'$149')+'<span>/mo</span>';
 document.getElementById('teamDesc').innerHTML=teamSizeIs10?'Full Pro for up to 10 operators — 1 owner + 9 members.':'Full Pro for your whole crew — 1 owner + 2 members, shared job history.';
 document.getElementById('pricingNote').textContent='14-day free trial on all plans. No card required to start. Cancel anytime.';
