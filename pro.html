@@ -2935,20 +2935,6 @@ s.onerror=()=>{_chartLoader=null;reject(new Error('Chart.js failed to load'));};
 document.head.appendChild(s);
 }));
 }
-async function initStripe(){
-try{
-await loadStripe();
-if(!stripe)stripe=Stripe(STRIPE_PK);
-const elements=stripe.elements();
-cardComplete=false;
-const pr=stripe.paymentRequest({country:'US',currency:'usd',total:{label:"Wood's Waste Pro — Free Trial (no charge today)",amount:100},requestPayerName:true,requestPayerEmail:true,requestPayerPhone:true});
-const prButton=elements.create('paymentRequestButton',{paymentRequest:pr,style:{paymentRequestButton:{type:'default',theme:'dark',height:'44px'}}});
-pr.canMakePayment().then(result=>{const wrap=document.getElementById('prButtonWrap');if(!wrap)return;if(result&&result.applePay){wrap.style.display='block';prButton.mount('#prButtonElement');}else{wrap.style.display='none';}});
-pr.on('paymentmethod',async(ev)=>{window._pendingPaymentMethodId=ev.paymentMethod.id;const nameParts=(ev.payerName||'').split(' ');if(!document.getElementById('m-first').value&&nameParts[0])document.getElementById('m-first').value=nameParts[0];if(!document.getElementById('m-last').value&&nameParts[1])document.getElementById('m-last').value=nameParts[1]||'';if(!document.getElementById('m-email').value&&ev.payerEmail)document.getElementById('m-email').value=ev.payerEmail;if(!document.getElementById('m-phone').value&&ev.payerPhone)document.getElementById('m-phone').value=ev.payerPhone;ev.complete('success');cardComplete=true;showToast('✓ Apple Pay authorized — fill in remaining fields');});
-window._signupPR=pr;
-}catch(e){console.warn('Stripe:',e.message);}
-}
-
 function onPhoneInput(el){
 let digits=el.value.replace(/\D/g,'').slice(0,10),fmt='';
 if(digits.length>0)fmt='('+digits.slice(0,3);
@@ -2962,7 +2948,6 @@ field.classList.toggle('has-error',digits.length>0&&!valid);
 function isValidPhone(d){if(d.length!==10)return false;if(d[0]==='0'||d[0]==='1')return false;if(d[3]==='0'||d[3]==='1')return false;return true;}
 function getRawPhone(){const d=document.getElementById('m-phone').value.replace(/\D/g,'');return d.length===10?'+1'+d:null;}
 
-let stripe=null,cardElement=null,cardComplete=false;
 let currentPlan='starter';
 let userLocation = null;
 let session={token:localStorage.getItem('ww_token')||null,companyId:localStorage.getItem('ww_cid')||null,businessName:localStorage.getItem('ww_biz')||"Wood's Waste",plan:localStorage.getItem('ww_plan')||'starter',role:localStorage.getItem('ww_role')||'owner',ownerId:localStorage.getItem('ww_owner_id')||null,stripeConnected:localStorage.getItem('ww_stripe_connected')==='1',stripePending:false};
@@ -3200,7 +3185,6 @@ document.getElementById('modalOverlay').classList.add('open');
 document.body.style.overflow='hidden';
 window._modalOpener=document.activeElement;
 setTimeout(()=>{const f=document.getElementById('modal').querySelector('button,input,[tabindex="0"]');if(f)f.focus();},80);
-setTimeout(initStripe,50);
 }
 
 function pickPlan(plan){
@@ -3217,7 +3201,6 @@ document.getElementById('modalStepDots').style.display='flex';
 document.getElementById('stepPick').style.display='none';
 document.getElementById('step1').style.display='block';
 updateStepDots(1);
-setTimeout(initStripe,50);
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);if(window._modalOpener&&window._modalOpener.focus)window._modalOpener.focus();window._modalOpener=null;}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
@@ -3309,11 +3292,10 @@ if(!pw||pw.length<8){setErr('f-pw',true);valid=false;}
 if(!valid){showBanner('step1Err','Please fill in all required fields above.');return;}
 hideBanner('step1Err');
 const btn=document.getElementById('step1Btn');btn.disabled=true;btn.textContent='Sending verification code...';
-let pmId=null;
 try{
 const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
 if(!res.success){showBanner('step1Err',res.error||'Could not send verification email.');btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
-verificationToken=res.verificationToken;window._pendingPaymentMethodId=pmId;
+verificationToken=res.verificationToken;
 }catch(e){showBanner('step1Err','Could not connect: '+e.message);btn.disabled=false;btn.textContent='Continue — verify your email →';return;}
 btn.disabled=false;btn.textContent='Continue — verify your email →';
 document.getElementById('twofa-email-display').textContent=email;
