@@ -883,12 +883,12 @@ box-shadow:0 8px 30px rgba(26,158,114,.08),inset 0 1px 0 rgba(255,255,255,.04);
 .s-input-wrap input{padding:6px 7px 6px 18px;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11.5px;font-weight:600;color:white;width:100%;font-family:var(--font-sans);outline:none;transition:border-color .15s;}
 .s-input-wrap input:focus{border-color:rgba(255,255,255,.28);}
 .s-specials-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px;}
-.s-special-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-sm);padding:6px 9px;gap:7px;}
+.s-special-row{min-width:0;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--d-border);background:rgba(255,255,255,.02);border-radius:var(--r-sm);padding:6px 9px;gap:7px;}
 .s-special-row.active{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);}
 .s-special-row:not(.active){opacity:.45;}
 .s-special-row .sitem-toggle{background:rgba(255,255,255,.08);border-color:var(--d-border);color:transparent;}
 .s-special-row .sitem-toggle.on{background:var(--green);border-color:var(--green);color:#fff;}
-.s-sitem-left{display:flex;align-items:center;gap:5px;font-size:10.5px;color:rgba(255,255,255,.6);font-weight:500;}
+.s-sitem-left{display:flex;align-items:center;gap:5px;font-size:10.5px;color:rgba(255,255,255,.6);font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .s-sitem-icon{font-size:13px;color:rgba(255,255,255,.42);display:flex;align-items:center;}
 .s-sitem-fee .s-input-wrap input{width:58px;font-size:10.5px;padding:4px 4px 4px 15px;}
 .s-sitem-toggle{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--d-border-hover);background:rgba(255,255,255,.04);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:8.5px;flex-shrink:0;transition:all .15s;}
@@ -1094,6 +1094,11 @@ section{padding:56px 20px;}
 .form-row{grid-template-columns:1fr;}
 .twofa-code-row{gap:5px;}.twofa-digit{width:37px;height:44px;font-size:17px;}
 .promo-banner{padding:20px;}
+}
+/* phones: a settings special row holds label + fee + toggle — half a phone screen can't
+   fit that, and the right column was clipping off-screen. One column below 560px. */
+@media(max-width:560px){
+.s-specials-grid{grid-template-columns:1fr;}
 }
 #paywallOverlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);}
 #paywallOverlay.open{display:flex;}
