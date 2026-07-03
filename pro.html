@@ -3011,6 +3011,7 @@ if(session.ownerId)localStorage.setItem('ww_owner_id',session.ownerId);
 applyPricing(res.pricing);
 localStorage.setItem('ww_pricing',JSON.stringify(res.pricing));
 checkTrialStatus(res);
+startStatusPoll();   // reload path — keep trial/payment status fresh (login path already does this)
 await flushSyncQueue();
 try{
 const jobsRes=await api({action:'getJobs',token:session.token});
@@ -3494,7 +3495,7 @@ document.body.style.overflow='hidden';
 }
 function closeLogoutOverlay(){
 document.getElementById('logoutOverlay').classList.remove('open');
-document.body.style.overflow='';
+_syncBodyLock();   // cancel path — a drawer (e.g. Settings) may still be open underneath
 }
 function closeLogoutModal(e){if(e.target===document.getElementById('logoutOverlay'))closeLogoutOverlay();}
 async function confirmLogout(){
@@ -4336,7 +4337,7 @@ document.body.style.overflow='hidden';
 function closePaymentModal(){
 stopPaymentPoll();
 document.getElementById('paymentModal').style.display='none';
-document.body.style.overflow='';
+_syncBodyLock();   // opened on top of the History drawer — don't unlock the page under a still-open panel
 }
 // Live payment detection — while the payment screen is open, poll the server so the job
 // flips to "Paid · Stripe" the moment the customer's payment lands (no manual refresh).
@@ -5167,7 +5168,7 @@ const members=teamData.members||[];
 el.innerHTML=scheduled.map(j=>{
 const label=escapeHtml((j.crm&&j.crm.name)||(j.load?j.load+' load':'Job'));
 const dt=formatAssignDateTime(j.crm&&j.crm.dateTime);
-const price=j.actual?.charged?'$'+j.actual.charged:j.price||'';
+const price=j.actual?.charged?'$'+j.actual.charged:jobQuotePrice(j)||'';
 const assigned=Array.isArray(j.assignedTo)?j.assignedTo:[];
 const allSel=members.length>0&&members.every(m=>assigned.includes(m.companyId));
 const chips=members.map(m=>{
@@ -5413,7 +5414,7 @@ const d=new Date(j.crm.dateTime);
 const time=d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 return `<div class="cal-popup-job">
      <div class="cal-popup-time">${time} — ${escapeHtml(j.crm.name||'Customer')}</div>
-     <div class="cal-popup-detail">${escapeHtml(j.crm.address||'No address')}<br>${j.price}</div>
+     <div class="cal-popup-detail">${escapeHtml(j.crm.address||'No address')}<br>${escapeHtml(jobQuotePrice(j))}</div>
    </div>`;
 }).join('');
 document.getElementById('calPopup').classList.add('show');
@@ -5441,11 +5442,11 @@ jobHistory.filter(j=>j.crm&&(j.crm.name||j.crm.phone||j.crm.address)).forEach(j=
 const rows=Object.values(groups).map(jobs=>{
 jobs.sort((a,b)=>new Date(b.crm.savedAt||0)-new Date(a.crm.savedAt||0)||(b.id-a.id));
 const c=jobs[0].crm,total=jobs.reduce((s,j)=>s+jobAvgValue(j),0);
-return [c.name||'',c.phone||'',c.address||'',c.status||'quoted',jobs.length,Math.round(total),(c.savedAt||'').slice(0,10),(c.notes||'').replace(/\s+/g,' ').trim()];
-}).sort((a,b)=>(b[6]||'').localeCompare(a[6]||''));
+return [c.name||'',c.phone||'',c.email||'',c.address||'',c.status||'quoted',jobs.length,Math.round(total),(c.savedAt||'').slice(0,10),(c.notes||'').replace(/\s+/g,' ').trim()];
+}).sort((a,b)=>(b[7]||'').localeCompare(a[7]||''));
 if(!rows.length){showToast('No customers to export yet',true);return;}
 const esc=v=>{v=String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
-const csv=[['Name','Phone','Address','Status','Jobs','Total $','Last activity','Notes'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
+const csv=[['Name','Phone','Email','Address','Status','Jobs','Total $','Last activity','Notes'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob);
 const a=document.createElement('a');a.href=url;a.download='woodswaste-customers-'+new Date().toISOString().slice(0,10)+'.csv';
 document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
@@ -5457,7 +5458,7 @@ const esc=v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,
 const ll={minimum:'Min Load',quarter:'Quarter Load',half:'Half Load',full:'Full Truck','ai-multi':'AI Photo Quote'};
 const rows=jobHistory.map(j=>[
 (j.actual&&j.actual.loggedAt)?j.actual.loggedAt.slice(0,10):(j.ts||''),
-j.crm?.name||'',j.crm?.phone||'',j.crm?.address||'',
+j.crm?.name||'',j.crm?.phone||'',j.crm?.email||'',j.crm?.address||'',
 j.loadSummary||ll[j.load]||j.load||'',
 (j.specials||[]).join('; '),
 j.price||'',j.finalPrice||'',
@@ -5465,7 +5466,7 @@ j.actual?.charged??'',j.actual?.hours??'',
 j.crm?.status||'quoted',
 j.payment&&j.payment.paid?('paid ('+(j.payment.method||'other')+')'):(j.crm?.status==='completed'?'unpaid':'')
 ]);
-const csv=[['Date','Customer','Phone','Address','Load','Add-ons','Quoted','Final price','Charged','Hours','Status','Payment'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
+const csv=[['Date','Customer','Phone','Email','Address','Load','Add-ons','Quoted','Final price','Charged','Hours','Status','Payment'],...rows].map(r=>r.map(esc).join(',')).join('\r\n');
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob);
 const a=document.createElement('a');a.href=url;a.download='woodswaste-jobs-'+new Date().toISOString().slice(0,10)+'.csv';
 document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
@@ -5648,7 +5649,7 @@ ${isMemberAssigned?`<div style="display:inline-flex;align-items:center;gap:5px;b
 <div class="upcoming-date">${dateStr} · ${timeStr}</div>
 <div class="upcoming-name">${escapeHtml(j.crm.name||'Customer')}</div>
 <div class="upcoming-detail">${escapeHtml(j.crm.address||'')}${j.crm.phone?' · '+escapeHtml(j.crm.phone):''}</div>
-<div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${j.price}</div>
+<div class="upcoming-price" style="font-family:var(--font-num);font-weight:700;letter-spacing:-0.5px;">${escapeHtml(jobQuotePrice(j))}</div>
 ${(j.crm.address||j.crm.phone||j.crm.dateTime)?`<div style="display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;">${j.crm.dateTime?`<button onclick="addToCalendar('${j.id}')" title="Add to your calendar" style="flex:1;min-width:90px;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-calendar-plus" style="font-size:12px;"></i> Calendar</button>`:''}${j.crm.address?`<button onclick="getSingleDirections(this.dataset.addr)" data-addr="${escapeHtml(j.crm.address)}" style="flex:1;padding:7px;background:rgba(26,158,114,.1);color:#5DCAA5;border:1px solid rgba(26,158,114,.28);border-radius:var(--r-sm);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;"><i class="ph ph-navigation-arrow" style="font-size:12px;"></i> Directions</button>`:''}${j.crm.phone?`<a href="tel:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-phone" style="font-size:12px;"></i> Call</a>`:''}${j.crm.phone?`<a href="sms:${escapeHtml(j.crm.phone.replace(/[^0-9+]/g,''))}" style="flex:1;padding:7px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);border:1px solid var(--d-border);border-radius:var(--r-sm);font-size:11px;font-weight:700;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;"><i class="ph ph-chat-circle" style="font-size:12px;"></i> Text</a>`:''}</div>`:''}
 <div id="timer-block-${j.id}" style="margin-top:10px;border:1px solid ${isRunning?'rgba(26,158,114,.45)':'var(--d-border)'};border-radius:var(--r-md);padding:11px 13px;background:${isRunning?'rgba(26,158,114,.07)':'rgba(255,255,255,.02)'};transition:all .2s;">
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
@@ -5893,7 +5894,7 @@ ${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;
 <div style="font-size:10.5px;color:rgba(255,255,255,.38);margin-top:1px;">${escapeHtml(j.crm?.address||'')}</div>
 </div>
 <div style="text-align:right;">
-<div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#5DCAA5;">${j.actual?.charged?'$'+j.actual.charged:j.price}</div>
+<div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#5DCAA5;">${j.actual?.charged?'$'+j.actual.charged:escapeHtml(jobQuotePrice(j))}</div>
 <div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-top:1px;">${j.actual?.durationFormatted||''}</div>
 </div>
 </div>
@@ -6131,7 +6132,9 @@ const now = new Date();
 const todayJobs = getScheduledJobs()
 .filter(j => {
 const d = new Date(j.crm.dateTime);
-return d >= now && j.crm?.address?.trim();
+// same 1-hour grace window as the Upcoming list — a job whose start time just passed
+// is still on today's route (you're probably driving to it right now).
+return (d.getTime() + 60*60*1000) >= now.getTime() && j.crm?.address?.trim();
 })
 .sort((a,b) => new Date(a.crm.dateTime) - new Date(b.crm.dateTime));
 
@@ -6168,7 +6171,7 @@ document.body.style.overflow = 'hidden';
 
 function closeDumpPopup(){
 document.getElementById('dumpPopup').style.display = 'none';
-document.body.style.overflow = '';
+_syncBodyLock();
 }
 
 function confirmDumpAndRoute(){
@@ -6210,7 +6213,7 @@ const now = Date.now();
 if (now - (document._lastTouch || 0) < 300) e.preventDefault();
 document._lastTouch = now;
 }, { passive: false });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeMobSidebar();closeCrm();closeDumpPopup();closeLogoutOverlay();closePaymentModal();_appConfirmDone(false);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistory();closeSettings();closeAiPanel();closeActual();closeMobSidebar();closeCrm();closeDumpPopup();closeLogoutOverlay();closePaymentModal();closeTeamPanel();closeIconPicker();_appConfirmDone(false);}});
 // When the app returns to the foreground (operators flip between apps all day), push queued
 // offline work and pull the latest jobs so crew devices stay current — throttled to 1/min.
 let _lastFgSync=0;
