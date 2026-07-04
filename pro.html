@@ -1494,16 +1494,39 @@ localStorage.setItem('installBannerDismissed','1');
 <!-- ══ DEMO VIDEO — upload demo.mp4 to the repo root and this section appears on its own;
      while the file is missing the section stays hidden, so this ships safely today. ══ -->
 <section id="demoSection" style="display:none;padding:88px 40px;background:#0b0b0b;border-bottom:1px solid rgba(255,255,255,.06);">
-<div class="section-inner" style="max-width:860px;">
+<style>
+#demoSection .demo-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center;max-width:980px;margin:0 auto;}
+#demoSection .demo-point{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:rgba(255,255,255,.68);line-height:1.55;}
+#demoSection .demo-point i{color:#5DCAA5;font-size:15px;flex-shrink:0;margin-top:2px;}
+@media(max-width:860px){
+#demoSection{padding:64px 22px;}
+#demoSection .demo-grid{grid-template-columns:1fr;gap:36px;}
+#demoSection .demo-phone{max-width:260px;}
+}
+</style>
+<div class="section-inner">
+<div class="demo-grid">
+<div>
 <p class="section-eyebrow" style="color:rgba(255,255,255,.5);">See it work</p>
-<h2 class="section-title" style="color:#fff;">Point. Shoot. Quote.</h2>
-<p style="font-size:14.5px;color:rgba(255,255,255,.55);max-width:520px;line-height:1.7;margin-bottom:28px;">One real pile of junk, sixty seconds, and a price the customer can say yes to on the spot.</p>
-<div style="position:relative;border-radius:var(--r-xl);overflow:hidden;border:1px solid rgba(26,158,114,.35);box-shadow:0 24px 80px rgba(0,0,0,.55),0 0 0 6px rgba(26,158,114,.06);">
+<h2 class="section-title" style="color:#fff;">Photo to paid — in 90 seconds.</h2>
+<p style="font-size:14.5px;color:rgba(255,255,255,.55);line-height:1.75;margin-bottom:22px;">This is one job, uncut: snap a photo of the pile, the AI prices it off <strong style="color:rgba(255,255,255,.8);">your</strong> rates, the customer gets a text, the schedule fills itself, and the card payment lands — receipt included.</p>
+<div style="display:flex;flex-direction:column;gap:11px;margin-bottom:28px;">
+<div class="demo-point"><i class="ph ph-check-circle"></i><span><strong style="color:rgba(255,255,255,.85);">AI photo quote</strong> — priced with your exact load rates &amp; item fees, not some national average</span></div>
+<div class="demo-point"><i class="ph ph-check-circle"></i><span><strong style="color:rgba(255,255,255,.85);">Customer saved &amp; scheduled</strong> in two taps — calendar, reminders, and directions included</span></div>
+<div class="demo-point"><i class="ph ph-check-circle"></i><span><strong style="color:rgba(255,255,255,.85);">Payment link &amp; QR code</strong> — Apple Pay, Google Pay, or card, straight to your bank</span></div>
+<div class="demo-point"><i class="ph ph-check-circle"></i><span><strong style="color:rgba(255,255,255,.85);">Every job feeds your analytics</strong> — see what you actually make per load, per hour</span></div>
+</div>
+<a href="#" class="btn-primary" onclick="openModal('pick');return false;">Start free trial →</a>
+<div style="font-size:11.5px;color:rgba(255,255,255,.35);margin-top:12px;">14 days free · no card · works in any phone browser</div>
+</div>
+<div style="display:flex;justify-content:center;">
+<div class="demo-phone" style="width:100%;max-width:300px;position:relative;border-radius:28px;overflow:hidden;border:1px solid rgba(26,158,114,.4);box-shadow:0 24px 80px rgba(0,0,0,.6),0 0 0 7px rgba(26,158,114,.07);">
 <video id="demoVideo" controls playsinline preload="metadata" style="display:block;width:100%;height:auto;background:#000;" aria-label="Wood's Waste Pro demo — AI photo quote on a real junk removal job">
 <source src="demo.mp4" type="video/mp4"/>
 </video>
 </div>
-<div style="font-size:12px;color:rgba(255,255,255,.35);margin-top:12px;">Filmed on a real job — quoted with the same AI photo tool that's on every plan.</div>
+</div>
+</div>
 </div>
 </section>
 <script>
