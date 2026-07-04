@@ -2267,6 +2267,8 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 <div class="welcome-banner-body">Start by selecting a load size below, then add any special items. You'll have a quote number in under 60 seconds. Hit "Save to history" after each job to track your numbers over time.</div>
 </div>
 
+<div id="obChecklist" style="display:none;"></div>
+
 <div class="calc-section">
 <div class="calc-section-title">Load size</div>
 <div class="calc-load-grid">
@@ -3102,13 +3104,37 @@ hidePageLoader();
 }
 })();
 
+let _promoCode='';
 (function handleUrlParams(){
 const p=new URLSearchParams(window.location.search);
 if(p.get('stripe_connected')==='1'){
 history.replaceState({},'',window.location.pathname);
 setTimeout(()=>{showToast('✓ Stripe account connected! You can now collect payments.');checkStripeStatus();},800);
 }
+// Self-serve promo links (?promo=month) — auto-open signup with the offer applied, so an
+// email click lands the free month with zero manual steps on either side.
+const _pr=(p.get('promo')||'').toLowerCase().trim();
+if(_pr==='month'&&!session.token){
+_promoCode=_pr;
+setTimeout(()=>{try{openModal('pick');_syncPromoBanner();}catch(e){}},600);
+}
 })();
+// Trial-length copy — flips to 30-day wording when a promo link is active.
+function trialSubCopy(){return _promoCode==='month'?'30 days free with your promo. No card required to start.':'14 days free. No card required to start.';}
+function trialAllPlansCopy(){return _promoCode==='month'?'All plans include your 30-day free month — no charge until activation.':'All plans include a 14-day free trial — no charge until activation.';}
+// Promo strip inside the signup modal — created on demand, shown while a promo is active.
+function _syncPromoBanner(){
+if(!_promoCode)return;
+let b=document.getElementById('promoOfferStrip');
+if(!b){
+b=document.createElement('div');b.id='promoOfferStrip';
+b.style.cssText='margin:0 0 14px;padding:10px 14px;background:rgba(26,158,114,.1);border:1px solid rgba(26,158,114,.35);border-radius:10px;font-size:12.5px;font-weight:700;color:#1a9e72;display:flex;align-items:center;gap:8px;';
+b.innerHTML='🎁 Free month applied — your trial runs a full 30 days, no card needed.';
+const t=document.getElementById('modalTitle');
+if(t&&t.parentNode)t.parentNode.insertBefore(b,t);
+}
+b.style.display='flex';
+}
 
 function loadLocalPricing(){try{const lp=localStorage.getItem('ww_pricing');if(lp)applyPricing(JSON.parse(lp));}catch(e){}}
 
@@ -3244,7 +3270,7 @@ document.getElementById('modalTabs').style.display='flex';
 document.getElementById('modalStepDots').style.display='none';
 document.getElementById('modalPlanBadge').style.display='none';
 document.getElementById('modalTitle').textContent='Choose your plan';
-document.getElementById('modalSubtitle').textContent='All plans include a 14-day free trial — no charge until activation.';
+document.getElementById('modalSubtitle').textContent=trialAllPlansCopy();
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('stepPick').style.display='block';
 document.getElementById('modalOverlay').classList.add('open');
@@ -3277,7 +3303,7 @@ document.getElementById('modalTabs').style.display='flex';
 document.getElementById('step1').style.display='block';
 updateStepDots(1);
 document.getElementById('modalTitle').textContent='Start your free trial';
-document.getElementById('modalSubtitle').textContent='14 days free. No card required to start.';
+document.getElementById('modalSubtitle').textContent=trialSubCopy();
 }
 document.getElementById('modalOverlay').classList.add('open');
 document.body.style.overflow='hidden';
@@ -3294,7 +3320,7 @@ const badgeText=planKey==='pro-yearly'?'Pro Plan — $590/yr':planKey==='pro'?'P
 document.getElementById('modalPlanBadge').textContent=badgeText;
 document.getElementById('modalPlanBadge').style.display='inline-block';
 document.getElementById('modalTitle').textContent='Start your free trial';
-document.getElementById('modalSubtitle').textContent='14 days free. No card required to start.';
+document.getElementById('modalSubtitle').textContent=trialSubCopy();
 document.getElementById('modalStepDots').style.display='flex';
 document.getElementById('stepPick').style.display='none';
 document.getElementById('step1').style.display='block';
@@ -3315,7 +3341,7 @@ else document.getElementById('loginForm').style.display='block';
 document.getElementById('modalStepDots').style.display='none';
 document.getElementById('modalPlanBadge').style.display='none';
 document.getElementById('modalTitle').textContent=isSig?'Choose your plan':isJoin?'Join your team':'Welcome back';
-document.getElementById('modalSubtitle').textContent=isSig?'All plans include a 14-day free trial — no charge until activation.':isJoin?'Set a password and get access to your team\'s quote tool.':'Log in to your quote tool';
+document.getElementById('modalSubtitle').textContent=isSig?trialAllPlansCopy():isJoin?'Set a password and get access to your team\'s quote tool.':'Log in to your quote tool';
 }
 function goStep(n){
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
@@ -3324,7 +3350,7 @@ if(n===2)document.getElementById('step2').style.display='block';
 if(n===3)document.getElementById('step3').style.display='block';
 updateStepDots(n);
 const titles=['Start your free trial','Verify your email','Set your costs & markup'];
-const subs=['14 days free. No card required to start.','','Takes 2 minutes. Change any of this anytime.'];
+const subs=[trialSubCopy(),'','Takes 2 minutes. Change any of this anytime.'];
 document.getElementById('modalTitle').textContent=titles[n-1]||'';
 document.getElementById('modalSubtitle').textContent=subs[n-1]||'';
 document.getElementById('modal').scrollTop=0;
@@ -3449,7 +3475,7 @@ const btn=document.getElementById('step3Btn');btn.disabled=true;btn.textContent=
 const specials={};
 SPECIAL_ITEMS_CONFIG.forEach(item=>{if(specialItemStates[item.key].enabled)specials[item.key]={fee:specialItemStates[item.key].fee,label:item.label,icon:item.icon};});
 const pricing={loads:{minimum:{low:nv('p-min-low'),high:nv('p-min-high'),dump:nv('p-dump-min')},quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high'),dump:nv('p-dump-qtr')},half:{low:nv('p-half-low'),high:nv('p-half-high'),dump:nv('p-dump-half')},full:{low:nv('p-full-low'),high:nv('p-full-high'),dump:nv('p-dump-full')}},specials,driveRate:nv('driveRate'),laborRate:nv('laborRate'),defaultMarkup:parseInt(document.getElementById('signupMarkup').value),truck:{length:parseFloat(document.getElementById('p-truck-l')?.value)||0,width:parseFloat(document.getElementById('p-truck-w')?.value)||0,height:parseFloat(document.getElementById('p-truck-h')?.value)||0}};
-const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
+const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
 if(!payload.password||payload.password.length<8){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);btn.disabled=false;btn.textContent='Save & open my quote tool →';return;}
 try{
 const res=await api(payload);btn.disabled=false;btn.textContent='Save & open my quote tool →';
@@ -3484,11 +3510,11 @@ function populateSuccessScreen(plan){
 const base=String(plan||'starter').replace('-yearly','').replace('team10','team');
 const planName={starter:'Starter',pro:'Pro',team:'Team'}[base]||'Starter';
 const badge=document.getElementById('successPlanBadge');
-if(badge)badge.innerHTML='<i class="ph ph-check" style="font-size:11px;"></i> '+planName+' plan · 14-day free trial active';
+if(badge)badge.innerHTML='<i class="ph ph-check" style="font-size:11px;"></i> '+planName+(_promoCode==='month'?' plan · 30-day free month active':' plan · 14-day free trial active');
 const heading=document.getElementById('successHeading');
 if(heading)heading.textContent=base==='team'?"Your team's all set.":"You're all set.";
 const sub=document.getElementById('successSubtext');
-if(sub)sub.textContent='Your pricing is saved and your 14-day free trial is live — no charge today. Here\'s what\'s ready for you:';
+if(sub)sub.textContent='Your pricing is saved and your '+(_promoCode==='month'?'30-day free month':'14-day free trial')+' is live — no charge today. Here\'s what\'s ready for you:';
 const item=(icon,txt)=>'<div class="success-next-item"><i class="ph ph-'+icon+'" style="font-size:13px;flex-shrink:0;margin-top:2px;color:#1a9e72;"></i> '+txt+'</div>';
 let items=
   item('camera','<strong>AI photo quoting</strong> — point your phone at the pile, get a price'+(base==='starter'?' (30/day — Pro is unlimited)':' (unlimited)'))+
@@ -3635,12 +3661,53 @@ if(mobAiBtn)mobAiBtn.style.display='flex';   // all plans
 const mobInsightsBtn=document.getElementById('mobInsightsBtn');
 if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
-buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();renderCalcTodayStrip();
+buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();renderCalcTodayStrip();renderOnboardChecklist();
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
 }
 function dismissWelcome(){const banner=document.getElementById('welcomeBanner');if(banner)banner.classList.remove('show');}
+
+/* ── Onboarding checklist: walks a new account to activation (first quote → AI → customer
+   → payments). Hides itself for members, once all four are done, after dismissal, or once
+   the account clearly isn't new anymore. Re-rendered by initCalc/persistHistory/stripe. ── */
+function renderOnboardChecklist(){
+const el=document.getElementById('obChecklist');if(!el)return;
+const done={
+quote:jobHistory.length>0,
+ai:jobHistory.some(j=>j&&j.aiQuote),
+cust:jobHistory.some(j=>j&&j.crm&&(j.crm.name||j.crm.phone)),
+pay:!!session.stripeConnected
+};
+const allDone=done.quote&&done.ai&&done.cust&&done.pay;
+let hide=false;
+try{
+if(session.role==='member')hide=true;
+if(localStorage.getItem('ww_ob_dismiss')==='1')hide=true;
+if(localStorage.getItem('ww_ob_done')==='1')hide=true;
+if(jobHistory.length>25)hide=true;   // clearly not a new account — don't nag
+if(allDone){localStorage.setItem('ww_ob_done','1');if(!hide)showToast('🎉 Fully set up — you\'re running the whole playbook');hide=true;}
+}catch(e){}
+if(hide||!session.token){el.style.display='none';el.innerHTML='';return;}
+const n=[done.quote,done.ai,done.cust,done.pay].filter(Boolean).length;
+const row=(ok,label,hint,action)=>'<div onclick="'+(ok?'':action)+'" style="display:flex;align-items:center;gap:10px;padding:8px 0;'+(ok?'opacity:.5;':'cursor:pointer;')+'">'+
+'<div style="width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;'+(ok?'background:rgba(26,158,114,.25);color:#5DCAA5;':'background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.3);')+'">'+(ok?'✓':'')+'</div>'+
+'<div style="flex:1;min-width:0;"><div style="font-size:12.5px;font-weight:700;color:'+(ok?'rgba(255,255,255,.45)':'#fff')+';'+(ok?'text-decoration:line-through;':'')+'">'+label+'</div>'+
+(ok?'':'<div style="font-size:10.5px;color:rgba(255,255,255,.4);margin-top:1px;">'+hint+'</div>')+'</div>'+
+(ok?'':'<i class="ph ph-caret-right" style="font-size:13px;color:rgba(255,255,255,.3);flex-shrink:0;"></i>')+
+'</div>';
+el.innerHTML='<div style="background:rgba(26,158,114,.05);border:1px solid rgba(26,158,114,.25);border-radius:var(--r-md);padding:13px 15px;margin-bottom:14px;">'+
+'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">'+
+'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5DCAA5;">Getting set up — '+n+' of 4</div>'+
+'<button onclick="try{localStorage.setItem(\'ww_ob_dismiss\',\'1\');}catch(e){};renderOnboardChecklist()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;padding:0 2px;line-height:1;">✕</button></div>'+
+'<div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:'+(n*25)+'%;background:#1a9e72;border-radius:2px;transition:width .4s;"></div></div>'+
+row(done.quote,'Save your first quote','Pick a load size below, hit Save to history','window.scrollTo({top:0,behavior:\'smooth\'})')+
+row(done.ai,'Try an AI photo quote','Point your camera at any pile — 10 seconds','openAiPanel()')+
+row(done.cust,'Add a customer to a job','Open a saved job and tap Add customer','openHistory()')+
+row(done.pay,'Set up card payments','Connect Stripe in Settings — get paid on the spot','openSettings()')+
+'</div>';
+el.style.display='block';
+}
 
 // ── Today's jobs strip: the calculator is the screen operators live on — surface the day's
 // schedule right there (tap a row for the customer, tap the arrow for directions).
@@ -4130,7 +4197,7 @@ api({..._p,token:session.token}).catch(()=>queueSync(_p));
 if(changed)persistHistory();
 }
 function loadHistory(){try{jobHistory=sanitizeJobs(JSON.parse(localStorage.getItem('ww_history')||'[]'));}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}migrateLegacyIds();renderHistory();refreshInsightsBtn();}
-function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}try{renderCalcTodayStrip();}catch(e){}}   // every job mutation flows through here — keeps the today strip live
+function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}try{renderCalcTodayStrip();}catch(e){}try{renderOnboardChecklist();}catch(e){}}   // every job mutation flows through here — keeps the today strip live
 // Stamp a job as locally edited "now" — the merge uses this to win against a stale server copy.
 function touchJob(j){if(j)j.updatedAt=Date.now();return j;}
 // Collision-proof job id. Date.now() alone collides when two saves land in the same millisecond
@@ -4537,6 +4604,7 @@ try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');
 }
 }catch(e){/* keep prior connected state on error */}
 renderStripeSettings();
+try{renderOnboardChecklist();}catch(e){}
 // refresh any open list views so the Collect-payment / Send-receipt buttons appear once status is known
 try{if(typeof renderHistory==='function')renderHistory();}catch(e){}
 renderDashboard({force:true,skipAnalytics:true}); // Stripe state changed (not job data) — refresh payment buttons without rebuilding the charts
