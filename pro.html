@@ -3182,11 +3182,27 @@ if(synced>0)showToast('✓ Synced '+synced+' offline job'+(synced!==1?'s':''));
 }catch(e){}
 }
 
+// Corrupted/foreign rows in saved history (a null, a non-object, or `specials` stored as a
+// string by an old build) crashed every renderer that iterates jobHistory — scrub once at
+// load/merge so downstream code can trust the shape.
+function sanitizeJobs(arr){
+if(!Array.isArray(arr))return[];
+const out=[];
+arr.forEach(j=>{
+if(!j||typeof j!=='object')return;
+if(!Array.isArray(j.specials))j.specials=j.specials?[String(j.specials)]:[];
+if(j.id==null)j.id=newJobId();
+out.push(j);
+});
+return out;
+}
 // Merge server jobs with local snapshot — keeps local `actual` when server doesn't have it yet,
 // and preserves local-only jobs that haven't synced yet.
 // localSnap is optional; if omitted, reads current localStorage.
 function mergeJobHistory(serverJobs,localSnap){
+serverJobs=sanitizeJobs(serverJobs);
 let local=localSnap;if(!local){try{local=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){local=[];}}
+local=sanitizeJobs(local);
 const merged=serverJobs.map(sj=>{
 const lj=local.find(j=>String(j.id)===String(sj.id));
 if(!lj)return sj;
@@ -4113,7 +4129,7 @@ api({..._p,token:session.token}).catch(()=>queueSync(_p));
 });
 if(changed)persistHistory();
 }
-function loadHistory(){try{jobHistory=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}migrateLegacyIds();renderHistory();refreshInsightsBtn();}
+function loadHistory(){try{jobHistory=sanitizeJobs(JSON.parse(localStorage.getItem('ww_history')||'[]'));}catch(e){jobHistory=[];try{localStorage.removeItem('ww_history');}catch(_){}}migrateLegacyIds();renderHistory();refreshInsightsBtn();}
 function persistHistory(){try{localStorage.setItem('ww_history',JSON.stringify(jobHistory));}catch(e){}try{renderCalcTodayStrip();}catch(e){}}   // every job mutation flows through here — keeps the today strip live
 // Stamp a job as locally edited "now" — the merge uses this to win against a stale server copy.
 function touchJob(j){if(j)j.updatedAt=Date.now();return j;}
@@ -4183,9 +4199,9 @@ const mid=priceMid(jobQuotePrice(j)),diff=Math.round(j.actual.charged-mid),dcol=
 resultLine=`<div style="margin-top:7px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.03);border:1px solid var(--d-border);border-radius:var(--r-sm);padding:7px 9px;"><i class="ph ph-check-circle" style="color:#5DCAA5;font-size:14px;flex-shrink:0;"></i><div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.4;">Charged <strong style="color:#fff;">$${j.actual.charged.toLocaleString()}</strong>${mid?` · <span style="color:${dcol};font-weight:700;">${diff>=0?'+':'−'}$${Math.abs(diff).toLocaleString()}</span> vs quote`:''}${j.actual.hours?` · ${j.actual.hours}hr`:''}</div></div>`;
 }
 return `<div class="history-item">
-     <div class="history-item-top"><div class="history-item-price">${jobQuotePrice(j)}</div><div class="history-item-time">${j.ts||''}</div></div>
-     <div class="history-item-detail">${j.loadSummary||ll[j.load]||j.load}${j.specials&&j.specials.length?' · '+j.specials.map(escapeHtml).join(', '):''}${j.miles?' · '+j.miles+' mi':''}${j.hours?' · '+j.hours+'hr':''}</div>
-     <div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${j.markup}% markup</span>${statusBadge}${paymentBadge(j)}</div>
+     <div class="history-item-top"><div class="history-item-price">${escapeHtml(jobQuotePrice(j))}</div><div class="history-item-time">${escapeHtml(j.ts||'')}</div></div>
+     <div class="history-item-detail">${escapeHtml(j.loadSummary||ll[j.load]||j.load||'')}${j.specials&&j.specials.length?' · '+j.specials.map(escapeHtml).join(', '):''}${j.miles?' · '+escapeHtml(String(j.miles))+' mi':''}${j.hours?' · '+escapeHtml(String(j.hours))+'hr':''}</div>
+     <div>${j.aiQuote?'<span class="history-item-ai">AI quote</span>':''}<span class="history-item-markup">${escapeHtml(String(j.markup==null?'':j.markup))}% markup</span>${statusBadge}${paymentBadge(j)}</div>
      ${customerInfo}
      ${resultLine}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px;">
@@ -5967,7 +5983,7 @@ ${_cdtStr?`<div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;
 </div>
 <div style="text-align:right;">
 <div style="font-family:var(--font-num);font-size:16px;font-weight:700;color:#5DCAA5;">${j.actual?.charged?'$'+j.actual.charged:escapeHtml(jobQuotePrice(j))}</div>
-<div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-top:1px;">${j.actual?.durationFormatted||''}</div>
+<div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-top:1px;">${escapeHtml(j.actual?.durationFormatted||'')}</div>
 </div>
 </div>
 ${(j.actual?.beforePhotos?.length||j.actual?.afterPhotos?.length)?`
