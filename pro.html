@@ -3683,13 +3683,15 @@ function dismissWelcome(){const banner=document.getElementById('welcomeBanner');
    the account clearly isn't new anymore. Re-rendered by initCalc/persistHistory/stripe. ── */
 function renderOnboardChecklist(){
 const el=document.getElementById('obChecklist');if(!el)return;
+let _ratesSet=false;try{_ratesSet=localStorage.getItem('ww_settings_saved')==='1';}catch(e){}
 const done={
+rates:_ratesSet,
 quote:jobHistory.length>0,
 ai:jobHistory.some(j=>j&&j.aiQuote),
 cust:jobHistory.some(j=>j&&j.crm&&(j.crm.name||j.crm.phone)),
 pay:!!session.stripeConnected
 };
-const allDone=done.quote&&done.ai&&done.cust&&done.pay;
+const allDone=done.rates&&done.quote&&done.ai&&done.cust&&done.pay;
 let hide=false;
 try{
 if(session.role==='member')hide=true;
@@ -3699,7 +3701,8 @@ if(jobHistory.length>25)hide=true;   // clearly not a new account — don't nag
 if(allDone){localStorage.setItem('ww_ob_done','1');if(!hide)showToast('🎉 Fully set up — you\'re running the whole playbook');hide=true;}
 }catch(e){}
 if(hide||!session.token){el.style.display='none';el.innerHTML='';return;}
-const n=[done.quote,done.ai,done.cust,done.pay].filter(Boolean).length;
+const _steps=[done.rates,done.quote,done.ai,done.cust,done.pay];
+const n=_steps.filter(Boolean).length,total=_steps.length;
 const row=(ok,label,hint,action)=>'<div onclick="'+(ok?'':action)+'" style="display:flex;align-items:center;gap:10px;padding:8px 0;'+(ok?'opacity:.5;':'cursor:pointer;')+'">'+
 '<div style="width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;'+(ok?'background:rgba(26,158,114,.25);color:#5DCAA5;':'background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.3);')+'">'+(ok?'✓':'')+'</div>'+
 '<div style="flex:1;min-width:0;"><div style="font-size:12.5px;font-weight:700;color:'+(ok?'rgba(255,255,255,.45)':'#fff')+';'+(ok?'text-decoration:line-through;':'')+'">'+label+'</div>'+
@@ -3708,9 +3711,10 @@ const row=(ok,label,hint,action)=>'<div onclick="'+(ok?'':action)+'" style="disp
 '</div>';
 el.innerHTML='<div style="background:rgba(26,158,114,.05);border:1px solid rgba(26,158,114,.25);border-radius:var(--r-md);padding:13px 15px;margin-bottom:14px;">'+
 '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">'+
-'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5DCAA5;">Getting set up — '+n+' of 4</div>'+
+'<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5DCAA5;">Getting set up — '+n+' of '+total+'</div>'+
 '<button onclick="try{localStorage.setItem(\'ww_ob_dismiss\',\'1\');}catch(e){};renderOnboardChecklist()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:13px;cursor:pointer;padding:0 2px;line-height:1;">✕</button></div>'+
-'<div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:'+(n*25)+'%;background:#1a9e72;border-radius:2px;transition:width .4s;"></div></div>'+
+'<div style="height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:'+Math.round(n/total*100)+'%;background:#1a9e72;border-radius:2px;transition:width .4s;"></div></div>'+
+row(done.rates,'Set your rates in Settings','Match load prices, dump fees &amp; markup to your business — every quote uses these','openSettings()')+
 row(done.quote,'Save your first quote','Pick a load size below, hit Save to history','window.scrollTo({top:0,behavior:\'smooth\'})')+
 row(done.ai,'Try an AI photo quote','Point your camera at any pile — 10 seconds','openAiPanel()')+
 row(done.cust,'Add a customer to a job','Open a saved job and tap Add customer','openHistory()')+
@@ -4088,6 +4092,7 @@ const newPricing={loads:{minimum:{low:nsv('s-min-low'),high:nsv('s-min-high'),du
 dumpAddress:document.getElementById('s-dump-address')?.value.trim()||''};
 if(session.token){try{const res=await api({action:'updatePricing',token:session.token,...newPricing});if(!res.success)showToast('Could not save to server',true);}catch(e){showToast('Could not reach server',true);}}
 applyPricing(newPricing);localStorage.setItem('ww_pricing',JSON.stringify(newPricing));
+try{localStorage.setItem('ww_settings_saved','1');}catch(e){}   // onboarding checklist: rates step done
 initCalc();btn.disabled=false;btn.textContent='Save pricing changes';closeSettings();showToast('✓ Pricing updated');
 }
 
