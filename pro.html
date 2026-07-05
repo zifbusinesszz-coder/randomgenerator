@@ -2215,6 +2215,7 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 <button class="mob-nav-btn ai" id="mobAiBtn" onclick="closeMobSidebar();openAiPanel();" style="display:none;"><i class="ph ph-camera" style="font-size:15px;"></i> AI Quote</button>
 <button class="mob-nav-btn" onclick="closeMobSidebar();openSettings();"><i class="ph ph-gear" style="font-size:15px;"></i> Settings</button>
 <button class="mob-nav-btn" onclick="closeMobSidebar();openHistory();"><i class="ph ph-clipboard-text" style="font-size:15px;"></i> History</button>
+<button class="mob-nav-btn" onclick="closeMobSidebar();showReferralPrompt(false);" style="color:#1a9e72;border-color:rgba(26,158,114,.3);background:rgba(26,158,114,.04);"><i class="ph ph-users" style="font-size:15px;"></i> Refer &amp; earn 25%</button>
 <div style="flex:1;"></div>
 <button id="mobUpgradeBtn" class="mob-nav-btn" onclick="closeMobSidebar();showUpgradePrompt();" style="background:rgba(26,158,114,.07);border-color:rgba(26,158,114,.28);color:#1a9e72;font-weight:700;"><i class="ph ph-arrow-circle-up" style="font-size:15px;"></i> Upgrade to Pro</button>
 <button class="mob-nav-btn logout" onclick="closeMobSidebar();doLogout();"><i class="ph ph-sign-out" style="font-size:15px;"></i> Log out</button>
@@ -3089,15 +3090,18 @@ hidePageLoader();
 }
 })();
 
-let _promoCode='';
+let _promoCode='',_refCode='';
 (function handleUrlParams(){
 const p=new URLSearchParams(window.location.search);
 if(p.get('stripe_connected')==='1'){
 history.replaceState({},'',window.location.pathname);
 setTimeout(()=>{showToast('✓ Stripe account connected! You can now collect payments.');checkStripeStatus();},800);
 }
+// Referral attribution — ?ref=<companyId> from another operator's share link. Stored so the
+// signup can record who sent them (that operator earns 25% of what they pay).
+_refCode=(p.get('ref')||'').trim().slice(0,60);
 // Self-serve promo links (?promo=month) — auto-open signup with the offer applied, so an
-// email click lands the free month with zero manual steps on either side.
+// email/referral click lands the free month with zero manual steps on either side.
 const _pr=(p.get('promo')||'').toLowerCase().trim();
 if(_pr==='month'&&!session.token){
 _promoCode=_pr;
@@ -3476,7 +3480,7 @@ SPECIAL_ITEMS_CONFIG.forEach(item=>{if(specialItemStates[item.key].enabled)speci
 const pricing={loads:{minimum:{low:nv('p-min-low'),high:nv('p-min-high'),dump:nv('p-dump-min')},quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high'),dump:nv('p-dump-qtr')},half:{low:nv('p-half-low'),high:nv('p-half-high'),dump:nv('p-dump-half')},full:{low:nv('p-full-low'),high:nv('p-full-high'),dump:nv('p-dump-full')}},specials,driveRate:nv('driveRate'),laborRate:nv('laborRate'),defaultMarkup:parseInt(document.getElementById('signupMarkup').value),truck:{length:parseFloat(document.getElementById('p-truck-l')?.value)||0,width:parseFloat(document.getElementById('p-truck-w')?.value)||0,height:parseFloat(document.getElementById('p-truck-h')?.value)||0}};
 const _isG=!!_googleCred;
 const _errB=_isG?'step1Err':'step2Err';
-const payload={action:_isG?'googleSignup':'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
+const payload={action:_isG?'googleSignup':'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',ref:_refCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
 if(_isG){payload.credential=_googleCred;payload.password='';}
 const _fail=(msg)=>{showBanner(_errB,msg);if(!_isG)goStep(2);const g=document.getElementById('step1Btn');if(_isG&&g){g.disabled=false;g.textContent='Create my account →';}};
 if(!_isG&&(!payload.password||payload.password.length<8)){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}return;}
@@ -4585,6 +4589,7 @@ touchJob(job);
 persistHistory();renderHistory();
 renderDashboard({force:true});
 closePaymentModal();showToast('✓ Marked paid · '+method);
+maybeReferralAfterPayment();   // first payment logged = a win worth sharing
 if(session.token){const _p={action:'saveJob',jobId:job.id,price:job.price,load:job.load,specials:job.specials,miles:job.miles,hours:job.hours,markup:job.markup,driveCost:0,laborCost:0,specialsCost:0,baseCost:0,jobData:job};api({..._p,token:session.token}).catch(()=>queueSync(_p));}
 }
 function openPaymentModal(jobId){
@@ -4641,6 +4646,61 @@ s.innerHTML='<div style="text-align:center;padding:16px 0 4px;">'+
 '<div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.5;margin-bottom:18px;">Job marked <span style="color:#a09eff;font-weight:700;">Paid · Stripe</span>. The customer was emailed a receipt.</div>'+
 '<button onclick="closePaymentModal()" style="width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Done</button>'+
 '</div>';
+maybeReferralAfterPayment();   // peak-delight moment: money just hit their bank
+}
+
+/* ── Referral loop — fired at the moment of delight (first card payment collected). Word of
+   mouth in a tight hauler community is the cheapest acquisition there is; peak happiness is
+   right after the app puts money in their account. Shows once, then lives in the menu. ── */
+function referralLink(){
+// Always the public production signup — a shared link must work for whoever receives it,
+// regardless of where the operator is running the app (installed PWA, phone, desktop).
+const id=encodeURIComponent(session.companyId||'ref');
+return 'https://woodswastemn.com/pro?ref='+id+'&promo=month';
+}
+function referralText(){
+return "Hey — I've been running my junk jobs through Wood's Waste Pro (quote off a photo, schedule, take card payments). You can try it free for a month, no card: "+referralLink();
+}
+function copyReferral(){
+const link=referralLink();
+navigator.clipboard?.writeText(link).then(()=>showToast('✓ Referral link copied')).catch(()=>{
+const t=document.createElement('textarea');t.value=link;document.body.appendChild(t);t.select();try{document.execCommand('copy');showToast('✓ Referral link copied');}catch(e){}t.remove();
+});
+}
+function textReferral(){window.open('sms:?&body='+encodeURIComponent(referralText()));}
+function shareReferral(){
+if(navigator.share){navigator.share({title:"Wood's Waste Pro",text:referralText()}).catch(()=>{});}
+else copyReferral();
+}
+function closeReferral(){const o=document.getElementById('referralOverlay');if(o)o.style.display='none';document.body.style.overflow=_anyPanelOpen()?'hidden':'';}
+function showReferralPrompt(celebrate){
+let o=document.getElementById('referralOverlay');
+if(!o){o=document.createElement('div');o.id='referralOverlay';document.body.appendChild(o);}
+o.style.cssText='display:flex;position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:22px;';
+o.onclick=e=>{if(e.target===o)closeReferral();};
+const head=celebrate
+?'<div style="font-size:34px;margin-bottom:6px;">💰</div><div style="font-size:19px;font-weight:800;color:#fff;letter-spacing:-.3px;">That just hit your bank.</div><div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-top:7px;">Nice work. Know another hauler who\'s still guessing prices?</div>'
+:'<div style="font-size:30px;margin-bottom:6px;">🤝</div><div style="font-size:19px;font-weight:800;color:#fff;letter-spacing:-.3px;">Refer a hauler, earn 25%</div><div style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-top:7px;">Send another operator a free month.</div>';
+o.innerHTML='<div style="background:var(--d-surface);border:1px solid var(--d-border);border-radius:var(--r-xl);width:100%;max-width:360px;padding:24px 22px;text-align:center;animation:modalIn .2s ease both;position:relative;">'+
+'<button onclick="closeReferral()" aria-label="Close" style="position:absolute;top:12px;right:14px;background:rgba(255,255,255,.06);border:none;color:rgba(255,255,255,.5);width:27px;height:27px;border-radius:50%;font-size:13px;cursor:pointer;">✕</button>'+
+head+
+'<div style="background:rgba(26,158,114,.08);border:1px solid rgba(26,158,114,.28);border-radius:12px;padding:12px 14px;margin:18px 0 16px;font-size:13px;color:#5DCAA5;font-weight:700;line-height:1.5;">They get a free month. You get <span style="color:#7fe0bb;">25% of everything they pay</span> — for a full year.</div>'+
+'<div style="display:flex;gap:7px;margin-bottom:9px;">'+
+'<input readonly value="'+referralLink()+'" onclick="this.select()" style="flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid var(--d-border);border-radius:9px;padding:10px 11px;font-size:11px;color:rgba(255,255,255,.75);font-family:var(--font-sans);"/>'+
+'<button onclick="copyReferral()" style="flex-shrink:0;background:rgba(255,255,255,.08);border:1px solid var(--d-border);color:#fff;border-radius:9px;padding:0 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-sans);">Copy</button>'+
+'</div>'+
+'<button onclick="'+(navigator.share?'shareReferral':'textReferral')+'()" style="width:100%;padding:12px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;"><i class="ph ph-paper-plane-right" style="font-size:15px;"></i> Send it to a hauler</button>'+
+'<button onclick="closeReferral()" style="width:100%;padding:9px;background:none;border:none;color:rgba(255,255,255,.4);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-sans);">Maybe later</button>'+
+'</div>';
+o.style.display='flex';document.body.style.overflow='hidden';
+}
+function maybeReferralAfterPayment(){
+try{
+if(localStorage.getItem('ww_ref_prompted')==='1')return;   // only auto-fire once, ever
+if(session.role==='member')return;                          // owners refer, not crew
+localStorage.setItem('ww_ref_prompted','1');
+setTimeout(()=>{try{showReferralPrompt(true);}catch(e){}},1400);   // let the "paid" screen land first
+}catch(e){}
 }
 function updatePmFee(){
 const amt=parseFloat(document.getElementById('pmAmount').value)||0;
