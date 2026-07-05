@@ -3733,6 +3733,7 @@ if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobIns
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
 buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();renderCalcTodayStrip();renderOnboardChecklist();
 setTimeout(()=>{try{maybeShowInstallPrompt();}catch(e){}},3500);   // gentle install nudge for activated mobile users
+setTimeout(()=>{try{maybeReferralPeriodic();}catch(e){}},6000);   // recurring refer-a-friend nudge (guarded so it never stacks)
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
@@ -4696,10 +4697,32 @@ o.style.display='flex';document.body.style.overflow='hidden';
 }
 function maybeReferralAfterPayment(){
 try{
-if(localStorage.getItem('ww_ref_prompted')==='1')return;   // only auto-fire once, ever
+if(localStorage.getItem('ww_ref_prompted')==='1')return;   // the big celebration fires once, ever
 if(session.role==='member')return;                          // owners refer, not crew
 localStorage.setItem('ww_ref_prompted','1');
 setTimeout(()=>{try{showReferralPrompt(true);}catch(e){}},1400);   // let the "paid" screen land first
+}catch(e){}
+}
+// Recurring gentle nudge — resurfaces the referral prompt for established users every few
+// weeks (backing off if they keep ignoring it), so it stays top-of-mind without nagging.
+// Never stacks on top of onboarding, the install banner, an open panel, or a modal.
+function maybeReferralPeriodic(){
+try{
+if(!session.token||session.role==='member')return;          // owners only
+if(jobHistory.length<3)return;                              // established, active users only
+let m={};try{m=JSON.parse(localStorage.getItem('ww_ref_meta')||'{}');}catch(e){}
+const now=Date.now();
+const cooldown=((m.shows||0)>=3?45:21)*86400000;            // ~3 weeks, easing to ~6 after a few
+if(m.lastShown&&now-m.lastShown<cooldown)return;
+// don't collide with anything else that's on screen
+const ib=document.getElementById('installBanner');if(ib&&ib.style.display==='block')return;
+const ro=document.getElementById('referralOverlay');if(ro&&ro.style.display==='flex')return;
+const wb=document.getElementById('welcomeBanner');if(wb&&wb.classList.contains('show'))return;
+const ob=document.getElementById('obChecklist');if(ob&&ob.style.display==='block')return;
+if(_anyPanelOpen())return;
+const mo=document.getElementById('modalOverlay');if(mo&&mo.classList.contains('open'))return;
+m.lastShown=now;m.shows=(m.shows||0)+1;localStorage.setItem('ww_ref_meta',JSON.stringify(m));
+showReferralPrompt(false);
 }catch(e){}
 }
 function updatePmFee(){
