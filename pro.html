@@ -2028,6 +2028,7 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 </div>
 <div id="step1">
 <div class="err-banner" id="step1Err"></div>
+<div id="googleSignupNote" style="display:none;background:rgba(26,158,114,.08);border:1px solid rgba(26,158,114,.3);border-radius:8px;padding:9px 13px;margin-bottom:12px;font-size:12.5px;color:var(--green);font-weight:600;">✓ Signed in with Google — just finish your business profile below.</div>
 <div class="modal-trial-box"><i class="ph ph-check-circle" style="font-size:13px;flex-shrink:0;margin-top:1px;color:var(--green);"></i><div><strong>No card required to start.</strong> Try free for 14 days — you'll only be asked for payment if you want to keep access after the trial.</div></div>
 <div class="form-grid">
 <div class="form-row">
@@ -2039,6 +2040,7 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 <div class="field" id="f-phone"><label for="m-phone">Phone number</label><input type="tel" id="m-phone" placeholder="(507) 555-0100" oninput="onPhoneInput(this)" maxlength="14"/><span class="error-hint" id="phone-err">Enter a valid US/CA phone number</span></div>
 <div class="field" id="f-pw"><label for="m-pw">Password</label><input type="password" autocomplete="new-password" id="m-pw" placeholder="Min 8 characters" oninput="savedPassword=this.value"/><span class="error-hint">Min 8 characters</span></div>
 <button class="submit-btn" id="step1Btn" onclick="goStep2()">Continue — verify your email →</button>
+<div class="google-auth-wrap" style="display:none;margin-top:12px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--gray);">or</span><div style="flex:1;height:1px;background:var(--border);"></div></div><div id="googleBtnSignup" style="display:flex;justify-content:center;"></div></div>
 <p class="fine-print">By continuing you agree to our terms. No card required to start.</p>
 </div>
 </div>
@@ -2148,6 +2150,7 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 <div class="field"><label for="l-email">Email</label><input type="email" autocomplete="email" id="l-email" placeholder="you@yourbusiness.com"/></div>
 <div class="field"><label for="l-pw">Password</label><input type="password" autocomplete="current-password" id="l-pw" placeholder="Your password"/></div>
 <button class="submit-btn" id="loginBtn" onclick="doLogin()">Log in to my quote tool →</button>
+<div class="google-auth-wrap" style="display:none;margin-top:12px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><div style="flex:1;height:1px;background:var(--border);"></div><span style="font-size:11px;color:var(--gray);">or</span><div style="flex:1;height:1px;background:var(--border);"></div></div><div id="googleBtnLogin" style="display:flex;justify-content:center;"></div></div>
 <p class="fine-print" style="text-align:center;margin-top:3px;">
 <a href="#" onclick="showForgotPassword();return false;" style="color:var(--gray);font-weight:500;text-decoration:underline;">Forgot your password?</a>
 </p>
@@ -2956,6 +2959,9 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 
 const API_URL   = 'https://script.google.com/macros/s/AKfycbzGxYErhivjt2cevxWKlLqE6lo6UDHRI2WXk8NHCTkJf-WMEKPbdZLJXsQRMEPN3npb/exec';
 const STRIPE_PK = 'pk_live_51TdRldLeWK0oPFPo5R4P1Y6R898Xm05cYBBJm7P0tWKTdEcxJre76gYvV5aMUOZJH8YWGPr2O9S87g0rgbvhCNJu00EhneeR4m';
+// Google Sign-In — OAuth Client ID (public by design, safe in source). Clearing it hides
+// the Google buttons and everything works as before.
+const GOOGLE_CLIENT_ID = '976857539773-bcu97i0na99680516alk3fjnp1mjh63c.apps.googleusercontent.com';
 // Escape user-supplied text before it touches innerHTML (prevents stored XSS / token theft).
 function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
@@ -3274,7 +3280,7 @@ document.getElementById('modalTitle').textContent='Choose your plan';
 document.getElementById('modalSubtitle').textContent=trialAllPlansCopy();
 ['step1','step2','step3','loginForm','forgotForm','resetCodeForm','savingOverlay','successState','stepPick'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
 document.getElementById('stepPick').style.display='block';
-document.getElementById('modalOverlay').classList.add('open');
+document.getElementById('modalOverlay').classList.add('open');setTimeout(()=>{try{loadGoogleButtons();}catch(e){}},50);
 document.body.style.overflow='hidden';
 window._modalOpener=document.activeElement;
 setTimeout(()=>{const f=document.getElementById('modal').querySelector('button,input,[tabindex="0"]');if(f)f.focus();},80);
@@ -3306,7 +3312,7 @@ updateStepDots(1);
 document.getElementById('modalTitle').textContent='Start your free trial';
 document.getElementById('modalSubtitle').textContent=trialSubCopy();
 }
-document.getElementById('modalOverlay').classList.add('open');
+document.getElementById('modalOverlay').classList.add('open');setTimeout(()=>{try{loadGoogleButtons();}catch(e){}},50);
 document.body.style.overflow='hidden';
 window._modalOpener=document.activeElement;
 setTimeout(()=>{const f=document.getElementById('modal').querySelector('button,input,[tabindex="0"]');if(f)f.focus();},80);
@@ -3327,7 +3333,7 @@ document.getElementById('stepPick').style.display='none';
 document.getElementById('step1').style.display='block';
 updateStepDots(1);
 }
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);if(window._modalOpener&&window._modalOpener.focus)window._modalOpener.focus();window._modalOpener=null;}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';document.getElementById('savingOverlay').style.display='none';document.getElementById('successState').style.display='none';if(resendTimer)clearInterval(resendTimer);try{_clearGoogleSignupMode();}catch(e){}if(window._modalOpener&&window._modalOpener.focus)window._modalOpener.focus();window._modalOpener=null;}
 function closeModalOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
 
 function switchTab(tab){
@@ -3404,18 +3410,25 @@ else{switchTab('login');document.getElementById('loginSuccess').textContent='Pas
 
 async function goStep2(){
 clearFormErrors();
+const isGoogle=!!_googleCred;
 const first=v('m-first'),last=v('m-last'),biz=v('m-biz'),email=v('m-email'),pw=v('m-pw'),phone=getRawPhone();
 if(pw) savedPassword=pw;
-if(!savedPassword){showBanner('step1Err','Something went wrong — please re-enter your password.');return;}
+if(!isGoogle&&!savedPassword){showBanner('step1Err','Something went wrong — please re-enter your password.');return;}
 let valid=true;
 if(!first){setErr('f-first',true);valid=false;}
 if(!last){setErr('f-last',true);valid=false;}
 if(!biz){setErr('f-biz',true);valid=false;}
 if(!email||!email.includes('@')){setErr('f-email',true);valid=false;}
 if(!phone){setErr('f-phone',true);document.getElementById('phone-err').textContent='Enter a valid 10-digit US/CA phone number';valid=false;}
-if(!pw||pw.length<8){setErr('f-pw',true);valid=false;}
+if(!isGoogle&&(!pw||pw.length<8)){setErr('f-pw',true);valid=false;}
 if(!valid){showBanner('step1Err','Please fill in all required fields above.');return;}
 hideBanner('step1Err');
+if(isGoogle){
+// Google already verified the email — no code round-trip, straight to account creation.
+const gbtn=document.getElementById('step1Btn');gbtn.disabled=true;gbtn.textContent='Creating your account…';
+completeSignup();
+return;
+}
 const btn=document.getElementById('step1Btn');btn.disabled=true;btn.textContent='Sending verification code...';
 try{
 const res=await api({action:'sendVerificationCode',email,businessName:biz,phone});
@@ -3483,18 +3496,22 @@ const _vbtn=document.getElementById('verifyBtn');
 const specials={};
 SPECIAL_ITEMS_CONFIG.forEach(item=>{if(specialItemStates[item.key].enabled)specials[item.key]={fee:specialItemStates[item.key].fee,label:item.label,icon:item.icon};});
 const pricing={loads:{minimum:{low:nv('p-min-low'),high:nv('p-min-high'),dump:nv('p-dump-min')},quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high'),dump:nv('p-dump-qtr')},half:{low:nv('p-half-low'),high:nv('p-half-high'),dump:nv('p-dump-half')},full:{low:nv('p-full-low'),high:nv('p-full-high'),dump:nv('p-dump-full')}},specials,driveRate:nv('driveRate'),laborRate:nv('laborRate'),defaultMarkup:parseInt(document.getElementById('signupMarkup').value),truck:{length:parseFloat(document.getElementById('p-truck-l')?.value)||0,width:parseFloat(document.getElementById('p-truck-w')?.value)||0,height:parseFloat(document.getElementById('p-truck-h')?.value)||0}};
-const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
-if(!payload.password||payload.password.length<8){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}return;}
+const _isG=!!_googleCred;
+const _errB=_isG?'step1Err':'step2Err';
+const payload={action:_isG?'googleSignup':'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
+if(_isG){payload.credential=_googleCred;payload.password='';}
+const _fail=(msg)=>{showBanner(_errB,msg);if(!_isG)goStep(2);const g=document.getElementById('step1Btn');if(_isG&&g){g.disabled=false;g.textContent='Create my account →';}};
+if(!_isG&&(!payload.password||payload.password.length<8)){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}return;}
 try{
 const res=await api(payload);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}
-if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}goStep(2);return;}
+if(!res.success){if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}_fail(res.error||'Something went wrong.');return;}
 saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan,res.role||'owner',res.ownerId||null);
 applyPricing(pricing);localStorage.setItem('ww_pricing',JSON.stringify(pricing));
 localStorage.setItem('ww_new_user','1');
 // Straight to the calculator — no pricing step, no interstitial. Welcome banner +
 // onboarding checklist fire on the calc via the ww_new_user flag.
 closeModal();openCalcDirect();
-}catch(e){if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
+}catch(e){if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}_fail('Could not connect: '+e.message);}
 }
 function showLoginSplash(cb){
 const splash=document.getElementById('loginSplash');
@@ -3551,6 +3568,67 @@ document.getElementById('successState').style.display='block';
 document.getElementById('modalStepDots').style.display='none';
 document.getElementById('modalTitle').textContent="You're all set.";
 document.getElementById('modalSubtitle').textContent='';
+}
+
+/* ── GOOGLE SIGN-IN (dormant until GOOGLE_CLIENT_ID is set) ── */
+let _gisLoaded=false,_googleCred=null;
+function loadGoogleButtons(){
+if(!GOOGLE_CLIENT_ID)return;
+const mount=()=>{
+if(!window.google?.accounts?.id)return;
+[['googleBtnLogin','signin_with'],['googleBtnSignup','signup_with']].forEach(([id,txt])=>{
+const el=document.getElementById(id);
+if(el&&!el.dataset.done){el.dataset.done='1';google.accounts.id.renderButton(el,{theme:'outline',size:'large',width:280,text:txt});}
+});
+document.querySelectorAll('.google-auth-wrap').forEach(w=>w.style.display='block');
+};
+if(_gisLoaded){mount();return;}
+const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;
+s.onload=()=>{_gisLoaded=true;try{google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onGoogleCredential});}catch(e){return;}mount();};
+document.head.appendChild(s);
+}
+function _clearGoogleSignupMode(){
+_googleCred=null;
+const em=document.getElementById('m-email');if(em){em.readOnly=false;em.style.opacity='';}
+const pw=document.getElementById('f-pw');if(pw)pw.style.display='';
+const note=document.getElementById('googleSignupNote');if(note)note.style.display='none';
+const btn=document.getElementById('step1Btn');if(btn)btn.textContent='Continue — verify your email →';
+}
+function _applyGoogleSignupMode(res){
+const f=document.getElementById('m-first'),l=document.getElementById('m-last');
+if(f&&!f.value)f.value=res.firstName||'';
+if(l&&!l.value)l.value=res.lastName||'';
+const em=document.getElementById('m-email');if(em){em.value=res.email||'';em.readOnly=true;em.style.opacity='.7';}
+const pw=document.getElementById('f-pw');if(pw)pw.style.display='none';
+const note=document.getElementById('googleSignupNote');if(note)note.style.display='block';
+const btn=document.getElementById('step1Btn');if(btn)btn.textContent='Create my account →';
+}
+async function onGoogleCredential(resp){
+if(!resp||!resp.credential)return;
+let res;
+try{res=await api({action:'googleAuth',credential:resp.credential});}
+catch(e){showBanner('loginErr','Could not connect: '+e.message);showBanner('step1Err','Could not connect: '+e.message);return;}
+if(!res.success){showBanner('loginErr',res.error||'Google sign-in failed.');showBanner('step1Err',res.error||'Google sign-in failed.');return;}
+if(res.mode==='login'){
+saveSession(res.token,res.companyId,res.businessName,res.plan||'starter',res.role||'owner',res.ownerId||null);
+if(res.hasStripeAccount!=null){session.stripeConnected=!!res.hasStripeAccount;try{localStorage.setItem('ww_stripe_connected',session.stripeConnected?'1':'0');}catch(e){}}
+applyPricing(res.pricing);localStorage.setItem('ww_pricing',JSON.stringify(res.pricing||{}));
+let _snap=[];try{_snap=JSON.parse(localStorage.getItem('ww_history')||'[]');}catch(e){}
+document.getElementById('modalOverlay').classList.remove('open');
+document.body.style.overflow='';
+showLoginSplash(()=>openCalcDirect());
+startStatusPoll();checkStripeStatus();
+(async()=>{
+await flushSyncQueue();
+try{const jr=await api({action:'getJobs',token:session.token});if(jr.success){jobHistory=mergeJobHistory(jr.jobs,_snap);if(jobHistory.length>1000)jobHistory=jobHistory.slice(0,1000);persistHistory();renderHistory();renderDashboard();}}catch(e){}
+try{const tr=await api({action:'getUser',token:session.token});if(tr.success)checkTrialStatus(tr);}catch(e){}
+})();
+return;
+}
+// new user: Google verified the email — collect the necessary business info on step 1
+_googleCred=resp.credential;
+if(document.getElementById('step1').style.display!=='block'){switchTab('signup');showToast('✓ Google verified — pick your plan to continue');}
+_applyGoogleSignupMode(res);
 }
 
 async function doLogin(){
