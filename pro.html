@@ -3445,7 +3445,11 @@ const res=await api({action:'verifyCode',verificationToken,code});
 btn.disabled=false;btn.textContent='Verify & continue →';
 if(!res.success){showBanner('step2Err',res.error||'Incorrect code.');clearDigits();document.getElementById('d0').focus();return;}
 if(resendTimer)clearInterval(resendTimer);
-goStep(3);
+// No more forced pricing step — create the account with sensible default rates and drop
+// the operator straight into the calculator. They tune rates anytime in Settings (the
+// onboarding checklist nudges them there).
+btn.disabled=true;btn.textContent='Setting up your account…';
+completeSignup();
 }catch(e){btn.disabled=false;btn.textContent='Verify & continue →';showBanner('step2Err','Could not connect: '+e.message);}
 }
 async function resendCode(){
@@ -3472,20 +3476,25 @@ function toggleSpecial(key){specialItemStates[key].enabled=!specialItemStates[ke
 function updateSpecialFee(key,val){specialItemStates[key].fee=Number(val)||0;}
 
 async function completeSignup(){
-const btn=document.getElementById('step3Btn');btn.disabled=true;btn.textContent='Saving...';
+// Reached straight from email verification now (the pricing step was removed) — the verify
+// button shows progress, so guard step3Btn since it may not be on screen.
+const btn=document.getElementById('step3Btn');if(btn){btn.disabled=true;btn.textContent='Saving...';}
+const _vbtn=document.getElementById('verifyBtn');
 const specials={};
 SPECIAL_ITEMS_CONFIG.forEach(item=>{if(specialItemStates[item.key].enabled)specials[item.key]={fee:specialItemStates[item.key].fee,label:item.label,icon:item.icon};});
 const pricing={loads:{minimum:{low:nv('p-min-low'),high:nv('p-min-high'),dump:nv('p-dump-min')},quarter:{low:nv('p-qtr-low'),high:nv('p-qtr-high'),dump:nv('p-dump-qtr')},half:{low:nv('p-half-low'),high:nv('p-half-high'),dump:nv('p-dump-half')},full:{low:nv('p-full-low'),high:nv('p-full-high'),dump:nv('p-dump-full')}},specials,driveRate:nv('driveRate'),laborRate:nv('laborRate'),defaultMarkup:parseInt(document.getElementById('signupMarkup').value),truck:{length:parseFloat(document.getElementById('p-truck-l')?.value)||0,width:parseFloat(document.getElementById('p-truck-w')?.value)||0,height:parseFloat(document.getElementById('p-truck-h')?.value)||0}};
 const payload={action:'signup',businessName:v('m-biz'),ownerName:v('m-first')+' '+v('m-last'),email:v('m-email'),phone:getRawPhone()||v('m-phone'),password:savedPassword||document.getElementById('m-pw')?.value||'',plan:currentPlan,promo:_promoCode||'',trialStart:new Date().toISOString(),verificationToken,loads:pricing.loads,specials:pricing.specials,driveRate:pricing.driveRate,laborRate:pricing.laborRate,defaultMarkup:pricing.defaultMarkup,truck:pricing.truck};
-if(!payload.password||payload.password.length<8){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);btn.disabled=false;btn.textContent='Save & open my quote tool →';return;}
+if(!payload.password||payload.password.length<8){showBanner('step2Err','Session expired — please go back and re-enter your password.');goStep(1);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}return;}
 try{
-const res=await api(payload);btn.disabled=false;btn.textContent='Save & open my quote tool →';
-if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');goStep(2);return;}
+const res=await api(payload);if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}
+if(!res.success){showBanner('step2Err',res.error||'Something went wrong.');if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}goStep(2);return;}
 saveSession(res.token,res.companyId,res.businessName||v('m-biz'),currentPlan,res.role||'owner',res.ownerId||null);
 applyPricing(pricing);localStorage.setItem('ww_pricing',JSON.stringify(pricing));
 localStorage.setItem('ww_new_user','1');
-showSuccess();
-}catch(e){btn.disabled=false;btn.textContent='Save & open my quote tool →';showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
+// Straight to the calculator — no pricing step, no interstitial. Welcome banner +
+// onboarding checklist fire on the calc via the ww_new_user flag.
+closeModal();openCalcDirect();
+}catch(e){if(btn){btn.disabled=false;btn.textContent='Save & open my quote tool →';}if(_vbtn){_vbtn.disabled=false;_vbtn.textContent='Verify & continue →';}showBanner('step2Err','Could not connect: '+e.message);goStep(2);}
 }
 function showLoginSplash(cb){
 const splash=document.getElementById('loginSplash');
