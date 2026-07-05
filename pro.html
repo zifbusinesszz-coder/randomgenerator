@@ -1454,35 +1454,13 @@ box-shadow:0 20px 46px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);}
 </div>
 </section>
 
-<div id="iosInstallBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:white;border-top:1px solid #e4e4e2;padding:18px 20px 28px;box-shadow:0 -8px 30px rgba(0,0,0,0.12);">
-<button onclick="document.getElementById('iosInstallBanner').style.display='none'" aria-label="Dismiss install banner" style="position:absolute;top:12px;right:14px;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;">✕</button>
-<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-<img src="icon.png" alt="Wood's Waste Pro app icon" style="width:48px;height:48px;border-radius:10px;">
-<div>
-<div style="font-family:-apple-system,sans-serif;font-size:14px;font-weight:700;color:#0d0d0d;">Wood's Waste Pro</div>
-<div style="font-family:-apple-system,sans-serif;font-size:12px;color:#6b6b6b;">Add to your home screen</div>
-</div>
-</div>
-<div style="font-family:-apple-system,sans-serif;font-size:13px;color:#444;line-height:1.7;margin-bottom:14px;">
-1. Tap the <strong>Share button</strong> <span style="font-size:16px;">⬆️</span> at the bottom of your screen<br>
-2. Scroll down and tap <strong>"Add to Home Screen"</strong><br>
-3. Tap <strong>Add</strong> — done!
-</div>
-<div style="background:#f5f5f3;border-radius:8px;padding:10px 13px;font-family:-apple-system,sans-serif;font-size:11.5px;color:#6b6b6b;">
-Works like a real app — no App Store needed.
-</div>
-</div>
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#fff;border-top:1px solid #e4e4e2;padding:16px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -8px 30px rgba(0,0,0,0.12);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;"></div>
 <script>
-const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-const dismissed = localStorage.getItem('installBannerDismissed');
-if(isIos && !isInStandaloneMode && !dismissed){
-document.getElementById('iosInstallBanner').style.display='block';
-document.getElementById('iosInstallBanner').querySelector('button').onclick = function(){
-document.getElementById('iosInstallBanner').style.display='none';
-localStorage.setItem('installBannerDismissed','1');
-};
-}
+// Capture Android's native install offer as early as possible (it can fire right on load).
+// The banner itself is shown later, in-app, to operators who've actually quoted a job.
+window._deferredInstall=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window._deferredInstall=e;});
+window.addEventListener('appinstalled',function(){try{var m=JSON.parse(localStorage.getItem('ww_install_meta')||'{}');m.installed=1;localStorage.setItem('ww_install_meta',JSON.stringify(m));}catch(e){}var el=document.getElementById('installBanner');if(el)el.style.display='none';});
 </script>
 
 <div class="promo-banner">
@@ -3750,6 +3728,7 @@ const mobInsightsBtn=document.getElementById('mobInsightsBtn');
 if(mobInsightsBtn){const hasActuals=jobHistory.some(j=>j.actual?.charged);mobInsightsBtn.style.display=(isPro()&&hasActuals)?'flex':'none';}
 Object.keys(userPricing.loads).forEach(key=>{const l=userPricing.loads[key],el=document.getElementById('cl-cost-'+key);if(el)el.textContent='$'+l.low+(l.low!==l.high?'–$'+l.high:'');});
 buildCalcSpecialsGrid();loadHistory();restoreTimers();recalc();checkMemberAssignments();renderCalcTodayStrip();renderOnboardChecklist();
+setTimeout(()=>{try{maybeShowInstallPrompt();}catch(e){}},3500);   // gentle install nudge for activated mobile users
 const isNew=localStorage.getItem('ww_new_user');
 const banner=document.getElementById('welcomeBanner');
 if(isNew&&banner){banner.classList.add('show');localStorage.removeItem('ww_new_user');}
@@ -3799,6 +3778,51 @@ row(done.cust,'Add a customer to a job','Open a saved job and tap Add customer',
 row(done.pay,'Set up card payments','Connect Stripe in Settings — get paid on the spot','openSettings()')+
 '</div>';
 el.style.display='block';
+}
+
+/* ── Home-screen install (PWA) — cross-platform, shown to ACTIVATED operators only.
+   An app icon on their phone is the single biggest retention lever: a bookmark gets
+   forgotten, an icon gets tapped. Android gets a real one-tap install; iOS gets the
+   Share → Add to Home Screen steps (Apple gives no programmatic install). Re-prompts at
+   most weekly, gives up after 3 declines. ── */
+function _installEnv(){
+const ua=navigator.userAgent.toLowerCase();
+const isIos=/iphone|ipad|ipod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isAndroid=/android/.test(ua);
+const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+return {isIos,isAndroid,standalone,mobile:isIos||isAndroid};
+}
+function _installMeta(){try{return JSON.parse(localStorage.getItem('ww_install_meta')||'{}');}catch(e){return {};}}
+function _saveInstallMeta(m){try{localStorage.setItem('ww_install_meta',JSON.stringify(m));}catch(e){}}
+function dismissInstall(){
+const el=document.getElementById('installBanner');if(el)el.style.display='none';
+const m=_installMeta();m.dismissCount=(m.dismissCount||0)+1;m.lastShown=Date.now();_saveInstallMeta(m);
+}
+async function doAndroidInstall(){
+const d=window._deferredInstall;if(!d)return;
+d.prompt();
+try{const r=await d.userChoice;const m=_installMeta();if(r&&r.outcome==='accepted')m.installed=1;m.lastShown=Date.now();_saveInstallMeta(m);}catch(e){}
+window._deferredInstall=null;
+const el=document.getElementById('installBanner');if(el)el.style.display='none';
+}
+function maybeShowInstallPrompt(){
+const s=_installEnv();
+if(s.standalone||!s.mobile)return;                       // already installed, or desktop
+if(s.isAndroid&&!window._deferredInstall)return;         // Android didn't offer it (ineligible / already installed)
+if(!session.token||!jobHistory.length)return;            // only logged-in operators who've quoted a job
+const m=_installMeta();
+if(m.installed)return;
+if((m.dismissCount||0)>=3)return;                        // stop nagging after 3 declines
+if(m.lastShown&&Date.now()-m.lastShown<7*86400000)return;// at most once a week
+const el=document.getElementById('installBanner');if(!el)return;
+const cta=(s.isAndroid&&window._deferredInstall)
+?'<button onclick="doAndroidInstall()" style="width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Install app — one tap</button>'
+:'<div style="background:#f5f5f3;border-radius:8px;padding:11px 13px;font-size:12.5px;color:#444;line-height:1.75;">1. Tap the <strong>Share</strong> button <span style="font-size:15px;">⬆️</span> below<br>2. Tap <strong>“Add to Home Screen”</strong><br>3. Tap <strong>Add</strong> — done</div>';
+el.innerHTML='<button onclick="dismissInstall()" aria-label="Dismiss" style="position:absolute;top:10px;right:12px;background:#f0f0ee;border:none;color:#888;width:26px;height:26px;border-radius:50%;font-size:12px;cursor:pointer;">✕</button>'
++'<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><img src="icon.png" alt="" style="width:46px;height:46px;border-radius:10px;flex-shrink:0;"><div><div style="font-size:14px;font-weight:700;color:#0d0d0d;">Put Wood\'s Waste Pro on your home screen</div><div style="font-size:12px;color:#6b6b6b;margin-top:2px;line-height:1.5;">Quote jobs in one tap from the driveway — no App Store needed.</div></div></div>'
++cta;
+el.style.display='block';
+const meta=_installMeta();meta.lastShown=Date.now();_saveInstallMeta(meta);
 }
 
 // ── Today's jobs strip: the calculator is the screen operators live on — surface the day's
