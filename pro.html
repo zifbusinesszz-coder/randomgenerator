@@ -2678,15 +2678,15 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
 <div class="pricing-plan" style="color:#5DCAA5;margin:0;">Team</div>
 <div style="display:inline-flex;align-items:center;background:rgba(255,255,255,.08);border-radius:16px;padding:2px;gap:2px;">
-<button id="pw-team3-btn" onclick="event.stopPropagation();setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:white;color:black;transition:all .15s;">3</button>
-<button id="pw-team10-btn" onclick="event.stopPropagation();setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(255,255,255,.4);transition:all .15s;">10</button>
+<button id="pw-team3-btn" onclick="event.stopPropagation();setTeamSize(false)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:var(--black);color:white;transition:all .15s;">3</button>
+<button id="pw-team10-btn" onclick="event.stopPropagation();setTeamSize(true)" style="border:none;border-radius:14px;padding:2px 9px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);background:transparent;color:rgba(0,0,0,.45);transition:all .15s;">10</button>
 </div>
 </div>
 <div class="pricing-price" id="pw-team-price">$149<span>/mo</span></div>
 <div class="pricing-desc" id="pw-team-desc">Everything in Pro for up to 3 operators on one subscription.</div>
 <ul class="pricing-features">
 <li class="pf"><span class="chk chk-green">✓</span> Everything in Pro</li>
-<li class="pf"><span class="chk chk-green">✓</span> 3 seats — 1 owner + 2 members</li>
+<li class="pf"><span class="chk chk-green">✓</span> <span id="pw-team-seats">3 seats — 1 owner + 2 members</span></li>
 <li class="pf"><span class="chk chk-green">✓</span> Shared job history & assignments</li>
 </ul>
 </div>
@@ -4991,12 +4991,14 @@ let teamSizeIs10 = false;
 function setTeamSize(is10) {
 teamSizeIs10 = is10;
 // Update seat toggle pill styles across all 3 locations
+// All three seat toggles sit on a LIGHT (white) card, so the same scheme applies to each:
+// selected = black pill + white text, unselected = readable dark-grey text. (The paywall's
+// inactive button was previously white-on-white, i.e. invisible until clicked.)
 ['mkt','sp','pw'].forEach(function(p){
 const b3=document.getElementById(p+'-team3-btn'),b10=document.getElementById(p+'-team10-btn');
-if(b3){b3.style.background=!is10?'var(--black)':'transparent';b3.style.color=!is10?'white':'rgba(0,0,0,.4)';}
-if(b10){b10.style.background=is10?'var(--black)':'transparent';b10.style.color=is10?'white':'rgba(0,0,0,.4)';}
-// paywall uses white-ish
-const pb3=document.getElementById(p+'-team3-btn'),pb10=document.getElementById(p+'-team10-btn');
+if(!b3||!b10)return;
+b3.style.background=!is10?'var(--black)':'transparent';b3.style.color=!is10?'white':'rgba(0,0,0,.45)';
+b10.style.background=is10?'var(--black)':'transparent';b10.style.color=is10?'white':'rgba(0,0,0,.45)';
 });
 // Re-run each context's billing toggle to update prices with new size
 const _t3m='$149',_t3y='$1,490',_t10m='$299',_t10y='$2,999';
@@ -5015,6 +5017,8 @@ const pwEl=document.getElementById('pw-team-price');
 if(pwEl)pwEl.innerHTML=(is10?(paywallBillingYearly?_t10y:_t10m):(paywallBillingYearly?_t3y:_t3m))+'<span>'+(paywallBillingYearly?'/yr':'/mo')+'</span>';
 const pwDesc=document.getElementById('pw-team-desc');
 if(pwDesc)pwDesc.textContent=is10?'Everything in Pro for up to 10 operators on one subscription.':'Everything in Pro for up to 3 operators on one subscription.';
+const pwSeats=document.getElementById('pw-team-seats');
+if(pwSeats)pwSeats.textContent=is10?'10 seats — 1 owner + 9 members':'3 seats — 1 owner + 2 members';
 }
 
 let signupBillingYearly = false;
