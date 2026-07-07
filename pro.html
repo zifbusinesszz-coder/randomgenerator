@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- build 2026-07-07.1 — signup 404 fix: retry the flaky Apps Script echo on send-code actions -->
+<!-- build 2026-07-07.2 — signup 404 fix: API routed through Cloudflare Worker proxy (kills the Apps Script echo 404) + send-code retry safety net -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2936,7 +2936,11 @@ v.addEventListener('loadedmetadata',function(){s.style.display='block';});
      that marketing visitors and Starter users should never pay for at page load. -->
 <script>
 
-const API_URL   = 'https://script.google.com/macros/s/AKfycbzGxYErhivjt2cevxWKlLqE6lo6UDHRI2WXk8NHCTkJf-WMEKPbdZLJXsQRMEPN3npb/exec';
+// Routed through a Cloudflare Worker proxy (winter-meadow-8a0e) that follows Apps Script's
+// 302->googleusercontent echo redirect SERVER-SIDE and returns a clean 200 — this is what
+// eliminated the intermittent signup 404s (the browser could not reliably read the echo
+// reply). Worker source: ww-api-proxy-worker.js. To bypass it, point back at the /exec URL.
+const API_URL   = 'https://winter-meadow-8a0e.woodswastemn.workers.dev/';
 const STRIPE_PK = 'pk_live_51TdRldLeWK0oPFPo5R4P1Y6R898Xm05cYBBJm7P0tWKTdEcxJre76gYvV5aMUOZJH8YWGPr2O9S87g0rgbvhCNJu00EhneeR4m';
 // Google Sign-In — OAuth Client ID (public by design, safe in source). Clearing it hides
 // the Google buttons and everything works as before.
