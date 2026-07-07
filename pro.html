@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- build 2026-07-04.2 — onboarding checklist, promo links, stress fixes, demo video section -->
+<!-- build 2026-07-07.1 — signup 404 fix: retry the flaky Apps Script echo on send-code actions -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -3130,20 +3130,32 @@ function loadLocalPricing(){try{const lp=localStorage.getItem('ww_pricing');if(l
 // Read-only actions are safe to retry once on a transient failure (flaky mobile signal,
 // Apps Script hiccup). Mutations are NEVER retried here — failed writes go through queueSync.
 const API_READ_ACTIONS={getUser:1,getJobs:1,checkStatus:1,stripeAccountStatus:1,stripeBalance:1,getTeam:1,getJobPayment:1};
+// Apps Script POSTs 302-redirect to a googleusercontent "echo" URL that intermittently
+// returns 404 AFTER the server already ran (e.g. the code email was sent). For actions where
+// re-running is HARMLESS — just a duplicate code email — retry so the browser eventually gets
+// the real reply (and the verificationToken). NEVER add state-changing mutations here
+// (completeSignup, verifyCode, resetPassword): a retry after a 404 would double-create or hit
+// "already used", since the work already succeeded server-side. The durable fix is the
+// Cloudflare Worker proxy (follows the redirect server-side); this is the client-side stopgap.
+const API_SAFE_RETRY_ACTIONS={sendVerificationCode:1,sendResetCode:1};
 async function api(payload){
 const fd=new FormData();fd.append('payload',JSON.stringify(payload));
 const canRetry=!!API_READ_ACTIONS[payload.action];
+const safeRetry=canRetry||!!API_SAFE_RETRY_ACTIONS[payload.action];
+const maxAttempt=safeRetry?3:0;
 let res;
 for(let attempt=0;;attempt++){
 try{
 res=await fetch(API_URL,{method:'POST',body:fd});
 }catch(e){
-if(canRetry&&attempt===0&&navigator.onLine!==false){await new Promise(r=>setTimeout(r,900));continue;}
+if(safeRetry&&attempt<maxAttempt&&navigator.onLine!==false){await new Promise(r=>setTimeout(r,700*(attempt+1)));continue;}
 const err=new Error(navigator.onLine===false?"You're offline — changes will sync when you reconnect.":'Network error — could not reach the server.');
 err.kind='network';err.action=payload.action;console.warn('[api] network error on "'+payload.action+'":',e&&e.message);
 throw err;
 }
-if(!res.ok&&res.status>=500&&canRetry&&attempt===0){await new Promise(r=>setTimeout(r,900));continue;}
+// 404 = the flaky Apps Script echo redirect (server ran, browser couldn't read the reply);
+// 5xx = transient. Retry only the harmless-to-repeat actions above.
+if(!res.ok&&(res.status===404||res.status>=500)&&safeRetry&&attempt<maxAttempt){await new Promise(r=>setTimeout(r,700*(attempt+1)));continue;}
 break;
 }
 const text=await res.text();
