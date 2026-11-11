@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Text Wood's Waste</title>
+<style>
+  :root{--ink:#1a1a1a;--muted:#6b6862;--bg:#efede8;--card:#fff}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);padding:16px}
+  .card{background:var(--card);border-radius:16px;max-width:420px;width:100%;padding:32px 24px;text-align:center}
+  img{width:84px;height:84px;border-radius:50%}
+  h1{font-size:22px;margin:16px 0 6px}
+  p{color:var(--muted);font-size:15px;line-height:22px;margin:0 0 22px}
+  a.btn{display:block;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;font-size:17px;
+        padding:16px;border-radius:999px;margin-bottom:12px}
+  a.alt{display:block;color:var(--ink);font-weight:700;text-decoration:none;font-size:15px;padding:10px}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="ww-badge.png" alt="Wood's Waste">
+  <h1>Text us a few photos</h1>
+  <p>Griffin or Gavin will text you back a price, usually same day.</p>
+  <a class="btn" id="sms" href="sms:+15072981179">Text (507) 298-1179</a>
+  <a class="alt" href="tel:+15072981179">or call us</a>
+</div>
+<script>
+  // iPhone wants "&body=", Android "?body="
+  var body = encodeURIComponent("Hi Griffin, I'm an agent with a cleanout. Photos attached:");
+  var ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  var link = "sms:+15072981179" + (ios ? "&" : "?") + "body=" + body;
+  document.getElementById("sms").href = link;
+  if (/Android|iPhone|iPad|iPod/.test(navigator.userAgent)) { setTimeout(function(){ location.href = link; }, 250); }
+</script>
+</body>
+</html>
