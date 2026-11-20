@@ -262,3 +262,17 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 @media (max-width:640px){.tier:last-child{grid-column:span 2}}
 .tier-note{margin-top:22px;background:#fff8ea;border:1px solid #f1d9a6;border-radius:var(--r);padding:16px 20px;font-size:15px;color:#5c4512;line-height:1.55}
 .tier-note b{color:#3d2e0a}
+
+/* city / service page local card */
+.local-card{background:var(--sand);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px}
+.local-card h3{font-size:22px;margin-bottom:10px}
+.local-card p{color:var(--ink-2);font-size:16px;margin-bottom:12px}
+.local-card ul{list-style:none;display:grid;gap:10px;margin:16px 0 22px}
+.local-card li{display:flex;gap:10px;font-weight:600}
+.local-card li svg{width:20px;height:20px;color:var(--green);flex:none;margin-top:2px}
+.local-card ul.take{grid-template-columns:1fr 1fr;gap:10px 16px}
+.local-card ul.take li{font-weight:600;font-size:15px}
+.local-card sup{color:var(--green-d);font-weight:800}
+.take-note{font-size:14px!important;color:var(--muted)!important}
+#local p{margin-top:14px}
+@media (max-width:560px){.local-card ul.take{grid-template-columns:1fr}}
