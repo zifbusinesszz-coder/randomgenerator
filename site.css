@@ -287,3 +287,16 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 .svc-more span{font-weight:700;color:var(--muted);margin-right:4px}
 @media (max-width:900px){.pop-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:560px){.pop-grid{grid-template-columns:1fr}}
+
+/* realtor / property-manager offers */
+.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.offer{background:var(--ink);color:#fff;border-radius:var(--r-lg);padding:34px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.offer-who{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9fd9c0}
+.offer-big{font-family:var(--head);font-weight:800;font-size:64px;line-height:1;margin:10px 0 4px}
+.offer-what{font-size:19px;font-weight:700}
+.offer-sub{color:#c9c4bb;margin:10px 0 18px;font-size:15.5px}
+.offer ul{list-style:none;display:grid;gap:10px;margin-bottom:24px;flex:1}
+.offer li{display:flex;gap:10px;color:#e9e5de;font-size:15.5px}
+.offer li svg{width:20px;height:20px;color:#6fd3a8;flex:none;margin-top:2px}
+.offer .btn{align-self:flex-start}
+@media (max-width:860px){.offer-grid{grid-template-columns:1fr}}

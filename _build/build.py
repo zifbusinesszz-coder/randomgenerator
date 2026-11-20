@@ -106,6 +106,10 @@ def _fit(cands, n):
 
 def seo(slug, p):
     """→ (title ≤ 60, description ≤ 155) written to win the click: price, same-day, stars, one action."""
+    if p["kind"] == "partner":
+        return ("Junk Removal for Realtors & Property Managers | Wood’s Waste"[:60] if len("Junk Removal for Realtors & Property Managers | Wood’s Waste") <= 60
+                else "Realtor & Property Manager Junk Removal | Wood’s Waste",
+                "Junk removal partner for south metro realtors & property managers. 10% off whole-house cleanouts, priority scheduling, before/after photos.")
     if p["kind"] == "home":
         t = _fit(["Same-Day Junk Removal, South Metro MN | Wood’s Waste", "Junk Removal South Metro MN | Wood’s Waste"], 60)
         d = "Local junk removal in Farmington, Lakeville, Apple Valley & the south metro. Same-day pickup from $199, we do all the lifting. 5.0★ on Google."
@@ -394,7 +398,7 @@ FOOT = f'''
       <div><h4>Top areas</h4><a href="/farmington">Farmington</a><a href="/lakeville">Lakeville</a><a href="/apple-valley">Apple Valley</a><a href="/burnsville">Burnsville</a><a href="/#areas">All areas</a></div>
       <div><h4>Contact</h4><a href="{TEL}">{PHONE}</a><a class="sms-link" href="{SMS}">Text us a photo</a><a href="#quote">Free quote form</a><a href="{GOOGLE}" target="_blank" rel="noopener">Google reviews</a></div>
     </div>
-    <div class="foot-bottom"><span>© <span id="year">2026</span> Wood’s Waste · Farmington, MN</span><span><a href="/pro" style="color:inherit">For junk-removal operators</a></span></div>
+    <div class="foot-bottom"><span>© <span id="year">2026</span> Wood’s Waste · Farmington, MN</span><span><a href="/realtors" style="color:inherit">For realtors &amp; property managers</a> · <a href="/pro" style="color:inherit">For junk-removal operators</a></span></div>
   </div>
 </footer>
 <script src="/script.js"></script>
@@ -588,7 +592,7 @@ def build_home(p):
     body = src[src.index("<body>") + len("<body>"):]
     body = body.replace('="../', '="/').replace("href=\"../", "href=\"/")
     body = re.sub(r'href="/([a-z-]+)\.html"', r'href="/\1"', body)
-    body = body.replace('<span>Same-day junk removal · (507) 298-1179</span>', '<span><a href="/pro" style="color:inherit">For junk-removal operators</a></span>')
+    body = body.replace('<span>Same-day junk removal · (507) 298-1179</span>', '<span><a href="/realtors" style="color:inherit">For realtors &amp; property managers</a> · <a href="/pro" style="color:inherit">For junk-removal operators</a></span>')
     body = body.replace('<a class="svc reveal" href="#quote">', '<a class="svc reveal" href="/estate-cleanout">').replace('<span class="more">Get a quote →</span>', '<span class="more">Learn more →</span>')
     more = "".join(f'<a href="/{k}">{n}</a>' for k, n, _, _ in MORE_SERVICES if k != "estate-cleanout")
     body = body.replace('</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">',
@@ -600,11 +604,79 @@ def build_home(p):
     return head(p, "index") + body
 
 
+PARTNER_FAQ = [
+    ("How does the 10% agent discount work?", "When you or your client texts us photos, mention you’re an agent (or have them mention your name). 10% comes off any whole-house cleanout for your clients."),
+    ("Who pays, me or my client?", "Whoever you prefer. Tell us who’s paying and we’ll send the receipt there."),
+    ("Does someone need to be at the property?", "No. A lockbox or door code works. We text you before and after photos when the job is done."),
+    ("How fast can you get there?", "Listings and turnovers jump our schedule. We’re usually out within 2 days, often sooner."),
+    ("Do you offer a rate for regular turnovers?", "Yes. Property managers with regular turnovers get a flat per-unit rate, so you’re not getting a new quote every time."),
+    ("Is there anything you can’t take?", "We don’t take paint, chemicals or other hazardous waste. Everything else in a typical house or unit, we haul."),
+]
+
+
+def partner_content():
+    base = C["garage-cleanout"]
+    lb = json.loads(json.dumps(base["ld"][0])); lb["url"] = "https://woodswastemn.com/realtors"
+    lb["description"] = "Junk removal partner for south metro realtors and property managers: whole-house cleanouts, rental turnovers, priority scheduling and before/after photos."
+    crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://woodswastemn.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Realtors & property managers", "item": "https://woodswastemn.com/realtors"}]}
+    svc = {"@context": "https://schema.org", "@type": "Service", "name": "Junk removal for realtors and property managers", "serviceType": "Junk removal",
+           "provider": {"@type": "LocalBusiness", "@id": "https://woodswastemn.com/#business", "name": "Wood’s Waste", "telephone": "+1-507-298-1179"},
+           "areaServed": [{"@type": "City", "name": n} for _, n, _ in ALL_AREAS], "url": "https://woodswastemn.com/realtors",
+           "audience": {"@type": "BusinessAudience", "audienceType": "Real estate agents and property managers"},
+           "offers": {"@type": "AggregateOffer", "priceCurrency": "USD", "lowPrice": "199", "highPrice": "779", "offerCount": "5"}}
+    metas = [m.replace("garage-cleanout", "realtors") for m in base["metas"] if 'name="keywords"' not in m]
+    metas.insert(0, '<meta name="keywords" content="junk removal for realtors, estate cleanout realtor MN, rental turnover junk removal, property manager junk removal Twin Cities, pre-listing cleanout Lakeville">')
+    return {"kind": "partner", "title": "", "metas": metas, "ld": [lb, svc, crumbs], "h1": "", "faq": PARTNER_FAQ,
+            "intro": None, "why": None, "nearby": [], "place": "Farmington"}
+
+
+def build_partner(slug, p):
+    p["faq_final"] = list(PARTNER_FAQ)
+    agent = ["Listings jump our schedule, usually out within 2 days", "Before &amp; after photos texted to you", "Lockbox is fine, no need to be there",
+             "Pre-listing, estate and move-out cleanouts"]
+    pm = ["Flat per-unit rate for regular turnovers", "Turnovers get priority, usually within 2 days", "Before &amp; after photos for your records",
+          "Evictions, abandoned furniture, dumped items", "A receipt for every job"]
+    li = lambda xs: "".join(f"<li>{CHECK}{x}</li>" for x in xs)
+    offers = f'''
+<section class="sec" id="offers">
+  <div class="wrap">
+    <div class="sec-head center reveal"><span class="eyebrow">Partner program</span><h2>Built for listings and turnovers</h2>
+      <p class="lede center">We’re Griffin and Gavin, brothers who run Wood’s Waste out of Farmington. We get houses and units empty, hauled off and swept, so they’re ready for photos or the next tenant.</p></div>
+    <div class="offer-grid">
+      <div class="offer reveal" id="agents"><span class="offer-who">For real estate agents</span><div class="offer-big">10% off</div>
+        <p class="offer-what">any whole-house cleanout for your clients</p><p class="offer-sub">On a typical house that’s $300 to $500 back in your seller’s pocket.</p>
+        <ul>{li(agent)}</ul><a class="btn btn-green sms-link" href="{SMS}">Text Griffin photos</a></div>
+      <div class="offer reveal" id="pm"><span class="offer-who">For property managers</span><div class="offer-big">10% off</div>
+        <p class="offer-what">your first unit cleanout</p><p class="offer-sub">Got regular turnovers? We’ll set a flat per-unit rate so you’re not getting a new quote every time.</p>
+        <ul>{li(pm)}</ul><a class="btn btn-green sms-link" href="{SMS}">Text Griffin photos</a></div>
+    </div>
+  </div>
+</section>'''
+    steps = '''
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head center reveal"><span class="eyebrow">How it works</span><h2>Three texts and the house is empty</h2></div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>Text photos + address</h3><p>Add the lockbox or door code and your deadline.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Get a firm price</h3><p>Usually the same day, so you can pass it to your client or owner.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>We clear it, you get photos</h3><p>Hauled, swept and photographed. Receipt goes to whoever’s paying.</p></div>
+    </div>
+  </div>
+</section>'''
+    h1 = "Your listings and turnovers,<br><em>cleared fast.</em>"
+    lede = "Junk removal partner for south metro realtors and property managers. Whole-house cleanouts, move-out leftovers and rental turnovers, with priority scheduling and before/after photos."
+    return (head(p, slug) + topbar() + hero("For realtors &amp; property managers", h1, lede, "curb") + STRIP + offers
+            + work(["curb", "lot"]) + steps + pricing() + reviews(slug)
+            + faq("Questions from agents and property managers", p["faq_final"]) + quote() + band("Text a few photos of the listing or unit and get a price today.") + FOOT)
+
+
 def sitemap(slugs):
     import datetime
     today = datetime.date.today().isoformat()
     def pri(s):
-        return "1.0" if s == "index" else ("0.9" if C[s]["kind"] == "service" else "0.8")
+        return "1.0" if s == "index" else ("0.9" if C[s]["kind"] in ("service", "partner") else "0.8")
     urls = "".join(f"  <url>\n    <loc>https://woodswastemn.com/{'' if s == 'index' else s}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pri(s)}</priority>\n  </url>\n" for s in slugs)
     open(os.path.join(ROOT, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 
@@ -613,8 +685,9 @@ def main():
     n = 0
     for slug in NEW:
         C[slug] = new_service_content(slug)
+    C["realtors"] = partner_content()
     for slug, p in C.items():
-        if p["kind"] in ("city", "service", "home"):
+        if p["kind"] in ("city", "service", "home", "partner"):
             apply_seo(slug, p)
     built = []
     for slug, p in C.items():
@@ -622,6 +695,8 @@ def main():
             out = build_city(slug, p)
         elif p["kind"] == "service":
             out = build_service(slug, p)
+        elif p["kind"] == "partner":
+            out = build_partner(slug, p)
         elif slug == "index":
             out = build_home(p)
         else:
@@ -629,7 +704,7 @@ def main():
         out = out.replace("FOOT_SVC_SLOT", FOOT_SVC)
         open(os.path.join(ROOT, slug + ".html"), "w").write(out)
         n += 1; built.append(slug)
-    sitemap(["index"] + [s for s in built if C[s]["kind"] == "service"] + [s for s in built if C[s]["kind"] == "city"])
+    sitemap(["index"] + [s for s in built if C[s]["kind"] in ("service", "partner")] + [s for s in built if C[s]["kind"] == "city"])
     print("built", n, "pages + sitemap")
 
 
