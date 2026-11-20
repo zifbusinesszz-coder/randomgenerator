@@ -302,3 +302,5 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 @media (max-width:860px){.offer-grid{grid-template-columns:1fr}}
 
 .rev img.av{object-fit:cover;display:block;flex:none}
+
+.band-sec{padding-top:clamp(56px,7vw,88px)}

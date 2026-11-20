@@ -420,7 +420,7 @@ def quote(where=""):
 
 def band(sub="Text a photo now and get a price today."):
     return f'''
-<section class="sec" style="padding-top:0">
+<section class="sec band-sec">
   <div class="wrap"><div class="band reveal">
     <div><h2>Ready to get your space back?</h2><p>{sub}</p></div>
     <div class="hero-ctas"><a class="btn btn-ink sms-link" href="{SMS}">Text a photo</a><a class="btn btn-line" href="{TEL}">Call {PHONE}</a></div>
