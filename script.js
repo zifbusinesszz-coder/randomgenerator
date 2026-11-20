@@ -231,30 +231,86 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (err) {
       status.style.display = 'block'; status.style.background = 'rgba(239,68,68,.12)'; status.style.color = '#fca5a5';
       status.textContent = 'Error reading files. Please try again.';
-      btn.disabled = false; btn.textContent = 'Book my free quote →'; return;
+      btn.disabled = false; btn.textContent = 'Get my free quote →'; return;
     }
     var payload = {
       name: document.getElementById('bName').value,
       phone: document.getElementById('bPhone').value,
       address: document.getElementById('bAddress').value,
       items: document.getElementById('bItems').value,
-      date: document.getElementById('bDate').value,
-      time: document.getElementById('bTime').value,
+      // 11-20: quotes happen by text/call — one "when" question instead of a date + time slot. The Apps Script still gets
+      // date/time fields (date = the answer, time empty) and the answer is also at the top of items, so it shows on his phone.
+      date: (document.getElementById('bWhen') || {}).value || '',
+      time: '',
       files: files
     };
+    if (payload.date) payload.items = 'When: ' + payload.date + '\n' + payload.items;
     try {
       await fetch('https://script.google.com/macros/s/AKfycbzGbctgjm5ekt7CFSVRzCHDxff_6X88b6mjY3yyb5gHXzTcGD5ZTtSWOYrP8-I4-IkQVw/exec', {
         method: 'POST', mode: 'no-cors', body: JSON.stringify(payload)
       });
-      status.style.display = 'block'; status.style.background = 'rgba(16,185,129,.12)'; status.style.color = '#34d399';
-      status.textContent = "✓ You're booked! We'll confirm shortly.";
-      form.reset();
-      window._uploadedFiles = []; renderFileList();
-      var t = document.getElementById('bTime'); t.disabled = true; t.innerHTML = '<option value="">Select a date first...</option>';
+      wwTrack('lead');
+      // 11-20: a clear "it went through" — the whole form turns into a confirmation card, scrolled into view
+      var first = (payload.name || '').trim().split(/\s+/)[0];
+      var done = document.createElement('div'); done.className = 'form-done';
+      done.innerHTML = '<div class="form-done-ic">✓</div><h3>Got it' + (first ? ', ' + first.replace(/[<>&"]/g, '') : '') + '!</h3>'
+        + '<p>Your request came through. We\'ll text you a price, usually the same day.</p>'
+        + '<p class="form-done-sub">Need it sooner? <a href="tel:5072981179">Call</a> or <a href="sms:+15072981179">text (507) 298-1179</a>.</p>';
+      form.style.display = 'none';
+      form.parentNode.insertBefore(done, form.nextSibling);
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      form.reset(); window._uploadedFiles = []; renderFileList();
     } catch (err) {
-      status.style.display = 'block'; status.style.background = 'rgba(239,68,68,.12)'; status.style.color = '#fca5a5';
-      status.textContent = 'Something went wrong. Please call (507) 298-1179.';
+      status.style.display = 'block'; status.className = 'form-status form-status-err';
+      status.innerHTML = 'That didn\'t go through. Please <a href="sms:+15072981179">text</a> or <a href="tel:5072981179">call (507) 298-1179</a>.';
+      status.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    btn.disabled = false; btn.textContent = 'Book my free quote →';
+    btn.disabled = false; btn.textContent = 'Get my free quote →';
   });
 });
+
+
+/* ── 11-20: Call / Text bar pinned to the bottom on phones (every page) ── */
+(function () {
+  function addBar() {
+    if (document.getElementById('wwCallBar')) return;
+    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    var sms = 'sms:+15072981179' + (ios ? '&' : '?') + 'body=' + encodeURIComponent('Hi! Junk removal quote, photos attached:');
+    var bar = document.createElement('div'); bar.id = 'wwCallBar'; bar.className = 'ww-callbar';
+    bar.innerHTML = '<a href="tel:5072981179" class="ww-cb-call">📞 Call</a><a href="' + sms + '" class="ww-cb-text">💬 Text a photo</a>';
+    document.body.appendChild(bar); document.body.classList.add('has-callbar');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addBar); else addBar();
+})();
+
+/* ── 11-20: ad tracking. Fill in the IDs (Google Ads "AW-…" + its conversion label, Meta Pixel id) and every page
+   reports calls, texts and quote-form leads. Empty = nothing loads. ── */
+var WW_TRACK = { googleAds: '', googleLeadLabel: '', googleCallLabel: '', metaPixel: '' };
+function wwTrack(kind) {
+  try {
+    if (window.gtag && WW_TRACK.googleAds) {
+      var lbl = kind === 'lead' ? WW_TRACK.googleLeadLabel : WW_TRACK.googleCallLabel;
+      if (lbl) gtag('event', 'conversion', { send_to: WW_TRACK.googleAds + '/' + lbl });
+      gtag('event', kind === 'lead' ? 'generate_lead' : 'contact', { method: kind });
+    }
+    if (window.fbq && WW_TRACK.metaPixel) fbq('track', kind === 'lead' ? 'Lead' : 'Contact', { method: kind });
+  } catch (e) {}
+}
+(function () {
+  if (WW_TRACK.googleAds) {
+    var g = document.createElement('script'); g.async = true; g.src = 'https://www.googletagmanager.com/gtag/js?id=' + WW_TRACK.googleAds;
+    document.head.appendChild(g);
+    window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date()); gtag('config', WW_TRACK.googleAds);
+  }
+  if (WW_TRACK.metaPixel) {
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;
+    s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', WW_TRACK.metaPixel); fbq('track', 'PageView');
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="tel:"],a[href^="sms:"]');
+    if (a) wwTrack(a.getAttribute('href').indexOf('sms:') === 0 ? 'text' : 'call');
+  }, true);
+})();

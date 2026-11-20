@@ -496,3 +496,21 @@ select.input{cursor:pointer;}
   .cta-buttons .btn{width:100%;}
   .form-row-split{grid-template-columns:1fr;}
 }
+
+/* 11-20: form confirmation card + error, and the phone Call / Text bar */
+.form-done{text-align:center;padding:36px 24px;border-radius:var(--r-lg);background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.45);}
+.form-done-ic{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-size:30px;font-weight:800;line-height:56px;}
+.form-done h3{font-size:24px;margin:0 0 8px;color:var(--ink);}
+.form-done p{color:var(--ink-muted);font-size:16px;line-height:1.5;margin:0 0 8px;}
+.form-done .form-done-sub{font-size:14px;color:var(--ink-subtle);}
+.form-done a,.form-status-err a{color:var(--accent);font-weight:600;}
+.form-status-err{display:block;background:rgba(239,68,68,.14);color:#fecaca;border:1px solid rgba(239,68,68,.45);font-size:15px;}
+.ww-callbar{display:none;}
+@media (max-width:820px){
+  .ww-callbar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(1,1,2,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--hairline-strong);}
+  .ww-callbar a{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:16px;padding:14px 10px;border-radius:var(--r-pill);}
+  .ww-cb-call{background:var(--surface-3);color:var(--ink);border:1px solid var(--hairline-strong);}
+  .ww-cb-text{background:var(--accent);color:var(--on-accent);}
+  body.has-callbar{padding-bottom:78px;}
+}
