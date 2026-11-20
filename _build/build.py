@@ -70,14 +70,52 @@ PAIRS = {
     "lot": ("lot", "Business back-lot cleanup", "Commercial", "Pallets, a cabinet and tabletops behind a business", "The same back lot, cleared"),
     "yard": ("yard", "Yard &amp; trampoline removal", "Residential", "Bookshelves, a play table and a trampoline on a lawn", "The same yard, cleared"),
 }
-REVIEWS = [
-    ("BG", "Bob Gremel", "Big pile of junk in the back yard. They took care of it and cleaned up nicely. Extremely good customer service and honest answers."),
+RATING, NREV = "4.8", "17"          # Google, 2026-11-20 (Places API). Update both when the profile changes.
+OLD_REVIEWS = [
     ("KH", "Kjerstin Hedstrom", "Responsive and timely! All my junk was gone less than 24 hours after contacting them. Great job!"),
     ("MD", "Mary DeHate", "Responded quickly, showed up when they said and cheerfully hauled stuff away. Very positive experience."),
     ("BA", "Bryan Anders", "Helped tremendously and priced very fairly. Very pleasant to work with. I would recommend."),
     ("OL", "Olivia", "Easy to contact and the service was quick, easy and affordable. Definitely recommend!!"),
     ("SP", "Shayla P.", "Had them help clean out my garage. Incredibly fast and nice!"),
 ]
+
+
+def _trim(t, n=230):
+    t = re.sub(r"\s+", " ", t).strip()
+    if len(t) <= n:
+        return t
+    cut = max(t.rfind(". ", 0, n), t.rfind("! ", 0, n))
+    return t[:cut + 1] if cut > 80 else t[:n].rsplit(" ", 1)[0] + "…"
+
+
+def _load_reviews():
+    out = []
+    try:
+        g = json.load(open(os.path.join(ROOT, "_build", "google_reviews.json")))
+        for r in g.get("reviews", []):
+            if r.get("rating") == 5 and r.get("text"):
+                nm = r["name"].title() if r["name"].islower() else r["name"]
+                out.append({"name": nm, "text": _trim(r["text"]), "photo": r.get("photo") or "",
+                            "init": "".join(w[0] for w in nm.split()[:2]).upper()})
+    except Exception:
+        pass
+    order = ["Cunto House", "Bob Gremel", "Dan Hornseth", "Melissa Colbert"]
+    out.sort(key=lambda r: order.index(r["name"]) if r["name"] in order else 9)
+    have = {r["name"] for r in out}
+    out += [{"name": n, "text": t, "photo": "", "init": i} for i, n, t in OLD_REVIEWS if n not in have]
+    return out
+
+
+REVIEWS = _load_reviews()
+
+
+def rev_card(r):
+    av = (f'<img class="av" src="{esc(r["photo"])}" alt="" width="38" height="38" loading="lazy" referrerpolicy="no-referrer" '
+          f'onerror="this.outerHTML=\'<span class=&quot;av&quot;>{r["init"]}</span>\'">' if r["photo"] else f'<span class="av">{r["init"]}</span>')
+    return (f'<div class="rev reveal"><span class="stars">★★★★★</span><q>{esc(r["text"])}</q>'
+            f'<div class="who">{av}<div>{esc(r["name"])}<small>Google review</small></div></div></div>')
+
+
 TIERS = [(0.12, "Minimum", "up to ~2 cu yd", "1–2 items: a couch, a mattress set, an appliance", "$199"),
          (0.25, "1/4 load", "~4 cu yd", "A few pieces of furniture or a small pile", "$329"),
          (0.5, "1/2 load", "~7.5 cu yd", "A room’s worth or a small garage", "$479"),
@@ -112,23 +150,23 @@ def seo(slug, p):
                 "Junk removal partner for south metro realtors & property managers. 10% off whole-house cleanouts, priority scheduling, before/after photos.")
     if p["kind"] == "home":
         t = _fit(["Same-Day Junk Removal, South Metro MN | Wood’s Waste", "Junk Removal South Metro MN | Wood’s Waste"], 60)
-        d = "Local junk removal in Farmington, Lakeville, Apple Valley & the south metro. Same-day pickup from $199, we do all the lifting. 5.0★ on Google."
+        d = f"Local junk removal in Farmington, Lakeville, Apple Valley & the south metro. Same-day pickup from $199, we do all the lifting. {RATING}★ on Google."
     elif p["kind"] == "city":
         c = p["place"]
         t = _fit([f"Junk Removal {c}, MN | Same-Day from $199 | Wood’s Waste", f"Junk Removal {c}, MN | From $199 | Wood’s Waste",
                   f"Junk Removal {c}, MN | Same-Day from $199", f"Junk Removal {c}, MN | From $199"], 60)
-        d = _fit([f"Same-day junk removal in {c}, MN from $199. Furniture, appliances, garage & estate cleanouts. We do all the lifting. 5.0★ on Google. Text a photo.",
-                  f"Same-day junk removal in {c}, MN from $199. Furniture, appliances & cleanouts. We do all the lifting. 5.0★ on Google. Text a photo.",
-                  f"Same-day junk removal in {c}, MN from $199. We do all the lifting. 5.0★ on Google. Text a photo for a price."], 155)
+        d = _fit([f"Same-day junk removal in {c}, MN from $199. Furniture, appliances, garage & estate cleanouts. We do all the lifting. {RATING}★ on Google. Text a photo.",
+                  f"Same-day junk removal in {c}, MN from $199. Furniture, appliances & cleanouts. We do all the lifting. {RATING}★ on Google. Text a photo.",
+                  f"Same-day junk removal in {c}, MN from $199. We do all the lifting. {RATING}★ on Google. Text a photo for a price."], 155)
     else:
         short = html.unescape(p.get("short") or OLD_SHORT.get(slug) or SVC[slug]["name"])
         sent = html.unescape(SVC[slug]["name"])
         t = _fit([f"{short} Twin Cities, MN | From $199 | Wood’s Waste", f"{short} Twin Cities | From $199 | Wood’s Waste",
                   f"{short} MN | From $199 | Wood’s Waste", f"{short} MN | Wood’s Waste"], 60)
         what = SVC_DESC.get(slug, "")
-        d = _fit([f"{sent} across the south metro from $199. {what} Same-day pickup, we do all the lifting. 5.0★ on Google.",
+        d = _fit([f"{sent} across the south metro from $199. {what} Same-day pickup, we do all the lifting. {RATING}★ on Google.",
                   f"{sent} across the south metro from $199. {what} Same-day, we do the lifting.",
-                  f"{sent} across the south metro from $199. Same-day pickup, we do all the lifting. 5.0★ on Google."], 155)
+                  f"{sent} across the south metro from $199. Same-day pickup, we do all the lifting. {RATING}★ on Google."], 155)
     return t, d
 
 
@@ -156,6 +194,9 @@ def apply_seo(slug, p):
 def head(p, slug):
     metas = "\n".join(p["metas"])
     lds = [d for d in p["ld"]]
+    for d in lds:
+        if isinstance(d, dict) and isinstance(d.get("aggregateRating"), dict):
+            d["aggregateRating"].update(ratingValue=RATING, reviewCount=NREV)
     lds.append({"@context": "https://schema.org", "@type": "FAQPage",
                 "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in p["faq_final"]]})
     ld = "\n".join(f'<script type="application/ld+json">{json.dumps(d, ensure_ascii=False)}</script>' for d in lds)
@@ -290,9 +331,12 @@ STEPS = '''
 
 
 def reviews(slug, n=3):
-    k = int(hashlib.md5(slug.encode()).hexdigest(), 16) % len(REVIEWS)
-    pick = [REVIEWS[(k + i * 2) % len(REVIEWS)] for i in range(n)]
-    cards = "".join(f'<div class="rev reveal"><span class="stars">★★★★★</span><q>{t}</q><div class="who"><span class="av">{i}</span><div>{nm}<small>Google review</small></div></div></div>' for i, nm, t in pick)
+    photo = [r for r in REVIEWS if r["photo"]]
+    k = int(hashlib.md5(slug.encode()).hexdigest(), 16)
+    pick = [photo[(k + i) % len(photo)] for i in range(min(n, len(photo)))] if photo else []
+    rest = [r for r in REVIEWS if r not in pick]
+    pick += rest[k % max(1, len(rest)):][: n - len(pick)] or rest[: n - len(pick)]
+    cards = "".join(rev_card(r) for r in pick[:n])
     return f'''
 <section class="sec" id="reviews">
   <div class="wrap">
@@ -598,6 +642,7 @@ def build_home(p):
     body = body.replace('</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">',
                         f'</div>\n    <div class="areas svc-more reveal"><span>Also:</span>{more}</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">', 1)
     body = re.sub(r'<div><h4>Services</h4>.*?</div>', FOOT_SVC, body, count=1, flags=re.S)
+    body = re.sub(r'<div class="rev-grid">.*?</div>\s*<p style="margin-top:26px"', '<div class="rev-grid">' + "".join(rev_card(r) for r in REVIEWS[:6]) + '</div>\n    <p style="margin-top:26px"', body, count=1, flags=re.S)
     faq_items = [(html.unescape(re.sub(r"<[^>]+>", "", q)), html.unescape(re.sub(r"<[^>]+>", "", a)))
                  for q, a in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body, re.S)]
     p["faq_final"] = faq_items
@@ -702,6 +747,9 @@ def main():
         else:
             continue
         out = out.replace("FOOT_SVC_SLOT", FOOT_SVC)
+        for a, b in (("5.0 on Google", f"{RATING} on Google"), ("<b>5.0 stars</b>", f"<b>{RATING} stars</b>"), ("13 Google reviews", f"{NREV} Google reviews"),
+                     ("13 reviews on Google", f"{NREV} reviews on Google"), ('<div class="rev-score"><b>5.0</b>', f'<div class="rev-score"><b>{RATING}</b>')):
+            out = out.replace(a, b)
         out = out.replace('<svg viewBox="0 0 24 24"', '<svg width="24" height="24" viewBox="0 0 24 24"')        # intrinsic size: never huge, even without CSS
         out = out.replace('<svg class="truck" viewBox="0 0 124 66"', '<svg class="truck" width="150" height="80" viewBox="0 0 124 66"')
         open(os.path.join(ROOT, slug + ".html"), "w").write(out)
