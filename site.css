@@ -260,3 +260,5 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 @media (max-width:1020px){.tiers{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:640px){.tiers{grid-template-columns:1fr 1fr}.tier{padding:18px 12px}.tier-price{font-size:28px}}
 @media (max-width:640px){.tier:last-child{grid-column:span 2}}
+.tier-note{margin-top:22px;background:#fff8ea;border:1px solid #f1d9a6;border-radius:var(--r);padding:16px 20px;font-size:15px;color:#5c4512;line-height:1.55}
+.tier-note b{color:#3d2e0a}
