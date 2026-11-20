@@ -125,8 +125,8 @@ TIER_GUIDE = "As a guide: about $329 for a quarter load, $479 for a half, $629 f
 # 🚚 TRAVEL ZONES (11-20, his call): route miles from _build/route_miles.json (OSRM road routes U-Haul Lakeville → town → Recycle
 # Minnesota → U-Haul). Fee = cost at $1.40/mi (U-Haul $1.09 + gas) + paid drive time, waived as the load grows.
 ZONES = [  # name, max route miles, fee small (<½), ½ load, ¾ load, full+
-    ("Home area", 27, 0, 0, 0, 0), ("Zone 2", 40, 89, 45, 25, 0), ("Zone 3", 56.5, 139, 70, 35, 0),
-    ("Zone 4", 68, 169, 85, 45, 0), ("Zone 5", 999, 229, 115, 59, 0)]
+    ("Home area", 27, 0, 0, 0, 0), ("Zone 2", 40, 89, 59, 39, 0), ("Zone 3", 56.5, 139, 99, 69, 49),
+    ("Zone 4", 68, 169, 129, 99, 79), ("Zone 5", 999, 229, 179, 149, 119)]   # 11-20: far zones keep a fee even on full loads (drive cost is the same)
 ZONE_COLORS = ["#178a63", "#7cc4a4", "#f2c14e", "#ef8a3c", "#d64545"]
 ROUTES = {r["slug"]: r for r in json.load(open(os.path.join(ROOT, "_build", "route_miles.json")))}
 
@@ -142,8 +142,9 @@ def travel_line(slug, city):
     i = zone_of(slug); z = ZONES[i]
     if i == 0:
         return f"{city} is in our home area: no travel fee on any job."
+    full = "free on a full load" if not z[5] else f"${z[5]} on a full load"
     return (f"{city} is in our {z[0]}. Travel fee: ${z[2]} on small jobs, ${z[3]} on a half load, ${z[4]} on a three-quarter load, "
-            f"and free on a full load.")
+            f"and {full}.")
 
 
 FEE_NOTE = "Items with extra dump fees (mattresses, Freon appliances, tires, TVs) add to the total, and you always get the full price before we start."
@@ -328,9 +329,9 @@ def _travel_html():
         towns.setdefault(zone_of(slug), []).append((slug, n))
     rows = "".join(
         f'<tr><th><span class="zdot" style="background:{ZONE_COLORS[i]}"></span>{z[0]}<small>{", ".join(n for _, n in towns.get(i, []))}</small></th>'
-        + ("".join("<td>Free</td>" for _ in range(4)) if i == 0 else f"<td>${z[2]}</td><td>${z[3]}</td><td>${z[4]}</td><td>Free</td>") + "</tr>"
+        + ("".join("<td>Free</td>" for _ in range(4)) if i == 0 else f"<td>${z[2]}</td><td>${z[3]}</td><td>${z[4]}</td><td>{'Free' if not z[5] else '$' + str(z[5])}</td>") + "</tr>"
         for i, z in enumerate(ZONES))
-    return f'''<div class="travel reveal" id="travel"><div class="travel-head"><h3>Travel fees</h3><p>Our truck and the dump are in Lakeville. The farther out, the more drive time, and the bigger the load, the less you pay for it. <a href="/#zone-map">See the zone map →</a></p></div>
+    return f'''<div class="travel reveal" id="travel"><div class="travel-head"><h3>Travel fees</h3><p>Our truck and the dump are in Lakeville. The farther out, the more drive time. Bigger loads get a lower travel fee. <a href="/#zone-map">See the zone map →</a></p></div>
       <div class="travel-scroll"><table><thead><tr><th>Where</th><th>Small job</th><th>½ load</th><th>¾ load</th><th>Full load</th></tr></thead><tbody>{rows}</tbody></table></div></div>'''
 
 
@@ -673,9 +674,9 @@ def zone_map_html():
         if not ll:
             continue
         i = zone_of(slug); z = ZONES[i]
-        fee = "No travel fee" if i == 0 else f"Travel: ${z[2]} small · ${z[3]} half · ${z[4]} ¾ · free full load"
+        fee = "No travel fee" if i == 0 else f"Travel: ${z[2]} small · ${z[3]} half · ${z[4]} ¾ · " + ("free full load" if not z[5] else f"${z[5]} full load")
         pts.append({"n": n, "s": slug, "la": float(ll.group(1)), "lo": float(ll.group(2)), "z": i, "zn": z[0], "f": fee})
-    legend = "".join(f'<span><i style="background:{ZONE_COLORS[i]}"></i>{z[0]}{"" if i == 0 else f" · from ${z[3]}–${z[2]}"}</span>' for i, z in enumerate(ZONES))
+    legend = "".join(f'<span><i style="background:{ZONE_COLORS[i]}"></i>{z[0]}{"" if i == 0 else f" · ${z[5] or 0}–${z[2]}"}</span>' for i, z in enumerate(ZONES))
     return f'''<div class="zmap-wrap reveal" id="zone-map"><div id="zmap" class="zmap" role="img" aria-label="Map of Wood’s Waste travel zones"></div>
       <div class="zlegend">{legend}<span><i class="base"></i>Truck &amp; dump (Lakeville)</span></div></div>
 <script>
