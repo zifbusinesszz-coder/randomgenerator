@@ -1,0 +1,122 @@
+{
+ "estate-cleanout": {
+  "name": "Estate cleanouts", "short": "Estate Cleanout", "pair": "curb",
+  "h1": "Estate Cleanout in the Twin Cities",
+  "card": "Whole-house cleanouts for families, executors and realtors. We donate what’s usable.",
+  "intro_h2": "A Whole House, Handled With Care",
+  "intro": [
+   "Clearing out a loved one’s home is a lot to take on, both physically and emotionally. Wood’s Waste handles the heavy part so your family can focus on what matters. We remove furniture, appliances, clothing, kitchenware, and everything in the basement and garage, room by room.",
+   "Before anything leaves, we work around the items you want to keep. Usable furniture and household goods get donated, and recyclables are sorted out. Only what’s left goes to the dump.",
+   "We work with families, executors and realtors across the south metro. Nobody needs to be there while we work if you’d rather not be, and we’ll send photos when the house is empty."
+  ],
+  "items": ["Furniture in every room", "Appliances*", "Mattresses &amp; beds*", "Clothing &amp; linens", "Kitchenware &amp; dishes", "Books, decor &amp; keepsakes you don’t want", "Basement contents", "Garage &amp; shed contents", "TVs &amp; electronics*", "Yard &amp; patio items"],
+  "faq": [
+   ["How much does an estate cleanout cost?", "Estate cleanouts are priced by volume. Most homes take one or more full loads. We give you a firm price up front from photos or a quick walkthrough, so you know the total before we start."],
+   ["Do you donate items from the estate?", "Yes. Usable furniture and household items get donated, and recyclables are sorted out before anything goes to the dump."],
+   ["Does someone need to be at the house?", "No. Many families and realtors give us a lockbox code or meet us to unlock. We send photos when the job is done."],
+   ["Can you work with the realtor or executor?", "Yes. We coordinate directly with whoever is handling the property, and we can schedule around showings and closing dates."],
+   ["How long does an estate cleanout take?", "Most houses are done in a day. Very full homes can take longer, and we’ll tell you up front."],
+   ["What can’t you take?", "We don’t take paint, chemicals or other hazardous waste. Everything else in a typical home, we haul."]
+  ]
+ },
+ "basement-cleanout": {
+  "name": "Basement cleanouts", "short": "Basement Cleanout", "pair": "garage",
+  "h1": "Basement Cleanout in the Twin Cities",
+  "card": "Old furniture, storage bins and years of stuff carried up and hauled away.",
+  "intro_h2": "We Carry It Up the Stairs So You Don’t Have To",
+  "intro": [
+   "Basements are where everything ends up: old couches, exercise equipment, boxes from three moves ago, broken appliances and holiday decor nobody uses. Getting it all up the stairs is the hard part, and that’s exactly what we do.",
+   "Our crew carries everything up and out, loads the truck, and sweeps up before we leave. We work around anything you’re keeping, and we donate or recycle what we can.",
+   "Getting a basement ready to finish, clearing it after a flood, or just taking the space back? Text us a few photos and we’ll send a price, usually the same day."
+  ],
+  "items": ["Old furniture &amp; couches", "Exercise equipment", "Boxes &amp; storage bins", "Shelving units", "Old appliances*", "Mattresses*", "Carpet &amp; padding", "Water-damaged items", "Toys &amp; holiday decor", "TVs &amp; electronics*"],
+  "faq": [
+   ["How much does a basement cleanout cost?", "Basement cleanouts are priced by how much truck space the load takes. Our minimum is $199, and most basements fall between a quarter and a full load. You get the full price before we start."],
+   ["Do you carry things up the stairs?", "Yes. We do all the lifting and carrying from the basement, up the stairs and out to the truck. You don’t need to move anything."],
+   ["Do you remove water-damaged items after a flood?", "Yes. We haul wet carpet, padding, furniture and boxes. Let us know about the damage when you text photos."],
+   ["Can you take an old couch that doesn’t fit up the stairs?", "Usually, yes. If a piece was assembled in the basement, we can take it apart to get it out."],
+   ["Do I need to sort anything first?", "No. Just show us what stays and we’ll take everything else."],
+   ["What can’t you take?", "We don’t take paint, chemicals or other hazardous waste."]
+  ]
+ },
+ "move-out-cleanout": {
+  "name": "Move-out cleanouts", "short": "Move-Out Cleanout", "pair": "lot",
+  "h1": "Move-Out Cleanout in the Twin Cities",
+  "card": "Rental turnovers and leftover stuff after a move, for tenants, landlords and agents.",
+  "intro_h2": "Leftover Stuff Gone Before the Next Move-In",
+  "intro": [
+   "Moving always leaves something behind: the couch that wouldn’t fit, a garage full of odds and ends, a basement nobody got to. Whether you’re the tenant, the landlord or the listing agent, we clear it fast so the unit is ready to turn over.",
+   "We work with property managers, landlords and realtors across the south metro, from single apartments to whole houses. Tell us the deadline and we’ll work to it.",
+   "Text a few photos of what’s left and we’ll send a price, usually the same day. Same-day and next-day pickups are often available."
+  ],
+  "items": ["Leftover furniture", "Mattresses &amp; bed frames*", "Appliances*", "Trash &amp; bagged junk", "Boxes &amp; clutter", "Garage leftovers", "Basement leftovers", "Patio furniture &amp; grills", "TVs &amp; electronics*", "Carpet &amp; rugs"],
+  "faq": [
+   ["How much does a move-out cleanout cost?", "Move-out cleanouts are priced by truck space. Our minimum is $199 for a single item or small load, and bigger cleanouts are quoted by volume before we start."],
+   ["Do you work with landlords and property managers?", "Yes. We handle rental turnovers for landlords, property managers and realtors, and we can provide a receipt for your records."],
+   ["Can you come before the new tenant moves in?", "Yes. Tell us your deadline. Same-day and next-day pickups are often available."],
+   ["Does anyone need to be there?", "Not necessarily. We can work from a lockbox or door code and send photos when the unit is clear."],
+   ["Do you clean the unit too?", "We sweep up after hauling, but we’re not a cleaning service. We get the stuff out so your cleaners can get in."],
+   ["What can’t you take?", "We don’t take paint, chemicals or other hazardous waste."]
+  ]
+ },
+ "mattress-removal": {
+  "name": "Mattress removal", "short": "Mattress Removal", "pair": "curb",
+  "h1": "Mattress Removal in the Twin Cities",
+  "card": "Mattresses, box springs and bed frames picked up from any room.",
+  "intro_h2": "Old Mattress Out, No Wrestling It Down the Stairs",
+  "intro": [
+   "Mattresses are heavy, floppy and a pain to move, and most trash services won’t take them. We pick them up from any room in the house, carry them out, and haul them away the right way.",
+   "We take mattresses of every size along with box springs, bed frames and headboards. Getting a whole bedroom set out? We can take the dresser and nightstands on the same trip.",
+   "Text us a photo and we’ll send a price, usually the same day. Same-day pickup is often available across the south metro."
+  ],
+  "items": ["Mattresses, any size*", "Box springs*", "Bed frames", "Headboards &amp; footboards", "Futons &amp; sleeper sofas", "Crib mattresses*", "Dressers &amp; nightstands", "Bedroom sets"],
+  "faq": [
+   ["How much does mattress removal cost?", "A single mattress pickup starts at our $199 minimum, which covers a mattress set plus another item or two. Mattresses carry a disposal fee, and it’s included in the price we give you up front."],
+   ["Do you take box springs and bed frames too?", "Yes. We take box springs, frames, headboards and the rest of the bedroom set."],
+   ["Do I need to bring it outside?", "No. We carry it from any room and any floor."],
+   ["What happens to the mattress?", "Mattresses in good condition can sometimes be donated. The rest go to proper disposal or recycling."],
+   ["Can you pick it up today?", "Often, yes. Text us in the morning and we can usually get there the same day."],
+   ["Do you take other furniture at the same time?", "Yes. Adding more items to the same trip is the best value, since you’re paying for truck space."]
+  ]
+ },
+ "hot-tub-removal": {
+  "name": "Hot tub removal", "short": "Hot Tub Removal", "pair": "yard",
+  "h1": "Hot Tub Removal in the Twin Cities",
+  "card": "Old hot tubs and spas cut up, hauled off and cleaned up after.",
+  "intro_h2": "That Old Hot Tub, Gone in an Afternoon",
+  "intro": [
+   "An old hot tub is one of the hardest things to get rid of. It’s heavy, awkward and usually stuck behind a fence or on a deck. We take it apart on site, haul every piece away, and clean up after ourselves.",
+   "Before we arrive, the power needs to be shut off and disconnected. A licensed electrician should handle that part. Drain the tub a day or two ahead so it’s lighter to move.",
+   "Send us a photo of the tub and how we’d get to it, and we’ll text you a price. We can take the steps, cover and any surrounding junk on the same trip."
+  ],
+  "items": ["Hot tubs &amp; spas", "Swim spas (ask first)", "Hot tub covers", "Steps &amp; surrounds", "Old decking boards", "Patio furniture", "Grills", "Yard junk nearby"],
+  "faq": [
+   ["How much does hot tub removal cost?", "Hot tubs are priced by size and how easy they are to reach. Most fall in our half to three-quarter load range. Send a photo and we’ll give you the full price before we start."],
+   ["Do I need to disconnect the power?", "Yes. The power must be shut off and disconnected before we arrive. A licensed electrician should do this. We don’t handle electrical work."],
+   ["Should I drain it first?", "Yes. Please drain it a day or two before so it’s lighter and drier to cut apart and move."],
+   ["Can you remove a hot tub from a deck or behind a fence?", "Usually, yes. We cut it into pieces on site so it fits through gates and down steps. Tell us about the access when you send photos."],
+   ["Do you take the cover and steps?", "Yes. We take the cover, steps and any other junk around it on the same trip."],
+   ["How long does it take?", "Most hot tub removals take a few hours, start to finish."]
+  ]
+ },
+ "commercial-junk-removal": {
+  "name": "Office &amp; commercial junk removal", "short": "Commercial Junk Removal", "pair": "lot",
+  "h1": "Office &amp; Commercial Junk Removal in the Twin Cities",
+  "card": "Offices, retail spaces and back lots cleared of furniture, fixtures and pallets.",
+  "intro_h2": "Clear the Space Without Slowing the Business Down",
+  "intro": [
+   "Old desks, chairs, filing cabinets, pallets, broken fixtures: businesses pile up junk just like homes do. Wood’s Waste clears offices, retail spaces, warehouses and back lots across the south metro.",
+   "We load everything ourselves, so your staff stays on their work. Tell us your hours and we’ll schedule around them when we can.",
+   "Text us photos of the space and we’ll send a price, usually the same day. We provide a receipt for your records."
+  ],
+  "items": ["Desks &amp; office chairs", "Filing cabinets", "Conference tables", "Cubicle panels", "Shelving &amp; racking", "Retail fixtures &amp; displays", "Pallets", "Break-room appliances*", "Monitors &amp; electronics*", "Back-lot debris"],
+  "faq": [
+   ["How much does commercial junk removal cost?", "Commercial jobs are priced by how much truck space the load takes. Our minimum is $199, and larger cleanouts are quoted by volume before we start."],
+   ["Can you work around our business hours?", "Tell us your hours and we’ll schedule around them when we can, including early mornings."],
+   ["Do you provide a receipt or invoice?", "Yes. You get a receipt for every job."],
+   ["Do you take office electronics?", "Yes. Monitors, computers and other electronics carry a small disposal fee, which is included in your quote."],
+   ["Can you clear a back lot or loading area?", "Yes. We haul pallets, broken furniture, fixtures and general debris, then sweep up."],
+   ["What can’t you take?", "We don’t take paint, chemicals or other hazardous waste."]
+  ]
+ }
+}

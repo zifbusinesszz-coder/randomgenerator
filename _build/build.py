@@ -27,7 +27,7 @@ SERVICES = [  # slug, card title, card text, icon path
     ("construction-debris-removal", "Construction debris", "Drywall, lumber, flooring, tile and remodel leftovers.",
      '<path d="M2 20h20M5 20V10l7-6 7 6v10M9 20v-5h6v5"/>'),
 ]
-ESTATE = ("/#quote", "Estate &amp; move-out cleanouts", "Whole-house, basement and rental turnovers. We donate what’s usable.",
+ESTATE = ("/estate-cleanout", "Estate &amp; move-out cleanouts", "Whole-house, basement and rental turnovers. We donate what’s usable.",
           '<path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zM9 21v-6h6v6"/>')
 
 # per service: name, what we take (* = extra disposal fee), photo pair, heavy-load note
@@ -50,6 +50,20 @@ SVC = {
         "Drywall", "Lumber &amp; scrap wood", "Flooring &amp; carpet", "Tile", "Cabinets &amp; countertops",
         "Doors &amp; windows", "Toilets, sinks &amp; tubs", "Trim &amp; molding", "Pallets", "Job-site trash &amp; packaging"]),
 }
+NEW = json.load(open(os.path.join(ROOT, "_build", "new_services.json")))
+NEW_ICONS = {
+    "estate-cleanout": '<path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zM9 21v-6h6v6"/>',
+    "basement-cleanout": '<path d="M3 9l9-6 9 6M5 9v12h14V9M9 21v-4h6v4M8 13h8"/>',
+    "move-out-cleanout": '<path d="M3 7h11v10H3zM14 10h4l3 3v4h-7M7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>',
+    "mattress-removal": '<path d="M3 9h18v8H3zM3 13h18M5 17v2M19 17v2M6 9V6h12v3"/>',
+    "hot-tub-removal": '<path d="M3 11h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM7 8c0-2 2-2 2-4M12 8c0-2 2-2 2-4M17 8c0-2 2-2 2-4"/>',
+    "commercial-junk-removal": '<path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h3a1 1 0 0 1 1 1v11M8 7h4M8 11h4M8 15h4M2 21h20"/>',
+}
+for _slug, _n in NEW.items():
+    SVC[_slug] = dict(name=_n["name"], pair=_n["pair"], items=_n["items"])
+MORE_SERVICES = [(k, v["name"], v["card"], NEW_ICONS[k]) for k, v in NEW.items()]
+ALL_SVC_NAMES = {**{k: v["name"] for k, v in SVC.items()}}
+
 PAIRS = {
     "garage": ("garage", "Garage cleanout", "Same day", "A garage piled high with boxes, a recliner and broken furniture", "The same garage floor, cleared"),
     "curb": ("curb", "Bedroom set &amp; furniture", "Curbside haul", "A bedroom set, loveseat and bed frame on a lawn", "The lawn after everything was hauled away"),
@@ -81,6 +95,58 @@ def truck(frac):
             f'<rect x="{x0:.1f}" y="9" width="{w:.1f}" height="36" rx="2" fill="#178a63"/>{lines}'
             '<path d="M84 18h18l12 14v16H84z" fill="#121212"/><path d="M89 22h11l8 9H89z" fill="#cfe9dd"/><rect x="2" y="47" width="114" height="5" rx="2" fill="#121212"/>'
             '<circle cx="24" cy="55" r="8" fill="#121212"/><circle cx="24" cy="55" r="3" fill="#fff"/><circle cx="98" cy="55" r="8" fill="#121212"/><circle cx="98" cy="55" r="3" fill="#fff"/></svg>')
+
+
+def _fit(cands, n):
+    for c in cands:
+        if len(c) <= n:
+            return c
+    return cands[-1][:n]
+
+
+def seo(slug, p):
+    """→ (title ≤ 60, description ≤ 155) written to win the click: price, same-day, stars, one action."""
+    if p["kind"] == "home":
+        t = _fit(["Same-Day Junk Removal, South Metro MN | Wood’s Waste", "Junk Removal South Metro MN | Wood’s Waste"], 60)
+        d = "Local junk removal in Farmington, Lakeville, Apple Valley & the south metro. Same-day pickup from $199, we do all the lifting. 5.0★ on Google."
+    elif p["kind"] == "city":
+        c = p["place"]
+        t = _fit([f"Junk Removal {c}, MN | Same-Day from $199 | Wood’s Waste", f"Junk Removal {c}, MN | From $199 | Wood’s Waste",
+                  f"Junk Removal {c}, MN | Same-Day from $199", f"Junk Removal {c}, MN | From $199"], 60)
+        d = _fit([f"Same-day junk removal in {c}, MN from $199. Furniture, appliances, garage & estate cleanouts. We do all the lifting. 5.0★ on Google. Text a photo.",
+                  f"Same-day junk removal in {c}, MN from $199. Furniture, appliances & cleanouts. We do all the lifting. 5.0★ on Google. Text a photo.",
+                  f"Same-day junk removal in {c}, MN from $199. We do all the lifting. 5.0★ on Google. Text a photo for a price."], 155)
+    else:
+        short = html.unescape(p.get("short") or OLD_SHORT.get(slug) or SVC[slug]["name"])
+        sent = html.unescape(SVC[slug]["name"])
+        t = _fit([f"{short} Twin Cities, MN | From $199 | Wood’s Waste", f"{short} Twin Cities | From $199 | Wood’s Waste",
+                  f"{short} MN | From $199 | Wood’s Waste", f"{short} MN | Wood’s Waste"], 60)
+        what = SVC_DESC.get(slug, "")
+        d = _fit([f"{sent} across the south metro from $199. {what} Same-day pickup, we do all the lifting. 5.0★ on Google.",
+                  f"{sent} across the south metro from $199. {what} Same-day, we do the lifting.",
+                  f"{sent} across the south metro from $199. Same-day pickup, we do all the lifting. 5.0★ on Google."], 155)
+    return t, d
+
+
+OLD_SHORT = {"furniture-removal": "Furniture Removal", "appliance-removal": "Appliance Removal", "garage-cleanout": "Garage Cleanout",
+             "yard-waste-removal": "Yard Waste Removal", "construction-debris-removal": "Construction Debris Removal"}
+SVC_DESC = {"furniture-removal": "Couches, mattresses, dressers & more.", "appliance-removal": "Fridges, washers, dryers & more.",
+            "garage-cleanout": "Whole garages cleared, floor swept.", "yard-waste-removal": "Brush, branches, playsets & trampolines.",
+            "construction-debris-removal": "Drywall, lumber, flooring & tile.", "estate-cleanout": "Whole homes cleared, usable items donated.",
+            "basement-cleanout": "We carry it all up the stairs.", "move-out-cleanout": "Rental turnovers & leftover stuff.",
+            "mattress-removal": "Mattresses, box springs & frames.", "hot-tub-removal": "Cut up, hauled off, cleaned up.",
+            "commercial-junk-removal": "Office furniture, fixtures & pallets."}
+
+
+def apply_seo(slug, p):
+    t, d = seo(slug, p)
+    p["title"] = t
+    og = t.replace(" | Wood’s Waste", "") + " | Wood’s Waste" if "Wood’s Waste" not in t else t
+    keep = [m for m in p["metas"] if not re.search(r'name="description"|property="og:(title|description)"|name="twitter:(title|description)"', m)]
+    p["metas"] = [f'<meta name="description" content="{esc(d)}">'] + keep + [
+        f'<meta property="og:title" content="{esc(og)}">', f'<meta property="og:description" content="{esc(d)}">',
+        f'<meta name="twitter:title" content="{esc(og)}">', f'<meta name="twitter:description" content="{esc(d)}">']
+    p["metas"] = [m for m in p["metas"] if 'name="theme-color"' not in m] + ['<meta name="theme-color" content="#ffffff">']
 
 
 def head(p, slug):
@@ -158,12 +224,14 @@ def services(title, lede, skip=None):
             continue
         cards.append(f'<a class="svc reveal" href="/{slug}"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></div><h3>{t}</h3><p>{d}</p><span class="more">Learn more →</span></a>')
     h, t, d, ic = ESTATE
-    cards.append(f'<a class="svc reveal" href="{h}"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></div><h3>{t}</h3><p>{d}</p><span class="more">Get a quote →</span></a>')
+    cards.append(f'<a class="svc reveal" href="{h}"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{ic}</svg></div><h3>{t}</h3><p>{d}</p><span class="more">Learn more →</span></a>')
+    more = "".join(f'<a href="/{k}">{n}</a>' for k, n, _, _ in MORE_SERVICES if k not in (skip, "estate-cleanout"))
     return f'''
 <section class="sec" id="services">
   <div class="wrap">
     <div class="sec-head reveal"><span class="eyebrow">What we haul</span><h2>{title}</h2><p class="lede">{lede}</p></div>
     <div class="svc-grid">{"".join(cards)}</div>
+    <div class="areas svc-more reveal"><span>Also:</span>{more}</div>
   </div>
 </section>'''
 
@@ -313,12 +381,16 @@ def band(sub="Text a photo now and get a price today."):
 </main>'''
 
 
+FOOT_SVC = ('<div><h4>Services</h4><a href="/garage-cleanout">Garage cleanouts</a><a href="/estate-cleanout">Estate cleanouts</a>'
+            '<a href="/basement-cleanout">Basement cleanouts</a><a href="/furniture-removal">Furniture removal</a><a href="/appliance-removal">Appliance removal</a>'
+            '<a href="/mattress-removal">Mattress removal</a><a href="/hot-tub-removal">Hot tub removal</a><a href="/move-out-cleanout">Move-out cleanouts</a>'
+            '<a href="/commercial-junk-removal">Office &amp; commercial</a><a href="/yard-waste-removal">Yard waste</a><a href="/construction-debris-removal">Construction debris</a></div>')
 FOOT = f'''
 <footer class="foot">
   <div class="wrap">
     <div class="foot-grid">
       <div><img class="foot-logo" src="/logo.PNG" alt="Wood's Waste"><p>Local, owner-operated junk removal out of Farmington, MN. Same-day pickup across the south metro.</p></div>
-      <div><h4>Services</h4><a href="/furniture-removal">Furniture removal</a><a href="/appliance-removal">Appliance removal</a><a href="/garage-cleanout">Garage cleanouts</a><a href="/yard-waste-removal">Yard waste</a><a href="/construction-debris-removal">Construction debris</a></div>
+      FOOT_SVC_SLOT
       <div><h4>Top areas</h4><a href="/farmington">Farmington</a><a href="/lakeville">Lakeville</a><a href="/apple-valley">Apple Valley</a><a href="/burnsville">Burnsville</a><a href="/#areas">All areas</a></div>
       <div><h4>Contact</h4><a href="{TEL}">{PHONE}</a><a class="sms-link" href="{SMS}">Text us a photo</a><a href="#quote">Free quote form</a><a href="{GOOGLE}" target="_blank" rel="noopener">Google reviews</a></div>
     </div>
@@ -354,9 +426,68 @@ def fix_faq(slug, p, city=None):
     return out
 
 
+COUNTY = {**{c: "Dakota" for c in ("farmington", "lakeville", "apple-valley", "burnsville", "rosemount", "eagan", "hastings", "inver-grove-heights",
+                                     "south-st-paul", "west-st-paul", "mendota-heights")},
+          **{c: "Scott" for c in ("prior-lake", "savage", "shakopee")},
+          **{c: "Hennepin" for c in ("bloomington", "richfield", "edina", "eden-prairie", "minneapolis", "minnetonka", "plymouth", "maple-grove", "brooklyn-park")},
+          **{c: "Carver" for c in ("chanhassen", "chaska", "victoria", "waconia")},
+          **{c: "Washington" for c in ("woodbury", "cottage-grove", "newport")},
+          **{c: "Ramsey" for c in ("st-paul", "maplewood")},
+          **{c: "Anoka" for c in ("coon-rapids", "blaine", "fridley")}, "northfield": "Rice"}
+HOME_LL = (44.6403, -93.1438)
+
+
+def miles_from_home(p):
+    import math
+    m = next((re.search(r'content="([-\d.]+);([-\d.]+)"', x) for x in p["metas"] if "geo.position" in x), None)
+    if not m:
+        return None
+    la, lo = float(m.group(1)), float(m.group(2))
+    r = 3958.8; f1, f2 = math.radians(HOME_LL[0]), math.radians(la)
+    dl, dn = math.radians(la - HOME_LL[0]), math.radians(lo - HOME_LL[1])
+    a = math.sin(dl / 2) ** 2 + math.cos(f1) * math.cos(f2) * math.sin(dn / 2) ** 2
+    return round(2 * r * math.asin(math.sqrt(a)))
+
+
+POPULAR = [("garage-cleanout", "Garage cleanouts", "Clear the garage in an afternoon"), ("furniture-removal", "Furniture removal", "Couches, beds, dressers and more"),
+           ("estate-cleanout", "Estate cleanouts", "Whole homes, handled with care"), ("basement-cleanout", "Basement cleanouts", "We carry it up the stairs"),
+           ("appliance-removal", "Appliance removal", "Fridges, washers and dryers"), ("move-out-cleanout", "Move-out cleanouts", "Rentals ready to turn over"),
+           ("mattress-removal", "Mattress removal", "From any room, any floor"), ("hot-tub-removal", "Hot tub removal", "Cut up and hauled off"),
+           ("yard-waste-removal", "Yard waste removal", "Brush, playsets, trampolines"), ("construction-debris-removal", "Construction debris", "Remodel leftovers gone"),
+           ("commercial-junk-removal", "Office &amp; commercial", "Offices, retail and back lots")]
+
+
+def city_extras(slug, p, city):
+    county = COUNTY.get(slug)
+    mi = miles_from_home(p)
+    dist = ("Farmington is our home base, so we’re usually minutes away." if slug == "farmington"
+            else f"{city} is about {mi} miles from our home base in Farmington, so we’re in the area most weeks." if mi else "")
+    cards = "".join(f'<a class="pop reveal" href="/{k}"><b>{n} in {esc(city)}</b><span>{d}</span></a>' for k, n, d in POPULAR)
+    facts = [dist,
+             f"{city} is in {county} County. We don’t take paint, chemicals or other hazardous waste; {county} County’s household hazardous waste program takes those." if county else "",
+             "Same-day and next-day pickups are often available. Text a photo in the morning for the fastest price."]
+    facts_html = "".join(f"<li>{CHECK}{esc(x)}</li>" for x in facts if x)
+    sec = f'''
+<section class="sec sec-sand" id="popular">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Popular in {esc(city)}</span><h2>Junk removal services in {esc(city)}</h2>
+      <p class="lede">Every job is priced by truck space, with the full price before we start.</p></div>
+    <div class="pop-grid">{cards}</div>
+    <div class="local-card reveal" style="margin-top:22px"><h3>Good to know in {esc(city)}</h3><ul>{facts_html}</ul></div>
+  </div>
+</section>'''
+    extra_faq = []
+    if mi and slug != "farmington":
+        extra_faq.append((f"How far is {city} from Wood’s Waste?", f"About {mi} miles from our home base in Farmington. We serve {city} most weeks, and same-day pickup is often available."))
+    extra_faq.append((f"Do you do estate, basement and move-out cleanouts in {city}?",
+                      f"Yes. We handle whole-house estate cleanouts, basement cleanouts and rental move-outs in {city}, priced by volume with the full price up front."))
+    return sec, extra_faq
+
+
 def build_city(slug, p):
     city = p["place"] or slug.replace("-", " ").title()
-    p["faq_final"] = fix_faq(slug, p, city)
+    pop_sec, extra_faq = city_extras(slug, p, city)
+    p["faq_final"] = fix_faq(slug, p, city) + extra_faq
     intro, why = p["intro"], p["why"]
     paras = "".join(f"<p>{esc(x)}</p>" for x in intro["paras"])
     why_p = "".join(f"<p>{esc(x)}</p>" for x in (why or {}).get("paras", []))
@@ -383,14 +514,45 @@ def build_city(slug, p):
     h1 = f"Junk removal in {esc(city)}, MN.<br><em>Gone today.</em>"
     lede = f"Local, owner-run junk removal for {esc(city)}. Furniture, appliances, garages and full cleanouts, usually the same day. We do all the lifting. Text a photo, get a price."
     return (head(p, slug) + topbar() + hero(f"Serving {esc(city)} · Same-day", h1, lede, "yard") + STRIP + local
-            + services(f"What we haul in {esc(city)}", "From one couch to a full cleanout. We load, haul, and sweep up after.")
+            + pop_sec
             + work(["garage", "curb"]) + pricing() + STEPS + reviews(slug)
             + faq(f"Junk removal in {esc(city)}: common questions", p["faq_final"]) + near_html + quote(f" in {esc(city)}")
             + band(f"Serving {esc(city)} and the south metro. Text a photo and get a price today.") + FOOT)
 
 
+AREA_NAMES = [n for _, n, _ in ALL_AREAS] if "ALL_AREAS" in globals() else []
+
+
+def service_ld(slug, p):
+    s = SVC[slug]
+    nm = html.unescape(p.get("short") or s["name"])
+    areas_ = [{"@type": "City", "name": n} for _, n, _ in ALL_AREAS]
+    return {"@context": "https://schema.org", "@type": "Service", "name": nm, "serviceType": nm,
+            "provider": {"@type": "LocalBusiness", "@id": "https://woodswastemn.com/#business", "name": "Wood’s Waste", "telephone": "+1-507-298-1179"},
+            "areaServed": areas_, "url": f"https://woodswastemn.com/{slug}",
+            "description": seo(slug, p)[1],
+            "offers": {"@type": "AggregateOffer", "priceCurrency": "USD", "lowPrice": "199", "highPrice": "779", "offerCount": "5"}}
+
+
+def new_service_content(slug):
+    n = NEW[slug]
+    base = C["garage-cleanout"]
+    lb = json.loads(json.dumps(base["ld"][0])); lb["url"] = f"https://woodswastemn.com/{slug}"
+    lb["description"] = f"{html.unescape(n['short'])} across the Twin Cities south metro. Same-day, owner-operated by Griffin and Gavin out of Farmington, MN."
+    crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://woodswastemn.com/"},
+        {"@type": "ListItem", "position": 2, "name": html.unescape(n["short"]), "item": f"https://woodswastemn.com/{slug}"}]}
+    metas = [m.replace("garage-cleanout", slug) for m in base["metas"] if 'name="keywords"' not in m]
+    kw = html.unescape(n["short"]).lower()
+    metas.insert(0, f'<meta name="keywords" content="{kw} MN, {kw} Twin Cities, {kw} Lakeville, {kw} Apple Valley, {kw} Farmington, same day {kw}">')
+    return {"kind": "service", "title": "", "metas": metas, "ld": [lb, {"@type": "Service"}, crumbs], "h1": html.unescape(n["h1"]),
+            "faq": [tuple(x) for x in n["faq"]], "intro": {"h2": n["intro_h2"], "eyebrow": "", "paras": n["intro"]}, "why": None,
+            "nearby": [], "place": "Farmington", "short": n["short"]}
+
+
 def build_service(slug, p):
     s = SVC[slug]
+    p["ld"] = [service_ld(slug, p) if (isinstance(d, dict) and d.get("@type") == "Service") else d for d in p["ld"]]
     p["faq_final"] = fix_faq(slug, p)
     intro = p["intro"]
     paras = "".join(f"<p>{esc(x)}</p>" for x in intro["paras"])
@@ -418,19 +580,43 @@ def build_service(slug, p):
 
 
 def build_home(p):
-    src = open(os.path.join(ROOT, "preview", "index.html")).read()
+    src = open(os.path.join(ROOT, "_build", "home.html")).read()
+    lb = p["ld"][0]
+    lb["hasOfferCatalog"] = {"@type": "OfferCatalog", "name": "Junk removal by load size", "itemListElement": [
+        {"@type": "Offer", "name": f"{n} ({yd})", "price": pr.strip("$"), "priceCurrency": "USD",
+         "itemOffered": {"@type": "Service", "name": f"Junk removal, {n.lower()}"}} for _, n, yd, _, pr in TIERS]}
     body = src[src.index("<body>") + len("<body>"):]
     body = body.replace('="../', '="/').replace("href=\"../", "href=\"/")
     body = re.sub(r'href="/([a-z-]+)\.html"', r'href="/\1"', body)
     body = body.replace('<span>Same-day junk removal · (507) 298-1179</span>', '<span><a href="/pro" style="color:inherit">For junk-removal operators</a></span>')
+    body = body.replace('<a class="svc reveal" href="#quote">', '<a class="svc reveal" href="/estate-cleanout">').replace('<span class="more">Get a quote →</span>', '<span class="more">Learn more →</span>')
+    more = "".join(f'<a href="/{k}">{n}</a>' for k, n, _, _ in MORE_SERVICES if k != "estate-cleanout")
+    body = body.replace('</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">',
+                        f'</div>\n    <div class="areas svc-more reveal"><span>Also:</span>{more}</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">', 1)
+    body = re.sub(r'<div><h4>Services</h4>.*?</div>', FOOT_SVC, body, count=1, flags=re.S)
     faq_items = [(html.unescape(re.sub(r"<[^>]+>", "", q)), html.unescape(re.sub(r"<[^>]+>", "", a)))
                  for q, a in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body, re.S)]
     p["faq_final"] = faq_items
     return head(p, "index") + body
 
 
+def sitemap(slugs):
+    import datetime
+    today = datetime.date.today().isoformat()
+    def pri(s):
+        return "1.0" if s == "index" else ("0.9" if C[s]["kind"] == "service" else "0.8")
+    urls = "".join(f"  <url>\n    <loc>https://woodswastemn.com/{'' if s == 'index' else s}</loc>\n    <lastmod>{today}</lastmod>\n    <priority>{pri(s)}</priority>\n  </url>\n" for s in slugs)
+    open(os.path.join(ROOT, "sitemap.xml"), "w").write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
+
+
 def main():
     n = 0
+    for slug in NEW:
+        C[slug] = new_service_content(slug)
+    for slug, p in C.items():
+        if p["kind"] in ("city", "service", "home"):
+            apply_seo(slug, p)
+    built = []
     for slug, p in C.items():
         if p["kind"] == "city":
             out = build_city(slug, p)
@@ -440,9 +626,11 @@ def main():
             out = build_home(p)
         else:
             continue
+        out = out.replace("FOOT_SVC_SLOT", FOOT_SVC)
         open(os.path.join(ROOT, slug + ".html"), "w").write(out)
-        n += 1
-    print("built", n, "pages")
+        n += 1; built.append(slug)
+    sitemap(["index"] + [s for s in built if C[s]["kind"] == "service"] + [s for s in built if C[s]["kind"] == "city"])
+    print("built", n, "pages + sitemap")
 
 
 if __name__ == "__main__":

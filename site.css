@@ -276,3 +276,14 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 .take-note{font-size:14px!important;color:var(--muted)!important}
 #local p{margin-top:14px}
 @media (max-width:560px){.local-card ul.take{grid-template-columns:1fr}}
+
+/* popular-in-city links + "Also:" service chips */
+.pop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pop{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;text-decoration:none;display:flex;flex-direction:column;gap:4px;transition:border-color .15s}
+.pop:hover{border-color:var(--ink)}
+.pop b{font-size:16px}
+.pop span{font-size:14px;color:var(--muted)}
+.svc-more{margin-top:22px;align-items:center}
+.svc-more span{font-weight:700;color:var(--muted);margin-right:4px}
+@media (max-width:900px){.pop-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.pop-grid{grid-template-columns:1fr}}

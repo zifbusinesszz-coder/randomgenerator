@@ -8,16 +8,21 @@ bad = collections.defaultdict(list); n = 0
 for f in sorted(glob.glob("*.html")):
     if f == "pro.html": continue
     n += 1; s = open(f).read(); o = old(f)
-    for name, rx in (("title", r"<title>(.*?)</title>"), ("canonical", r'rel="canonical" href="([^"]+)"'), ("desc", r'name="description" content="([^"]*)"')):
-        a, b = grab(o, rx), grab(s, rx)
-        if name == "title": a, b = html.unescape(a or ""), html.unescape(b or "")
-        if a != b: bad[f].append(f"{name} changed: {a!r} → {b!r}")
+    t = html.unescape(grab(s, r"<title>(.*?)</title>") or ""); d = html.unescape(grab(s, r'name="description" content="([^"]*)"') or "")
+    if not (20 <= len(t) <= 60): bad[f].append(f"title length {len(t)}: {t}")
+    if not (90 <= len(d) <= 160): bad[f].append(f"description length {len(d)}: {d}")
+    can = grab(s, r'rel="canonical" href="([^"]+)"')
+    want = "https://woodswastemn.com/" + ("" if f == "index.html" else f[:-5])
+    if o and grab(o, r'rel="canonical" href="([^"]+)"') != can: bad[f].append(f"canonical changed {can}")
+    if not o and can != want: bad[f].append(f"new page canonical {can} != {want}")
+    sm = open("sitemap.xml").read()
+    if f"<loc>{want}</loc>" not in sm: bad[f].append("not in sitemap")
     lds = []
     for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', s, re.S):
         try: lds.append(json.loads(m.group(1)))
         except Exception as e: bad[f].append(f"bad LD {e}")
     oldtypes = sorted(str(json.loads(m.group(1)).get("@type")) for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', o, re.S))
-    if sorted(str(d.get("@type")) for d in lds) != oldtypes: bad[f].append(f"LD types {oldtypes} → {sorted(str(d.get('@type')) for d in lds)}")
+    if o and sorted(str(d.get("@type")) for d in lds) != oldtypes: bad[f].append(f"LD types {oldtypes} → {sorted(str(d.get('@type')) for d in lds)}")
     fq = next((d for d in lds if d.get("@type") == "FAQPage"), None)
     vis = re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", s, re.S)
     if not fq or len(fq["mainEntity"]) != len(vis) or len(vis) < 5: bad[f].append(f"FAQ mismatch LD {len(fq['mainEntity']) if fq else 0} vs visible {len(vis)}")
@@ -29,7 +34,7 @@ for f in sorted(glob.glob("*.html")):
     ids = re.findall(r'\sid="([^"]+)"', s); d = [k for k, v in collections.Counter(ids).items() if v > 1]
     if d: bad[f].append(f"dup ids {d}")
     if s.count("<h1") != 1: bad[f].append(f"h1 x{s.count('<h1')}")
-    for junk in ("$150", "handle hazardous", "paint cans", '="../', "noindex", "Book my free quote", "Preferred date"):
+    for junk in ("$150", "handle hazardous", "FOOT_SVC_SLOT", "Removal Removal", '="../', "noindex", "Book my free quote", "Preferred date"):
         if junk in s: bad[f].append(f"contains {junk!r}")
     for h in re.findall(r'href="(/[^"#?]*)', s):
         t = h.strip("/")
