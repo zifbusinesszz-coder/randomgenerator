@@ -407,7 +407,9 @@ ALL_AREAS = [("farmington", "Farmington", 1), ("lakeville", "Lakeville", 1), ("a
              ("victoria", "Victoria", 0), ("waconia", "Waconia", 0), ("plymouth", "Plymouth", 0), ("maple-grove", "Maple Grove", 0), ("brooklyn-park", "Brooklyn Park", 0),
              ("coon-rapids", "Coon Rapids", 0), ("blaine", "Blaine", 0), ("fridley", "Fridley", 0), ("maplewood", "Maplewood", 0),
              ("elko-new-market", "Elko New Market", 0), ("credit-river", "Credit River", 0), ("hampton", "Hampton", 0), ("dundas", "Dundas", 0),
-             ("cannon-falls", "Cannon Falls", 0), ("new-prague", "New Prague", 0), ("jordan", "Jordan", 0)]
+             ("cannon-falls", "Cannon Falls", 0), ("new-prague", "New Prague", 0), ("jordan", "Jordan", 0),
+             ("hopkins", "Hopkins", 0), ("st-louis-park", "St. Louis Park", 0), ("golden-valley", "Golden Valley", 0), ("roseville", "Roseville", 0),
+             ("wayzata", "Wayzata", 0)]
 ALL_AREAS.sort(key=lambda a: ROUTES.get(a[0], {}).get("miles", 999))      # nearest first
 
 
@@ -525,7 +527,8 @@ COUNTY = {**{c: "Dakota" for c in ("farmington", "lakeville", "apple-valley", "b
           **{c: "Ramsey" for c in ("st-paul", "maplewood")},
           **{c: "Anoka" for c in ("coon-rapids", "blaine", "fridley")}, "northfield": "Rice",
           "elko-new-market": "Scott", "credit-river": "Scott", "jordan": "Scott", "new-prague": "Scott", "hampton": "Dakota",
-          "cannon-falls": "Goodhue", "dundas": "Rice"}
+          "cannon-falls": "Goodhue", "dundas": "Rice", "st-louis-park": "Hennepin", "hopkins": "Hennepin", "golden-valley": "Hennepin",
+          "roseville": "Ramsey", "wayzata": "Hennepin"}
 ALSO = {"farmington": "Empire and Castle Rock", "hampton": "Vermillion and Coates", "cannon-falls": "Randolph", "northfield": "Webster and Dundas"}
 HOME_LL = (44.6403, -93.1438)
 
@@ -811,7 +814,9 @@ def build_partner(slug, p):
 
 NEW_CITIES = json.load(open(os.path.join(ROOT, "_build", "new_cities.json")))
 NEARBY_ADD = {"lakeville": ["elko-new-market"], "prior-lake": ["credit-river"], "farmington": ["hampton"], "northfield": ["dundas"],
-              "hastings": ["cannon-falls"], "shakopee": ["jordan"], "savage": ["credit-river"]}
+              "hastings": ["cannon-falls"], "shakopee": ["jordan"], "savage": ["credit-river"],
+              "minneapolis": ["st-louis-park", "golden-valley"], "edina": ["st-louis-park", "hopkins"], "minnetonka": ["hopkins", "wayzata"],
+              "st-paul": ["roseville"], "maplewood": ["roseville"], "plymouth": ["wayzata", "golden-valley"]}
 
 
 def new_city_content(slug, d):

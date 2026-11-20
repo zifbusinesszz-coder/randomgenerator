@@ -188,10 +188,26 @@
   "minutes": 83
  },
  {
+  "slug": "hopkins",
+  "town": "Hopkins",
+  "miles": 59.9,
+  "minutes": 83,
+  "lat": 44.9244,
+  "lng": -93.4114
+ },
+ {
   "slug": "st-paul",
   "town": "St. Paul",
   "miles": 61.2,
   "minutes": 85
+ },
+ {
+  "slug": "st-louis-park",
+  "town": "St. Louis Park",
+  "miles": 61.9,
+  "minutes": 88,
+  "lat": 44.9597,
+  "lng": -93.3702
  },
  {
   "slug": "minnetonka",
@@ -212,6 +228,22 @@
   "minutes": 86
  },
  {
+  "slug": "golden-valley",
+  "town": "Golden Valley",
+  "miles": 64.0,
+  "minutes": 88,
+  "lat": 44.9917,
+  "lng": -93.36
+ },
+ {
+  "slug": "roseville",
+  "town": "Roseville",
+  "miles": 64.8,
+  "minutes": 95,
+  "lat": 45.0061,
+  "lng": -93.1566
+ },
+ {
   "slug": "maplewood",
   "town": "Maplewood",
   "miles": 66.7,
@@ -222,6 +254,14 @@
   "town": "Cottage Grove",
   "miles": 67.0,
   "minutes": 93
+ },
+ {
+  "slug": "wayzata",
+  "town": "Wayzata",
+  "miles": 72.9,
+  "minutes": 100,
+  "lat": 44.9741,
+  "lng": -93.5066
  },
  {
   "slug": "plymouth",
