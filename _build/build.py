@@ -116,7 +116,7 @@ def rev_card(r):
             f'<div class="who">{av}<div>{esc(r["name"])}<small>Google review</small></div></div></div>')
 
 
-TIERS = [(0.12, "Minimum", "up to ~2 cu yd", "1–2 items: a couch, a mattress set, an appliance", "$199"),
+TIERS = [(0.2, "Minimum", "up to ~3 cu yd", "A few items: a couch, a mattress set and an appliance", "$199"),
          (0.25, "1/4 load", "~4 cu yd", "A few pieces of furniture or a small pile", "$259"),
          (0.5, "1/2 load", "~7.5 cu yd", "A room’s worth or a small garage", "$399"),
          (0.75, "3/4 load", "~11 cu yd", "A big garage or basement", "$539"),
