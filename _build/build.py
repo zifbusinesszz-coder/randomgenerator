@@ -117,11 +117,11 @@ def rev_card(r):
 
 
 TIERS = [(0.12, "Minimum", "up to ~2 cu yd", "1–2 items: a couch, a mattress set, an appliance", "$199"),
-         (0.25, "1/4 load", "~4 cu yd", "A few pieces of furniture or a small pile", "$329"),
-         (0.5, "1/2 load", "~7.5 cu yd", "A room’s worth or a small garage", "$479"),
-         (0.75, "3/4 load", "~11 cu yd", "A big garage or basement", "$629"),
-         (1.0, "Full load", "~15 cu yd", "Whole-house or estate cleanouts", "$779")]
-TIER_GUIDE = "As a guide: about $329 for a quarter load, $479 for a half, $629 for three-quarters and $779 for a full 15-yard load."
+         (0.25, "1/4 load", "~4 cu yd", "A few pieces of furniture or a small pile", "$259"),
+         (0.5, "1/2 load", "~7.5 cu yd", "A room’s worth or a small garage", "$399"),
+         (0.75, "3/4 load", "~11 cu yd", "A big garage or basement", "$539"),
+         (1.0, "Full load", "~15 cu yd", "Whole-house or estate cleanouts", "$699")]
+TIER_GUIDE = "As a guide: about $259 for a quarter load, $399 for a half, $539 for three-quarters and $699 for a full 15-yard load. Past a full load, each extra cubic yard is around $40."
 # 🚚 TRAVEL ZONES (11-20, his call): route miles from _build/route_miles.json (OSRM road routes U-Haul Lakeville → town → Recycle
 # Minnesota → U-Haul). Fee = cost at $1.40/mi (U-Haul $1.09 + gas) + paid drive time, waived as the load grows.
 ZONES = [  # name, max route miles, fee small (<½), ½ load, ¾ load, full+
@@ -349,7 +349,7 @@ def pricing(extra=""):
     <p class="tier-note reveal"><b>Prices are starting points.</b> Your total can be higher if your load includes items the dump charges extra for: couches and sectionals, mattresses and box springs, appliances with Freon (fridges, freezers, AC units), tires, and TVs and electronics.{extra_html} We’ll always give you the full price before we start. {NO_HAZ}</p>
     {TRAVEL_HTML}
     <div class="tier-foot reveal">
-      <ul><li>{CHECK}Price set before we start, no surprises</li><li>{CHECK}Bigger than a full load? Quoted by volume</li></ul>
+      <ul><li>{CHECK}Price set before we start, no surprises</li><li>{CHECK}Bigger than a full load? Around $40 per extra cubic yard</li></ul>
       <div class="hero-ctas"><a class="btn btn-green" href="#quote">Get my exact price</a><a class="btn btn-line sms-link" href="{SMS}">Text a photo</a></div>
     </div>
   </div>
