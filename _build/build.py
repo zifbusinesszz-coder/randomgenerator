@@ -405,11 +405,14 @@ ALL_AREAS = [("farmington", "Farmington", 1), ("lakeville", "Lakeville", 1), ("a
              ("south-st-paul", "South St. Paul", 0), ("west-st-paul", "West St. Paul", 0), ("mendota-heights", "Mendota Heights", 0), ("newport", "Newport", 0),
              ("st-paul", "St. Paul", 0), ("minneapolis", "Minneapolis", 0), ("minnetonka", "Minnetonka", 0), ("chanhassen", "Chanhassen", 0), ("chaska", "Chaska", 0),
              ("victoria", "Victoria", 0), ("waconia", "Waconia", 0), ("plymouth", "Plymouth", 0), ("maple-grove", "Maple Grove", 0), ("brooklyn-park", "Brooklyn Park", 0),
-             ("coon-rapids", "Coon Rapids", 0), ("blaine", "Blaine", 0), ("fridley", "Fridley", 0), ("maplewood", "Maplewood", 0)]
+             ("coon-rapids", "Coon Rapids", 0), ("blaine", "Blaine", 0), ("fridley", "Fridley", 0), ("maplewood", "Maplewood", 0),
+             ("elko-new-market", "Elko New Market", 0), ("credit-river", "Credit River", 0), ("hampton", "Hampton", 0), ("dundas", "Dundas", 0),
+             ("cannon-falls", "Cannon Falls", 0), ("new-prague", "New Prague", 0), ("jordan", "Jordan", 0)]
+ALL_AREAS.sort(key=lambda a: ROUTES.get(a[0], {}).get("miles", 999))      # nearest first
 
 
 def areas(title, lede, chips):
-    a = "".join('<a%s href="/%s">%s</a>' % (' class="core"' if core else "", s, n) for s, n, core in chips)
+    a = "".join('<a%s href="/%s">%s</a>' % (' class="core"' if zone_of(s) == 0 else "", s, n) for s, n, core in chips)
     return f'''
 <section class="sec" id="areas">
   <div class="wrap">
@@ -520,7 +523,10 @@ COUNTY = {**{c: "Dakota" for c in ("farmington", "lakeville", "apple-valley", "b
           **{c: "Carver" for c in ("chanhassen", "chaska", "victoria", "waconia")},
           **{c: "Washington" for c in ("woodbury", "cottage-grove", "newport")},
           **{c: "Ramsey" for c in ("st-paul", "maplewood")},
-          **{c: "Anoka" for c in ("coon-rapids", "blaine", "fridley")}, "northfield": "Rice"}
+          **{c: "Anoka" for c in ("coon-rapids", "blaine", "fridley")}, "northfield": "Rice",
+          "elko-new-market": "Scott", "credit-river": "Scott", "jordan": "Scott", "new-prague": "Scott", "hampton": "Dakota",
+          "cannon-falls": "Goodhue", "dundas": "Rice"}
+ALSO = {"farmington": "Empire and Castle Rock", "hampton": "Vermillion and Coates", "cannon-falls": "Randolph", "northfield": "Webster and Dundas"}
 HOME_LL = (44.6403, -93.1438)
 
 
@@ -548,11 +554,12 @@ def city_extras(slug, p, city):
     county = COUNTY.get(slug)
     mi = miles_from_home(p)
     dist = ("Farmington is our home base, so we’re usually minutes away." if slug == "farmington"
-            else f"{city} is about {mi} miles from our home base in Farmington, so we’re in the area most weeks." if mi else "")
+            else f"{city} is about {mi} miles from our home base in Farmington, so we’re in the area {'most weeks' if zone_of(slug) <= 1 else 'regularly'}." if mi else "")
     cards = "".join(f'<a class="pop reveal" href="/{k}"><b>{n} in {esc(city)}</b><span>{d}</span></a>' for k, n, d in POPULAR)
     facts = [dist,
              f"{city} is in {county} County. We don’t take paint, chemicals or other hazardous waste; {county} County’s household hazardous waste program takes those." if county else "",
              travel_line(slug, city),
+             f"We also serve nearby {ALSO[slug]}." if slug in ALSO else "",
              "Same-day and next-day pickups are often available. Text a photo in the morning for the fastest price."]
     facts_html = "".join(f"<li>{CHECK}{esc(x)}</li>" for x in facts if x)
     sec = f'''
@@ -566,7 +573,8 @@ def city_extras(slug, p, city):
 </section>'''
     extra_faq = []
     if mi and slug != "farmington":
-        extra_faq.append((f"How far is {city} from Wood’s Waste?", f"About {mi} miles from our home base in Farmington. We serve {city} most weeks, and same-day pickup is often available."))
+        often = "most weeks, and same-day pickup is often available" if zone_of(slug) <= 1 else "regularly. Tell us your timeline and we’ll fit you in"
+        extra_faq.append((f"How far is {city} from Wood’s Waste?", f"About {mi} miles from our home base in Farmington. We serve {city} {often}."))
     extra_faq.append((f"Do you do estate, basement and move-out cleanouts in {city}?",
                       f"Yes. We handle whole-house estate cleanouts, basement cleanouts and rental move-outs in {city}, priced by volume with the full price up front."))
     return sec, extra_faq
@@ -801,6 +809,29 @@ def build_partner(slug, p):
             + faq("Questions from agents and property managers", p["faq_final"]) + quote() + band("Text a few photos of the listing or unit and get a price today.") + FOOT)
 
 
+NEW_CITIES = json.load(open(os.path.join(ROOT, "_build", "new_cities.json")))
+NEARBY_ADD = {"lakeville": ["elko-new-market"], "prior-lake": ["credit-river"], "farmington": ["hampton"], "northfield": ["dundas"],
+              "hastings": ["cannon-falls"], "shakopee": ["jordan"], "savage": ["credit-river"]}
+
+
+def new_city_content(slug, d):
+    base = C["lakeville"]; place = d["place"]; r = ROUTES[slug]
+    def sub(x):
+        return x.replace("lakeville", slug).replace("Lakeville", place)
+    metas = [sub(m) for m in base["metas"] if 'name="keywords"' not in m and "geo.position" not in m]
+    metas.insert(0, f'<meta name="keywords" content="junk removal {place} MN, furniture removal {place}, garage cleanout {place}, appliance removal {place}, same day junk removal {place}">')
+    metas.append(f'<meta name="geo.position" content="{r["lat"]};{r["lng"]}">')
+    lb = json.loads(sub(json.dumps(base["ld"][0])))
+    crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://woodswastemn.com/"},
+        {"@type": "ListItem", "position": 2, "name": f"Junk Removal {place}", "item": f"https://woodswastemn.com/{slug}"}]}
+    names = {s_: n for s_, n, _ in ALL_AREAS}
+    return {"kind": "city", "title": "", "metas": metas, "ld": [lb, crumbs], "h1": f"Junk removal in {place}, MN.",
+            "faq": [(sub(q), sub(a)) for q, a in base["faq"]], "intro": {"h2": d["h2"], "eyebrow": "", "paras": d["paras"]},
+            "why": {"h2": "", "paras": [sub(x) for x in (base["why"] or {}).get("paras", [])]},
+            "nearby": [(names[n], "/" + n) for n in d["near"] if n in names], "place": place}
+
+
 def sitemap(slugs):
     import datetime
     today = datetime.date.today().isoformat()
@@ -815,6 +846,12 @@ def main():
     for slug in NEW:
         C[slug] = new_service_content(slug)
     C["realtors"] = partner_content()
+    for slug_, d_ in NEW_CITIES.items():
+        C[slug_] = new_city_content(slug_, d_)
+    names_ = {s_: n for s_, n, _ in ALL_AREAS}
+    for a_, adds in NEARBY_ADD.items():
+        have_ = {h for _, h in C[a_]["nearby"]}
+        C[a_]["nearby"] += [(names_[x], "/" + x) for x in adds if "/" + x not in have_]
     for slug, p in C.items():
         if p["kind"] in ("city", "service", "home", "partner"):
             apply_seo(slug, p)

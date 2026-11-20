@@ -18,6 +18,22 @@
   "minutes": 28
  },
  {
+  "slug": "credit-river",
+  "town": "Credit River",
+  "miles": 18.3,
+  "minutes": 39,
+  "lat": 44.6701,
+  "lng": -93.359
+ },
+ {
+  "slug": "elko-new-market",
+  "town": "Elko New Market",
+  "miles": 21.4,
+  "minutes": 34,
+  "lat": 44.5647,
+  "lng": -93.3269
+ },
+ {
   "slug": "rosemount",
   "town": "Rosemount",
   "miles": 25.4,
@@ -28,6 +44,14 @@
   "town": "Burnsville",
   "miles": 25.9,
   "minutes": 41
+ },
+ {
+  "slug": "hampton",
+  "town": "Hampton",
+  "miles": 27.7,
+  "minutes": 46,
+  "lat": 44.6105,
+  "lng": -93.0021
  },
  {
   "slug": "prior-lake",
@@ -60,16 +84,40 @@
   "minutes": 52
  },
  {
+  "slug": "dundas",
+  "town": "Dundas",
+  "miles": 41.1,
+  "minutes": 64,
+  "lat": 44.4294,
+  "lng": -93.2019
+ },
+ {
   "slug": "richfield",
   "town": "Richfield",
   "miles": 43.0,
   "minutes": 60
  },
  {
+  "slug": "cannon-falls",
+  "town": "Cannon Falls",
+  "miles": 46.2,
+  "minutes": 71,
+  "lat": 44.5069,
+  "lng": -92.9055
+ },
+ {
   "slug": "mendota-heights",
   "town": "Mendota Heights",
   "miles": 46.8,
   "minutes": 71
+ },
+ {
+  "slug": "new-prague",
+  "town": "New Prague",
+  "miles": 48.5,
+  "minutes": 74,
+  "lat": 44.5433,
+  "lng": -93.5761
  },
  {
   "slug": "edina",
@@ -82,6 +130,14 @@
   "town": "Inver Grove Heights",
   "miles": 48.7,
   "minutes": 70
+ },
+ {
+  "slug": "jordan",
+  "town": "Jordan",
+  "miles": 49.2,
+  "minutes": 77,
+  "lat": 44.6712,
+  "lng": -93.6294
  },
  {
   "slug": "west-st-paul",

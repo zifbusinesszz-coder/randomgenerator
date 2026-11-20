@@ -1,0 +1,51 @@
+{
+ "elko-new-market": {"place": "Elko New Market", "county": "Scott",
+  "near": ["lakeville", "credit-river", "prior-lake", "farmington", "new-prague"],
+  "h2": "Elko New Market's Local Junk Removal Crew",
+  "paras": [
+   "Elko New Market sits just southwest of Lakeville along I-35, close to our truck and the dump. That makes it one of the quickest places for us to get to, often the same day you text.",
+   "With so many newer homes and growing families, the jobs we see here are garage cleanouts, old furniture after an upgrade, basement clear-outs and move-out leftovers. We do all the lifting, load everything, and sweep up before we leave.",
+   "Text a few photos and we'll send a price, usually the same day. Elko New Market is in our home area, so there's no travel fee."]},
+ "credit-river": {"place": "Credit River", "county": "Scott",
+  "near": ["prior-lake", "savage", "lakeville", "elko-new-market", "burnsville"],
+  "h2": "Junk Removal for Credit River Homes",
+  "paras": [
+   "Credit River sits between Prior Lake and Lakeville, with big lots, big garages and outbuildings that collect years of stuff. That's exactly the kind of cleanout we like.",
+   "We haul old furniture, appliances, garage and shed contents, yard debris, playsets and whole-house estate cleanouts. Our crew carries everything out from wherever it is on the property.",
+   "Credit River is in our home area, so there's no travel fee. Text us photos and we'll send a price, usually the same day."]},
+ "hampton": {"place": "Hampton", "county": "Dakota",
+  "near": ["farmington", "hastings", "rosemount", "cannon-falls", "northfield"],
+  "h2": "Hampton's Nearby Junk Removal Team",
+  "paras": [
+   "Hampton is a small Dakota County city off Highway 52, a short drive from our home base. We cover Hampton and the farms and acreages around it.",
+   "Jobs out here run from a single couch to full farmhouse, garage and outbuilding cleanouts. We do all the loading and hauling, and we donate or recycle what we can.",
+   "Hampton is in Zone 2, so a small travel fee applies to small jobs and shrinks as the load grows. It's free on a full load. Text a photo for a price."]},
+ "jordan": {"place": "Jordan", "county": "Scott",
+  "near": ["shakopee", "prior-lake", "new-prague", "savage", "chaska"],
+  "h2": "Junk Removal in Jordan, MN",
+  "paras": [
+   "We serve Jordan and the surrounding Scott County countryside along Highway 169. Garages, basements, sheds and whole-house cleanouts are the jobs we see most here.",
+   "Our two-person crew shows up on time, does every bit of the lifting and loading, and sweeps up before we leave. You just point at what goes.",
+   "Jordan is in Zone 3, so a travel fee applies, and it shrinks as your load grows. Text a few photos and we'll send the full price, travel included, before we come out."]},
+ "new-prague": {"place": "New Prague", "county": "Scott",
+  "near": ["jordan", "elko-new-market", "prior-lake", "lakeville", "northfield"],
+  "h2": "New Prague's Junk Removal Crew",
+  "paras": [
+   "New Prague, the Czech-heritage town on the Scott and Le Sueur county line, is part of our regular service area. We handle everything from one old appliance to a full estate cleanout.",
+   "We carry it out of the house, garage, basement or shed, haul it off, and donate or recycle whatever we can before anything goes to the dump.",
+   "New Prague is in Zone 3, so a travel fee applies, and it gets smaller the bigger the load. Text photos for a price with travel included."]},
+ "cannon-falls": {"place": "Cannon Falls", "county": "Goodhue",
+  "near": ["hampton", "hastings", "northfield", "dundas", "farmington"],
+  "h2": "Junk Removal in Cannon Falls",
+  "paras": [
+   "Cannon Falls sits on the Cannon River along Highway 52, an easy run down from our home base. We clear homes, garages, basements, cabins and outbuildings across the area.",
+   "Bigger cleanouts are where we're most useful out here. We bring the truck, do every bit of the lifting, and leave the space swept.",
+   "Cannon Falls is in Zone 3, so a travel fee applies, and it shrinks as your load grows. Send a few photos and we'll text the full price before we come."]},
+ "dundas": {"place": "Dundas", "county": "Rice",
+  "near": ["northfield", "farmington", "lakeville", "cannon-falls", "hampton"],
+  "h2": "Junk Removal for Dundas Homes",
+  "paras": [
+   "Dundas sits just south of Northfield along the Cannon River. We serve both towns, along with the homes and farms in between.",
+   "We haul furniture, appliances, mattresses, garage and basement contents, and whole-house cleanouts. Usable items get donated and recyclables get sorted out.",
+   "Dundas is in Zone 3, so a travel fee applies, and it gets smaller as your load grows. Text photos for a price with everything included."]}
+}
