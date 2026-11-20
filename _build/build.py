@@ -122,6 +122,30 @@ TIERS = [(0.12, "Minimum", "up to ~2 cu yd", "1–2 items: a couch, a mattress s
          (0.75, "3/4 load", "~11 cu yd", "A big garage or basement", "$629"),
          (1.0, "Full load", "~15 cu yd", "Whole-house or estate cleanouts", "$779")]
 TIER_GUIDE = "As a guide: about $329 for a quarter load, $479 for a half, $629 for three-quarters and $779 for a full 15-yard load."
+# 🚚 TRAVEL ZONES (11-20, his call): route miles from _build/route_miles.json (OSRM road routes U-Haul Lakeville → town → Recycle
+# Minnesota → U-Haul). Fee = cost at $1.40/mi (U-Haul $1.09 + gas) + paid drive time, waived as the load grows.
+ZONES = [  # name, max route miles, fee small (<½), ½ load, ¾ load, full+
+    ("Home area", 27, 0, 0, 0, 0), ("Zone 2", 40, 89, 45, 25, 0), ("Zone 3", 56.5, 139, 70, 35, 0),
+    ("Zone 4", 68, 169, 85, 45, 0), ("Zone 5", 999, 229, 115, 59, 0)]
+ZONE_COLORS = ["#178a63", "#7cc4a4", "#f2c14e", "#ef8a3c", "#d64545"]
+ROUTES = {r["slug"]: r for r in json.load(open(os.path.join(ROOT, "_build", "route_miles.json")))}
+
+
+def zone_of(slug):
+    m = ROUTES.get(slug, {}).get("miles")
+    if m is None:
+        return 0
+    return next(i for i, z in enumerate(ZONES) if m < z[1])
+
+
+def travel_line(slug, city):
+    i = zone_of(slug); z = ZONES[i]
+    if i == 0:
+        return f"{city} is in our home area: no travel fee on any job."
+    return (f"{city} is in our {z[0]}. Travel fee: ${z[2]} on small jobs, ${z[3]} on a half load, ${z[4]} on a three-quarter load, "
+            f"and free on a full load.")
+
+
 FEE_NOTE = "Items with extra dump fees (mattresses, Freon appliances, tires, TVs) add to the total, and you always get the full price before we start."
 NO_HAZ = "We don’t take paint, chemicals or other hazardous waste."
 
@@ -298,7 +322,20 @@ def work(pairs):
 </section>'''
 
 
+def _travel_html():
+    towns = {}
+    for slug, n, _ in ALL_AREAS:
+        towns.setdefault(zone_of(slug), []).append((slug, n))
+    rows = "".join(
+        f'<tr><th><span class="zdot" style="background:{ZONE_COLORS[i]}"></span>{z[0]}<small>{", ".join(n for _, n in towns.get(i, []))}</small></th>'
+        + ("".join("<td>Free</td>" for _ in range(4)) if i == 0 else f"<td>${z[2]}</td><td>${z[3]}</td><td>${z[4]}</td><td>Free</td>") + "</tr>"
+        for i, z in enumerate(ZONES))
+    return f'''<div class="travel reveal" id="travel"><div class="travel-head"><h3>Travel fees</h3><p>Our truck and the dump are in Lakeville. The farther out, the more drive time, and the bigger the load, the less you pay for it. <a href="/#zone-map">See the zone map →</a></p></div>
+      <div class="travel-scroll"><table><thead><tr><th>Where</th><th>Small job</th><th>½ load</th><th>¾ load</th><th>Full load</th></tr></thead><tbody>{rows}</tbody></table></div></div>'''
+
+
 def pricing(extra=""):
+    TRAVEL_HTML = _travel_html()
     cards = "".join(f'<div class="tier reveal">{truck(f)}<div class="tier-name">{n}</div><div class="tier-yd">{yd}</div><p>{ex}</p><div class="tier-price"><small>from*</small>{pr}</div></div>'
                     for f, n, yd, ex, pr in TIERS)
     extra_html = f" {extra}" if extra else ""
@@ -309,6 +346,7 @@ def pricing(extra=""):
       <p class="lede center">Loading, haul-away and disposal are all included. Text a photo and we’ll tell you exactly where you land before we come out.</p></div>
     <div class="tiers">{cards}</div>
     <p class="tier-note reveal"><b>Prices are starting points.</b> Your total can be higher if your load includes items the dump charges extra for: mattresses and box springs, appliances with Freon (fridges, freezers, AC units), tires, and TVs and electronics.{extra_html} We’ll always give you the full price before we start. {NO_HAZ}</p>
+    {TRAVEL_HTML}
     <div class="tier-foot reveal">
       <ul><li>{CHECK}Price set before we start, no surprises</li><li>{CHECK}Bigger than a full load? Quoted by volume</li></ul>
       <div class="hero-ctas"><a class="btn btn-green" href="#quote">Get my exact price</a><a class="btn btn-line sms-link" href="{SMS}">Text a photo</a></div>
@@ -360,7 +398,7 @@ def faq(title, items):
 
 
 ALL_AREAS = [("farmington", "Farmington", 1), ("lakeville", "Lakeville", 1), ("apple-valley", "Apple Valley", 1), ("burnsville", "Burnsville", 1),
-             ("rosemount", "Rosemount", 1), ("eagan", "Eagan", 1), ("hastings", "Hastings", 0), ("prior-lake", "Prior Lake", 0), ("savage", "Savage", 0),
+             ("rosemount", "Rosemount", 1), ("eagan", "Eagan", 0), ("hastings", "Hastings", 0), ("prior-lake", "Prior Lake", 0), ("savage", "Savage", 0),
              ("inver-grove-heights", "Inver Grove Heights", 0), ("northfield", "Northfield", 0), ("cottage-grove", "Cottage Grove", 0), ("woodbury", "Woodbury", 0),
              ("bloomington", "Bloomington", 0), ("richfield", "Richfield", 0), ("edina", "Edina", 0), ("eden-prairie", "Eden Prairie", 0), ("shakopee", "Shakopee", 0),
              ("south-st-paul", "South St. Paul", 0), ("west-st-paul", "West St. Paul", 0), ("mendota-heights", "Mendota Heights", 0), ("newport", "Newport", 0),
@@ -463,7 +501,7 @@ def fix_faq(slug, p, city=None):
     for q, a in p["faq"]:
         ql = q.lower()
         if ("cost" in ql or "price" in ql) and p["kind"] == "city":
-            a = f"Our minimum pickup in {city} is $199 for a single item or small load. Bigger jobs are priced by how much truck space your load takes. {TIER_GUIDE} {FEE_NOTE}"
+            a = f"Our minimum pickup in {city} is $199 for a single item or small load. Bigger jobs are priced by how much truck space your load takes. {TIER_GUIDE} {travel_line(slug, city)} {FEE_NOTE}"
         elif ("cost" in ql or "price" in ql) and p["kind"] == "service":
             a = re.sub(r"\s*Call or text( us)?( \(507\) 298-1179)? for a (fast|quick) estimate\.?", "", a).strip()
             a = f"{a} {TIER_GUIDE} {FEE_NOTE}"
@@ -513,6 +551,7 @@ def city_extras(slug, p, city):
     cards = "".join(f'<a class="pop reveal" href="/{k}"><b>{n} in {esc(city)}</b><span>{d}</span></a>' for k, n, d in POPULAR)
     facts = [dist,
              f"{city} is in {county} County. We don’t take paint, chemicals or other hazardous waste; {county} County’s household hazardous waste program takes those." if county else "",
+             travel_line(slug, city),
              "Same-day and next-day pickups are often available. Text a photo in the morning for the fastest price."]
     facts_html = "".join(f"<li>{CHECK}{esc(x)}</li>" for x in facts if x)
     sec = f'''
@@ -627,6 +666,46 @@ def build_service(slug, p):
             + quote() + band() + FOOT)
 
 
+def zone_map_html():
+    pts = []
+    for slug, n, _ in ALL_AREAS:
+        ll = next((re.search(r'content="([-\d.]+);([-\d.]+)"', x) for x in C[slug]["metas"] if "geo.position" in x), None)
+        if not ll:
+            continue
+        i = zone_of(slug); z = ZONES[i]
+        fee = "No travel fee" if i == 0 else f"Travel: ${z[2]} small · ${z[3]} half · ${z[4]} ¾ · free full load"
+        pts.append({"n": n, "s": slug, "la": float(ll.group(1)), "lo": float(ll.group(2)), "z": i, "zn": z[0], "f": fee})
+    legend = "".join(f'<span><i style="background:{ZONE_COLORS[i]}"></i>{z[0]}{"" if i == 0 else f" · from ${z[3]}–${z[2]}"}</span>' for i, z in enumerate(ZONES))
+    return f'''<div class="zmap-wrap reveal" id="zone-map"><div id="zmap" class="zmap" role="img" aria-label="Map of Wood’s Waste travel zones"></div>
+      <div class="zlegend">{legend}<span><i class="base"></i>Truck &amp; dump (Lakeville)</span></div></div>
+<script>
+(function () {{
+  var PTS = {json.dumps(pts)}, COL = {json.dumps(ZONE_COLORS)}, BASE = [44.6422924, -93.2158361];
+  var el = document.getElementById('zmap'); if (!el) return;
+  function draw() {{
+    var m = L.map(el, {{ scrollWheelZoom: false, attributionControl: true }});
+    L.tileLayer('https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{ maxZoom: 14,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }}).addTo(m);
+    var b = [];
+    PTS.forEach(function (p) {{
+      var c = L.circleMarker([p.la, p.lo], {{ radius: 9, color: '#fff', weight: 2, fillColor: COL[p.z], fillOpacity: .95 }}).addTo(m);
+      c.bindPopup('<b>' + p.n + '</b><br>' + p.zn + '<br>' + p.f + '<br><a href="/' + p.s + '">' + p.n + ' junk removal →</a>');
+      c.bindTooltip(p.n, {{ direction: 'top', offset: [0, -8] }}); b.push([p.la, p.lo]);
+    }});
+    L.circleMarker(BASE, {{ radius: 7, color: '#121212', weight: 3, fillColor: '#fff', fillOpacity: 1 }}).addTo(m).bindTooltip('Our truck &amp; the dump, Lakeville');
+    m.fitBounds(b, {{ padding: [18, 18] }});
+  }}
+  function load() {{
+    var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
+    var js = document.createElement('script'); js.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; js.onload = draw; document.head.appendChild(js);
+  }}
+  if ('IntersectionObserver' in window) {{
+    var io = new IntersectionObserver(function (e) {{ if (e[0].isIntersecting) {{ io.disconnect(); load(); }} }}, {{ rootMargin: '400px' }}); io.observe(el);
+  }} else load();
+}})();
+</script>'''
+
+
 def build_home(p):
     src = open(os.path.join(ROOT, "_build", "home.html")).read()
     lb = p["ld"][0]
@@ -642,6 +721,10 @@ def build_home(p):
     body = body.replace('</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">',
                         f'</div>\n    <div class="areas svc-more reveal"><span>Also:</span>{more}</div>\n  </div>\n</section>\n\n<section class="sec sec-sand" id="work">', 1)
     body = re.sub(r'<div><h4>Services</h4>.*?</div>', FOOT_SVC, body, count=1, flags=re.S)
+    body = re.sub(r'<section class="sec sec-sand" id="pricing">.*?</section>', lambda _: pricing().strip(), body, count=1, flags=re.S)
+    home_areas = areas("Where we work", "Our truck and the dump are in Lakeville, so travel is free in the home area. Tap a town to see its travel fee.", ALL_AREAS)
+    home_areas = home_areas.replace('<div class="areas reveal">', zone_map_html() + '\n    <div class="areas reveal">', 1)
+    body = re.sub(r'<section class="sec" id="areas">.*?</section>', lambda _: home_areas.strip(), body, count=1, flags=re.S)
     body = re.sub(r'<div class="rev-grid">.*?</div>\s*<p style="margin-top:26px"', '<div class="rev-grid">' + "".join(rev_card(r) for r in REVIEWS[:6]) + '</div>\n    <p style="margin-top:26px"', body, count=1, flags=re.S)
     faq_items = [(html.unescape(re.sub(r"<[^>]+>", "", q)), html.unescape(re.sub(r"<[^>]+>", "", a)))
                  for q, a in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body, re.S)]

@@ -304,3 +304,25 @@ foot,.foot{background:var(--ink);color:#d4cfc6;padding:64px 0 28px;margin-top:0}
 .rev img.av{object-fit:cover;display:block;flex:none}
 
 .band-sec{padding-top:clamp(56px,7vw,88px)}
+
+/* travel fees table + zone map */
+.travel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:24px 26px}
+.travel-head h3{font-size:22px}
+.travel-head p{color:var(--ink-2);font-size:15px;margin:6px 0 16px}
+.travel-head a{color:var(--green-d);font-weight:700}
+.travel-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.travel table{width:100%;border-collapse:collapse;font-size:15px;min-width:560px}
+.travel th,.travel td{text-align:left;padding:12px 10px;border-top:1px solid var(--line);vertical-align:top}
+.travel thead th{border-top:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.travel td{font-weight:700;white-space:nowrap}
+.travel tbody th{font-weight:800;min-width:220px}
+.travel tbody th small{display:block;font-weight:500;color:var(--muted);font-size:13px;margin-top:2px;line-height:1.4}
+.zdot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.zmap-wrap{margin-bottom:24px}
+.zmap{height:460px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--sand-2);overflow:hidden}
+.zlegend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:14px;font-weight:600;color:var(--ink-2)}
+.zlegend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.zlegend i.base{background:#fff;border:3px solid #121212;width:12px;height:12px;box-sizing:border-box}
+@media (max-width:640px){.zmap{height:360px}}
+
+.zmap .leaflet-tile-pane{filter:grayscale(.85) contrast(.95) brightness(1.04)}

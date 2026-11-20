@@ -1,0 +1,218 @@
+[
+ {
+  "slug": "lakeville",
+  "town": "Lakeville",
+  "miles": 5.4,
+  "minutes": 13
+ },
+ {
+  "slug": "farmington",
+  "town": "Farmington",
+  "miles": 10.9,
+  "minutes": 20
+ },
+ {
+  "slug": "apple-valley",
+  "town": "Apple Valley",
+  "miles": 16.3,
+  "minutes": 28
+ },
+ {
+  "slug": "rosemount",
+  "town": "Rosemount",
+  "miles": 25.4,
+  "minutes": 42
+ },
+ {
+  "slug": "burnsville",
+  "town": "Burnsville",
+  "miles": 25.9,
+  "minutes": 41
+ },
+ {
+  "slug": "prior-lake",
+  "town": "Prior Lake",
+  "miles": 28.2,
+  "minutes": 44
+ },
+ {
+  "slug": "savage",
+  "town": "Savage",
+  "miles": 31.5,
+  "minutes": 45
+ },
+ {
+  "slug": "eagan",
+  "town": "Eagan",
+  "miles": 33.0,
+  "minutes": 49
+ },
+ {
+  "slug": "northfield",
+  "town": "Northfield",
+  "miles": 35.3,
+  "minutes": 55
+ },
+ {
+  "slug": "bloomington",
+  "town": "Bloomington",
+  "miles": 37.7,
+  "minutes": 52
+ },
+ {
+  "slug": "richfield",
+  "town": "Richfield",
+  "miles": 43.0,
+  "minutes": 60
+ },
+ {
+  "slug": "mendota-heights",
+  "town": "Mendota Heights",
+  "miles": 46.8,
+  "minutes": 71
+ },
+ {
+  "slug": "edina",
+  "town": "Edina",
+  "miles": 48.6,
+  "minutes": 66
+ },
+ {
+  "slug": "inver-grove-heights",
+  "town": "Inver Grove Heights",
+  "miles": 48.7,
+  "minutes": 70
+ },
+ {
+  "slug": "west-st-paul",
+  "town": "West St. Paul",
+  "miles": 49.9,
+  "minutes": 71
+ },
+ {
+  "slug": "shakopee",
+  "town": "Shakopee",
+  "miles": 51.4,
+  "minutes": 76
+ },
+ {
+  "slug": "chaska",
+  "town": "Chaska",
+  "miles": 52.7,
+  "minutes": 83
+ },
+ {
+  "slug": "hastings",
+  "town": "Hastings",
+  "miles": 53.1,
+  "minutes": 83
+ },
+ {
+  "slug": "south-st-paul",
+  "town": "South St. Paul",
+  "miles": 54.8,
+  "minutes": 77
+ },
+ {
+  "slug": "minneapolis",
+  "town": "Minneapolis",
+  "miles": 55.7,
+  "minutes": 79
+ },
+ {
+  "slug": "eden-prairie",
+  "town": "Eden Prairie",
+  "miles": 57.6,
+  "minutes": 80
+ },
+ {
+  "slug": "newport",
+  "town": "Newport",
+  "miles": 59.1,
+  "minutes": 83
+ },
+ {
+  "slug": "st-paul",
+  "town": "St. Paul",
+  "miles": 61.2,
+  "minutes": 85
+ },
+ {
+  "slug": "minnetonka",
+  "town": "Minnetonka",
+  "miles": 63.0,
+  "minutes": 85
+ },
+ {
+  "slug": "chanhassen",
+  "town": "Chanhassen",
+  "miles": 63.2,
+  "minutes": 86
+ },
+ {
+  "slug": "woodbury",
+  "town": "Woodbury",
+  "miles": 63.2,
+  "minutes": 86
+ },
+ {
+  "slug": "maplewood",
+  "town": "Maplewood",
+  "miles": 66.7,
+  "minutes": 95
+ },
+ {
+  "slug": "cottage-grove",
+  "town": "Cottage Grove",
+  "miles": 67.0,
+  "minutes": 93
+ },
+ {
+  "slug": "plymouth",
+  "town": "Plymouth",
+  "miles": 73.3,
+  "minutes": 98
+ },
+ {
+  "slug": "fridley",
+  "town": "Fridley",
+  "miles": 75.4,
+  "minutes": 104
+ },
+ {
+  "slug": "victoria",
+  "town": "Victoria",
+  "miles": 76.3,
+  "minutes": 104
+ },
+ {
+  "slug": "waconia",
+  "town": "Waconia",
+  "miles": 76.6,
+  "minutes": 122
+ },
+ {
+  "slug": "brooklyn-park",
+  "town": "Brooklyn Park",
+  "miles": 78.4,
+  "minutes": 109
+ },
+ {
+  "slug": "maple-grove",
+  "town": "Maple Grove",
+  "miles": 81.9,
+  "minutes": 108
+ },
+ {
+  "slug": "coon-rapids",
+  "town": "Coon Rapids",
+  "miles": 87.6,
+  "minutes": 126
+ },
+ {
+  "slug": "blaine",
+  "town": "Blaine",
+  "miles": 90.2,
+  "minutes": 121
+ }
+]

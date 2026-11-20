@@ -37,6 +37,7 @@ for f in sorted(glob.glob("*.html")):
     for junk in ("$150", "handle hazardous", "FOOT_SVC_SLOT", "Removal Removal", '="../', "noindex", "Book my free quote", "Preferred date"):
         if junk in s: bad[f].append(f"contains {junk!r}")
     for h in re.findall(r'href="(/[^"#?]*)', s):
+        if "'" in h: continue                      # a link built in JavaScript (zone map popups)
         t = h.strip("/")
         if t and not (t in files or os.path.exists(t) or os.path.exists(t + ".html") or os.path.isdir(t)): bad[f].append(f"broken link {h}")
     for src in re.findall(r'src="(/[^"?]+)', s):
