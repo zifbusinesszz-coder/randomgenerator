@@ -6,14 +6,14 @@ import json, os, re, html, hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 C = json.load(open(os.path.join(ROOT, "_build", "content.json")))
-CSS_V = "20261120e"
+CSS_V = hashlib.md5(open(os.path.join(ROOT, "site.css"), "rb").read()).hexdigest()[:10]   # changes whenever site.css does → no stale styles
 PHONE, TEL, SMS = "(507) 298-1179", "tel:5072981179", "sms:+15072981179"
 GOOGLE = "https://share.google/2VDupAN3BZz3mM9Ml"
 esc = lambda s: html.escape(str(s), quote=True)
 
-CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
-ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
-BUBBLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'
+CHECK = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+BUBBLE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'
 
 SERVICES = [  # slug, card title, card text, icon path
     ("furniture-removal", "Furniture removal", "Couches, sectionals, mattresses, dressers, desks and recliners.",
@@ -702,6 +702,8 @@ def main():
         else:
             continue
         out = out.replace("FOOT_SVC_SLOT", FOOT_SVC)
+        out = out.replace('<svg viewBox="0 0 24 24"', '<svg width="24" height="24" viewBox="0 0 24 24"')        # intrinsic size: never huge, even without CSS
+        out = out.replace('<svg class="truck" viewBox="0 0 124 66"', '<svg class="truck" width="150" height="80" viewBox="0 0 124 66"')
         open(os.path.join(ROOT, slug + ".html"), "w").write(out)
         n += 1; built.append(slug)
     sitemap(["index"] + [s for s in built if C[s]["kind"] in ("service", "partner")] + [s for s in built if C[s]["kind"] == "city"])
