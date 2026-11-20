@@ -33,7 +33,7 @@ ESTATE = ("/estate-cleanout", "Estate &amp; move-out cleanouts", "Whole-house, b
 # per service: name, what we take (* = extra disposal fee), photo pair, heavy-load note
 SVC = {
     "furniture-removal": dict(name="Furniture removal", pair="curb", items=[
-        "Couches, sofas &amp; sectionals", "Recliners &amp; armchairs", "Mattresses &amp; box springs*", "Bed frames &amp; headboards",
+        "Couches, sofas &amp; sectionals*", "Recliners &amp; armchairs", "Mattresses &amp; box springs*", "Bed frames &amp; headboards",
         "Dressers &amp; nightstands", "Tables &amp; chairs", "Desks &amp; office furniture", "Bookshelves &amp; entertainment centers",
         "Patio furniture", "Cribs &amp; kids’ furniture"]),
     "appliance-removal": dict(name="Appliance removal", pair="curb", items=[
@@ -147,7 +147,7 @@ def travel_line(slug, city):
             f"and {full}.")
 
 
-FEE_NOTE = "Items with extra dump fees (mattresses, Freon appliances, tires, TVs) add to the total, and you always get the full price before we start."
+FEE_NOTE = "Items with extra dump fees (couches, mattresses, Freon appliances, tires, TVs) add to the total, and you always get the full price before we start."
 NO_HAZ = "We don’t take paint, chemicals or other hazardous waste."
 
 
@@ -346,7 +346,7 @@ def pricing(extra=""):
     <div class="sec-head center reveal"><span class="eyebrow">Simple pricing</span><h2>Pay only for the space your stuff takes</h2>
       <p class="lede center">Loading, haul-away and disposal are all included. Text a photo and we’ll tell you exactly where you land before we come out.</p></div>
     <div class="tiers">{cards}</div>
-    <p class="tier-note reveal"><b>Prices are starting points.</b> Your total can be higher if your load includes items the dump charges extra for: mattresses and box springs, appliances with Freon (fridges, freezers, AC units), tires, and TVs and electronics.{extra_html} We’ll always give you the full price before we start. {NO_HAZ}</p>
+    <p class="tier-note reveal"><b>Prices are starting points.</b> Your total can be higher if your load includes items the dump charges extra for: couches and sectionals, mattresses and box springs, appliances with Freon (fridges, freezers, AC units), tires, and TVs and electronics.{extra_html} We’ll always give you the full price before we start. {NO_HAZ}</p>
     {TRAVEL_HTML}
     <div class="tier-foot reveal">
       <ul><li>{CHECK}Price set before we start, no surprises</li><li>{CHECK}Bigger than a full load? Quoted by volume</li></ul>
